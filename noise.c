@@ -2,7 +2,6 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
-#include <stdlib.h>
 #include <math.h>
 
 //I kinda need this for the winsize
