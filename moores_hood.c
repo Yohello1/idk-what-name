@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 //I kinda need this for the winsize
 struct winsize win_size;
@@ -14,19 +15,32 @@ int x;
 // Random function for choosing if something is white or black
 int noise_gen(int density);
 int moores_hood(int y_pos, int x_pos);
+void bomb(char *message);
 
+// Making the buffer
+static char buffer[] = "foobar";
 
+#define FILENAME "window.dat"
 int main()
 {
     //getting density
     int density;
     scanf("%i", &density);
 
+    //making window pointer
+    WINDOW *win;
+    FILE *wfile;
+    FILE *newscreen;
+
+    int r;
+
     //starting the screen
     initscr();
-
+    win = newwin(5, 20, 7, 30);
+    if (win == NULL)
+        bomb("Unable to create window\n");
     // hiding the thingy, cursor visablity
-    curs_set(0);    
+    curs_set(0);
 
     //This is how I get the size getyx doesn't work well lol
     ioctl(0, TIOCGWINSZ, &win_size);
@@ -44,40 +58,40 @@ int main()
             }
         }
     }
-
-    // //Get position, go up, if wall add to int, then check all sides
-    // int walled = 0;
-    // // if(mvinch(y_pos + 1, x_pos) == '#'){
-    // //     walled++;
-    // // }
-    // if (mvinch(3, 3) == '#')
-    // {
-    //     walled++;
-    // }
-    scr_dump("text.txt");
     getch();
-    //closing window
+    wrefresh(win);
+    if (win == NULL)
+        bomb("Unable to create window2\n");
+    wfile = fopen("OLD.txt", "w+");
+    if (wfile == NULL)
+        bomb("Error creating file\n");
+    else
+        addstr("works\n");
+    if (win == NULL)
+        bomb("Unable to create window3\n");
+    putwin(win, wfile);
+
     int walled;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 50; i++)
     {
-        getch();
         for (int y_pos = 0; y_pos < y; y_pos++)
         {
             for (int x_pos = 0; x_pos < x; x_pos++)
             {
-                if (noise_gen(density) == 0)
-                {
-                    walled = moores_hood(y_pos, x_pos);
-                }
+
+                moores_hood(y_pos, x_pos);
+                refresh();
             }
         }
     }
+
+
     getch();
     endwin();
 
     //displaying debug info
     printf("diemensions: %i, %i \n", x, y);
-    printf("is 3,3 walled? %i ( 1 = yes, 0 = no) \n", walled);
+    // printf("is 3,3 walled? %i ( 1 = yes, 0 = no) \n", walled);
 }
 
 int noise_gen(int density)
@@ -152,3 +166,27 @@ int moores_hood(int y_pos, int x_pos)
     }
     return walled;
 }
+
+void bomb(char *message)
+{
+    endwin();
+    puts(message);
+    exit(1);
+}
+
+// /* open the file */
+// wfile = fopen(FILENAME, "r+");
+// if (wfile == NULL)
+//     bomb("Error reading file\n");
+
+// /* write the window's data */
+// win = getwin(wfile);
+// if (win == NULL)
+//     bomb("Unable to read/create window\n");
+// fclose(wfile);
+// wrefresh(win);
+// getch();
+
+// endwin();
+// return 0;
+// }

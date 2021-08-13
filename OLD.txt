@@ -1,0 +1,15 @@
+ˆˆˆˆncurses 6.2.20201114
+_maxy=4
+_maxx=19
+_begy=7
+_begx=30
+_bkgd=\{NORMAL|C8192}
+flag=_idcok
+_delay=-1
+_regbottom=4
+rows:
+1:\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s
+2:\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s
+3:\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s
+4:\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s
+5:\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s
