@@ -6,18 +6,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
+#include <time.h>
 
 //I kinda need this for the winsize
 struct winsize win_size;
 int y;
 int x;
-WINDOW *win;
+
 static char buffer[] = "foobar";
 
 // Random function for choosing if something is white or black
 int noise_gen(int density);
-int moores_hood(int y_pos, int x_pos);
+void moores_hood(int y_pos, int x_pos);
 void bomb(char *message);
+void shift_win_left(void);
+int win_offset;
+int win_size_x;
 
 int main()
 {
@@ -28,86 +32,76 @@ int main()
     //starting the screen
     initscr();
 
-    FILE *oldfile;
-    FILE *newfile;
-
     //This is how I get the size getyx doesn't work well lol
     ioctl(0, TIOCGWINSZ, &win_size);
     y = win_size.ws_row;
     x = win_size.ws_col;
 
-    win = newwin(y, x, 0, 0);
-    if (win == NULL)
-        bomb("Unable to create window\n");
-    // hiding the thingy, cursor visablity
+    if ((y % 2) == 0)
+    {
+        win_size_x = x / 2;
+    }
+    else
+    {
+        win_size_x = (x - 1) / 2;
+    }
+
+    win_offset = win_size_x;
+
+    mvprintw(0, 0, "%i", win_size_x);
+
     curs_set(0);
     refresh();
+    getch();
 
     //actually making the noise now
     for (int y_pos = 0; y_pos < y; y_pos++)
     {
-        for (int x_pos = 0; x_pos < x; x_pos++)
+        for (int x_pos = 0; x_pos < win_size_x; x_pos++)
         {
             if (noise_gen(density) == 0)
             {
-                mvwprintw(win, y_pos, x_pos, "#");
+                mvprintw(y_pos, x_pos, "#");
             }
             else
             {
-                mvwprintw(win, y_pos, x_pos, " ");
+                mvprintw(y_pos, x_pos, " ");
             }
+            mvprintw(4, 0, "%i", x_pos);
+            mvprintw(5, 0, "%i", y_pos);
         }
     }
 
-    // //Get position, go up, if wall add to int, then check all sides
-    // int walled = 0;
-    // // if(mvinch(y_pos + 1, x_pos) == '#'){
-    // //     walled++;
-    // // }
-    // if (mvinch(3, 3) == '#')
-    // {
-    //     walled++;
-    // }
-    int r;
-    wrefresh(win);
-    oldfile = fopen("OLD.txt", "w+");
-    if (oldfile == NULL)
-        bomb("Error creating file\n");
-
-    /* write the window's data */
-    r = putwin(win, oldfile);
-    if (r == ERR)
-        addstr("Error putting window to disk\n");
-    else
-        addstr("Window put to disk\n");
-
     getch();
-
-    wrefresh(win);
     refresh();
 
     //closing window
-    int walled;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 5; i++)
     {
         getch();
         for (int y_pos = 0; y_pos < y; y_pos++)
         {
-            for (int x_pos = 0; x_pos < x; x_pos++)
+            for (int x_pos = 0; x_pos < win_size_x; x_pos++)
             {
-                if (noise_gen(density) == 0)
-                {
-                    walled = moores_hood(y_pos, x_pos);
-                }
+                // if (noise_gen(density) == 0)
+                // {
+                moores_hood(y_pos, x_pos);
+                // }
+                mvprintw(4, 0, "%i", x_pos);
+                mvprintw(5, 0, "%i", y_pos);
             }
+            // wrefresh(win2);
         }
+        getch();
+        shift_win_left();
     }
+
+    mvprintw(0, 0, "test");
+
     mvprintw(0, 0, "The end is nye");
     getch();
 
-
-
-/*
+    /*
 You know what?
 Screw this, Ima try another method
 Have 3 windows, 
@@ -116,13 +110,11 @@ switch which one is being shown when doing the analyaztion and printing
 solves all the issues
 */
 
-
     getch();
     endwin();
 
     //displaying debug info
     printf("diemensions: %i, %i \n", x, y);
-    printf("is 3,3 walled? %i ( 1 = yes, 0 = no) \n", walled);
 }
 
 int noise_gen(int density)
@@ -141,7 +133,7 @@ int noise_gen(int density)
     }
     return num;
 }
-int moores_hood(int y_pos, int x_pos)
+void moores_hood(int y_pos, int x_pos)
 {
     int walled = 0;
     //perpendicular stuff
@@ -185,17 +177,30 @@ int moores_hood(int y_pos, int x_pos)
     {
         walled++;
     }
+    // wrefresh(win2);
+    // // refresh();
+    // wrefresh(win2);
 
-    //finally switching it, time to go experimental
-    if (walled < 4)
+    if (walled < 5)
     {
-        mvprintw(y_pos, x_pos, "#");
+        mvprintw(y_pos, x_pos + win_offset, "#");
     }
     else
     {
-        mvprintw(y_pos, x_pos, " ");
+        mvprintw(y_pos, x_pos + win_offset, " ");
     }
-    return walled;
+}
+
+void shift_win_left()
+{
+    for (int x_pos = 0; x_pos < win_offset; x_pos++)
+    {
+        for (int y_pos = 0; y_pos < y; y_pos++)
+        {
+            char grid_temp = mvinch(y_pos, x_pos + win_offset);
+            mvprintw(y_pos, x_pos, "%c" ,grid_temp);
+        }
+    }
 }
 
 void bomb(char *message)
