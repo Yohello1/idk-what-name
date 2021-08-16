@@ -1,19 +1,17 @@
 // including thingys I need
 #include <ncurses.h>
-#include <stdio.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <time.h>
+#include <unistd.h>
 
 //I kinda need this for the winsize
 struct winsize win_size;
 int y;
 int x;
-
-static char buffer[] = "foobar";
 
 // Random function for choosing if something is white or black
 int noise_gen(int density);
@@ -22,12 +20,16 @@ void bomb(char *message);
 void shift_win_left(void);
 int win_offset;
 int win_size_x;
-
+int microseconds = 10;
+unsigned int currenttime;
+int noise_run_times;
 int main()
 {
     //getting density
     int density;
+    printf("Enter Desity of the noise thingy");
     scanf("%i", &density);
+    currenttime = (unsigned int)time(NULL);
 
     //starting the screen
     initscr();
@@ -48,8 +50,6 @@ int main()
 
     win_offset = win_size_x;
 
-    mvprintw(0, 0, "%i", win_size_x);
-
     curs_set(0);
     refresh();
     getch();
@@ -67,8 +67,6 @@ int main()
             {
                 mvprintw(y_pos, x_pos, " ");
             }
-            mvprintw(4, 0, "%i", x_pos);
-            mvprintw(5, 0, "%i", y_pos);
         }
     }
 
@@ -87,16 +85,12 @@ int main()
                 // {
                 moores_hood(y_pos, x_pos);
                 // }
-                mvprintw(4, 0, "%i", x_pos);
-                mvprintw(5, 0, "%i", y_pos);
             }
             // wrefresh(win2);
         }
         getch();
         shift_win_left();
     }
-
-    mvprintw(0, 0, "test");
 
     mvprintw(0, 0, "The end is nye");
     getch();
@@ -121,8 +115,10 @@ int noise_gen(int density)
 
 {
 
-    int lower = 0, upper = 100;
-    int num = (rand() % (upper - lower + 1)) + lower;
+    srand(currenttime + noise_run_times);
+    noise_run_times++;
+    int num = (rand() % 100);
+
     if (num > density)
     {
         num = 1;
@@ -198,7 +194,7 @@ void shift_win_left()
         for (int y_pos = 0; y_pos < y; y_pos++)
         {
             char grid_temp = mvinch(y_pos, x_pos + win_offset);
-            mvprintw(y_pos, x_pos, "%c" ,grid_temp);
+            mvprintw(y_pos, x_pos, "%c", grid_temp);
         }
     }
 }
