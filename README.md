@@ -7,3 +7,4 @@
 ## What files do I need to compile?
 - For cellular Automata: `cellular-automata/moores_hood.c`
 - For Drunkard Walking: `drunk-walker/drunk.c` (walker.c may also be valid but it is not gaurenteed)
+- For Diffusion-Limited-Affregration `Diffusion-limited/diffuse-limit-aggregation.c` 
