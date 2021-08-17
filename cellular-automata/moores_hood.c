@@ -13,22 +13,27 @@ struct winsize win_size;
 int y;
 int x;
 
-// Random function for choosing if something is white or black
+// Random functions
 int noise_gen(int density);
 void moores_hood(int y_pos, int x_pos);
 void bomb(char *message);
 void shift_win_left(void);
-int win_offset;
+
+// Size of a window, or like 1/2 of the screen
 int win_size_x;
-int microseconds = 10;
+
+// For noise generation
 unsigned int currenttime;
 int noise_run_times;
+
 int main()
 {
     //getting density
     int density;
     printf("Enter Desity of the noise thingy");
     scanf("%i", &density);
+
+    // Getting time
     currenttime = (unsigned int)time(NULL);
 
     //starting the screen
@@ -39,6 +44,7 @@ int main()
     y = win_size.ws_row;
     x = win_size.ws_col;
 
+    // Getting 1/2 the size
     if ((y % 2) == 0)
     {
         win_size_x = x / 2;
@@ -48,7 +54,7 @@ int main()
         win_size_x = (x - 1) / 2;
     }
 
-    win_offset = win_size_x;
+
 
     curs_set(0);
     refresh();
@@ -70,10 +76,10 @@ int main()
         }
     }
 
+    //Refresh and making sure they know what is happening
     getch();
     refresh();
 
-    //closing window
     for (int i = 0; i < 5; i++)
     {
         getch();
@@ -98,8 +104,8 @@ int main()
     /*
 You know what?
 Screw this, Ima try another method
-Have 3 windows, 
-1 old, 1 new, and one being shown (We need the 3rd one so stuff stays realitively simple)
+Have 2 windows, 
+1 old, 1 new, an
 switch which one is being shown when doing the analyaztion and printing
 solves all the issues
 */
@@ -129,6 +135,7 @@ int noise_gen(int density)
     }
     return num;
 }
+
 void moores_hood(int y_pos, int x_pos)
 {
     int walled = 0;
@@ -140,15 +147,15 @@ void moores_hood(int y_pos, int x_pos)
     {
         walled++;
     }
-    if (mvinch(y_pos - 1, x_pos) == '#')
+    else if (mvinch(y_pos - 1, x_pos) == '#')
     {
         walled++;
     }
-    if (mvinch(y_pos, x_pos + 1) == '#')
+    else if (mvinch(y_pos, x_pos + 1) == '#')
     {
         walled++;
     }
-    if (mvinch(y_pos, x_pos - 1) == '#')
+    else if (mvinch(y_pos, x_pos - 1) == '#')
     {
         walled++;
     }
@@ -157,19 +164,19 @@ void moores_hood(int y_pos, int x_pos)
     //  4 X 1
     //  X X X
     //  2 X 3
-    if (mvinch(y_pos + 1, x_pos + 1) == '#')
+    else if (mvinch(y_pos + 1, x_pos + 1) == '#')
     {
         walled++;
     }
-    if (mvinch(y_pos - 1, x_pos - 1) == '#')
+    else if (mvinch(y_pos - 1, x_pos - 1) == '#')
     {
         walled++;
     }
-    if (mvinch(y_pos - 1, x_pos + 1) == '#')
+    else if (mvinch(y_pos - 1, x_pos + 1) == '#')
     {
         walled++;
     }
-    if (mvinch(y_pos + 1, x_pos - 1) == '#')
+    else if (mvinch(y_pos + 1, x_pos - 1) == '#')
     {
         walled++;
     }
@@ -179,21 +186,22 @@ void moores_hood(int y_pos, int x_pos)
 
     if (walled < 5)
     {
-        mvprintw(y_pos, x_pos + win_offset, "#");
+        mvprintw(y_pos, x_pos + win_size_x, "#");
     }
     else
     {
-        mvprintw(y_pos, x_pos + win_offset, " ");
+        mvprintw(y_pos, x_pos + win_size_x, " ");
     }
 }
 
 void shift_win_left()
 {
-    for (int x_pos = 0; x_pos < win_offset; x_pos++)
+    for (int x_pos = 0; x_pos < win_size_x; x_pos++)
     {
         for (int y_pos = 0; y_pos < y; y_pos++)
         {
-            char grid_temp = mvinch(y_pos, x_pos + win_offset);
+            //read from 1 position and write to the equvilent across the screen
+            char grid_temp = mvinch(y_pos, x_pos + win_size_x);
             mvprintw(y_pos, x_pos, "%c", grid_temp);
         }
     }
