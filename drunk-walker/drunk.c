@@ -218,6 +218,6 @@ int dir_walk(void)
 }
 void usrwait(void)
 {
-    // getch();
+    getch();
     // printf("");
 }

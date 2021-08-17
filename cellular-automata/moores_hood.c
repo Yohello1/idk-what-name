@@ -161,9 +161,9 @@ void moores_hood(int y_pos, int x_pos)
     }
 
     // Adjacent
-    //  4 X 1
-    //  X X X
     //  2 X 3
+    //  X X X
+    //  4 X 1
     else if (mvinch(y_pos + 1, x_pos + 1) == '#')
     {
         walled++;
