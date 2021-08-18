@@ -9,7 +9,6 @@
 #define REMOVING 2
 struct winsize win_size;
 int noise_run_times = 0;
-unsigned int mSeconds = 500;
 unsigned int currenttime;
 struct timespec ts;
 int dir_walk(void);
@@ -218,6 +217,6 @@ int dir_walk(void)
 }
 void usrwait(void)
 {
-    getch();
+    // getch();
     // printf("");
 }
