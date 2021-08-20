@@ -30,7 +30,7 @@ int main(void)
 
     int amount_of_points = LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH;
     struct positions spots[amount_of_points];
-    struct positions new[amount_of_points];
+    struct positions new_state[amount_of_points];
     srand(currenttime);
 
     SDL_Init(SDL_INIT_VIDEO);
@@ -61,20 +61,175 @@ int main(void)
                       << "X = " << spots[position].x_pos << "\n"
                       << "Y = " << spots[position].y_pos << "\n";
             SDL_SetRenderDrawColor(renderer, spots[position].r, spots[position].g, spots[position].b, 255);
-             SDL_RenderPresent(renderer);
-
             SDL_RenderDrawPoint(renderer, x, y);
             std::cout << "Point (" << x << " , " << y << ") \n";
         }
     }
     SDL_RenderPresent(renderer);
+    std::cout << "Done Noise? phase\n";
+
+    position = 0;
+    int walled = 0;
+
+    for (int y = 0; y < LOGICAL_WINDOW_WIDTH; y++)
+    {
+        for (int x = 0; x < LOGICAL_WINDOW_WIDTH; x++)
+        {
+            walled = 0;
+            position++;
+
+            // There should be another struct for every position
+            // Therefore, if we get the position I am currently at, and subtract
+            // the width of it from the index of the struct array we should get the part above it
+            // and add it to the thingy to get the one below it, then +/- 1 to get the other ones
+            // if x = 0 skip checking the ones on the left
+            // if x = 255 skip the right
+            // if y = 0 skip top check
+            // if y = 255 skip bottom check
+            // this is gonna have so many branches
+            // 2 1 3
+            // 4 X 5
+            // 7 6 8
+
+            // Top
+            if (spots[position].y_pos != 0)
+            {
+                if (spots[position - LOGICAL_WINDOW_WIDTH].r == 255)
+                {
+                    walled++;
+                }
+            }
+            else
+            {
+                walled++;
+            }
+            if (spots[position].y_pos != 0 && spots[position].x_pos != 0)
+            {
+
+                if (spots[position - LOGICAL_WINDOW_WIDTH - 1].r == 255)
+                {
+                    walled++;
+                }
+            }
+            else
+            {
+                walled++;
+            }
+            if (spots[position].y_pos != 0 && spots[position].x_pos != 255)
+            {
+
+                if (spots[position - LOGICAL_WINDOW_WIDTH + 1].r == 255)
+                {
+                    walled++;
+                }
+            }
+            else
+            {
+                walled++;
+            }
+
+            //Mid
+            if (spots[position].x_pos != 0)
+            {
+                if (spots[position - 1].r == 255)
+                {
+                    walled++;
+                }
+            }
+            else
+            {
+                walled++;
+            }
+            if (spots[position].x_pos != 255)
+            {
+                if (spots[position + 1].r == 255)
+                {
+                    walled++;
+                }
+            }
+            else
+            {
+                walled++;
+            }
+
+            // Bottom
+            if (spots[position].y_pos != 255)
+            {
+                if (spots[position + LOGICAL_WINDOW_WIDTH].r == 255)
+                {
+                    walled++;
+                }
+            }
+            else
+            {
+                walled++;
+            }
+            if (spots[position].y_pos != 255 && spots[position].x_pos != 0)
+            {
+
+                if (spots[position - LOGICAL_WINDOW_WIDTH - 1].r == 255)
+                {
+                    walled++;
+                }
+            }
+            else
+            {
+                walled++;
+            }
+            if (spots[position].y_pos != 255 && spots[position].x_pos != 255)
+            {
+
+                if (spots[position - LOGICAL_WINDOW_WIDTH - 1].r == 255)
+                {
+                    walled++;
+                }
+            }
+            else
+            {
+                walled++;
+            }
+
+            std::cout << "Position ( " << x << "," << y << " )"
+                      << "Walls = " << walled;
+            if (walled > 5)
+            {
+                std::cout << " Becomes wall\n";
+                new_state[position].r = 255;
+                new_state[position].g = 255;
+                new_state[position].b = 255;
+            }
+            else
+            {
+                std::cout << "\n";
+                new_state[position].r = 0;
+                new_state[position].g = 0;
+                new_state[position].b = 0;
+            }
+        }
+    }
+
+    std::cout << "Done wall phase\n";
+    SDL_Delay(5000);
+
+    position = 0;
+    for (int y = 0; y < LOGICAL_WINDOW_WIDTH; y++)
+    {
+        for (int x = 0; x < LOGICAL_WINDOW_WIDTH; x++)
+        {
+            position++;
+            spots[position].r = new_state[position].r;
+            spots[position].g = new_state[position].g;
+            spots[position].b = new_state[position].b;
+            SDL_SetRenderDrawColor(renderer, spots[position].r, spots[position].g, spots[position].b, 255);
+            SDL_RenderDrawPoint(renderer, x, y);
+        }
+    }
+    SDL_RenderPresent(renderer);
+
+    std::cout << "Done hood phase\n";
 
 
-
-
-
-
-
+    
 
     while (1)
     {
@@ -95,7 +250,7 @@ int noise_gen()
     time_noise_run++;
     int num = (rand() % 100);
 
-    if (num > 90)
+    if (num > 50)
     {
         num = 1;
     }
