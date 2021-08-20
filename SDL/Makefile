@@ -1,12 +1,12 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = draw.cpp
+OBJS = cellular-automata.cpp
 
 #CC specifies which compiler we're using
 CC = g++
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS = -w
+COMPILER_FLAGS = -wall
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lSDL2 -lSDL2_image -g `sdl2-config --cflags --libs` 

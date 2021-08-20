@@ -4,9 +4,9 @@
 #include <iostream>
 #include <random>
 #include <cmath>
-#define WINDOW_WIDTH 600
+#define LOGICAL_WINDOW_WIDTH 256
+#define ACTUAL_WINDOW_WIDTH 1024
 
-int noise(void);
 struct positions
 {
     int y_pos;
@@ -20,24 +20,29 @@ int currenttime = (unsigned int)time(NULL);
 
 int main(void)
 {
+    int upscaling = 1;
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     std::cout << "Time = " << currenttime << "\n";
     SDL_Event event;
     SDL_Renderer *renderer;
     SDL_Window *window;
 
-    int amount_of_points = 100;
+    int amount_of_points = 500;
     struct positions spots[amount_of_points];
+    srand(currenttime + noise_run);
 
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_WIDTH, 0, &window, &renderer);
+
+    SDL_CreateWindowAndRenderer(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, 0, &window, &renderer);
+    SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
     for (int positions_to_generate = 0; positions_to_generate < amount_of_points; positions_to_generate++)
     {
-        spots[positions_to_generate].x_pos = rand() % WINDOW_WIDTH;
-        spots[positions_to_generate].y_pos = rand() % WINDOW_WIDTH;
+        spots[positions_to_generate].x_pos = rand() % LOGICAL_WINDOW_WIDTH;
+        spots[positions_to_generate].y_pos = rand() % LOGICAL_WINDOW_WIDTH;
         spots[positions_to_generate].r = rand() % 255;
         spots[positions_to_generate].g = rand() % 255;
         spots[positions_to_generate].b = rand() % 255;
@@ -56,11 +61,11 @@ int main(void)
     SDL_RenderPresent(renderer);
     std::cout << "Done making points\n";
 
-    // for(int x = 0; x < WINDOW_WIDTH; x++)
+    // for(int x = 0; x < LOGICAL_WINDOW_WIDTH; x++)
 
-    for (int y = 0; y < WINDOW_WIDTH; y++)
+    for (int y = 0; y < LOGICAL_WINDOW_WIDTH; y++)
     {
-        for (int x = 0; x < WINDOW_WIDTH; x++)
+        for (int x = 0; x < LOGICAL_WINDOW_WIDTH; x++)
         {
             int point;
             float distance = 1000000000;
@@ -95,19 +100,14 @@ int main(void)
     while (1)
     {
         if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+        {
             break;
+        }
+
+        SDL_RenderPresent(renderer);
     }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
     return EXIT_SUCCESS;
-}
-
-int noise()
-{
-    // srand(currenttime + noise_run);
-    const int seed = currenttime + noise_run;
-    std::mt19937_64 mtrand(seed);
-    int return_int = mtrand();
-    return return_int;
 }
