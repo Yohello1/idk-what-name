@@ -4,7 +4,7 @@
 #include <iostream>
 #include <random>
 #include <cmath>
-#define LOGICAL_WINDOW_WIDTH 256
+#define LOGICAL_WINDOW_WIDTH 1024
 #define ACTUAL_WINDOW_WIDTH 1024
 
 struct positions
@@ -55,7 +55,7 @@ int main(void)
     {
         SDL_SetRenderDrawColor(renderer, spots[i].r, spots[i].g, spots[i].b, 255);
         SDL_RenderDrawPoint(renderer, spots[i].x_pos, spots[i].y_pos);
-        SDL_Delay(50);
+        // SDL_Delay(50);
         SDL_RenderPresent(renderer);
     }
     SDL_RenderPresent(renderer);
