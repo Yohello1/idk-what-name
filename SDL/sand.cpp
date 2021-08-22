@@ -96,68 +96,15 @@ int main()
     }
     SDL_RenderPresent(renderer);
     std::cout << "Done the writing\n";
-
-    for (int itterations = 0; itterations < 1000; itterations++)
+    SDL_Delay(100);
+    int count = 0;
+    for (int iteration = 0; iteration < 100; iteration++)
     {
-        std::cout << "Itterations = " << itterations;
+        std::cout << "iteration = " << iteration << std::endl;
         position = 0;
 
-        for (int y = 0; y < LOGICAL_WINDOW_WIDTH; y++)
-        {
-            for (int x = 0; x < LOGICAL_WINDOW_WIDTH; x++)
-            {
-                position++;
+        
 
-                // There should be another struct for every position
-                // Therefore, if we get the position I am currently at, and subtract
-                // the width of it from the index of the struct array we should get the part above it
-                // and add it to the thingy to get the one below it, then +/- 1 to get the other ones
-                // if x = 0 skip checking the ones on the left
-                // if x = 255 skip the right
-                // if y = 0 skip top check
-                // if y = 255 skip bottom check
-                // this is gonna have so many branches
-                // X X X
-                // X X X
-                // X 1 X
-                // Bottom
-                if (spots[position].y_pos != 255)
-                {
-                    if (spots[position + LOGICAL_WINDOW_WIDTH].empty == false)
-                    {
-                        spots[position + LOGICAL_WINDOW_WIDTH].empty = true;
-                        spots[position + LOGICAL_WINDOW_WIDTH].r = 255;
-                        spots[position + LOGICAL_WINDOW_WIDTH].g = 255;
-
-                        spots[position].empty = true;
-                        spots[position].r = 0;
-                        spots[position].g = 0;
-                    }
-                }
-
-                // std::cout << "Position ( " << x << "," << y << " )"
-                //           << "Walls = " << walled;
-                // if (walled > 4)
-                // {
-                //     std::cout << " Becomes wall\n";
-                //     new_state[position].r = 255;
-                //     new_state[position].g = 255;
-                //     new_state[position].b = 255;
-                //     new_state[position].x_pos = spots[position].x_pos;
-                //     new_state[position].y_pos = spots[position].y_pos;
-                // }
-                // else
-                // {
-                //     std::cout << "\n";
-                //     new_state[position].r = 0;
-                //     new_state[position].g = 0;
-                //     new_state[position].b = 0;
-                //     new_state[position].x_pos = spots[position].x_pos;
-                //     new_state[position].y_pos = spots[position].y_pos;
-                // }
-                //
-            }
-        }
         position = 0;
 
         for (int y = 0; y < LOGICAL_WINDOW_WIDTH; y++)
