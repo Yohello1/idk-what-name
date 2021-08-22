@@ -96,14 +96,37 @@ int main()
     }
     SDL_RenderPresent(renderer);
     std::cout << "Done the writing\n";
-    SDL_Delay(100);
-    int count = 0;
-    for (int iteration = 0; iteration < 100; iteration++)
-    {
-        std::cout << "iteration = " << iteration << std::endl;
+    SDL_Delay(10000);
+
+    position = 0;
+    // for (int iteration = 0; iteration < 100; iteration++)
+    // {
+        // std::cout << "iteration = " << iteration << std::endl;
         position = 0;
 
-        
+        for (int y = LOGICAL_WINDOW_WIDTH; y > 0; y--)
+        {
+
+            for (int x = 0; x < LOGICAL_WINDOW_WIDTH; x++)
+            {
+                                position++;
+
+                if(position > 256){
+                position++;
+                spots[position].r = spots[position + 210].r;
+                spots[position].g = spots[position + 210].g;
+                spots[position].b = spots[position + 210].b;
+                spots[position].a = spots[position + 210].a;
+                }
+                SDL_SetRenderDrawColor(renderer, spots[position].r, spots[position].g, spots[position].b, 255);
+                SDL_RenderDrawPoint(renderer, x, y);
+
+                // spots[position].r = 0;
+                // spots[position].g = 0;
+                // spots[position].b = 0;
+                // spots[position].a = 255;
+            }
+        }
 
         position = 0;
 
@@ -118,7 +141,9 @@ int main()
         }
         SDL_Delay(100);
         SDL_RenderPresent(renderer);
-    }
+    // }
+        std::cout << "Done the writing2\n";
+
     SDL_RenderPresent(renderer);
     while (1)
     {
