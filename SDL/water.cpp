@@ -76,10 +76,10 @@ int main()
     std::cout << "Startup complete, there should be a black window displaying" << std::endl;
 
     // It draws a box, and says it did
-    draw_box(126, 130, 25, 35, 255, 255, 0, 255);
-    draw_box(40, 100, 100, 200, 255, 255, 0, 255);
-    draw_box(200, 240, 3, 5, 255, 255, 0, 255);
-    draw_box(220, 226, 100, 200, 255, 255, 0, 255);
+    draw_box(126, 130, 25, 35, 0, 255, 0, 255);
+    draw_box(40, 100, 100, 200, 0, 255, 0, 255);
+    draw_box(200, 240, 3, 5, 0, 255, 0, 255);
+    draw_box(220, 226, 100, 200, 0, 255, 0, 255);
 
     std::cout << "Drew the box" << std::endl;
     // Waits for 3 seconds
@@ -142,7 +142,7 @@ void sand_sim()
 {
     for (int position = (LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH); position > 0; position--)
     {
-        if (pixels[position + LOGICAL_WINDOW_WIDTH].empty == true && pixels[position].y_pos != 256 && pixels[position].empty == false)
+        if (pixels[position + LOGICAL_WINDOW_WIDTH].empty == true && pixels[position].y_pos != LOGICAL_WINDOW_WIDTH && pixels[position].empty == false)
         {
             pixels[position + LOGICAL_WINDOW_WIDTH].r = pixels[position].r;
             pixels[position + LOGICAL_WINDOW_WIDTH].g = pixels[position].g;
@@ -154,7 +154,7 @@ void sand_sim()
             pixels[position].empty = true;
             std::cout << "And another one bites the dust" << std::endl;
         }
-        else if (pixels[position + LOGICAL_WINDOW_WIDTH - 1].empty == true && pixels[position].y_pos != 256 && pixels[position].x_pos != 0 && pixels[position].empty == false)
+        else if (pixels[position + LOGICAL_WINDOW_WIDTH - 1].empty == true && pixels[position].y_pos != LOGICAL_WINDOW_WIDTH && pixels[position].x_pos != 0 && pixels[position].empty == false)
         {
             pixels[position + LOGICAL_WINDOW_WIDTH - 1].r = pixels[position].r;
             pixels[position + LOGICAL_WINDOW_WIDTH - 1].g = pixels[position].g;
@@ -166,12 +166,37 @@ void sand_sim()
             pixels[position].empty = true;
             std::cout << "And another one bites the dust" << std::endl;
         }
-        else if (pixels[position + LOGICAL_WINDOW_WIDTH + 1].empty == true && pixels[position].y_pos != 256 && pixels[position].x_pos != 256 && pixels[position].empty == false)
+        else if (pixels[position + LOGICAL_WINDOW_WIDTH + 1].empty == true && pixels[position].y_pos != LOGICAL_WINDOW_WIDTH && pixels[position].x_pos != LOGICAL_WINDOW_WIDTH && pixels[position].empty == false)
         {
             pixels[position + LOGICAL_WINDOW_WIDTH + 1].r = pixels[position].r;
             pixels[position + LOGICAL_WINDOW_WIDTH + 1].g = pixels[position].g;
             pixels[position + LOGICAL_WINDOW_WIDTH + 1].b = pixels[position].b;
             pixels[position + LOGICAL_WINDOW_WIDTH + 1].empty = pixels[position].empty;
+            pixels[position].r = 0;
+            pixels[position].g = 0;
+            pixels[position].b = 0;
+            pixels[position].empty = true;
+            std::cout << "And another one bites the dust" << std::endl;
+        }
+        // Right Left check now
+        else if (pixels[position + 1].empty == true && pixels[position].y_pos != LOGICAL_WINDOW_WIDTH && pixels[position].x_pos != LOGICAL_WINDOW_WIDTH && pixels[position].empty == false &&  pixels[position].x_pos != 1)
+        {
+            pixels[position + 1].r = pixels[position].r;
+            pixels[position + 1].g = pixels[position].g;
+            pixels[position + 1].b = pixels[position].b;
+            pixels[position + 1].empty = pixels[position].empty;
+            pixels[position].r = 0;
+            pixels[position].g = 0;
+            pixels[position].b = 0;
+            pixels[position].empty = true;
+            std::cout << "And another one bites the dust" << std::endl;
+        }
+        else if (pixels[position - 1].empty == true && pixels[position].y_pos != LOGICAL_WINDOW_WIDTH && pixels[position].x_pos != 1 && pixels[position].empty == false)
+        {
+            pixels[position - 1].r = pixels[position].r;
+            pixels[position - 1].g = pixels[position].g;
+            pixels[position - 1].b = pixels[position].b;
+            pixels[position - 1].empty = pixels[position].empty;
             pixels[position].r = 0;
             pixels[position].g = 0;
             pixels[position].b = 0;
