@@ -38,10 +38,11 @@ int main()
     SDL_CreateWindowAndRenderer(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, 0, &window, &renderer);
     SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    std::cout << "Done inizaling everything\n";
-
-    // WHY IS THERE SO MUCH STUFF JUST TO INIT THIS
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);                
+    // spots[position].r = spots[position - 15].r;
+                // spots[position].g = spots[position - 15].g;
+                // spots[position].b = spots[position - 15].b;
+                // spots[position].a = spots[position - 15].a;
     int position = 0;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
@@ -109,15 +110,13 @@ int main()
 
             for (int x = 0; x < LOGICAL_WINDOW_WIDTH; x++)
             {
-                                position++;
 
-                if(position > 256){
                 position++;
-                spots[position].r = spots[position + 210].r;
-                spots[position].g = spots[position + 210].g;
-                spots[position].b = spots[position + 210].b;
-                spots[position].a = spots[position + 210].a;
-                }
+                // spots[position].r = spots[position - 15].r;
+                // spots[position].g = spots[position - 15].g;
+                // spots[position].b = spots[position - 15].b;
+                // spots[position].a = spots[position - 15].a;
+
                 SDL_SetRenderDrawColor(renderer, spots[position].r, spots[position].g, spots[position].b, 255);
                 SDL_RenderDrawPoint(renderer, x, y);
 
@@ -139,7 +138,6 @@ int main()
                 SDL_RenderDrawPoint(renderer, x, y);
             }
         }
-        SDL_Delay(100);
         SDL_RenderPresent(renderer);
     // }
         std::cout << "Done the writing2\n";
