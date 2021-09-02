@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = water.cpp
+OBJS = sandy_water.cpp
 
 #CC specifies which compiler we're using
 CC = g++
@@ -17,3 +17,4 @@ OBJ_NAME = draw
 #This is the target that compiles our executable
 all : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	./draw
