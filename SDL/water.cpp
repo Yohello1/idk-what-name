@@ -76,7 +76,7 @@ int main()
 
     // Wait till ordered to kill the process, and free everything from the shackles of this computer world
 
-    for (int x_pos = 120; x_pos < 125; x_pos++)
+    for (int x_pos = 50; x_pos < 200; x_pos++)
     {
         for (int y_pos = 40; y_pos < 100; y_pos++)
         {
