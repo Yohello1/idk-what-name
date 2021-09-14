@@ -76,9 +76,9 @@ int main()
 
     // Wait till ordered to kill the process, and free everything from the shackles of this computer world
 
-    for (int x_pos = 50; x_pos < 200; x_pos++)
+    for (int x_pos = 50; x_pos < 250; x_pos++)
     {
-        for (int y_pos = 40; y_pos < 100; y_pos++)
+        for (int y_pos = 10; y_pos < 100; y_pos++)
         {
             SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
             SDL_RenderDrawPoint(renderer, x_pos, y_pos);

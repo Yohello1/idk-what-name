@@ -82,20 +82,20 @@ int main()
     }
     std::cout << "Yes it does?" << std ::endl;
 
-    // Make a rectangle of sand
-    for (int x_pos = 80; x_pos < 100; x_pos++)
-    {
-        for (int y_pos = 120; y_pos < 250; y_pos++)
-        {
-            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-            SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+    // // Make a rectangle of sand
+    // for (int x_pos = 80; x_pos < 100; x_pos++)
+    // {
+    //     for (int y_pos = 120; y_pos < 250; y_pos++)
+    //     {
+    //         SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+    //         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
 
-            pixels[x_pos][y_pos].state_now = solid;
-            pixels[x_pos][y_pos].r = 255;
-            pixels[x_pos][y_pos].g = 255;
-            pixels[x_pos][y_pos].b = 0;
-        }
-    }
+    //         pixels[x_pos][y_pos].state_now = solid;
+    //         pixels[x_pos][y_pos].r = 255;
+    //         pixels[x_pos][y_pos].g = 255;
+    //         pixels[x_pos][y_pos].b = 0;
+    //     }
+    // }
 
     SDL_RenderPresent(renderer);
     std::cout << "Done1\n";
@@ -153,7 +153,7 @@ void fluid_1(void)
                 new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
             }
             // Down left
-            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 10)
+            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1)
             {
                 new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
                 new_version[x_pos - 1][y_pos + 1].b = 255;
@@ -171,19 +171,28 @@ void fluid_1(void)
                 new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
             }
             // Should be right?
-            // THIS CAUSES THR PROBLRM
-            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos - 1][y_pos].state_now == empty && new_version[x_pos - 1][y_pos].state_now == empty && x_pos != 10)
+            // else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty && x_pos != 250)
+            // {
+            //     new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
+            //     new_version[x_pos + 1][y_pos].b = 255;
+
+            //     new_version[x_pos][y_pos].state_now = empty;
+            //     new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
+            // }
+
+            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos + 1][y_pos].state_now == empty && x_pos != 250 && new_version[x_pos + 1][y_pos].state_now == empty)
             {
-                new_version[x_pos - 1][y_pos] = pixels[x_pos][y_pos];
-                new_version[x_pos - 1][y_pos].b = 255;
+                new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
+                new_version[x_pos + 1][y_pos].b = 255;
 
                 new_version[x_pos][y_pos].state_now = empty;
                 new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
             }
-            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty && x_pos != 250)
+
+            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos - 1][y_pos].state_now == empty && x_pos != 250 && new_version[x_pos - 1][y_pos].state_now == empty)
             {
-                new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
-                new_version[x_pos + 1][y_pos].b = 255;
+                new_version[x_pos - 1][y_pos] = pixels[x_pos][y_pos];
+                new_version[x_pos - 1][y_pos].b = 255;
 
                 new_version[x_pos][y_pos].state_now = empty;
                 new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
