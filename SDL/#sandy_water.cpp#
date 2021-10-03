@@ -43,7 +43,7 @@ struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 
 void render_now(void);
 void excecution_finished(void);
-void fluid_1(struct fluid_pos);
+void fluid_1(struct fluid_pos, int fluid_num);
 void scr_dump();
 void draw_and_render();
 // x ranges, y ranges, and rgba colour
@@ -163,7 +163,7 @@ void excecution_finished(void)
     SDL_Quit();
 }
 
-void fluid_1(struct fluid_pos)
+void fluid_1(struct fluid_pos, int fluid_num)
 {
     std::copy(&pixels[0][0], &pixels[0][0] + LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH, &new_version[0][0]);
 
@@ -220,6 +220,9 @@ void fluid_1(struct fluid_pos)
     //     }
     // }
     // scr_dump();
+
+    // I honestly have no idea how this is gonna look when done
+
     std::copy(&new_version[0][0], &new_version[0][0] + LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH, &pixels[0][0]);
     SDL_RenderPresent(renderer);
 }
