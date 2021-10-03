@@ -30,6 +30,13 @@ struct position
     int b;
     int a;
 };
+// why must I make this
+struct cord_2d
+{
+    int x_pos;
+    int y_pos;
+};
+
 // Array of pixel stuff
 
 struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
@@ -37,7 +44,7 @@ struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 
 void render_now(void);
 void excecution_finished(void);
-void fluid_1();
+void fluid_1(struct cord_2d fluid_pos[], int fluid_num);
 void scr_dump();
 void draw_and_render();
 // x ranges, y ranges, and rgba colour
@@ -59,6 +66,8 @@ int main()
     // PAINT IT BLACK
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 
+    // read later
+    int fluid_pos_num = 0;
     // Makt a rectangle of water??
     for (int x_pos = 40; x_pos < 220; x_pos++)
     {
@@ -71,17 +80,9 @@ int main()
             pixels[x_pos][y_pos].r = 0;
             pixels[x_pos][y_pos].g = 0;
             pixels[x_pos][y_pos].b = 255;
+            fluid_pos_num++;
         }
     }
-    std::cout << "Does this work?" << std ::endl;
-    if (pixels[500][300].state_now == empty)
-    {
-        std::cout << "this should be false" << std::endl;
-        SDL_RenderDrawPoint(renderer, 500, 300);
-        pixels[500][300].state_now = fluid;
-    }
-    std::cout << "Yes it does?" << std ::endl;
-
     // Make a rectangle of sand
     for (int x_pos = 80; x_pos < 100; x_pos++)
     {
@@ -97,13 +98,32 @@ int main()
         }
     }
 
+    // making the list of fluid shid
+    //int fluid_positions = 0;
+    struct cord_2d fluid_pos[fluid_pos_num];
+    int point = 0;
+    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+    {
+        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+        {
+            if (pixels[x_pos][y_pos].state_now == fluid)
+            {
+                fluid_pos[point].x_pos = x_pos;
+                fluid_pos[point].y_pos = y_pos;
+                point++;
+            }
+        }
+    }
+
+    // struct 2d_cord fluid_points[i];
+
     SDL_RenderPresent(renderer);
     std::cout << "Done1\n";
     SDL_Delay(1000);
     // Note: This is where the actual phsyics part happens for sand
     for (int iterations = 0; iterations < 1000; iterations++)
     {
-        fluid_1();
+        fluid_1(fluid_pos, fluid_pos_num);
         SDL_Delay(20);
         draw_and_render();
         std::cout << "Iteration : " << iterations << std::endl;
@@ -134,63 +154,77 @@ void excecution_finished(void)
     SDL_Quit();
 }
 
-void fluid_1(void)
+void fluid_1(struct cord_2d fluid_pos[], int fluid_num)
 {
     std::copy(&pixels[0][0], &pixels[0][0] + LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH, &new_version[0][0]);
 
-    for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
-    {
-        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-        {
+    // for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
+    // {
+    //     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+    //     {
+    //         // Check below and move.
+    //         if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty && y_pos != (LOGICAL_WINDOW_WIDTH - 1))
+    //         {
+    //             new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+    //             new_version[x_pos][y_pos + 1].b = 255;
 
-            // Check below and move.
-            if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty && y_pos != (LOGICAL_WINDOW_WIDTH - 1))
-            {
-                new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
-                new_version[x_pos][y_pos + 1].b = 255;
+    //             new_version[x_pos][y_pos].state_now = empty;
+    //             new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
+    //         }
+    //         // Down left
+    //         else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 10)
+    //         {
+    //             new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
+    //             new_version[x_pos - 1][y_pos + 1].b = 255;
 
-                new_version[x_pos][y_pos].state_now = empty;
-                new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
-            }
-            // Down left
-            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 10)
-            {
-                new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
-                new_version[x_pos - 1][y_pos + 1].b = 255;
+    //             new_version[x_pos][y_pos].state_now = empty;
+    //             new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
+    //         }
+    //         // Down right
+    //         else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 250)
+    //         {
+    //             new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
+    //             new_version[x_pos + 1][y_pos + 1].b = 255;
 
-                new_version[x_pos][y_pos].state_now = empty;
-                new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
-            }
-            // Down right
-            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 250)
-            {
-                new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
-                new_version[x_pos + 1][y_pos + 1].b = 255;
+    //             new_version[x_pos][y_pos].state_now = empty;
+    //             new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
+    //         }
+    //         // Should be right?
+    //         // THIS CAUSES THR PROBLRM
+    //         else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos - 1][y_pos].state_now == empty && new_version[x_pos - 1][y_pos].state_now == empty && x_pos != 10)
+    //         {
+    //             new_version[x_pos - 1][y_pos] = pixels[x_pos][y_pos];
+    //             new_version[x_pos - 1][y_pos].b = 255;
 
-                new_version[x_pos][y_pos].state_now = empty;
-                new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
-            }
-            // Should be right?
-            // THIS CAUSES THR PROBLRM
-            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos - 1][y_pos].state_now == empty && new_version[x_pos - 1][y_pos].state_now == empty && x_pos != 10)
-            {
-                new_version[x_pos - 1][y_pos] = pixels[x_pos][y_pos];
-                new_version[x_pos - 1][y_pos].b = 255;
+    //             new_version[x_pos][y_pos].state_now = empty;
+    //             new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
+    //         }
+    //         else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty && x_pos != 250)
+    //         {
+    //             new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
+    //             new_version[x_pos + 1][y_pos].b = 255;
 
-                new_version[x_pos][y_pos].state_now = empty;
-                new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
-            }
-            else if (pixels[x_pos][y_pos].state_now == fluid && pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty && x_pos != 250)
-            {
-                new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
-                new_version[x_pos + 1][y_pos].b = 255;
+    //             new_version[x_pos][y_pos].state_now = empty;
+    //             new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
+    //         }
+    //     }
+    // }
+     scr_dump();
 
-                new_version[x_pos][y_pos].state_now = empty;
-                new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].r = 0;
-            }
+    // I honestly have no idea how this is gonna look when done
+    // Took me 3hr to start cause I forgot how to spell lol
+    for(int i = 0; i < fluid_num; i++){
+        if(pixels[fluid_pos[i].x_pos][fluid_pos[i].y_pos].state_now == fluid && pixels[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1].state_now == empty && fluid_pos[i].y_pos != (LOGICAL_WINDOW_WIDTH - 1) && new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1].state_now == empty){
+            // std::cout << "this might work" << std::endl;
+            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1] = new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos];
+            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1].b = 255;
+            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1].state_now = fluid;
+
+            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos].state_now = empty;
+            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos].r = new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos].g = new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos].b = 0;
         }
     }
-    // scr_dump();
+
     std::copy(&new_version[0][0], &new_version[0][0] + LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH, &pixels[0][0]);
     SDL_RenderPresent(renderer);
 }
@@ -224,3 +258,16 @@ void draw_and_render()
         }
     }
 }
+
+// Mini essay section lol
+/*
+  ok so we need to know what pixels are and aren't fluid
+  how will we know?
+  once they are _all__ added we will make an array of structs with the positions of said pixels
+  and we will go through this struct when checking, simple
+
+  brute force finding pixels, cant do it when making them otherwise we'd have to use a linked-list which would be shid
+  therefoer we do after
+
+Note: Maybe add in hashmaps soon
+*/
