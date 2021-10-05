@@ -214,11 +214,11 @@ void fluid_1(struct cord_2d fluid_pos[], int fluid_num)
     // I honestly have no idea how this is gonna look when done
     // Took me 3hr to start cause I forgot how to spell lol
     for(int i = 0; i < fluid_num; i++){
-        if(pixels[fluid_pos[i].x_pos][fluid_pos[i].y_pos].state_now == fluid && pixels[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1].state_now == empty && fluid_pos[i].y_pos != (LOGICAL_WINDOW_WIDTH - 1) && new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1].state_now == empty){
+        if(pixels[fluid_pos[i].x_pos][fluid_pos[i].y_pos].state_now == fluid && pixels[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1].state_now == empty && fluid_pos[i].y_pos != 1 && new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1].state_now == empty){
             // std::cout << "this might work" << std::endl;
-            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1] = new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos];
-            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1].b = 255;
-            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos + 1].state_now = fluid;
+            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1] = new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos];
+            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1].b = 255;
+            new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1].state_now = fluid;
 
             new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos].state_now = empty;
             new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos].r = new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos].g = new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos].b = 0;
