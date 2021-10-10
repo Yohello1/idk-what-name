@@ -39,7 +39,7 @@ struct cord_2d
 
 // Array of pixel stuff
 
-struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct position pixels[256][256];
 struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 
 void render_now(void);
