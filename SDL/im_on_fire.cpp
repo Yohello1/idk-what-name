@@ -90,11 +90,7 @@ int main()
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
     std::cout << "Wait for 1 second pls" << std::endl;
-    SDL_Delay(3000);
-
-
-
-
+    SDL_Delay(1000);
 
     // I gueinuely have no idea is gonna happen from now on
     for (int x_pos = 120; x_pos < 128; x_pos++)
@@ -118,7 +114,7 @@ int main()
                 pixels[x_pos][y_pos].flameability = non_flamable;
                 pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = 255;
 
-                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, 255, 255, 255);
+                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, 255);
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
                 SDL_RenderPresent(renderer);
             }
@@ -126,7 +122,7 @@ int main()
     }
     // redraw_and_render();
     // uh does this make sense?
-    for (int i = 0; i < 250; i++)
+    for (int i = 0; i < 1000; i++)
     {
         std::cout << i << std::endl;
 
@@ -138,40 +134,45 @@ int main()
                 {
                     // std::cout << "There is a toasty baguette here" << std::endl;
                     /*
-                          . 3 .
-                          2 X 4
-                          . 1 .
-                         */
-                    if (pixels[x_pos][y_pos + 1].flameability == flameable && pixels[x_pos][y_pos + 1].temperature != 100)
+                     . 3 .
+                     2 X 4
+                     . 1 .
+                    */
+                    if (pixels[x_pos][y_pos + 1].flameability == flameable && pixels[x_pos][y_pos + 1].temperature != 200)
                     {
                         pixels[x_pos][y_pos + 1].temperature += 1;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].temperature * 2.5, 0, 0, 255);
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
                     }
-                    if (pixels[x_pos - 1][y_pos].flameability == flameable && pixels[x_pos - 1][y_pos].temperature != 100)
+                    if (pixels[x_pos - 1][y_pos].flameability == flameable && pixels[x_pos - 1][y_pos].temperature != 200)
                     {
                         pixels[x_pos - 1][y_pos].temperature += 1;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].temperature * 2.5, 0, 0, 255);
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
                     }
-                    if (pixels[x_pos][y_pos - 1].flameability == flameable && pixels[x_pos][y_pos - 1].temperature != 100)
+                    if (pixels[x_pos][y_pos - 1].flameability == flameable && pixels[x_pos][y_pos - 1].temperature != 200)
                     {
                         pixels[x_pos][y_pos - 1].temperature += 1;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].temperature * 2.5, 0, 0, 255);
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
                     }
-                    if (pixels[x_pos + 1][y_pos].flameability == flameable && pixels[x_pos + 1][y_pos].temperature != 100)
+                    if (pixels[x_pos + 1][y_pos].flameability == flameable && pixels[x_pos + 1][y_pos].temperature != 200)
                     {
                         pixels[x_pos + 1][y_pos].temperature += 1;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].temperature * 2.5, 0, 0, 255);
-                        SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+                        SDL_RenderDrawPoint(renderer, x_pos, y_pos);    
                     }
                 }
                 if (pixels[x_pos][y_pos].temperature == 20)
                 {
                     pixels[x_pos][y_pos].state_now = burning;
                 }
-
+                if (pixels[x_pos][y_pos].temperature == 200)
+                {
+                    pixels[x_pos][y_pos].flameability = non_flamable;
+                    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+                    SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+                }
             }
         }
         SDL_Delay(50);
@@ -202,8 +203,7 @@ void redraw_and_render()
             SDL_RenderDrawPoint(renderer, x_pos, y_pos);
         }
     }
-            SDL_RenderPresent(renderer);
-
+    SDL_RenderPresent(renderer);
 }
 void excecution_finished(void)
 {
