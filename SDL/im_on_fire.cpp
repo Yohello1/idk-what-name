@@ -122,7 +122,8 @@ int main()
     }
     // redraw_and_render();
     // uh does this make sense?
-    for (int i = 0; i < 10000; i++)
+    int power = 1;
+    for (int i = 0; i < 1000; i++)
     {
         std::cout << i << std::endl;
 
@@ -140,7 +141,7 @@ int main()
                     */
                     if ( y_pos != 255&& pixels[x_pos][y_pos + 1].flameability == flameable && pixels[x_pos][y_pos + 1].temperature != 510)
                     {
-                        pixels[x_pos][y_pos + 1].temperature += 1;
+                        pixels[x_pos][y_pos + 1].temperature += 1 * power * 5;
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature /2 ;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos + 1].r, pixels[x_pos][y_pos + 1].g, pixels[x_pos][y_pos + 1].b, pixels[x_pos][y_pos + 1].a);
 
@@ -148,39 +149,40 @@ int main()
                     }
                     if (x_pos != 1 && pixels[x_pos - 1][y_pos].flameability == flameable && pixels[x_pos - 1][y_pos].temperature != 510)
                     {
-                        pixels[x_pos - 1][y_pos].temperature += 1;
+                        pixels[x_pos - 1][y_pos].temperature += 1 * power * 1;
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature /2;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos - 1][y_pos].r, pixels[x_pos - 1][y_pos].g, pixels[x_pos - 1][y_pos].b, pixels[x_pos - 1][y_pos].a);
                         SDL_RenderDrawPoint(renderer, x_pos - 1, y_pos);
                     }
                     if (y_pos != 1 && pixels[x_pos][y_pos - 1].flameability == flameable && pixels[x_pos][y_pos - 1].temperature != 510)
                     {
-                        pixels[x_pos][y_pos - 1].temperature += 1;
+                        pixels[x_pos][y_pos - 1].temperature += 1 * power * 5;
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature /2;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos - 1].r, pixels[x_pos][y_pos - 1].g, pixels[x_pos][y_pos - 1].b, pixels[x_pos][y_pos-1].a);
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos - 1);
                     }
                     if (x_pos != 255 && pixels[x_pos + 1][y_pos].flameability == flameable && pixels[x_pos + 1][y_pos].temperature != 510)
                     {
-                        pixels[x_pos + 1][y_pos].temperature += 1;
+                        pixels[x_pos + 1][y_pos].temperature += 1 * power * 10;
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature /2;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos + 1][y_pos].r, pixels[x_pos + 1][y_pos].g, pixels[x_pos + 1][y_pos].b, pixels[x_pos + 1][y_pos].a);
                         SDL_RenderDrawPoint(renderer, x_pos + 1, y_pos);
                     }
+		    pixels[x_pos][y_pos].temperature += 1;
                 }
                 if (pixels[x_pos][y_pos].temperature == 50)
                 {
                     pixels[x_pos][y_pos].state_now = burning;
                 }
-                 if (pixels[x_pos][y_pos].temperature == 510)
-                 {
-                     pixels[x_pos][y_pos].flameability = non_flamable;
-                     SDL_SetRenderDrawColor(renderer, 178, 190, 181, 255);
-                     SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-                 }
+                if (pixels[x_pos][y_pos].temperature > 510)
+                {
+		  pixels[x_pos][y_pos].flameability = non_flamable;
+                  SDL_SetRenderDrawColor(renderer, 178, 190, 181, 255);
+                  SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+                }
             }
         }
-        SDL_Delay(50);
+        SDL_Delay(10);
         SDL_RenderPresent(renderer);
     }
     excecution_finished();
