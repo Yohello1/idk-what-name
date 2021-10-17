@@ -36,6 +36,7 @@ int main()
     int y_pos = win_size.ws_row / 2;
     int x_pos = win_size.ws_col / 2;
     int tms = 50;
+    curs_set(3);
 
     for (int steps_till_die = 0; steps_till_die < 300; steps_till_die++)
     {
@@ -47,7 +48,6 @@ int main()
             y_pos--;
             mvprintw(y_pos, x_pos, " ");
             attroff(COLOR_PAIR(REMOVING));
-
             usrwait();
 
             attron(COLOR_PAIR(NORMAL));
@@ -192,6 +192,7 @@ int main()
             {
                 break;
             }
+            getch();
         }
         for (int i = 0; i < 900000; i++)
         {
@@ -202,6 +203,7 @@ int main()
                 break;
             }
         }
+        getch();
     }
     getch();
 
