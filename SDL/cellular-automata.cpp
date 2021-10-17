@@ -64,12 +64,12 @@ int main(void)
             spots[position].g = colour;
             spots[position].b = colour;
             // Prints this so I can see what is going on
-            std::cout << "Should be generating " << position << "\n"
-                      << "X = " << spots[position].x_pos << "\n"
-                      << "Y = " << spots[position].y_pos << "\n";
+	    // std::cout << "Should be generating " << position << "\n"
+	    //         << "X = " << spots[position].x_pos << "\n"
+	    //        << "Y = " << spots[position].y_pos << "\n";
             SDL_SetRenderDrawColor(renderer, spots[position].r, spots[position].g, spots[position].b, 255);
             SDL_RenderDrawPoint(renderer, x, y);
-            std::cout << "Point (" << x << " , " << y << ") \n";
+            // std::cout << "Point (" << x << " , " << y << ") \n";
         }
     }
 
@@ -200,8 +200,8 @@ int main(void)
                     walled++;
                 }
 
-                std::cout << "Position ( " << x << "," << y << " )"
-                          << "Walls = " << walled;
+                // std::cout << "Position ( " << x << "," << y << " )"
+                //           << "Walls = " << walled;
                 if (walled > 4)
                 {
                     std::cout << " Becomes wall\n";
@@ -242,8 +242,8 @@ int main(void)
                 spots[position].r = new_state[position].r;
                 spots[position].g = new_state[position].g;
                 spots[position].b = new_state[position].b;
-                std::cout << " NEXT ITTERATION\nSpots ( " << spots[position].x_pos << "," << spots[position].y_pos << ")\n"
-                          << "New_state ( " << new_state[position].x_pos << "," << new_state[position].y_pos << ")\n";
+		//                std::cout << " NEXT ITTERATION\nSpots ( " << spots[position].x_pos << "," << spots[position].y_pos << ")\n"
+		//         << "New_state ( " << new_state[position].x_pos << "," << new_state[position].y_pos << ")\n";
 
                 SDL_SetRenderDrawColor(renderer, spots[position].r, spots[position].g, spots[position].b, 255);
                 SDL_RenderDrawPoint(renderer, x, y);
