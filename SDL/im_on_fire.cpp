@@ -7,7 +7,7 @@
 #include <cmath>
 #include <memory>
 #define LOGICAL_WINDOW_WIDTH 256
-
+#define PI 3.14159265
 //time
 unsigned int current_time = (unsigned int)time(NULL);
 // pointers to these things
@@ -59,7 +59,7 @@ int noise_gen();
 // this script is gonn hurtme
 
 // ion feel like taking usr input so these are just gonna be pre-defined global variables
-int noise_density = 80;
+int noise_density = 95;
 double wind_dir_degrees = 65;
 
 int main()
@@ -127,7 +127,7 @@ int main()
     }
     // redraw_and_render();
     // uh does this make sense?
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i > -1; i++)
     {
         std::cout << i << std::endl;
 
@@ -150,7 +150,7 @@ int main()
                         // this is like taking the dir and changing how fast it's heating up the tiles based on the intensity in its direction
                         // "wind_dir_degrees * 3.141 / 180" switches it to radians, then pass it through sin/cos
                         // sin for height, cos for horizonetelasjs
-                        pixels[x_pos][y_pos + 1].temperature += sin(wind_dir_degrees * 3.141 / 180) ;
+                        pixels[x_pos][y_pos + 1].temperature += sin(wind_dir_degrees * 3.141 / 180) * (tan(wind_dir_degrees) * -1);
                         // sets colour stuff by taking temp and halfint it, might remove this tbh
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
                         // Setting colour and drawing
@@ -159,7 +159,7 @@ int main()
                     }
                     if (x_pos != 1 && pixels[x_pos - 1][y_pos].flameability == flameable && pixels[x_pos - 1][y_pos].temperature != 510)
                     {
-                        pixels[x_pos - 1][y_pos].temperature += cos(wind_dir_degrees * 3.141 / 180);
+                        pixels[x_pos - 1][y_pos].temperature += cos(wind_dir_degrees * 3.141 / 180) * (tan(wind_dir_degrees) * -1);
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos - 1][y_pos].r, pixels[x_pos - 1][y_pos].g, pixels[x_pos - 1][y_pos].b, pixels[x_pos - 1][y_pos].a);
                         SDL_RenderDrawPoint(renderer, x_pos - 1, y_pos);
@@ -167,14 +167,14 @@ int main()
                     if (y_pos != 1 && pixels[x_pos][y_pos - 1].flameability == flameable && pixels[x_pos][y_pos - 1].temperature != 510)
                     {
                         // The +1 stuff is to offset the negative stuff so it doesnt become negative temp
-                        pixels[x_pos][y_pos - 1].temperature += (sin(wind_dir_degrees * 3.141 / 180) + 1);
+                        pixels[x_pos][y_pos - 1].temperature += (sin(wind_dir_degrees * 3.141 / 180) + 1) * (tan(wind_dir_degrees) * -1);
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos - 1].r, pixels[x_pos][y_pos - 1].g, pixels[x_pos][y_pos - 1].b, pixels[x_pos][y_pos - 1].a);
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos - 1);
                     }
                     if (x_pos != 255 && pixels[x_pos + 1][y_pos].flameability == flameable && pixels[x_pos + 1][y_pos].temperature != 510)
                     {
-                        pixels[x_pos + 1][y_pos].temperature += (cos(wind_dir_degrees * 3.141 / 180) + 1);
+                        pixels[x_pos + 1][y_pos].temperature += (cos(wind_dir_degrees * 3.141 / 180) + 1) * (tan(wind_dir_degrees) * -1);
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos + 1][y_pos].r, pixels[x_pos + 1][y_pos].g, pixels[x_pos + 1][y_pos].b, pixels[x_pos + 1][y_pos].a);
                         SDL_RenderDrawPoint(renderer, x_pos + 1, y_pos);
@@ -195,6 +195,13 @@ int main()
         }
         SDL_Delay(10);
         SDL_RenderPresent(renderer);
+        if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+        {
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_Quit();
+            return 0;
+        }
     }
     excecution_finished();
 }
