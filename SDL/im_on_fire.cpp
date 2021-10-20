@@ -7,7 +7,7 @@
 #include <cmath>
 #include <memory>
 #define LOGICAL_WINDOW_WIDTH 256
-
+#define PI 3.14159265
 //time
 unsigned int current_time = (unsigned int)time(NULL);
 // pointers to these things
@@ -37,11 +37,11 @@ struct pixel_data_struct
 {
     pixel_state state_now;
     flame flameability;
-    int r;
-    int g;
-    int b;
-    int a;
-    int temperature;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
+    uint16_t temperature;
 };
 // why must I make this
 struct cord_2d
@@ -57,6 +57,10 @@ void redraw_and_render();
 void excecution_finished();
 int noise_gen();
 // this script is gonn hurtme
+
+// ion feel like taking usr input so these are just gonna be pre-defined global variables
+int noise_density = 95;
+double wind_dir_degrees = 65;
 
 int main()
 {
@@ -92,7 +96,7 @@ int main()
     std::cout << "Wait for 1 second pls" << std::endl;
     SDL_Delay(1000);
 
-    // I gueinuely have no idea is gonna happen from now on
+    // draw fire
     for (int x_pos = 120; x_pos < 128; x_pos++)
     {
         for (int y_pos = 120; y_pos < 128; y_pos++)
@@ -105,6 +109,7 @@ int main()
             SDL_RenderDrawPoint(renderer, x_pos, y_pos);
         }
     }
+    // Noise
     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
         for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
@@ -122,7 +127,7 @@ int main()
     }
     // redraw_and_render();
     // uh does this make sense?
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i > -1; i++)
     {
         std::cout << i << std::endl;
 
@@ -138,50 +143,65 @@ int main()
                      2 X 4
                      . 1 .
                     */
-                    if ( y_pos != 255&& pixels[x_pos][y_pos + 1].flameability == flameable && pixels[x_pos][y_pos + 1].temperature != 510)
+                    // Just go look at the fire_wind_math_idk.png picture for an explaination
+                    if (y_pos != 255 && pixels[x_pos][y_pos + 1].flameability == flameable && pixels[x_pos][y_pos + 1].temperature != 510)
                     {
-                        pixels[x_pos][y_pos + 1].temperature += 1;
-                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature /2 ;
+                        // I HAVE NO CLUE BUT I'LL TRY AND EXPLAIN
+                        // this is like taking the dir and changing how fast it's heating up the tiles based on the intensity in its direction
+                        // "wind_dir_degrees * 3.141 / 180" switches it to radians, then pass it through sin/cos
+                        // sin for height, cos for horizonetelasjs
+                        pixels[x_pos][y_pos + 1].temperature += sin(wind_dir_degrees * 3.141 / 180);
+                        // sets colour stuff by taking temp and halfint it, might remove this tbh
+                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
+                        // Setting colour and drawing
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos + 1].r, pixels[x_pos][y_pos + 1].g, pixels[x_pos][y_pos + 1].b, pixels[x_pos][y_pos + 1].a);
-
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos + 1);
                     }
                     if (x_pos != 1 && pixels[x_pos - 1][y_pos].flameability == flameable && pixels[x_pos - 1][y_pos].temperature != 510)
                     {
-                        pixels[x_pos - 1][y_pos].temperature += 1;
-                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature /2;
+                        pixels[x_pos - 1][y_pos].temperature += cos(wind_dir_degrees * 3.141 / 180);
+                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos - 1][y_pos].r, pixels[x_pos - 1][y_pos].g, pixels[x_pos - 1][y_pos].b, pixels[x_pos - 1][y_pos].a);
                         SDL_RenderDrawPoint(renderer, x_pos - 1, y_pos);
                     }
                     if (y_pos != 1 && pixels[x_pos][y_pos - 1].flameability == flameable && pixels[x_pos][y_pos - 1].temperature != 510)
                     {
-                        pixels[x_pos][y_pos - 1].temperature += 1;
-                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature /2;
-                        SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos - 1].r, pixels[x_pos][y_pos - 1].g, pixels[x_pos][y_pos - 1].b, pixels[x_pos][y_pos-1].a);
+                        // The +1 stuff is to offset the negative stuff so it doesnt become negative temp
+                        pixels[x_pos][y_pos - 1].temperature += (sin(wind_dir_degrees * 3.141 / 180)+1 );
+                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
+                        SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos - 1].r, pixels[x_pos][y_pos - 1].g, pixels[x_pos][y_pos - 1].b, pixels[x_pos][y_pos - 1].a);
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos - 1);
                     }
                     if (x_pos != 255 && pixels[x_pos + 1][y_pos].flameability == flameable && pixels[x_pos + 1][y_pos].temperature != 510)
                     {
-                        pixels[x_pos + 1][y_pos].temperature += 1;
-                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature /2;
+                        pixels[x_pos + 1][y_pos].temperature += (cos(wind_dir_degrees * 3.141 / 180)+1) ;
+                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
                         SDL_SetRenderDrawColor(renderer, pixels[x_pos + 1][y_pos].r, pixels[x_pos + 1][y_pos].g, pixels[x_pos + 1][y_pos].b, pixels[x_pos + 1][y_pos].a);
                         SDL_RenderDrawPoint(renderer, x_pos + 1, y_pos);
                     }
+                    pixels[x_pos][y_pos].temperature += 1;
                 }
                 if (pixels[x_pos][y_pos].temperature == 50)
                 {
                     pixels[x_pos][y_pos].state_now = burning;
                 }
-                 if (pixels[x_pos][y_pos].temperature == 510)
-                 {
-                     pixels[x_pos][y_pos].flameability = non_flamable;
-                     SDL_SetRenderDrawColor(renderer, 178, 190, 181, 255);
-                     SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-                 }
+                if (pixels[x_pos][y_pos].temperature > 510)
+                {
+                    pixels[x_pos][y_pos].flameability = non_flamable;
+                    SDL_SetRenderDrawColor(renderer, 178, 190, 181, 255);
+                    SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+                }
             }
         }
-        SDL_Delay(50);
+        SDL_Delay(10);
         SDL_RenderPresent(renderer);
+        if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+        {
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_Quit();
+            return 0;
+        }
     }
     excecution_finished();
 }
@@ -230,7 +250,7 @@ int noise_gen()
 {
     int num = (rand() % 100);
 
-    if (num > 80)
+    if (num > noise_density)
     {
         num = 1;
     }

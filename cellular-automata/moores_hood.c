@@ -101,15 +101,6 @@ int main()
     mvprintw(0, 0, "The end is nye");
     getch();
 
-    /*
-You know what?
-Screw this, Ima try another method
-Have 2 windows, 
-1 old, 1 new, an
-switch which one is being shown when doing the analyaztion and printing
-solves all the issues
-*/
-
     getch();
     endwin();
 
@@ -161,9 +152,9 @@ void moores_hood(int y_pos, int x_pos)
     }
 
     // Adjacent
-    //  2 X 3
-    //  X X X
     //  4 X 1
+    //  X X X
+    //  2 X 3
     else if (mvinch(y_pos + 1, x_pos + 1) == '#')
     {
         walled++;
