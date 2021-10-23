@@ -139,7 +139,14 @@ int main()
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
-                SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
+                for (int y_pos = (mouse_y / 4) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / 4) + 4; y_pos++)
+                {
+                    for (int x_pos = (mouse_x / 4) - 4; x_pos != LOGICAL_WINDOW_WIDTH - 1 && x_pos < (mouse_x / 4) + 4; x_pos++)
+                    {
+                        SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+                        std::cout << "(" << x_pos << "," << y_pos << ")" << std::endl;
+                    }
+                }
                 SDL_RenderPresent(renderer);
                 pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].b = pixels[mouse_x / 4][mouse_y / 4].a = 255;
                 break;
