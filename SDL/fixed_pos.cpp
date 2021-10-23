@@ -30,11 +30,11 @@ enum pixel_state
 struct position
 {
     pixel_state state_now;
-    int r;
-    int g;
-    int b;
-    int a;
-    int temperature;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
+    uint16_t temperature;
 };
 // why must I make this
 struct cord_2d
@@ -99,33 +99,77 @@ int main()
             {
                 mouse_down = false;
             }
-            if (mouse_down == true)
-            {
-                if (button->button == SDL_BUTTON_LEFT)
-                {
-                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                    SDL_GetMouseState(&mouse_x, &mouse_y);
-                    std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
-                    SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
-                    SDL_RenderPresent(renderer);
-                    pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].b = pixels[mouse_x / 4][mouse_y / 4].a = 255;
-                    // pixels[x_pos][y_pos].state_now = fixed_pos;
-                }
-                else if (button->button == SDL_BUTTON_LEFT)
-                {
-                    SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-                    pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].b = pixels[mouse_x / 4][mouse_y / 4].a = 255;
-                    pixels[mouse_x / 4][mouse_y / 4].g = 0;
-                    SDL_GetMouseState(&mouse_x, &mouse_y);
-                    std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
-                    SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
-                    SDL_RenderPresent(renderer);
-                }
+            // if (mouse_down == true)
+            // {
+            //     if (event.button.button == SDL_BUTTON_LEFT)
+            //     {
+            //         SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+            //         SDL_GetMouseState(&mouse_x, &mouse_y);
+            //         std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
+            //         SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
+            //         SDL_RenderPresent(renderer);
+            //         pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+            //     }
+            //     if (event.button.button == SDL_BUTTON_RIGHT)
+            //     {
+            //         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            //         SDL_GetMouseState(&mouse_x, &mouse_y);
+            //         std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
+            //         SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
+            //         SDL_RenderPresent(renderer);
+            //         pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].b = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+            //         // pixels[x_pos][y_pos].state_now = fixed_pos;
+            //     }
 
-                // pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 255;
-                // pixels[x_pos][y_pos].state_now = fixed_pos;
+            //     // pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 255;
+            //     // pixels[x_pos][y_pos].state_now = fixed_pos;
+            // }
+
+            switch (event.button.button)
+            {
+            case SDL_BUTTON_LEFT:
+                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                SDL_GetMouseState(&mouse_x, &mouse_y);
+                std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
+                SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
+                SDL_RenderPresent(renderer);
+                pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+                break;
+            case SDL_BUTTON_RIGHT:
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                SDL_GetMouseState(&mouse_x, &mouse_y);
+                std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
+                SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
+                SDL_RenderPresent(renderer);
+                pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].b = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+                break;
             }
         }
+        // if (event.type == SDL_MOUSEBUTTONDOWN)
+        // {
+        //     switch (event.button.button)
+        //     {
+        //     case SDL_BUTTON_LEFT:
+        //         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        //         SDL_GetMouseState(&mouse_x, &mouse_y);
+        //         std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
+        //         SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
+        //         SDL_RenderPresent(renderer);
+        //         pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].b = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+        //         break;
+        //     case SDL_BUTTON_RIGHT:
+        //         SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+        //         pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].b = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+        //         pixels[mouse_x / 4][mouse_y / 4].g = 0;
+        //         SDL_GetMouseState(&mouse_x, &mouse_y);
+        //         std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
+        //         SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
+        //         SDL_RenderPresent(renderer);
+        //         break;
+        //     default:
+        //         break;
+        //     }
+        // }
     }
 
     excecution_finished();

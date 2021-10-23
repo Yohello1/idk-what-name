@@ -28,11 +28,11 @@ enum pixel_state
 struct position
 {
     pixel_state state_now;
-    int r;
-    int g;
-    int b;
-    int a;
-    int temperature;
+    uint8_t  r;
+    uint8_t  g;
+    uint8_t  b;
+    uint8_t  a;
+    uint16_t temperature;
 };
 // why must I make this
 struct cord_2d
