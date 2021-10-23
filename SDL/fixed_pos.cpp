@@ -21,6 +21,7 @@ enum pixel_state
     empty,
     gas,
     fluid,
+    sand,
     solid,
     fire,
     burning,
@@ -78,9 +79,9 @@ int main()
     }
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
+    // Poisition, quit vars
     int mouse_x = 0, mouse_y = 0;
     bool quit = false;
-    bool mouse_down = false;
     while (!quit)
     {
         while (SDL_PollEvent(&event) != 0)
@@ -91,14 +92,15 @@ int main()
             {
                 quit = true;
             }
-            else if (event.type == SDL_MOUSEBUTTONDOWN)
-            {
-                mouse_down = true;
-            }
-            else if (event.type == SDL_MOUSEBUTTONUP)
-            {
-                mouse_down = false;
-            }
+
+            // else if (event.type == SDL_MOUSEBUTTONDOWN)
+            // {
+            //     mouse_down = true;
+            // }
+            // else if (event.type == SDL_MOUSEBUTTONUP)
+            // {
+            //     mouse_down = false;
+            // }
             // if (mouse_down == true)
             // {
             //     if (event.button.button == SDL_BUTTON_LEFT)
@@ -134,21 +136,31 @@ int main()
                 SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
                 SDL_RenderPresent(renderer);
                 pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+                pixels[mouse_x / 4][mouse_y / 4].state_now = fixed_pos;
                 break;
             case SDL_BUTTON_RIGHT:
+            // set draw colour
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                // Get mouse position
                 SDL_GetMouseState(&mouse_x, &mouse_y);
+                //Output location
                 std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
+                // Get mouse position, convert to logical position, then make like a block around it which is 8x8 to make I think white
                 for (int y_pos = (mouse_y / 4) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / 4) + 4; y_pos++)
                 {
                     for (int x_pos = (mouse_x / 4) - 4; x_pos != LOGICAL_WINDOW_WIDTH - 1 && x_pos < (mouse_x / 4) + 4; x_pos++)
                     {
+                        // Drawing , outputing position, draw, and seting new state
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
                         std::cout << "(" << x_pos << "," << y_pos << ")" << std::endl;
+                        pixels[mouse_x / 4][mouse_y / 4].state_now = sand;
                     }
                 }
+                // Present data
                 SDL_RenderPresent(renderer);
-                pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].b = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+                // Setting colours
+                pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].a = 255;
+                pixels[mouse_x / 4][mouse_y / 4].b = 0;
                 break;
             }
         }
