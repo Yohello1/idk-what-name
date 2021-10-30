@@ -7,6 +7,7 @@
 #include <cmath>
 #include <memory>
 #define LOGICAL_WINDOW_WIDTH 256
+#define ACTUAL_WINDOW_WIDTH 1024
 
 //time
 unsigned int current_time = (unsigned int)time(NULL);
@@ -63,9 +64,13 @@ int main()
     srand(current_time);
     // rise my glorious creation*
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(1024, 1024, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, 0, &window, &renderer);
     SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
     SDL_RenderClear(renderer);
+
+    // Now we need to get the ratio
+    uint_fast8_t actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
+
     // PAINT IT BLACK
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 
@@ -98,35 +103,35 @@ int main()
             case SDL_BUTTON_LEFT:
                 SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
                 SDL_GetMouseState(&mouse_x, &mouse_y);
-                std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
-                SDL_RenderDrawPoint(renderer, mouse_x / 4, mouse_y / 4);
+                std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+                SDL_RenderDrawPoint(renderer, mouse_x / actual_2_logic_ratio, mouse_y / actual_2_logic_ratio);
                 SDL_RenderPresent(renderer);
-                pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].a = 255;
-                pixels[mouse_x / 4][mouse_y / 4].state_now = fixed_pos;
+                pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+                pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = fixed_pos;
                 break;
             case SDL_BUTTON_RIGHT:
-            // set draw colour
+                // set draw colour
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
                 // Get mouse position
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 //Output location
-                std::cout << "(" << mouse_x / 4 << "," << mouse_y / 4 << ")" << std::endl;
+                std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
                 // Get mouse position, convert to logical position, then make like a block around it which is 8x8 to make I think white
-                for (int y_pos = (mouse_y / 4) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / 4) + 4; y_pos++)
+                for (int y_pos = (mouse_y / actual_2_logic_ratio) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / actual_2_logic_ratio) + 4; y_pos++)
                 {
-                    for (int x_pos = (mouse_x / 4) - 4; x_pos != LOGICAL_WINDOW_WIDTH - 1 && x_pos < (mouse_x / 4) + 4; x_pos++)
+                    for (int x_pos = (mouse_x / actual_2_logic_ratio) - 4; x_pos != LOGICAL_WINDOW_WIDTH - 1 && x_pos < (mouse_x / actual_2_logic_ratio) + 4; x_pos++)
                     {
                         // Drawing , outputing position, draw, and seting new state
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
                         std::cout << "(" << x_pos << "," << y_pos << ")" << std::endl;
-                        pixels[mouse_x / 4][mouse_y / 4].state_now = sand;
+                        pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = sand;
                     }
                 }
                 // Present data
                 SDL_RenderPresent(renderer);
                 // Setting colours
-                pixels[mouse_x / 4][mouse_y / 4].r = pixels[mouse_x / 4][mouse_y / 4].g = pixels[mouse_x / 4][mouse_y / 4].a = 255;
-                pixels[mouse_x / 4][mouse_y / 4].b = 0;
+                pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+                pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
                 break;
             }
         }
@@ -172,4 +177,14 @@ void excecution_finished(void)
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+void sand_sim()
+{
+    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+    {
+        for(int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++){
+            
+        }
+    }
 }
