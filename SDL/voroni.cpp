@@ -88,11 +88,12 @@ int main(void)
             SDL_SetRenderDrawColor(renderer, spots[point].r, spots[point].g, spots[point].b, 255);
 
             SDL_RenderDrawPoint(renderer, x, y);
-            std::cout << "Point (" << x << " , " << y << ") \n";
-            SDL_RenderPresent(renderer);
+            // std::cout << "Point (" << x << " , " << y << ") \n";
 
             // getch();
         }
+        SDL_RenderPresent(renderer);
+
         // getch();
     }
     SDL_RenderPresent(renderer);
