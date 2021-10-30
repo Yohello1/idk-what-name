@@ -50,6 +50,7 @@ struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void scr_dump();
 void redraw_and_render();
 void excecution_finished();
+void sand_sim();
 
 // this script is gonn hurtme
 
@@ -91,6 +92,12 @@ int main()
     {
         while (SDL_PollEvent(&event) != 0)
         {
+            // This is gonna be annoying 
+            /*
+                Make 2 threads, one for user input, other for simulation
+                Why 2 threads?
+                Cause doing this on one breaks soo muchhhh
+            */
 
             //User requests quit
             if (event.type == SDL_QUIT)
@@ -107,7 +114,9 @@ int main()
                 SDL_RenderDrawPoint(renderer, mouse_x / actual_2_logic_ratio, mouse_y / actual_2_logic_ratio);
                 SDL_RenderPresent(renderer);
                 pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+                pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
                 pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = fixed_pos;
+                SDL_RenderPresent(renderer);
                 break;
             case SDL_BUTTON_RIGHT:
                 // set draw colour
@@ -124,14 +133,13 @@ int main()
                         // Drawing , outputing position, draw, and seting new state
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
                         std::cout << "(" << x_pos << "," << y_pos << ")" << std::endl;
-                        pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = sand;
+                        pixels[x_pos][y_pos].state_now = solid;
+                        pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].b = 255;
+                       
                     }
+                    SDL_RenderPresent(renderer);
                 }
-                // Present data
-                SDL_RenderPresent(renderer);
-                // Setting colours
-                pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
-                pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
+
                 break;
             }
         }
@@ -161,9 +169,9 @@ void redraw_and_render()
             SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
             SDL_RenderDrawPoint(renderer, x_pos, y_pos);
 
-            if (pixels[x_pos][y_pos].b == 255)
+            if (pixels[x_pos][y_pos].state_now == solid)
             {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
             }
         }
@@ -177,14 +185,4 @@ void excecution_finished(void)
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-}
-
-void sand_sim()
-{
-    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-    {
-        for(int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++){
-            
-        }
-    }
 }
