@@ -127,7 +127,7 @@ int main()
     }
     // redraw_and_render();
     // uh does this make sense?
-    for (int i = 0; i > -1; i++)
+    for (int i = 0; i > 1000; i++)
     {
         std::cout << i << std::endl;
 
