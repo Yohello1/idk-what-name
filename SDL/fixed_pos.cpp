@@ -6,6 +6,7 @@
 #include <random>
 #include <cmath>
 #include <memory>
+#include <thread>
 #define LOGICAL_WINDOW_WIDTH 256
 #define ACTUAL_WINDOW_WIDTH 1024
 
@@ -50,8 +51,14 @@ struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void scr_dump();
 void redraw_and_render();
 void excecution_finished();
-void sand_sim();
+// void sand_sim();
 
+// The ratios
+const uint_fast8_t actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
+
+// Starting thread stuff
+int rendering_thread(void);
+void foo(void);
 // this script is gonn hurtme
 
 int main()
@@ -70,7 +77,6 @@ int main()
     SDL_RenderClear(renderer);
 
     // Now we need to get the ratio
-    uint_fast8_t actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
 
     // PAINT IT BLACK
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -83,7 +89,8 @@ int main()
             pixels[x_pos][y_pos].state_now = empty;
         }
     }
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+    std::thread render_thread_pointer(rendering_thread);
 
     // Poisition, quit vars
     int mouse_x = 0, mouse_y = 0;
@@ -92,7 +99,7 @@ int main()
     {
         while (SDL_PollEvent(&event) != 0)
         {
-            // This is gonna be annoying 
+            // This is gonna be annoying
             /*
                 Make 2 threads, one for user input, other for simulation
                 Why 2 threads?
@@ -108,19 +115,15 @@ int main()
             switch (event.button.button)
             {
             case SDL_BUTTON_LEFT:
-                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
-                SDL_RenderDrawPoint(renderer, mouse_x / actual_2_logic_ratio, mouse_y / actual_2_logic_ratio);
-                SDL_RenderPresent(renderer);
                 pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
                 pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
                 pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = fixed_pos;
-                SDL_RenderPresent(renderer);
+
                 break;
             case SDL_BUTTON_RIGHT:
                 // set draw colour
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
                 // Get mouse position
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 //Output location
@@ -131,22 +134,47 @@ int main()
                     for (int x_pos = (mouse_x / actual_2_logic_ratio) - 4; x_pos != LOGICAL_WINDOW_WIDTH - 1 && x_pos < (mouse_x / actual_2_logic_ratio) + 4; x_pos++)
                     {
                         // Drawing , outputing position, draw, and seting new state
-                        SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+
                         std::cout << "(" << x_pos << "," << y_pos << ")" << std::endl;
                         pixels[x_pos][y_pos].state_now = solid;
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].b = 255;
-                       
                     }
-                    SDL_RenderPresent(renderer);
                 }
 
                 break;
             }
         }
     }
-
+    render_thread_pointer.join();
     excecution_finished();
 }
+
+int rendering_thread(void)
+{
+    std::cout << "Thread Started" << std::endl;
+    bool quit = false;
+    while (!quit)
+    {
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        {
+
+            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+            {
+                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
+                SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+            }
+        }
+        SDL_RenderPresent(renderer);
+        SDL_Delay(17);
+        if (event.type == SDL_QUIT)
+        {
+            quit = true;
+            break;
+        }
+    }
+}
+
+
 
 // Debug functions
 void scr_dump()
