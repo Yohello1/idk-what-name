@@ -8,7 +8,20 @@
 #include <memory>
 #include <thread>
 #define LOGICAL_WINDOW_WIDTH 256
-#define ACTUAL_WINDOW_WIDTH 1024
+#define ACTUAL_WINDOW_WIDTH 512
+
+/*
+Note to future self:
+Fuck this shit Im out
+
+Anyways,
+For some reason splitting it into 2 different threads was FINE and somehow
+didnt kill this via mutexs, deadlocks, and stuff????
+So I might leave this as is, and race condtions lol
+ */
+
+
+
 
 //time
 unsigned int current_time = (unsigned int)time(NULL);
@@ -57,8 +70,8 @@ void excecution_finished();
 const uint_fast8_t actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
 
 // Starting thread stuff
-int rendering_thread(void);
-void foo(void);
+void rendering_thread(void);
+void polling_thread(void);
 // this script is gonn hurtme
 
 int main()
@@ -90,13 +103,26 @@ int main()
         }
     }
 
+    // Starting up the threads, one for rendering, another for polling, oh gosh something is gonna break
+    // Wasnt I supposed to make a pointer??
     std::thread render_thread_pointer(rendering_thread);
+    std::thread polling_thread_pointer(polling_thread);
 
-    // Poisition, quit vars
-    int mouse_x = 0, mouse_y = 0;
-    bool quit = false;
-    while (!quit)
+    // Joining the threads so I dont have to put down a revolution
+    polling_thread_pointer.join();
+    render_thread_pointer.join();
+    excecution_finished();
+}
+
+void polling_thread(void)
+{
+  int mouse_x = 0, mouse_y = 0;
+  bool quit = false;
+  int i = 0;
+  while (!quit)
     {
+      i++;
+      std::cout << "Polling itteration" << i << std::endl;
         while (SDL_PollEvent(&event) != 0)
         {
             // This is gonna be annoying
@@ -145,16 +171,19 @@ int main()
             }
         }
     }
-    render_thread_pointer.join();
-    excecution_finished();
+  
 }
 
-int rendering_thread(void)
+
+void rendering_thread(void)
 {
     std::cout << "Thread Started" << std::endl;
     bool quit = false;
+    int i = 0;
     while (!quit)
     {
+      i++;
+      std::cout << "Itteration rendering" << i << std::endl;
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
 
@@ -172,6 +201,7 @@ int rendering_thread(void)
             break;
         }
     }
+	std::cout << "Oh no What ever will I do" << std::endl;
 }
 
 
