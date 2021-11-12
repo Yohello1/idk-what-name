@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = fixed_pos.cpp
+OBJS = not_fixed.cpp
 
 #CC specifies which compiler we're using
 CC = g++
@@ -9,7 +9,7 @@ CC = g++
 COMPILER_FLAGS = -Wall -O3
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2 -lSDL2_image -g `sdl2-config --cflags --libs` 
+LINKER_FLAGS = -lSDL2 -lSDL2_image -g `sdl2-config --cflags --libs`  -lpthread
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = draw2
