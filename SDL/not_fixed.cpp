@@ -6,6 +6,9 @@
 #include <random>
 #include <cmath>
 #include <memory>
+#include <thread>
+#include <mutex>
+#include <atomic>
 #define LOGICAL_WINDOW_WIDTH 256
 #define ACTUAL_WINDOW_WIDTH 1024
 //time
@@ -44,7 +47,7 @@ struct cord_2d
     int y_pos;
 };
 
-pthread_mutex_t locks[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+std::mutex locks[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void scr_dump_state();
@@ -58,13 +61,14 @@ void excecution_finished();
 // void polling_thread();
 // void rendering_thread_function();
 
+void fall();
 /*
 Im sorry threading functions, 
 you were meant to be so much more
 you were meant to save us
 help us
 but, the limitations of SDL
-limit our abilities
+limits our abilities
 
 ANYWAYS SIMULATION STUFF GO GO GO
 WE HAVE HOSTILES INCOMING
@@ -72,9 +76,10 @@ WE HAVE HOSTILES INCOMING
 SIR WE CANT HOLD EM
 
 I SAID HOLD EM, WE JUST NEED TO HOLD ON FOR ANOTHER-
-OH ODIN WHAT'S WHAT
-*/
+OH ODIN WHAT'S THAT
 
+Dies
+*/
 
 // The ratios
 const uint_fast8_t actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
@@ -103,7 +108,7 @@ int main()
     {
         for (int y_pos = 0; y_pos < 0; y_pos++)
         {
-            pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].temperature = 255;
+            pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].temperature = 0;
             pixels[x_pos][y_pos].state_now = empty;
         }
     }
@@ -111,12 +116,16 @@ int main()
     // Joining the threads so I dont have to put down a revolution
     SDL_RenderPresent(renderer);
 
+    // std::thread sand_pointer(fall);
+
     std::cout << "So the threads have started" << std::endl;
     bool quit = false;
     uint i = 0;
-    int mouse_x =0, mouse_y = 0;
+    int mouse_x = 0, mouse_y = 0;
     while (!quit)
     {
+        i++;
+        std::cout << "Itteration" << i << std::endl;
         while (SDL_PollEvent(&event) != 0)
         {
             //User requests quit
@@ -160,6 +169,38 @@ int main()
 
             break;
         }
+
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        {
+            for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
+            {
+                if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos][y_pos + 1].state_now == empty)
+                {
+
+                    std::cout << "Valid move" << std::endl;
+                    pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+                    pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+                    pixels[x_pos][y_pos].state_now = empty;
+                }
+                else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos + 1][y_pos + 1].state_now == empty)
+                {
+
+                    std::cout << "Valid move" << std::endl;
+                    pixels[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
+                    pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+                    pixels[x_pos][y_pos].state_now = empty;
+                }
+                else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos - 1][y_pos + 1].state_now == empty)
+                {
+
+                    std::cout << "Valid move" << std::endl;
+                    pixels[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
+                    pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+                    pixels[x_pos][y_pos].state_now = empty;
+                }
+            }
+        }
+
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
@@ -171,10 +212,53 @@ int main()
         SDL_RenderPresent(renderer);
     }
 
+    // sand_pointer.join();
     // So this is the reason it was being dumped LOL
     // scr_dump();
-    scr_dump_state();
+    // scr_dump_state();
     excecution_finished();
+}
+
+void fall()
+{
+
+    int i = 0;
+    bool quit = false;
+    while (!quit)
+    {
+        // check if it can die yet
+        while (SDL_PollEvent(&event) != 0)
+        {
+            //User requests quit
+            if (event.type == SDL_QUIT)
+            {
+                quit = true;
+            }
+        }
+        i++;
+        std::cout << "Another sand falling down " << i << std::endl;
+
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        {
+            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+            {
+                locks[x_pos][y_pos].lock();
+                locks[x_pos][y_pos + 1].lock();
+                if (pixels[x_pos][y_pos + 1].state_now != fixed_pos && y_pos != 255 && pixels[x_pos][y_pos].state_now == solid)
+                {
+                    pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+                    pixels[x_pos][y_pos].r =
+                        pixels[x_pos][y_pos].g =
+                            pixels[x_pos][y_pos].b =
+                                pixels[x_pos][y_pos].a = 0;
+                    pixels[x_pos][y_pos].state_now = empty;
+                    std::cout << "Hello" << std::endl;
+                }
+                locks[x_pos][y_pos].unlock();
+                locks[x_pos][y_pos + 1].unlock();
+            }
+        }
+    }
 }
 
 // Debug functions
