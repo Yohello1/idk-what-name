@@ -1,0 +1,15 @@
+So how will multi-threading work in this program??
+
+After some research I found out I cannot mutli-thread rendering & polling data :P
+Those two things have to be on the same thread, now that makes this several times more annoying but eh
+
+I plan on having 4 arrays that store the screen space data
+1 array is being rendered
+2 are being used to do the actual simualation stuff
+1 array is being used to store the usr input until the simulation stuff is done being ya know
+
+Run polling & Rendering on one thread
+
+One thread for simulation
+
+One for the stored data
