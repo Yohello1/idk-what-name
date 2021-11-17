@@ -63,7 +63,7 @@ void excecution_finished();
 // void polling_thread();
 // void rendering_thread_function();
 
-void fall();
+void simulation();
 /*
 Im sorry threading functions, 
 you were meant to be so much more
@@ -118,7 +118,7 @@ int main()
     // Joining the threads so I dont have to put down a revolution
     SDL_RenderPresent(renderer);
 
-    // std::thread sand_pointer(fall);
+    std::thread sand_pointer(simulation);
 
     std::cout << "So the threads have started" << std::endl;
     bool quit = false;
@@ -136,7 +136,7 @@ int main()
                 quit = true;
             }
         }
-        switch (event.button.button)
+       switch (event.button.button)
         {
         case SDL_BUTTON_LEFT:
             SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
@@ -172,6 +172,70 @@ int main()
             break;
         }
 
+        // for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        // {
+        //     for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
+        //     {
+        //         if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos][y_pos + 1].state_now == empty)
+        //         {
+
+	// 	  // std::cout << "Valid move" << std::endl;
+        //             pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+        //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+        //             pixels[x_pos][y_pos].state_now = empty;
+        //         }
+        //         else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos + 1][y_pos + 1].state_now == empty)
+        //         {
+
+	// 	  // std::cout << "Valid move" << std::endl;
+        //             pixels[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
+        //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+        //             pixels[x_pos][y_pos].state_now = empty;
+        //         }
+        //         else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos - 1][y_pos + 1].state_now == empty)
+        //         {
+
+	// 	  // std::cout << "Valid move" << std::endl;
+        //             pixels[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
+        //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+        //             pixels[x_pos][y_pos].state_now = empty;
+        //         }
+        //     }
+        // }
+
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        {
+            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+            {
+                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
+                SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+            }
+        }
+        SDL_RenderPresent(renderer);
+    }
+
+    sand_pointer.join();
+    // So this is the reason it was being dumped LOL
+    // scr_dump();
+    // scr_dump_state();
+    excecution_finished();
+}
+
+void simulation()
+{
+
+  bool quit = false;
+   while (!quit)
+    {
+        while (SDL_PollEvent(&event) != 0)
+        {
+            //User requests quit
+            if (event.type == SDL_QUIT)
+            {
+                quit = true;
+            }
+        }
+   
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
             for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
@@ -200,64 +264,6 @@ int main()
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                     pixels[x_pos][y_pos].state_now = empty;
                 }
-            }
-        }
-
-        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-        {
-            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-            {
-                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
-                SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-            }
-        }
-        SDL_RenderPresent(renderer);
-    }
-
-    // sand_pointer.join();
-    // So this is the reason it was being dumped LOL
-    // scr_dump();
-    // scr_dump_state();
-    excecution_finished();
-}
-
-void fall()
-{
-
-    int i = 0;
-    bool quit = false;
-    while (!quit)
-    {
-        // check if it can die yet
-        while (SDL_PollEvent(&event) != 0)
-        {
-            //User requests quit
-            if (event.type == SDL_QUIT)
-            {
-                quit = true;
-            }
-        }
-        i++;
-        std::cout << "Another sand falling down " << i << std::endl;
-
-        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-        {
-            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-            {
-                locks[x_pos][y_pos].lock();
-                locks[x_pos][y_pos + 1].lock();
-                if (pixels[x_pos][y_pos + 1].state_now != fixed_pos && y_pos != 255 && pixels[x_pos][y_pos].state_now == solid)
-                {
-                    pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
-                    pixels[x_pos][y_pos].r =
-                        pixels[x_pos][y_pos].g =
-                            pixels[x_pos][y_pos].b =
-                                pixels[x_pos][y_pos].a = 0;
-                    pixels[x_pos][y_pos].state_now = empty;
-                    std::cout << "Hello" << std::endl;
-                }
-                locks[x_pos][y_pos].unlock();
-                locks[x_pos][y_pos + 1].unlock();
             }
         }
     }

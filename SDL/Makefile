@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = not_fixed.cpp
+OBJS = multi_array_test.cpp 
 
 #CC specifies which compiler we're using
 CC = g++
@@ -18,3 +18,4 @@ OBJ_NAME = draw2
 all : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 	./draw2
+ 
