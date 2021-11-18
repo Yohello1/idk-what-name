@@ -9,9 +9,11 @@
 #include <thread>
 #include <mutex>
 #include <atomic>
+#include <chrono>
+using namespace std::chrono;
 
-#define LOGICAL_WINDOW_WIDTH 256
-#define ACTUAL_WINDOW_WIDTH 512
+#define LOGICAL_WINDOW_WIDTH 512
+#define ACTUAL_WINDOW_WIDTH 1024
 
 //time
 unsigned int current_time = (unsigned int)time(NULL);
@@ -136,7 +138,7 @@ int main()
                 quit = true;
             }
         }
-       switch (event.button.button)
+        switch (event.button.button)
         {
         case SDL_BUTTON_LEFT:
             SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
@@ -179,7 +181,7 @@ int main()
         //         if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos][y_pos + 1].state_now == empty)
         //         {
 
-	// 	  // std::cout << "Valid move" << std::endl;
+        // 	  // std::cout << "Valid move" << std::endl;
         //             pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
         //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
         //             pixels[x_pos][y_pos].state_now = empty;
@@ -187,7 +189,7 @@ int main()
         //         else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos + 1][y_pos + 1].state_now == empty)
         //         {
 
-	// 	  // std::cout << "Valid move" << std::endl;
+        // 	  // std::cout << "Valid move" << std::endl;
         //             pixels[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
         //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
         //             pixels[x_pos][y_pos].state_now = empty;
@@ -195,7 +197,7 @@ int main()
         //         else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos - 1][y_pos + 1].state_now == empty)
         //         {
 
-	// 	  // std::cout << "Valid move" << std::endl;
+        // 	  // std::cout << "Valid move" << std::endl;
         //             pixels[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
         //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
         //             pixels[x_pos][y_pos].state_now = empty;
@@ -203,6 +205,7 @@ int main()
         //     }
         // }
 
+        // auto start = high_resolution_clock::now();
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
@@ -212,6 +215,9 @@ int main()
             }
         }
         SDL_RenderPresent(renderer);
+        // auto stop = high_resolution_clock::now();
+        // auto duration = duration_cast<microseconds>(stop - start);
+        // std::cout << "Time taken by function: Rendering" << duration.count() << " microseconds" << std::endl;
     }
 
     sand_pointer.join();
@@ -224,8 +230,8 @@ int main()
 void simulation()
 {
 
-  bool quit = false;
-   while (!quit)
+    bool quit = false;
+    while (!quit)
     {
         while (SDL_PollEvent(&event) != 0)
         {
@@ -235,37 +241,41 @@ void simulation()
                 quit = true;
             }
         }
-   
+        // auto start = high_resolution_clock::now();
+
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
             for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
             {
-                if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos][y_pos + 1].state_now == empty)
+                if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && pixels[x_pos][y_pos + 1].state_now == empty)
                 {
 
-		  // std::cout << "Valid move" << std::endl;
+                    // std::cout << "Valid move" << std::endl;
                     pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                     pixels[x_pos][y_pos].state_now = empty;
                 }
-                else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos + 1][y_pos + 1].state_now == empty)
+                else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && pixels[x_pos + 1][y_pos + 1].state_now == empty)
                 {
 
-		  // std::cout << "Valid move" << std::endl;
+                    // std::cout << "Valid move" << std::endl;
                     pixels[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                     pixels[x_pos][y_pos].state_now = empty;
                 }
-                else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos - 1][y_pos + 1].state_now == empty)
+                else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && pixels[x_pos - 1][y_pos + 1].state_now == empty)
                 {
 
-		  // std::cout << "Valid move" << std::endl;
+                    // std::cout << "Valid move" << std::endl;
                     pixels[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                     pixels[x_pos][y_pos].state_now = empty;
                 }
             }
         }
+        //   auto stop = high_resolution_clock::now();
+        // auto duration = duration_cast<microseconds>(stop - start);
+        // std::cout << "Time taken by function: Simulating" << duration.count() << " microseconds" << std::endl;
     }
 }
 
