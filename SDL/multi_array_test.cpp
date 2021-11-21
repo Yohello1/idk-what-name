@@ -7,7 +7,6 @@
 #include <cmath>
 #include <memory>
 #include <thread>
-#include <mutex>
 #include <atomic>
 #include <chrono>
 using namespace std::chrono;
@@ -51,7 +50,6 @@ struct cord_2d
     int y_pos;
 };
 
-std::mutex locks[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void scr_dump_state();
@@ -273,8 +271,7 @@ void simulation()
                 }
             }
         }
-* Returns the sum of two numbers
-
+        //Returns the sum of two numbers
     }
 }
 
