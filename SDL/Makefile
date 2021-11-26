@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = new_render_method.cpp 
+OBJS = basic_new_render.cpp 
 
 #CC specifies which compiler we're using
 CC = g++

@@ -44,7 +44,7 @@ struct cord_2d
 
 struct position pixel_pos[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-
+double ratio = ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH;
 void excecution_finished();
 
 // What the geunine duck is going on here
@@ -54,7 +54,8 @@ void excecution_finished();
 // *magic*, but actually
 // First of all, make a texture, delete the texture data, but keep the pointer and allocated memory
 // Now you are the texture
-// What I mean is, you have to do the math for scalling...
+// // ~~What I mean is, you have to do the math for scalling...~~
+// That was wrong, I just can't do math, and wasn't putting LOGICAL_WINDOW_WIDTH in the right places
 // Because we literally copy paste the texture into the memory buffer
 // So we do all this shid ourselves, may god have mercy upon my soul
 int main()
@@ -72,10 +73,12 @@ int main()
     SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
     SDL_RenderClear(renderer);
 
-
-    SDL_Texture * texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
-    Uint32 * pixels = new Uint32[640 * 480];
+    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
+    Uint32 *pixels = new Uint32[LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH];
     memset(pixels, 128, LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH * sizeof(Uint32));
+
+        bool leftMouseButtonDown = false;
+
 
     // PAINT IT BLACK
     while (1)
@@ -85,8 +88,26 @@ int main()
         {
             break;
         }
-        SDL_RenderPresent(renderer);
-        // SDL_Delay(50);
+
+        switch (event.type)
+        {
+        case SDL_MOUSEBUTTONUP:
+            if (event.button.button == SDL_BUTTON_LEFT)
+                leftMouseButtonDown = false;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (event.button.button == SDL_BUTTON_LEFT)
+                leftMouseButtonDown = true;
+        case SDL_MOUSEMOTION:
+            if (leftMouseButtonDown)
+            {
+                int mouseX = event.motion.x* ratio;
+                int mouseY = event.motion.y*ratio;
+                pixels[mouseY * LOGICAL_WINDOW_WIDTH + mouseX] = 0;
+            }
+            break;
+        }
+
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, texture, NULL, NULL);
         SDL_RenderPresent(renderer);
@@ -98,7 +119,7 @@ int main()
     excecution_finished();
 }
 
-// Debug functions
+// idk what to name these functions
 
 void excecution_finished(void)
 {
