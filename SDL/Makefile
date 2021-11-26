@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = multi_array_test.cpp 
+OBJS = new_render_method.cpp 
 
 #CC specifies which compiler we're using
 CC = g++
