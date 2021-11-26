@@ -44,7 +44,6 @@ struct cord_2d
 
 struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-void scr_dump();
 void excecution_finished();
 
 // this script is gonn hurtme
@@ -68,24 +67,7 @@ int main()
     excecution_finished();
 }
 
-// Debug functions
-void redraw_and_render()
-{
-    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-    {
-        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-        {
-            SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
-            SDL_RenderDrawPoint(renderer, x_pos, y_pos);
 
-            if (pixels[x_pos][y_pos].b == 255)
-            {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-            }
-        }
-    }
-}
 void excecution_finished(void)
 {
     while (1)

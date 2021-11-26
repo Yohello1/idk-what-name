@@ -29,10 +29,10 @@ enum pixel_state
 struct position
 {
     pixel_state state_now;
-    uint8_t  r;
-    uint8_t  g;
-    uint8_t  b;
-    uint8_t  a;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
     uint16_t temperature;
 };
 // why must I make this
@@ -42,13 +42,21 @@ struct cord_2d
     int y_pos;
 };
 
-struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct position pixel_pos[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-void scr_dump();
+
 void excecution_finished();
 
-// this script is gonn hurtme
+// What the geunine duck is going on here
+// I am going to pull of so mcuh mental gymnastics to get this workign LOL
 
+// Cinamon toast here to explain wtf is going on
+// *magic*, but actually
+// First of all, make a texture, delete the texture data, but keep the pointer and allocated memory
+// Now you are the texture
+// What I mean is, you have to do the math for scalling...
+// Because we literally copy paste the texture into the memory buffer
+// So we do all this shid ourselves, may god have mercy upon my soul
 int main()
 {
     std::cout << "MY BAGUETTES ARE ON FIRE" << std::endl;
@@ -63,29 +71,35 @@ int main()
     SDL_CreateWindowAndRenderer(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, 0, &window, &renderer);
     SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
     SDL_RenderClear(renderer);
-    // PAINT IT BLACK
 
+
+    SDL_Texture * texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
+    Uint32 * pixels = new Uint32[640 * 480];
+    memset(pixels, 128, LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH * sizeof(Uint32));
+
+    // PAINT IT BLACK
+    while (1)
+    {
+        SDL_UpdateTexture(texture, NULL, pixels, LOGICAL_WINDOW_WIDTH * sizeof(Uint32));
+        if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+        {
+            break;
+        }
+        SDL_RenderPresent(renderer);
+        // SDL_Delay(50);
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, texture, NULL, NULL);
+        SDL_RenderPresent(renderer);
+    }
+
+    // Ending stuff
+    delete[] pixels;
+    SDL_DestroyTexture(texture);
     excecution_finished();
 }
 
 // Debug functions
-void redraw_and_render()
-{
-    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-    {
-        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-        {
-            SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
-            SDL_RenderDrawPoint(renderer, x_pos, y_pos);
 
-            if (pixels[x_pos][y_pos].b == 255)
-            {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-            }
-        }
-    }
-}
 void excecution_finished(void)
 {
     while (1)
