@@ -7,6 +7,7 @@
 #include <cmath>
 #include <memory>
 #include <thread>
+#include <chrono>
 #define LOGICAL_WINDOW_WIDTH 128
 #define ACTUAL_WINDOW_WIDTH 1024
 const int noise_density = 80;
@@ -49,6 +50,9 @@ int noise_gen();
 void scr_dump();
 // this script is gonn hurtme
 
+// no clue what this does, I just use it for timing lol
+typedef std::chrono::high_resolution_clock Clock;
+
 int main()
 {
    std::cout << "MY BAGUETTES ARE ON FIRE" << std::endl;
@@ -62,8 +66,10 @@ int main()
    SDL_Init(SDL_INIT_VIDEO);
    SDL_CreateWindowAndRenderer(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, 0, &window, &renderer);
    SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
+   SDL_SetWindowTitle(window, "Averager");
    SDL_RenderClear(renderer);
    // PAINT IT BLACK
+   SDL_Delay(5000);
 
    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
    {
@@ -93,7 +99,7 @@ int main()
       }
    }
 
-   // std::thread pressure_pointer(eqaulize);
+   std::thread pressure_pointer(eqaulize);
    scr_dump();
 
    while (1)
@@ -102,8 +108,7 @@ int main()
       {
          break;
       }
-
-      eqaulize();
+      auto start_time = Clock::now();
 
       for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
       {
@@ -114,11 +119,18 @@ int main()
             SDL_RenderDrawPoint(renderer, x_pos, y_pos);
          }
       }
+      std::cout << "Next Itteration" << std::endl;
       SDL_RenderPresent(renderer);
-      // SDL_Delay(50);
+
+      // 1/60 - time to run minus
+      auto end_time = Clock::now();
+      if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 16000000)
+      {
+         SDL_Delay(16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count());
+      }
    }
 
-   // pressure_pointer.join();
+   pressure_pointer.join();
    scr_dump();
    excecution_finished();
 }
@@ -134,93 +146,97 @@ void eqaulize()
    If above target, subtract one from cell and add to cell below the average
    */
 
-   // while (1)
-   // // {
-   //    if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
-   //    {
-   //       break;
-   //    }
-
-   for (int x_pos = 1; x_pos < LOGICAL_WINDOW_WIDTH - 1; x_pos++)
+   while (1)
    {
-      for (int y_pos = 1; y_pos < LOGICAL_WINDOW_WIDTH - 1; y_pos++)
+      // {
+      if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
       {
-         double target_pressure;
-         // Fetch average
+         break;
+      }
+      auto start_time = Clock::now();
 
+      for (int x_pos = 1; x_pos < LOGICAL_WINDOW_WIDTH - 1; x_pos++)
+      {
+         for (int y_pos = 1; y_pos < LOGICAL_WINDOW_WIDTH - 1; y_pos++)
          {
-            /*
+            double target_pressure;
+            // Fetch average
+
+            {
+               /*
                   0 1 0
                   2 X 3
                   0 4 0
                */
-            target_pressure = (pixels[x_pos][y_pos - 1].pressure + pixels[x_pos - 1][y_pos].pressure + pixels[x_pos + 1][y_pos].pressure + pixels[x_pos][y_pos + 1].pressure) / 4;
-            // std::cout << "Target Pressure" << target_pressure << std::endl;
-         }
+               target_pressure = (pixels[x_pos][y_pos - 1].pressure + pixels[x_pos - 1][y_pos].pressure + pixels[x_pos + 1][y_pos].pressure + pixels[x_pos][y_pos + 1].pressure) / 4;
+               // std::cout << "Target Pressure" << target_pressure << std::endl;
+            }
 
-         // Below target
-         if (pixels[x_pos][y_pos].pressure < target_pressure)
-         {
-            /*
+            // Below target
+            if (pixels[x_pos][y_pos].pressure < target_pressure)
+            {
+               /*
                   5 1 6
                   2 X 3
                   7 4 8
                */
-            if (pixels[x_pos][y_pos - 1].pressure > target_pressure)
-            {
-               pixels[x_pos][y_pos].pressure++;
-               pixels[x_pos][y_pos - 1].pressure--;
-               std::cout << "Change be made" << std::endl;
-            }
+               if (pixels[x_pos][y_pos - 1].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos][y_pos - 1].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
 
-            else if (pixels[x_pos - 1][y_pos].pressure > target_pressure)
-            {
-               pixels[x_pos][y_pos].pressure++;
-               pixels[x_pos - 1][y_pos].pressure--;
-               std::cout << "Change be made" << std::endl;
-            }
-            else if (pixels[x_pos + 1][y_pos].pressure > target_pressure)
-            {
-               pixels[x_pos][y_pos].pressure++;
-               pixels[x_pos + 1][y_pos].pressure--;
-               std::cout << "Change be made" << std::endl;
-            }
-            else if (pixels[x_pos][y_pos + 1].pressure > target_pressure)
-            {
-               pixels[x_pos][y_pos].pressure++;
-               pixels[x_pos][y_pos + 1].pressure--;
-               std::cout << "Change be made" << std::endl;
-            }
-            else if (pixels[x_pos - 1][y_pos - 11].pressure > target_pressure)
-            {
-               pixels[x_pos][y_pos].pressure++;
-               pixels[x_pos - 1][y_pos - 1].pressure--;
-               std::cout << "Change be made" << std::endl;
-            }
-            else if (pixels[x_pos + 1][y_pos - 1].pressure > target_pressure)
-            {
-               pixels[x_pos][y_pos].pressure++;
-               pixels[x_pos + 1][y_pos - 1].pressure--;
-               std::cout << "Change be made" << std::endl;
-            }
-            else if (pixels[x_pos - 1][y_pos + 1].pressure > target_pressure)
-            {
-               pixels[x_pos][y_pos].pressure++;
-               pixels[x_pos - 1][y_pos + 1].pressure--;
-               std::cout << "Change be made" << std::endl;
-            }
-            else if (pixels[x_pos + 1][y_pos + 1].pressure > target_pressure)
-            {
-               pixels[x_pos][y_pos].pressure++;
-               pixels[x_pos + 1][y_pos + 1].pressure--;
-               std::cout << "Change be made" << std::endl;
+               else if (pixels[x_pos - 1][y_pos].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos - 1][y_pos].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos + 1][y_pos].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos + 1][y_pos].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos][y_pos + 1].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos][y_pos + 1].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos - 1][y_pos - 11].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos - 1][y_pos - 1].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos + 1][y_pos - 1].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos + 1][y_pos - 1].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos - 1][y_pos + 1].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos - 1][y_pos + 1].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos + 1][y_pos + 1].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos + 1][y_pos + 1].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
             }
          }
       }
-      // }
-
-      SDL_RenderPresent(renderer);
-      // SDL_Delay(50);
+      auto end_time = Clock::now();
+      if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 16000000)
+      {
+         SDL_Delay(16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count());
+      }
    }
 }
 
