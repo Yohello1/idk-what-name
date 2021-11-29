@@ -131,7 +131,7 @@ int main()
       auto end_time = Clock::now();
       if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 16000000)
       {
-         SDL_Delay((16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000000);
+         SDL_Delay((16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
       }
    }
 
@@ -191,7 +191,7 @@ void eqaulize()
                {
                   pixels[x_pos][y_pos].pressure++;
                   pixels[x_pos][y_pos - 1].pressure--;
-                  std::cout << "Change be made1" << std::endl;
+                  // std::cout << "Change be made1" << std::endl;
                }
 
                else if (pixels[x_pos - 1][y_pos].pressure > target_pressure)
@@ -212,37 +212,38 @@ void eqaulize()
                   pixels[x_pos][y_pos + 1].pressure--;
                   //std::cout << "Change be made" << std::endl;
                }
-               // else if (pixels[x_pos - 1][y_pos - 11].pressure > target_pressure)
-               // {
-               //    pixels[x_pos][y_pos].pressure++;
-               //    pixels[x_pos - 1][y_pos - 1].pressure--;
-               //    //std::cout << "Change be made" << std::endl;
-               // }
-               // else if (pixels[x_pos + 1][y_pos - 1].pressure > target_pressure)
-               // {
-               //    pixels[x_pos][y_pos].pressure++;
-               //    pixels[x_pos + 1][y_pos - 1].pressure--;
-               //   // std::cout << "Change be made" << std::endl;
-               // }
-               // else if (pixels[x_pos - 1][y_pos + 1].pressure > target_pressure)
-               // {
-               //    pixels[x_pos][y_pos].pressure++;
-               //    pixels[x_pos - 1][y_pos + 1].pressure--;
-               //    //std::cout << "Change be made" << std::endl;
-               // }
-               // else if (pixels[x_pos + 1][y_pos + 1].pressure > target_pressure)
-               // {
-               //    pixels[x_pos][y_pos].pressure++;
-               //    pixels[x_pos + 1][y_pos + 1].pressure--;
-               //    //std::cout << "Change be made" << std::endl;
-               // }
+               else if (pixels[x_pos - 1][y_pos - 11].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos - 1][y_pos - 1].pressure--;
+                  //std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos + 1][y_pos - 1].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos + 1][y_pos - 1].pressure--;
+                  // std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos - 1][y_pos + 1].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos - 1][y_pos + 1].pressure--;
+                  //std::cout << "Change be made" << std::endl;
+               }
+               else if (pixels[x_pos + 1][y_pos + 1].pressure > target_pressure)
+               {
+                  pixels[x_pos][y_pos].pressure++;
+                  pixels[x_pos + 1][y_pos + 1].pressure--;
+                  //std::cout << "Change be made" << std::endl;
+               }
             }
          }
       }
       auto end_time = Clock::now();
       if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 16000000)
       {
-         SDL_Delay((16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000000);
+         SDL_Delay((16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
+         std::cout << "sleep god dam it" << std::endl;
       }
    }
 }
