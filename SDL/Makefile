@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = eqaulize.cpp 
+OBJS = montreal_style_smoked_meat.cpp 
 
 #CC specifies which compiler we're using
 CC = g++
