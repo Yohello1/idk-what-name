@@ -1,11 +1,12 @@
+
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <time.h>
 #include <iostream>
 #include <random>
 #include <cmath>
-#define LOGICAL_WINDOW_WIDTH 1024
-#define ACTUAL_WINDOW_WIDTH 1024
+#define LOGICAL_WINDOW_WIDTH 512
+#define ACTUAL_WINDOW_WIDTH 512
 
 struct positions
 {

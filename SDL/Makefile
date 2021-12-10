@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = montreal_style_smoked_meat.cpp 
+OBJS = not_fixed.cpp 
 
 #CC specifies which compiler we're using
 CC = g++

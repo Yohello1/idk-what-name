@@ -136,9 +136,11 @@ int main()
                 quit = true;
             }
         }
-        switch (event.button.button)
+        // switch (event.button.button)
+        // {
+        // case SDL_BUTTON_RIGHT:
+        if(event.motion.state & SDL_BUTTON_LMASK == SDL_BUTTON_LEFT)
         {
-        case SDL_BUTTON_LEFT:
             SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
             SDL_GetMouseState(&mouse_x, &mouse_y);
             std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
@@ -148,14 +150,19 @@ int main()
             pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
             pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = fixed_pos;
             SDL_RenderPresent(renderer);
-            break;
-        case SDL_BUTTON_RIGHT:
+            std::cout << "Left" << std::endl;
+        }
+        //     break;
+        // case SDL_BUTTON_LEFT:
+        if(event.button.button == SDL_BUTTON(SDL_BUTTON_RIGHT))
+        {
             // set draw colour
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             // Get mouse position
             SDL_GetMouseState(&mouse_x, &mouse_y);
             //Output location
             std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+            std::cout << "Right" << std::endl;
             // Get mouse position, convert to logical position, then make like a block around it which is 8x8 to make I think white
             for (int y_pos = (mouse_y / actual_2_logic_ratio) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / actual_2_logic_ratio) + 4; y_pos++)
             {
@@ -168,9 +175,10 @@ int main()
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].b = 255;
                 }
             }
-
-            break;
         }
+
+        //     break;
+        // }
 
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {

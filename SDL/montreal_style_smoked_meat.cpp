@@ -133,7 +133,6 @@ int main()
       }
       // auto start_time = Clock::now();
       // eqaulize();
-      SDL_RenderPresent(renderer);
 
       // SDL_RenderClear(renderer);
       for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
@@ -145,6 +144,7 @@ int main()
             SDL_RenderDrawPoint(renderer, x_pos, y_pos);
          }
       }
+      SDL_RenderPresent(renderer);
 
       switch (event.button.button)
       {
@@ -152,6 +152,7 @@ int main()
          SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
          SDL_GetMouseState(&mouse_x, &mouse_y);
          std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+         std::cout << "It somehow worked" << std::endl;
          SDL_RenderDrawPoint(renderer, mouse_x / actual_2_logic_ratio, mouse_y / actual_2_logic_ratio);
          SDL_RenderPresent(renderer);
          pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
@@ -183,7 +184,7 @@ int main()
          break;
       }
 
-      std::cout << "Next Itteration" << std::endl;
+      // std::cout << "Next Itteration" << std::endl;
 
       // 1/60 - time to run minus
       // auto end_time = Clock::now();
@@ -212,153 +213,129 @@ void smoke_move()
    If above target, subtract one from cell and add to cell below the average
    */
 
-   while (1)
-   {
+   // while (1)
+   // {
 
-      if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
-      {
-         break;
-      }
-      auto start_time = Clock::now();
-      for (int x_pos = 1; x_pos < LOGICAL_WINDOW_WIDTH - 1; x_pos++)
-      {
-         for (int y_pos = 1; y_pos < LOGICAL_WINDOW_WIDTH - 1; y_pos++)
-         {
-            double target_pressure;
-            // Fetch average
+   //    if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+   //    {
+   //       break;
+   //    }
+   //    auto start_time = Clock::now();
+   //    for (int x_pos = 1; x_pos < LOGICAL_WINDOW_WIDTH - 1; x_pos++)
+   //    {
+   //       for (int y_pos = 1; y_pos < LOGICAL_WINDOW_WIDTH - 1; y_pos++)
+   //       {
+   //          double target_pressure;
+   //          // Fetch average
 
-            /*
-                  0 1 0
-                  2 X 3
-                  0 4 0
-               */
-            target_pressure = (pixels[x_pos][y_pos - 1].pressure + pixels[x_pos - 1][y_pos].pressure + pixels[x_pos + 1][y_pos].pressure + pixels[x_pos][y_pos + 1].pressure) / 4;
-            // std::cout << "Target Pressure" << target_pressure << std::endl;
+   //          /*
+   //                0 1 0
+   //                2 X 3
+   //                0 4 0
+   //             */
+   //          target_pressure = (pixels[x_pos][y_pos - 1].pressure + pixels[x_pos - 1][y_pos].pressure + pixels[x_pos + 1][y_pos].pressure + pixels[x_pos][y_pos + 1].pressure) / 4;
+   //          // std::cout << "Target Pressure" << target_pressure << std::endl;
 
-            // Below target
-            if (pixels[x_pos][y_pos].pressure < target_pressure)
-            {
-               /*
-                  5 1 6
-                  2 X 3
-                  7 4 8
-               */
-               if (pixels[x_pos][y_pos - 1].pressure > target_pressure)
-               {
-                  pixels[x_pos][y_pos].pressure++;
-                  pixels[x_pos][y_pos - 1].pressure--;
-                  // std::cout << "Change be made1" << std::endl;
-               }
+   //          // Below target
+   //          if (pixels[x_pos][y_pos].pressure < target_pressure)
+   //          {
+   //             /*
+   //                5 1 6
+   //                2 X 3
+   //                7 4 8
+   //             */
+   //             if (pixels[x_pos][y_pos - 1].pressure > target_pressure)
+   //             {
+   //                pixels[x_pos][y_pos].pressure++;
+   //                pixels[x_pos][y_pos - 1].pressure--;
+   //                // std::cout << "Change be made1" << std::endl;
+   //             }
 
-               else if (pixels[x_pos - 1][y_pos].pressure > target_pressure)
-               {
-                  pixels[x_pos][y_pos].pressure++;
-                  pixels[x_pos - 1][y_pos].pressure--;
-                  // std::cout << "Change be made" << std::endl;
-               }
-               else if (pixels[x_pos + 1][y_pos].pressure > target_pressure)
-               {
-                  pixels[x_pos][y_pos].pressure++;
-                  pixels[x_pos + 1][y_pos].pressure--;
-                  // std::cout << "Change be made" << std::endl;
-               }
-               else if (pixels[x_pos][y_pos + 1].pressure > target_pressure)
-               {
-                  pixels[x_pos][y_pos].pressure++;
-                  pixels[x_pos][y_pos + 1].pressure--;
-                  //std::cout << "Change be made" << std::endl;
-               }
-               // else if (pixels[x_pos - 1][y_pos - 11].pressure > target_pressure)
-               // {
-               //    pixels[x_pos][y_pos].pressure++;
-               //    pixels[x_pos - 1][y_pos - 1].pressure--;
-               //    //std::cout << "Change be made" << std::endl;
-               // }
-               // else if (pixels[x_pos + 1][y_pos - 1].pressure > target_pressure)
-               // {
-               //    pixels[x_pos][y_pos].pressure++;
-               //    pixels[x_pos + 1][y_pos - 1].pressure--;
-               //    // std::cout << "Change be made" << std::endl;
-               // }
-               // else if (pixels[x_pos - 1][y_pos + 1].pressure > target_pressure)
-               // {
-               //    pixels[x_pos][y_pos].pressure++;
-               //    pixels[x_pos - 1][y_pos + 1].pressure--;
-               //    //std::cout << "Change be made" << std::endl;
-               // }
-               // else if (pixels[x_pos + 1][y_pos + 1].pressure > target_pressure)
-               // {
-               //    pixels[x_pos][y_pos].pressure++;
-               //    pixels[x_pos + 1][y_pos + 1].pressure--;
-               //    //std::cout << "Change be made" << std::endl;
-               // }
-            }
+   //             else if (pixels[x_pos - 1][y_pos].pressure > target_pressure)
+   //             {
+   //                pixels[x_pos][y_pos].pressure++;
+   //                pixels[x_pos - 1][y_pos].pressure--;
+   //                // std::cout << "Change be made" << std::endl;
+   //             }
+   //             else if (pixels[x_pos + 1][y_pos].pressure > target_pressure)
+   //             {
+   //                pixels[x_pos][y_pos].pressure++;
+   //                pixels[x_pos + 1][y_pos].pressure--;
+   //                // std::cout << "Change be made" << std::endl;
+   //             }
+   //             else if (pixels[x_pos][y_pos + 1].pressure > target_pressure)
+   //             {
+   //                pixels[x_pos][y_pos].pressure++;
+   //                pixels[x_pos][y_pos + 1].pressure--;
+   //                //std::cout << "Change be made" << std::endl;
+   //             }
+   //          }
 
-            if (pixels[x_pos][y_pos].state_now == burning)
-            {
-               // std::cout << "There is a toasty baguette here" << std::endl;
-               /*
-                               . 3 .
-                               2 X 4
-                               . 1 .
-                              */
-               // Just go look at the fire_wind_math_idk.png picture for an explaination
-               if (y_pos != 255 && pixels[x_pos][y_pos + 1].state_now == flameable && pixels[x_pos][y_pos + 1].temperature != 510)
-               {
-                  // I HAVE NO CLUE BUT I'LL TRY AND EXPLAIN
-                  // this is like taking the dir and changing how fast it's heating up the tiles based on the intensity in its direction
-                  // "wind_dir_degrees * 3.141 / 180" switches it to radians, then pass it through sin/cos
-                  // sin for height, cos for horizonetelasjs
-                  pixels[x_pos][y_pos + 1].temperature += sin(wind_dir_degrees * 3.141 / 180);
-                  // sets colour stuff by taking temp and halfint it, might remove this tbh
-                  pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
-                  // Setting colour and drawing
-                  SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos + 1].r, pixels[x_pos][y_pos + 1].g, pixels[x_pos][y_pos + 1].b, pixels[x_pos][y_pos + 1].a);
-                  SDL_RenderDrawPoint(renderer, x_pos, y_pos + 1);
-               }
-               if (x_pos != 1 && pixels[x_pos - 1][y_pos].state_now == flameable && pixels[x_pos - 1][y_pos].temperature != 510)
-               {
-                  pixels[x_pos - 1][y_pos].temperature += cos(wind_dir_degrees * 3.141 / 180);
-                  pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
-                  SDL_SetRenderDrawColor(renderer, pixels[x_pos - 1][y_pos].r, pixels[x_pos - 1][y_pos].g, pixels[x_pos - 1][y_pos].b, pixels[x_pos - 1][y_pos].a);
-                  SDL_RenderDrawPoint(renderer, x_pos - 1, y_pos);
-               }
-               if (y_pos != 1 && pixels[x_pos][y_pos - 1].state_now == flameable && pixels[x_pos][y_pos - 1].temperature != 510)
-               {
-                  // The +1 stuff is to offset the negative stuff so it doesnt become negative temp
-                  pixels[x_pos][y_pos - 1].temperature += (sin(wind_dir_degrees * 3.141 / 180) + 1);
-                  pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
-                  SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos - 1].r, pixels[x_pos][y_pos - 1].g, pixels[x_pos][y_pos - 1].b, pixels[x_pos][y_pos - 1].a);
-                  SDL_RenderDrawPoint(renderer, x_pos, y_pos - 1);
-               }
-               if (x_pos != 255 && pixels[x_pos + 1][y_pos].state_now == flameable && pixels[x_pos + 1][y_pos].temperature != 510)
-               {
-                  pixels[x_pos + 1][y_pos].temperature += (cos(wind_dir_degrees * 3.141 / 180) + 1);
-                  pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
-                  SDL_SetRenderDrawColor(renderer, pixels[x_pos + 1][y_pos].r, pixels[x_pos + 1][y_pos].g, pixels[x_pos + 1][y_pos].b, pixels[x_pos + 1][y_pos].a);
-                  SDL_RenderDrawPoint(renderer, x_pos + 1, y_pos);
-               }
-               pixels[x_pos][y_pos].temperature += 1;
-            }
-            if (pixels[x_pos][y_pos].temperature == 50)
-            {
-               pixels[x_pos][y_pos].state_now = burning;
-            }
-            if (pixels[x_pos][y_pos].temperature > 510)
-            {
-               pixels[x_pos][y_pos].state_now = burnt;
-               SDL_SetRenderDrawColor(renderer, 178, 190, 181, 255);
-               SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-            }
-         }
-      }
-      auto end_time = Clock::now();
-      if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 16000000)
-      {
-         SDL_Delay((16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
-         std::cout << "sleep god dam it" << std::endl;
-      }
-   }
+   //          if (pixels[x_pos][y_pos].state_now == burning)
+   //          {
+   //             // std::cout << "There is a toasty baguette here" << std::endl;
+   //             /*
+   //                             . 3 .
+   //                             2 X 4
+   //                             . 1 .
+   //                            */
+   //             // Just go look at the fire_wind_math_idk.png picture for an explaination
+   //             if (y_pos != 255 && pixels[x_pos][y_pos + 1].state_now == flameable && pixels[x_pos][y_pos + 1].temperature != 510)
+   //             {
+   //                // I HAVE NO CLUE BUT I'LL TRY AND EXPLAIN
+   //                // this is like taking the dir and changing how fast it's heating up the tiles based on the intensity in its direction
+   //                // "wind_dir_degrees * 3.141 / 180" switches it to radians, then pass it through sin/cos
+   //                // sin for height, cos for horizonetelasjs
+   //                pixels[x_pos][y_pos + 1].temperature += sin(wind_dir_degrees * 3.141 / 180);
+   //                // sets colour stuff by taking temp and halfint it, might remove this tbh
+   //                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
+   //                // Setting colour and drawing
+   //                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos + 1].r, pixels[x_pos][y_pos + 1].g, pixels[x_pos][y_pos + 1].b, pixels[x_pos][y_pos + 1].a);
+   //                SDL_RenderDrawPoint(renderer, x_pos, y_pos + 1);
+   //             }
+   //             if (x_pos != 1 && pixels[x_pos - 1][y_pos].state_now == flameable && pixels[x_pos - 1][y_pos].temperature != 510)
+   //             {
+   //                pixels[x_pos - 1][y_pos].temperature += cos(wind_dir_degrees * 3.141 / 180);
+   //                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
+   //                SDL_SetRenderDrawColor(renderer, pixels[x_pos - 1][y_pos].r, pixels[x_pos - 1][y_pos].g, pixels[x_pos - 1][y_pos].b, pixels[x_pos - 1][y_pos].a);
+   //                SDL_RenderDrawPoint(renderer, x_pos - 1, y_pos);
+   //             }
+   //             if (y_pos != 1 && pixels[x_pos][y_pos - 1].state_now == flameable && pixels[x_pos][y_pos - 1].temperature != 510)
+   //             {
+   //                // The +1 stuff is to offset the negative stuff so it doesnt become negative temp
+   //                pixels[x_pos][y_pos - 1].temperature += (sin(wind_dir_degrees * 3.141 / 180) + 1);
+   //                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
+   //                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos - 1].r, pixels[x_pos][y_pos - 1].g, pixels[x_pos][y_pos - 1].b, pixels[x_pos][y_pos - 1].a);
+   //                SDL_RenderDrawPoint(renderer, x_pos, y_pos - 1);
+   //             }
+   //             if (x_pos != 255 && pixels[x_pos + 1][y_pos].state_now == flameable && pixels[x_pos + 1][y_pos].temperature != 510)
+   //             {
+   //                pixels[x_pos + 1][y_pos].temperature += (cos(wind_dir_degrees * 3.141 / 180) + 1);
+   //                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
+   //                SDL_SetRenderDrawColor(renderer, pixels[x_pos + 1][y_pos].r, pixels[x_pos + 1][y_pos].g, pixels[x_pos + 1][y_pos].b, pixels[x_pos + 1][y_pos].a);
+   //                SDL_RenderDrawPoint(renderer, x_pos + 1, y_pos);
+   //             }
+   //             pixels[x_pos][y_pos].temperature += 1;
+   //          }
+   //          if (pixels[x_pos][y_pos].temperature == 50)
+   //          {
+   //             pixels[x_pos][y_pos].state_now = burning;
+   //          }
+   //          if (pixels[x_pos][y_pos].temperature > 510)
+   //          {
+   //             pixels[x_pos][y_pos].state_now = burnt;
+   //             SDL_SetRenderDrawColor(renderer, 178, 190, 181, 255);
+   //             SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+   //          }
+   //       }
+   //    }
+   //    auto end_time = Clock::now();
+   //    if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 16000000)
+   //    {
+   //       SDL_Delay((16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
+   //       std::cout << "sleep god dam it" << std::endl;
+   //    }
+   // }
 }
 
 void excecution_finished(void)
@@ -410,60 +387,3 @@ int noise_gen()
    }
    return num;
 }
-
-//   if (pixels[x_pos][y_pos].state_now == burning)
-//                 {
-//                     // std::cout << "There is a toasty baguette here" << std::endl;
-//                     /*
-//                      . 3 .
-//                      2 X 4
-//                      . 1 .
-//                     */
-//                     // Just go look at the fire_wind_math_idk.png picture for an explaination
-//                     if (y_pos != 255 && pixels[x_pos][y_pos + 1].flameability == flameable && pixels[x_pos][y_pos + 1].temperature != 510)
-//                     {
-//                         // I HAVE NO CLUE BUT I'LL TRY AND EXPLAIN
-//                         // this is like taking the dir and changing how fast it's heating up the tiles based on the intensity in its direction
-//                         // "wind_dir_degrees * 3.141 / 180" switches it to radians, then pass it through sin/cos
-//                         // sin for height, cos for horizonetelasjs
-//                         pixels[x_pos][y_pos + 1].temperature += sin(wind_dir_degrees * 3.141 / 180);
-//                         // sets colour stuff by taking temp and halfint it, might remove this tbh
-//                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
-//                         // Setting colour and drawing
-//                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos + 1].r, pixels[x_pos][y_pos + 1].g, pixels[x_pos][y_pos + 1].b, pixels[x_pos][y_pos + 1].a);
-//                         SDL_RenderDrawPoint(renderer, x_pos, y_pos + 1);
-//                     }
-//                     if (x_pos != 1 && pixels[x_pos - 1][y_pos].flameability == flameable && pixels[x_pos - 1][y_pos].temperature != 510)
-//                     {
-//                         pixels[x_pos - 1][y_pos].temperature += cos(wind_dir_degrees * 3.141 / 180);
-//                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
-//                         SDL_SetRenderDrawColor(renderer, pixels[x_pos - 1][y_pos].r, pixels[x_pos - 1][y_pos].g, pixels[x_pos - 1][y_pos].b, pixels[x_pos - 1][y_pos].a);
-//                         SDL_RenderDrawPoint(renderer, x_pos - 1, y_pos);
-//                     }
-//                     if (y_pos != 1 && pixels[x_pos][y_pos - 1].flameability == flameable && pixels[x_pos][y_pos - 1].temperature != 510)
-//                     {
-//                         // The +1 stuff is to offset the negative stuff so it doesnt become negative temp
-//                         pixels[x_pos][y_pos - 1].temperature += (sin(wind_dir_degrees * 3.141 / 180)+1 );
-//                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
-//                         SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos - 1].r, pixels[x_pos][y_pos - 1].g, pixels[x_pos][y_pos - 1].b, pixels[x_pos][y_pos - 1].a);
-//                         SDL_RenderDrawPoint(renderer, x_pos, y_pos - 1);
-//                     }
-//                     if (x_pos != 255 && pixels[x_pos + 1][y_pos].flameability == flameable && pixels[x_pos + 1][y_pos].temperature != 510)
-//                     {
-//                         pixels[x_pos + 1][y_pos].temperature += (cos(wind_dir_degrees * 3.141 / 180)+1) ;
-//                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].temperature / 2;
-//                         SDL_SetRenderDrawColor(renderer, pixels[x_pos + 1][y_pos].r, pixels[x_pos + 1][y_pos].g, pixels[x_pos + 1][y_pos].b, pixels[x_pos + 1][y_pos].a);
-//                         SDL_RenderDrawPoint(renderer, x_pos + 1, y_pos);
-//                     }
-//                     pixels[x_pos][y_pos].temperature += 1;
-//                 }
-//                 if (pixels[x_pos][y_pos].temperature == 50)
-//                 {
-//                     pixels[x_pos][y_pos].state_now = burning;
-//                 }
-//                 if (pixels[x_pos][y_pos].temperature > 510)
-//                 {
-//                     pixels[x_pos][y_pos].flameability = non_flamable;
-//                     SDL_SetRenderDrawColor(renderer, 178, 190, 181, 255);
-//                     SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-//                 }
