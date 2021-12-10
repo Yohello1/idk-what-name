@@ -111,6 +111,7 @@ int main()
                 SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+                std::cout << "Left" << std::endl;
                 SDL_RenderDrawPoint(renderer, mouse_x / actual_2_logic_ratio, mouse_y / actual_2_logic_ratio);
                 SDL_RenderPresent(renderer);
                 pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
@@ -125,6 +126,7 @@ int main()
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 //Output location
                 std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+                std::cout << "Right" << std::endl;
                 // Get mouse position, convert to logical position, then make like a block around it which is 8x8 to make I think white
                 for (int y_pos = (mouse_y / actual_2_logic_ratio) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / actual_2_logic_ratio) + 4; y_pos++)
                 {
