@@ -11,7 +11,7 @@
 #include <atomic>
 
 #define LOGICAL_WINDOW_WIDTH 256
-#define ACTUAL_WINDOW_WIDTH 512
+#define ACTUAL_WINDOW_WIDTH 1024
 
 //time
 unsigned int current_time = (unsigned int)time(NULL);
@@ -180,6 +180,7 @@ int main()
         //     break;
         // }
 
+        // Sand simulation
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
             for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
