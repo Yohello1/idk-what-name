@@ -7,7 +7,7 @@
 #include <cmath>
 #include <memory>
 
-// #include "base_data.hpp"
+#include "init_funcs.hpp"
 #include "physics.hpp"
 #include "render.hpp"
 
@@ -18,13 +18,14 @@ int main()
 {
 
     start();
-
+    struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+    struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     cord_2d box_verts[2];
-    box_verts[0].x_pos = 182;
+    box_verts[0].x_pos = 250;
     box_verts[1].x_pos = 138;
-    box_verts[0].y_pos = 49;
-    box_verts[1].y_pos = 98;
-    draw_box_sand(box_verts[0],box_verts[1]);
+    box_verts[0].y_pos = 1;
+    box_verts[1].y_pos = 150;
+    draw_box_white_sand(box_verts[0],box_verts[1], pixels);
 
 
     int frame_count = 0;
@@ -37,8 +38,8 @@ int main()
         }
         frame_count++;
         std::cout << "Frame " << frame_count << std::endl;
-        sand_sim();
-        redraw_render();
+        sand_sim(pixels);
+        redraw_render(pixels, renderer);
         SDL_RenderPresent(renderer);
         // SDL_Delay(50);
     }
