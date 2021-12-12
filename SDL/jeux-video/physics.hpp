@@ -1,12 +1,12 @@
-#include "render.hpp"
-
-void sand_sim()
+// #include "render.hpp"
+// #include "base_data.hpp"
+void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
         for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
         {
-            if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos][y_pos + 1].state_now == empty)
+            if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH-1) && pixels[x_pos][y_pos + 1].state_now == empty)
             {
 
                 // std::cout << "Valid move" << std::endl;
@@ -14,14 +14,14 @@ void sand_sim()
                 pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                 pixels[x_pos][y_pos].state_now = empty;
             }
-            else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos + 1][y_pos + 1].state_now == empty)
+            else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH-1) && pixels[x_pos + 1][y_pos + 1].state_now == empty)
             {
                 // std::cout << "Valid move" << std::endl;
                 pixels[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
                 pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                 pixels[x_pos][y_pos].state_now = empty;
             }
-            else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos - 1][y_pos + 1].state_now == empty)
+            else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH-1) && pixels[x_pos - 1][y_pos + 1].state_now == empty)
             {
                 // std::cout << "Valid move" << std::endl;
                 pixels[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
@@ -32,7 +32,7 @@ void sand_sim()
     }
 }
 
-void draw_box_sand(cord_2d start, cord_2d end)
+void draw_box_white_sand(cord_2d start, cord_2d end, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
     // The location is relative to where it is on the screen/window :P
     int higher_x = std::min(start.x_pos, end.x_pos);
