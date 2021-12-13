@@ -35,4 +35,5 @@ struct cord_2d
     int x_pos;
     int y_pos;
 };
+typedef std::chrono::high_resolution_clock Clock;
 
