@@ -50,3 +50,8 @@ void draw_box_white_sand(cord_2d start, cord_2d end, position pixels[LOGICAL_WIN
     }
 
 }
+
+void simulate_single(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+{
+    sand_sim(pixels);
+}
