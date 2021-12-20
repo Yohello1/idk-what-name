@@ -1,6 +1,9 @@
 // #include "render.hpp"
 // #include "base_data.hpp"
-void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+
+std::mutex mtx;
+
+void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
@@ -10,26 +13,35 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
             {
 
                 // std::cout << "Valid move" << std::endl;
-                pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
-                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
-                pixels[x_pos][y_pos].state_now = empty;
+                new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+                new_version[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+                new_version[x_pos][y_pos].state_now = empty;
             }
             else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH-1) && pixels[x_pos + 1][y_pos + 1].state_now == empty)
             {
                 // std::cout << "Valid move" << std::endl;
-                pixels[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
-                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
-                pixels[x_pos][y_pos].state_now = empty;
+                new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
+                new_version[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+                new_version[x_pos][y_pos].state_now = empty;
             }
             else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH-1) && pixels[x_pos - 1][y_pos + 1].state_now == empty)
             {
                 // std::cout << "Valid move" << std::endl;
-                pixels[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
-                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
-                pixels[x_pos][y_pos].state_now = empty;
+                new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
+                new_version[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
+                new_version[x_pos][y_pos].state_now = empty;
             }
+            else
+            {
+                new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+            }
+
         }
     }
+    mtx.lock();
+    memcpy(&pixels, &new_version, sizeof(new_version));
+    mtx.unlock();
+
 }
 
 void draw_box_white_sand(cord_2d start, cord_2d end, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
@@ -51,7 +63,7 @@ void draw_box_white_sand(cord_2d start, cord_2d end, position pixels[LOGICAL_WIN
 
 }
 
-void simulate_single(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+void simulate_single(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
-    sand_sim(pixels);
+    sand_sim(pixels, new_version);
 }

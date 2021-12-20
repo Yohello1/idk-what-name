@@ -12,3 +12,8 @@ I think that makes sense???
 Go look at the jpg file lol
 
 https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixing-that-works-like-mixing-real-colors
+
+Cause Im stupid
+TODO:
+Make a mixer so we can make all the colour stuff happen before it's "rendered" so SDL is only showing the dots
+Maps bigger than the screen

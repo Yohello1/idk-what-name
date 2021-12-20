@@ -6,6 +6,9 @@
 #include <random>
 #include <cmath>
 #include <chrono>
+// #include <bits/stdc++.h>
+#include <mutex>
+#include <thread>
 
 #include "init_funcs.hpp"
 #include "physics.hpp"
@@ -23,6 +26,7 @@ int main()
     struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     struct position ui[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+    bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     array_clean_start(pixels);
     cord_2d box_verts[2];
     box_verts[0].x_pos = 250;
@@ -43,7 +47,8 @@ int main()
         poll_usr_input(usr_input,&event,quit, actual_2_logic_ratio);
 
         frame_count++;
-        simulate_single(pixels);
+        simulate_single(pixels, new_version);
+        mix_new_version_usr_input(changed,usr_input,new_version);
         redraw_render(pixels, renderer);
         SDL_RenderPresent(renderer);
         // SDL_Delay(50);
@@ -58,7 +63,7 @@ int main()
         // }
         // else
         // {
-        //     std::cout << "Frame " << frame_count << std::endl << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
+            std::cout << "Frame " << frame_count << std::endl << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
 
         // }
     }
