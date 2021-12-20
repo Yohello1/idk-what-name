@@ -9,3 +9,6 @@ First it goes through the mix_user_input_one
 Then when simulating it will check against the new_version one, if it doesn't change it just gets copied over to `new_new_version`
 
 I think that makes sense???
+Go look at the jpg file lol
+
+https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixing-that-works-like-mixing-real-colors
