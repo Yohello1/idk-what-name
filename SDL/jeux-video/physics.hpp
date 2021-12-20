@@ -5,6 +5,9 @@ std::mutex mtx;
 
 void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
+
+    // ADD ADITIONAL CHECK TO MAKE SURE IT DOESNT MOVE INTO FULL TILE 
+    // SAND IS BROKEN
     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
         for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
@@ -14,7 +17,7 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
 
                 std::cout << "Valid move" << std::endl;
                 new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
-                new_version[x_pos][y_pos].r = pixels[x_pos][y_pos].g = new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].a = 0;
+                new_version[x_pos][y_pos].r = new_version[x_pos][y_pos].g = new_version[x_pos][y_pos].b = new_version[x_pos][y_pos].a = 0;
                 new_version[x_pos][y_pos].state_now = empty;
             }
             else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH-1) && pixels[x_pos + 1][y_pos + 1].state_now == empty)

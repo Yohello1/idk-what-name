@@ -6,7 +6,6 @@
 #include <random>
 #include <cmath>
 #include <chrono>
-// #include <bits/stdc++.h>
 #include <mutex>
 #include <thread>
 
@@ -14,6 +13,7 @@
 #include "physics.hpp"
 #include "render.hpp"
 #include "input.hpp"
+#include "rand_testing.hpp"
 
 void excecution_finished();
 void draw_box(cord_2d start, cord_2d end);
@@ -44,28 +44,35 @@ int main()
     {
         auto start_time = Clock::now();
 
-        poll_usr_input(usr_input,&event,quit, actual_2_logic_ratio);
+        // poll_usr_input(usr_input,&event,quit, actual_2_logic_ratio);
 
         frame_count++;
         simulate_single(pixels, new_version);
-        mix_new_version_usr_input(changed,usr_input,new_version);
+        // mix_new_version_usr_input(changed,usr_input,new_version);
         redraw_render(pixels, renderer);
         SDL_RenderPresent(renderer);
         // SDL_Delay(50);
         auto end_time = Clock::now();
-
-        // Add this code back in when multi-threading the simulation stuff
-        if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
-        {
-            SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
-            std::cout << "Frame " << frame_count << std::endl << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
-
-        }
-        else
-        {
-         std::cout << "Frame " << frame_count << std::endl << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
-        }
+    if ( event.type == SDL_QUIT)
+    {
+        quit = true;
     }
+        // Add this code back in when multi-threading the simulation stuff
+        // if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
+        // {
+        //     SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
+        //     std::cout << "Frame " << frame_count << std::endl << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
+
+        // }
+        // else
+        // {
+        //  std::cout << "Frame " << frame_count << std::endl << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
+        // }
+            std::cout << "Sand: " << count_sand(pixels) << std::endl;
+
+    }
+    std::cout << "ENDED" << std::endl;
+    std::cout << "Sand: " << count_sand(pixels) << std::endl;
 
     excecution_finished();
 
