@@ -2,7 +2,7 @@
 // This is gonna be painful
 // #include "base_data.hpp"
 #include <SDL2/SDL.h>
-void poll_usr_input(position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Event* event, bool quit, int actual_2_logic_ratio)
+void poll_usr_input(position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Event *event, bool quit, int actual_2_logic_ratio)
 {
     if (SDL_PollEvent(event) && event->type == SDL_QUIT)
     {
@@ -10,7 +10,7 @@ void poll_usr_input(position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDT
     }
     int mouse_x = 0;
     int mouse_y = 0;
-    if(event->motion.state & SDL_BUTTON_LMASK == SDL_BUTTON_LEFT)
+    if ((event->motion.state & SDL_BUTTON_LMASK) == SDL_BUTTON_LEFT)
     {
         SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
         SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -24,7 +24,7 @@ void poll_usr_input(position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDT
         std::cout << "Left" << std::endl;
     }
 
-    if(event->motion.state & SDL_BUTTON_RMASK == SDL_BUTTON_RIGHT)
+    if ((event->motion.state & SDL_BUTTON_RMASK) == SDL_BUTTON_RIGHT)
     {
         SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
         SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -40,7 +40,27 @@ void poll_usr_input(position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDT
 }
 
 // Gonna throw this part onto the backburner for now whilst I figure out what the heck is going on
-void mix_new_version_usr_input(position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+void mix_new_version_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
+    for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+    {
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        {
+            if(changed[x_pos][y_pos] == true)
+            {
+                // Doesn't work dumbass
+                // new_version[x_pos][y_pos] = usr_input[x_pos][y_pos];
+                new_version[x_pos][y_pos].r             = usr_input[x_pos][y_pos].r          ;
+                new_version[x_pos][y_pos].g             = usr_input[x_pos][y_pos].g          ;
+                new_version[x_pos][y_pos].b             = usr_input[x_pos][y_pos].b          ;
+                new_version[x_pos][y_pos].a             = usr_input[x_pos][y_pos].a          ;
+                new_version[x_pos][y_pos].state_now     = usr_input[x_pos][y_pos].state_now  ;
+                new_version[x_pos][y_pos].pressure      = usr_input[x_pos][y_pos].pressure   ;
+                new_version[x_pos][y_pos].temperature   = usr_input[x_pos][y_pos].temperature;
 
+                usr_input[x_pos][y_pos].r = usr_input[x_pos][y_pos].g = usr_input[x_pos][y_pos].b = usr_input[x_pos][y_pos].a = usr_input[x_pos][y_pos].temperature = usr_input[x_pos][y_pos].pressure = 0;
+                usr_input[x_pos][y_pos].state_now = empty;
+            }
+        }
+    }
 }

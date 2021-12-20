@@ -30,6 +30,7 @@ struct position
 
 
 
+
 struct cord_2d
 {
     int x_pos;
