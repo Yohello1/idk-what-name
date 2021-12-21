@@ -93,7 +93,7 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
 
         }
     }
-    mtx.lock();
+    // mtx.lock();
     // memcpy(&pixels, &new_version, sizeof(pixels));
     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
@@ -109,7 +109,7 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
             new_version[x_pos][y_pos].pressure    = 0    ;
         }
     }
-    mtx.unlock();
+    // mtx.unlock();
 
 }
 
@@ -132,7 +132,21 @@ void draw_box_white_sand(cord_2d start, cord_2d end, position pixels[LOGICAL_WIN
 
 }
 
-void simulate_single(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], bool quit)
 {
-    sand_sim(pixels, new_version);
+
+    while(!quit)
+    {
+        auto start_time = Clock::now();
+
+        sand_sim(pixels, new_version);
+
+        auto end_time = Clock::now();
+
+        if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
+        {
+            SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
+        }
+
+    }
 }
