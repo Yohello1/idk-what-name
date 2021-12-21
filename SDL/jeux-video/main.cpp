@@ -29,8 +29,8 @@ int main()
     bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     array_clean_start(pixels);
     cord_2d box_verts[2];
-    box_verts[0].x_pos = 250;
-    box_verts[1].x_pos = 138;
+    box_verts[0].x_pos = 100;
+    box_verts[1].x_pos = 50;
     box_verts[0].y_pos = 1;
     box_verts[1].y_pos = 150;
     draw_box_white_sand(box_verts[0],box_verts[1], pixels);
@@ -53,10 +53,10 @@ int main()
         SDL_RenderPresent(renderer);
         // SDL_Delay(50);
         auto end_time = Clock::now();
-    if ( event.type == SDL_QUIT)
-    {
-        quit = true;
-    }
+        if ( event.type == SDL_QUIT)
+        {
+            quit = true;
+        }
         // Add this code back in when multi-threading the simulation stuff
         // if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
         // {
