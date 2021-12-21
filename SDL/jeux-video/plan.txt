@@ -15,5 +15,6 @@ https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixi
 
 Cause Im stupid
 TODO:
+Fix the sand only going one way
 Make a mixer so we can make all the colour stuff happen before it's "rendered" so SDL is only showing the dots
 Maps bigger than the screen
