@@ -22,7 +22,7 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
                 y_pos != (LOGICAL_WINDOW_WIDTH - 1)
             )
             {
-                std::cout << "Done" << std::endl;
+                // std::cout << "Done" << std::endl;
                 new_version[x_pos][y_pos + 1].r              = pixels[x_pos][y_pos].r          ;
                 new_version[x_pos][y_pos + 1].g              = pixels[x_pos][y_pos].g          ;
                 new_version[x_pos][y_pos + 1].b              = pixels[x_pos][y_pos].b          ;
@@ -47,7 +47,7 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
                 y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1
             )
             {
-                std::cout << "Done2" << std::endl;
+                // std::cout << "Done2" << std::endl;
                 new_version[x_pos - 1][y_pos + 1].r              = pixels[x_pos][y_pos].r          ;
                 new_version[x_pos - 1][y_pos + 1].g              = pixels[x_pos][y_pos].g          ;
                 new_version[x_pos - 1][y_pos + 1].b              = pixels[x_pos][y_pos].b          ;
@@ -143,10 +143,12 @@ void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
 
         auto end_time = Clock::now();
 
-        if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
+        if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 22222)
         {
-            SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
+            SDL_Delay((22222 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
         }
 
     }
+
+    std::cout << "It don't matter it done" << std::endl;
 }

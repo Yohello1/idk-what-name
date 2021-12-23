@@ -19,13 +19,6 @@ void start()
 
 }
 
-void excecution_finished(void)
-{
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-}
 
 void array_clean_start(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {

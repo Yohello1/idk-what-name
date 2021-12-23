@@ -28,9 +28,6 @@ struct position
     uint8_t pressure;
 };
 
-
-
-
 struct cord_2d
 {
     int x_pos;
