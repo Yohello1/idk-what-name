@@ -26,6 +26,7 @@ int main()
     struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     struct position ui[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+    struct position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
     array_clean_start(pixels);
     cord_2d box_verts[2];
@@ -46,11 +47,13 @@ int main()
 
         quit = poll_usr_input(changed, usr_input,&event,quit, actual_2_logic_ratio);
 
-        // mix_new_version_usr_input();
         // simulate_once(pixels, new_version);
+        // simulate_once(pixels,new_version,quit);
+        mix_new_version_usr_input(changed, usr_input,pixels);
 
-        mix_new_version_usr_input(changed, usr_input,new_version);
-        redraw_render(pixels, renderer);
+        std::memcpy(&render, &pixels, sizeof(pixels));
+
+        redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
         std::cout << "Sand: " << count_sand(pixels) << std::endl;
         auto end_time = Clock::now();
