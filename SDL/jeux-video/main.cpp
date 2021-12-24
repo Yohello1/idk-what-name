@@ -49,7 +49,7 @@ int main()
 
         // simulate_once(pixels, new_version);
         // simulate_once(pixels,new_version,quit);
-        mix_new_version_usr_input(changed, usr_input,pixels);
+        mix_new_version_usr_input(changed, usr_input,pixels );
 
         std::memcpy(&render, &pixels, sizeof(pixels));
 
