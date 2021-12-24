@@ -10,32 +10,63 @@ bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], po
     while(SDL_PollEvent(event) != 0)
     {
         // idk why this doesn't
-        if (SDL_PollEvent(event) && event->type == SDL_QUIT)
-        {
-            quit_now = true;
-            std::cout << "SHOULD NOW STOP" << std::endl;
-        }
+        // if (SDL_PollEvent(event) && event->type == SDL_QUIT)
+        // {
+        //     quit_now = true;
+        //     std::cout << "SHOULD NOW STOP" << std::endl;
+        // }
 
-        else if ((event->motion.state & SDL_BUTTON_LMASK) == SDL_BUTTON_LEFT)
-        {
-            SDL_GetMouseState(&mouse_x, &mouse_y);
-            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
-            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
-            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
-            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
-            changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
-            std::cout << "Left" << std::endl;
-        }
+        // if ((event->motion.state & SDL_BUTTON_LMASK) == SDL_BUTTON_LEFT)
+        // {
+        //     SDL_GetMouseState(&mouse_x, &mouse_y);
+        //     std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 148;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 204;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 222;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
+        //     changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
+        //     std::cout << "Left" << std::endl;
+        // }
 
-        else if ((event->motion.state & SDL_BUTTON_RMASK) == SDL_BUTTON_RIGHT)
+        // if ((event->motion.state & SDL_BUTTON_RMASK) == SDL_BUTTON_RIGHT)
+        // {
+        //     SDL_GetMouseState(&mouse_x, &mouse_y);
+        //     std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 153;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 0;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
+        //     changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
+        //     std::cout << "Right" << std::endl;
+        // }
+
+        switch(event->motion.state)
         {
-            SDL_GetMouseState(&mouse_x, &mouse_y);
-            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
-            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
-            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
-            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
-            changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
-            std::cout << "Right" << std::endl;
+            case SDL_QUIT:
+                std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 148;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 204;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 222;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
+                changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
+                std::cout << "Left" << std::endl;
+                break;
+            case SDL_BUTTON_RIGHT:
+                SDL_GetMouseState(&mouse_x, &mouse_y);
+                std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 153;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 0;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
+                changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
+                std::cout << "Right" << std::endl;
+                break;
+            default:
+                break;
         }
     }
 
