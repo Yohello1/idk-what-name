@@ -3,8 +3,10 @@
 // #include "base_data.hpp"
 #include <SDL2/SDL.h>
 
-bool left_down = false, right_down = false;
+// keep track of if it's held down or not
+bool left_down = false, right_down = false, L_shift = false;
 
+// not even god knows what this does
 void mouse_Press(SDL_MouseButtonEvent &mouse_thing)
 {
 
@@ -20,44 +22,15 @@ void mouse_Press(SDL_MouseButtonEvent &mouse_thing)
 
 bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Event *event, bool quit, int actual_2_logic_ratio)
 {
+    // Failed experiement,
+    // give up on your dreams and die - levi
+    // stdin mouse_down = SDL_MOUSEBUTTONDOWN;
     bool quit_now = false;
     int mouse_x = 0;
     int mouse_y = 0;
     while (SDL_PollEvent(event) != 0)
     {
-        // idk why this doesn't
-        // if (SDL_PollEvent(event) && event->type == SDL_QUIT)
-        // {
-        //     quit_now = true;
-        //     std::cout << "SHOULD NOW STOP" << std::endl;
-        // }
-
-        // if ((event->motion.state & SDL_BUTTON_LMASK) == SDL_BUTTON_LEFT)
-        // {
-        //     SDL_GetMouseState(&mouse_x, &mouse_y);
-        //     std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 148;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 204;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 222;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
-        //     changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
-        //     std::cout << "Left" << std::endl;
-        // }
-
-        // if ((event->motion.state & SDL_BUTTON_RMASK) == SDL_BUTTON_RIGHT)
-        // {
-        //     SDL_GetMouseState(&mouse_x, &mouse_y);
-        //     std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 153;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 0;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 0;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
-        //     usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
-        //     changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
-        //     std::cout << "Right" << std::endl;
-        // }
-
+        // Access the event type dumbass
         switch (event->type)
         {
         case SDL_QUIT:
@@ -69,6 +42,27 @@ bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], po
         case SDL_MOUSEBUTTONUP:
             mouse_Press(event->button);
             break;
+        case SDL_KEYDOWN:
+            // L_shift = true;
+            // std::cout << "I am a banana" << '\n';
+            // if (event->key.keysym.sym == SDLK_a)
+            // {
+            //     std::cout << "A" << '\n';
+            //     if (event->key.keysym.mod & KMOD_SHIFT)
+            //     {
+            //     std::cout << "A2" << '\n';
+            //     }
+            //     else
+            //     {
+            //         // Handle 'a'
+            //     }
+            // }
+            if(event->key.keysym.mod & KMOD_SHIFT)
+            {
+                std::cout << "I am a banana" << '\n';
+            }
+            break;
+
         default:
             break;
         }

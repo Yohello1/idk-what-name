@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <cstring>
+#include <cstdio>
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <iostream>
@@ -47,31 +48,13 @@ int main()
 
         quit = poll_usr_input(changed, usr_input,&event,quit, actual_2_logic_ratio);
 
-        // simulate_once(pixels, new_version);
-        // simulate_once(pixels,new_version,quit);
         mix_new_version_usr_input(changed, usr_input,pixels );
 
         std::memcpy(&render, &pixels, sizeof(pixels));
 
         redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
-        std::cout << "Sand: " << count_sand(pixels) << std::endl;
         auto end_time = Clock::now();
-
-        // Add this code back in when multi-threading the simulation stuff
-        // ^
-        // On second thought, nah
-        // if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
-        // {
-        //     SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
-        //     std::cout << "Frame " << frame_count << std::endl << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
-
-        // }
-        // else
-        // {
-        //  std::cout << "Frame " << frame_count << std::endl << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
-        // }
-            // std::cout << "Sand: " << count_sand(pixels) << std::endl;
 
     }
     physics.join();

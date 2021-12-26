@@ -7,8 +7,7 @@ std::mutex mtx;
 void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
 
-    // Sand is somewhat broken
-    // Look into later, the comment later on has more details
+    // it works don't ask
     for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
     {
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
@@ -114,6 +113,7 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
 void draw_box_white_sand(cord_2d start, cord_2d end, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
     // The location is relative to where it is on the screen/window :P
+    // That made no sense
     int higher_x = std::min(start.x_pos, end.x_pos);
     int higher_y = std::min(start.y_pos, end.y_pos);
     int  lower_x = std::max(start.x_pos, end.y_pos);
