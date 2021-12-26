@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 
 // keep track of if it's held down or not
-bool left_down = false, right_down = false, L_shift = false;
+bool left_down = false, right_down = false, shift = false;
 
 // not even god knows what this does
 void mouse_Press(SDL_MouseButtonEvent &mouse_thing)
@@ -14,7 +14,7 @@ void mouse_Press(SDL_MouseButtonEvent &mouse_thing)
     {
         left_down = !left_down;
     }
-    else
+    else if (mouse_thing.button == SDL_BUTTON_RIGHT)
     {
         right_down = !right_down;
     }
@@ -59,17 +59,24 @@ bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], po
             // }
             if(event->key.keysym.mod & KMOD_SHIFT)
             {
-                std::cout << "I am a banana" << '\n';
+                shift = !shift;
             }
             break;
-
+        case SDL_KEYUP:
+            // if(event->key.keysym.mod & KMOD_SHIFT)
+            // {
+                shift = !shift;
+                std::cout << "hi" << '\n';
+            // }
+            std::cout << "hi2" << '\n';
+            break;
         default:
             break;
         }
 
         int mouse_x = 0;
         int mouse_y = 0;
-        if (left_down == true)
+        if (left_down == true && shift == false)
         {
             SDL_GetMouseState(&mouse_x, &mouse_y);
             std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
@@ -81,7 +88,7 @@ bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], po
             changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
             std::cout << "Left" << std::endl;
         }
-        else if (right_down == true)
+        else if (right_down == true && shift == false)
         {
             SDL_GetMouseState(&mouse_x, &mouse_y);
             std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
@@ -92,6 +99,30 @@ bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], po
             usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = solid;
             changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
             std::cout << "Right" << std::endl;
+        }
+        else if (right_down == true && shift == true)
+        {
+            SDL_GetMouseState(&mouse_x, &mouse_y);
+            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 241;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 27;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 21;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = fixed_pos;
+            changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
+            std::cout << "Fixed" << std::endl;
+        }
+        else if (left_down == true && shift == true)
+        {
+            SDL_GetMouseState(&mouse_x, &mouse_y);
+            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 190;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 238;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 254;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
+            usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = fluid;    
+            changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
+            std::cout << "fluid" << std::endl;
         }
     }
 
