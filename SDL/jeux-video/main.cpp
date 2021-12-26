@@ -35,7 +35,7 @@ int main()
     box_verts[1].x_pos = 50;
     box_verts[0].y_pos = 1;
     box_verts[1].y_pos = 150;
-    draw_box_white_sand(box_verts[0],box_verts[1], pixels);
+    // draw_box_white_sand(box_verts[0],box_verts[1], pixels);
 
     int actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH;
 
