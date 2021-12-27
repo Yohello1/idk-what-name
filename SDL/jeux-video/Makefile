@@ -6,7 +6,7 @@ CC = g++
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS = -Wall -O3
+COMPILER_FLAGS = -Wall -O3 -Waggressive-loop-optimizations
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lSDL2 -lSDL2_image -g `sdl2-config --cflags --libs`  -lpthread
