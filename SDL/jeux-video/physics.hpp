@@ -27,13 +27,13 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
                 new_version[x_pos][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
                 new_version[x_pos][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
 
-                // pixels[x_pos][y_pos].r = 0;
-                // pixels[x_pos][y_pos].g = 0;
-                // pixels[x_pos][y_pos].b = 0;
-                // pixels[x_pos][y_pos].a = 0;
-                // pixels[x_pos][y_pos].state_now = empty;
-                // pixels[x_pos][y_pos].temperature = 0;
-                // pixels[x_pos][y_pos].pressure = 0;
+                pixels[x_pos][y_pos].r = 0;
+                pixels[x_pos][y_pos].g = 0;
+                pixels[x_pos][y_pos].b = 0;
+                pixels[x_pos][y_pos].a = 0;
+                pixels[x_pos][y_pos].state_now = empty;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].pressure = 0;
             }
 
             else if (
@@ -49,13 +49,13 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
                 new_version[x_pos + 1][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
                 new_version[x_pos + 1][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
 
-                // pixels[x_pos][y_pos].r = 0;
-                // pixels[x_pos][y_pos].g = 0;
-                // pixels[x_pos][y_pos].b = 0;
-                // pixels[x_pos][y_pos].a = 0;
-                // pixels[x_pos][y_pos].state_now = empty;
-                // pixels[x_pos][y_pos].temperature = 0;
-                // pixels[x_pos][y_pos].pressure = 0;
+                pixels[x_pos][y_pos].r = 0;
+                pixels[x_pos][y_pos].g = 0;
+                pixels[x_pos][y_pos].b = 0;
+                pixels[x_pos][y_pos].a = 0;
+                pixels[x_pos][y_pos].state_now = empty;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].pressure = 0;
             }
 
             else if (
@@ -71,17 +71,127 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
                 new_version[x_pos - 1][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
                 new_version[x_pos - 1][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
 
-                // pixels[x_pos][y_pos].r = 0;
-                // pixels[x_pos][y_pos].g = 0;
-                // pixels[x_pos][y_pos].b = 0;
-                // pixels[x_pos][y_pos].a = 0;
-                // pixels[x_pos][y_pos].state_now = empty;
-                // pixels[x_pos][y_pos].temperature = 0;
-                // pixels[x_pos][y_pos].pressure = 0;
+                pixels[x_pos][y_pos].r = 0;
+                pixels[x_pos][y_pos].g = 0;
+                pixels[x_pos][y_pos].b = 0;
+                pixels[x_pos][y_pos].a = 0;
+                pixels[x_pos][y_pos].state_now = empty;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].pressure = 0;
             }
-            
 
-            else
+            // Water oooo
+            else if (
+                pixels[x_pos][y_pos].state_now == fluid &&
+                pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
+                y_pos != (LOGICAL_WINDOW_WIDTH - 1))
+            {
+                new_version[x_pos][y_pos + 1].r = pixels[x_pos][y_pos].r;
+                new_version[x_pos][y_pos + 1].g = pixels[x_pos][y_pos].g;
+                new_version[x_pos][y_pos + 1].b = pixels[x_pos][y_pos].b;
+                new_version[x_pos][y_pos + 1].a = pixels[x_pos][y_pos].a;
+                new_version[x_pos][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
+                new_version[x_pos][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
+                new_version[x_pos][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
+
+                pixels[x_pos][y_pos].r = 0;
+                pixels[x_pos][y_pos].g = 0;
+                pixels[x_pos][y_pos].b = 0;
+                pixels[x_pos][y_pos].a = 0;
+                pixels[x_pos][y_pos].state_now = empty;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].pressure = 0;
+            }
+
+            else if (
+                pixels[x_pos][y_pos].state_now == fluid &&
+                pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
+                y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != (LOGICAL_WINDOW_WIDTH - 1))
+            {
+                new_version[x_pos + 1][y_pos + 1].r = pixels[x_pos][y_pos].r;
+                new_version[x_pos + 1][y_pos + 1].g = pixels[x_pos][y_pos].g;
+                new_version[x_pos + 1][y_pos + 1].b = pixels[x_pos][y_pos].b;
+                new_version[x_pos + 1][y_pos + 1].a = pixels[x_pos][y_pos].a;
+                new_version[x_pos + 1][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
+                new_version[x_pos + 1][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
+                new_version[x_pos + 1][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
+
+                pixels[x_pos][y_pos].r = 0;
+                pixels[x_pos][y_pos].g = 0;
+                pixels[x_pos][y_pos].b = 0;
+                pixels[x_pos][y_pos].a = 0;
+                pixels[x_pos][y_pos].state_now = empty;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].pressure = 0;
+            }
+
+            else if (
+                pixels[x_pos][y_pos].state_now == fluid &&
+                pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
+                y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1)
+            {
+                new_version[x_pos - 1][y_pos + 1].r = pixels[x_pos][y_pos].r;
+                new_version[x_pos - 1][y_pos + 1].g = pixels[x_pos][y_pos].g;
+                new_version[x_pos - 1][y_pos + 1].b = pixels[x_pos][y_pos].b;
+                new_version[x_pos - 1][y_pos + 1].a = pixels[x_pos][y_pos].a;
+                new_version[x_pos - 1][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
+                new_version[x_pos - 1][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
+                new_version[x_pos - 1][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
+
+                pixels[x_pos][y_pos].r = 0;
+                pixels[x_pos][y_pos].g = 0;
+                pixels[x_pos][y_pos].b = 0;
+                pixels[x_pos][y_pos].a = 0;
+                pixels[x_pos][y_pos].state_now = empty;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].pressure = 0;
+            }
+
+            else if (
+                pixels[x_pos][y_pos].state_now == fluid &&
+                pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty &&
+                x_pos != (LOGICAL_WINDOW_WIDTH - 1))
+            {
+                new_version[x_pos + 1][y_pos].r = pixels[x_pos][y_pos].r;
+                new_version[x_pos + 1][y_pos].g = pixels[x_pos][y_pos].g;
+                new_version[x_pos + 1][y_pos].b = pixels[x_pos][y_pos].b;
+                new_version[x_pos + 1][y_pos].a = pixels[x_pos][y_pos].a;
+                new_version[x_pos + 1][y_pos].state_now = pixels[x_pos][y_pos].state_now;
+                new_version[x_pos + 1][y_pos].temperature = pixels[x_pos][y_pos].temperature;
+                new_version[x_pos + 1][y_pos].pressure = pixels[x_pos][y_pos].pressure;
+
+                pixels[x_pos][y_pos].r = 0;
+                pixels[x_pos][y_pos].g = 0;
+                pixels[x_pos][y_pos].b = 0;
+                pixels[x_pos][y_pos].a = 0;
+                pixels[x_pos][y_pos].state_now = empty;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].pressure = 0;
+            }
+
+            else if (
+                pixels[x_pos][y_pos].state_now == fluid &&
+                pixels[x_pos - 1][y_pos].state_now == empty && new_version[x_pos - 1][y_pos].state_now == empty &&
+                x_pos != 1)
+            {
+                new_version[x_pos - 1][y_pos].r = pixels[x_pos][y_pos].r;
+                new_version[x_pos - 1][y_pos].g = pixels[x_pos][y_pos].g;
+                new_version[x_pos - 1][y_pos].b = pixels[x_pos][y_pos].b;
+                new_version[x_pos - 1][y_pos].a = pixels[x_pos][y_pos].a;
+                new_version[x_pos - 1][y_pos].state_now = pixels[x_pos][y_pos].state_now;
+                new_version[x_pos - 1][y_pos].temperature = pixels[x_pos][y_pos].temperature;
+                new_version[x_pos - 1][y_pos].pressure = pixels[x_pos][y_pos].pressure;
+
+                pixels[x_pos][y_pos].r = 0;
+                pixels[x_pos][y_pos].g = 0;
+                pixels[x_pos][y_pos].b = 0;
+                pixels[x_pos][y_pos].a = 0;
+                pixels[x_pos][y_pos].state_now = empty;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].pressure = 0;
+            }
+
+            else if (pixels[x_pos][y_pos].state_now != empty && new_version[x_pos][y_pos].state_now == empty)
             {
                 new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
             }
@@ -249,7 +359,6 @@ void water_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posi
             }
         }
     }
-
 
     for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
     {
