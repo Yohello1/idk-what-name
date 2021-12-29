@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <random>
-#define LOGICAL_WINDOW_WIDTH 256
+#define LOGICAL_WINDOW_WIDTH 128
 #define ACTUAL_WINDOW_WIDTH 1024
 
 //time
