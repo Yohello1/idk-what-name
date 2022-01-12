@@ -15,8 +15,6 @@ void start()
     SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
     SDL_RenderClear(renderer);
 
-    int actual_2_logic_ratio = LOGICAL_WINDOW_WIDTH/ACTUAL_WINDOW_WIDTH;
-
 }
 
 

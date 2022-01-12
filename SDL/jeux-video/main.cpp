@@ -13,22 +13,27 @@
 #include "init_funcs.hpp"
 #include "physics.hpp"
 #include "render.hpp"
-#include "input.hpp"
+#include "input_large.hpp"
 #include "rand_testing.hpp"
 
+struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct position ui[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void excecution_finished();
 void draw_box(cord_2d start, cord_2d end);
 
+std::mutex mtx2;
+
+
 int main()
 {
-
+    std::cout << "Starting" << '\n';
     start();
-    struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-    struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-    struct position ui[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-    struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-    struct position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-    bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+    std::cout << "Started, allocating memory" << '\n';
+
     array_clean_start(pixels);
     cord_2d box_verts[2];
     box_verts[0].x_pos = 100;
@@ -37,7 +42,9 @@ int main()
     box_verts[1].y_pos = 150;
     // draw_box_white_sand(box_verts[0],box_verts[1], pixels);
 
-    int actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH;
+    const int actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH;
+
+    std::cout << "Thingy started now" << '\n';
 
     bool quit = false;
     std::thread physics(simulate, pixels,new_version, quit);
@@ -48,9 +55,10 @@ int main()
 
         quit = poll_usr_input(changed, usr_input,&event,quit, actual_2_logic_ratio);
 
+        mtx2.lock();
         mix_new_version_usr_input(changed, usr_input,pixels );
-
         std::memcpy(&render, &pixels, sizeof(pixels));
+        mtx2.unlock();
 
         redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
