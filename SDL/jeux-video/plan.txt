@@ -15,6 +15,15 @@ https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixi
 
 Cause Im stupid
 TODO:
-~~Fix the sand only going one way~~
-Make a mixer so we can make all the colour stuff happen before it's "rendered" so SDL is only showing the dots
 Maps bigger than the screen
+Smoke mixing (Use the wind thing for gravity/things going up)
+Rework the physics system AGAIN to start using name spaces instead
+
+Am I going to do newtowian physics?
+
+CANNOT BE DONE IN A REASONABLE AMOUNT OF TIME:
+Make a mixer so we can make all the colour stuff happen before it's "rendered" so SDL is only showing the dots
+I dont have the time to get a PHD in like everything dam it
+
+FIXED:
+Fix the sand only going one way

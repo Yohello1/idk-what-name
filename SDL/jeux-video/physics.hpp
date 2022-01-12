@@ -6,6 +6,7 @@ std::mutex mtx;
 
 void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
+    mtx.lock();
 
     // it works don't ask
     for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
@@ -15,6 +16,29 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
             // sand ig
 
             if (
+                pixels[x_pos][y_pos].state_now == solid &&
+                pixels[x_pos][y_pos + 1].state_now == fluid &&
+                y_pos != (LOGICAL_WINDOW_WIDTH - 1))
+            {
+                position temp_4_swap = pixels[x_pos][y_pos + 1];
+                new_version[x_pos][y_pos + 1].r = pixels[x_pos][y_pos].r;
+                new_version[x_pos][y_pos + 1].g = pixels[x_pos][y_pos].g;
+                new_version[x_pos][y_pos + 1].b = pixels[x_pos][y_pos].b;
+                new_version[x_pos][y_pos + 1].a = pixels[x_pos][y_pos].a;
+                new_version[x_pos][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
+                new_version[x_pos][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
+                new_version[x_pos][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
+
+                new_version[x_pos][y_pos].r =           temp_4_swap.r;
+                new_version[x_pos][y_pos].g =           temp_4_swap.g;
+                new_version[x_pos][y_pos].b =           temp_4_swap.b;
+                new_version[x_pos][y_pos].a =           temp_4_swap.a;
+                new_version[x_pos][y_pos].state_now =   temp_4_swap.state_now;
+                new_version[x_pos][y_pos].temperature = temp_4_swap.temperature;
+                new_version[x_pos][y_pos].pressure =    temp_4_swap.pressure;
+            }
+
+            else if (
                 pixels[x_pos][y_pos].state_now == solid &&
                 pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
                 y_pos != (LOGICAL_WINDOW_WIDTH - 1))
@@ -35,7 +59,6 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
                 pixels[x_pos][y_pos].temperature = 0;
                 pixels[x_pos][y_pos].pressure = 0;
             }
-
             else if (
                 pixels[x_pos][y_pos].state_now == solid &&
                 pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
@@ -197,7 +220,6 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
             }
         }
     }
-    // mtx.lock();
     // memcpy(&pixels, &new_version, sizeof(pixels));
     for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
     {
@@ -213,7 +235,7 @@ void sand_sim(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
             new_version[x_pos][y_pos].pressure = 0;
         }
     }
-    // mtx.unlock();
+    mtx.unlock();
 }
 
 void draw_box_white_sand(cord_2d start, cord_2d end, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
@@ -384,6 +406,11 @@ void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
         auto start_time = Clock::now();
 
         sand_sim(pixels, new_version);
+
+        /*
+        * FIXME My I better come back and take out the fluid related code from sand and move that into it's own function so there aren't
+        * a ton of random eqautions just thrown everywehre and anywhere they fit
+        */
         // water_sim(pixels, new_version);
 
         auto end_time = Clock::now();
