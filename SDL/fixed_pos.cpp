@@ -56,7 +56,7 @@ void sand_sim();
 
 int main()
 {
-    std::cout << "MY BAGUETTES ARE ON FIRE" << std::endl;
+    std::cout << "MY BAGUETTES ARE ON FIRE" << '\n';
     // telling it how to scale
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     // Printing the time
@@ -110,8 +110,8 @@ int main()
             case SDL_BUTTON_LEFT:
                 SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
                 SDL_GetMouseState(&mouse_x, &mouse_y);
-                std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
-                std::cout << "Left" << std::endl;
+                std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << '\n';
+                std::cout << "Left" << '\n';
                 SDL_RenderDrawPoint(renderer, mouse_x / actual_2_logic_ratio, mouse_y / actual_2_logic_ratio);
                 SDL_RenderPresent(renderer);
                 pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
@@ -125,8 +125,8 @@ int main()
                 // Get mouse position
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 //Output location
-                std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
-                std::cout << "Right" << std::endl;
+                std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << '\n';
+                std::cout << "Right" << '\n';
                 // Get mouse position, convert to logical position, then make like a block around it which is 8x8 to make I think white
                 for (int y_pos = (mouse_y / actual_2_logic_ratio) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / actual_2_logic_ratio) + 4; y_pos++)
                 {
@@ -134,7 +134,7 @@ int main()
                     {
                         // Drawing , outputing position, draw, and seting new state
                         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-                        std::cout << "(" << x_pos << "," << y_pos << ")" << std::endl;
+                        std::cout << "(" << x_pos << "," << y_pos << ")" << '\n';
                         pixels[x_pos][y_pos].state_now = solid;
                         pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].b = 255;
                        
@@ -159,7 +159,7 @@ void scr_dump()
         {
             std::cout << pixels[x_pos][y_pos].state_now;
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
 void redraw_and_render()

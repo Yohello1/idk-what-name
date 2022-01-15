@@ -169,7 +169,7 @@ int main()
         // new_version = pixels;
         SDL_RenderPresent(renderer);
         SDL_Delay(10);
-        std::cout << iterations << std::endl;
+        std::cout << iterations << '\n';
     }
 
     std::cout << "Done\n";

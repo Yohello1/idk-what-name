@@ -421,7 +421,7 @@ void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], posit
         }
     }
 
-    std::cout << "It don't matter it done" << std::endl;
+    std::cout << "It don't matter it done" << '\n';
 }
 
 void simulate_once(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], bool quit)
@@ -438,5 +438,5 @@ void simulate_once(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], 
         SDL_Delay((22222 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
     }
 
-    std::cout << "It don't matter it done" << std::endl;
+    std::cout << "It don't matter it done" << '\n';
 }

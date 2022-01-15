@@ -73,7 +73,7 @@ int main()
     // Draw it
     draw_and_render();
 
-    std::cout << "Startup complete, there should be a black window displaying" << std::endl;
+    std::cout << "Startup complete, there should be a black window displaying" << '\n';
 
     // It draws a box, and says it did
     draw_box(126, 130, 25, 35, 255, 255, 0, 255);
@@ -81,7 +81,7 @@ int main()
     draw_box(200, 240, 3, 5, 255, 255, 0, 255);
     draw_box(220, 226, 100, 200, 255, 255, 0, 255);
 
-    std::cout << "Drew the box" << std::endl;
+    std::cout << "Drew the box" << '\n';
     // Waits for 3 seconds
     SDL_Delay(3000);
     // Does the sand stuff
@@ -90,7 +90,7 @@ int main()
         sand_sim();
     }
     draw_and_render();
-    std::cout << "Done the sim" << std::endl;
+    std::cout << "Done the sim" << '\n';
     // Wait till ordered to kill the process, and free everything from the shackles of this computer world
     excecution_finished();
     return EXIT_SUCCESS;
@@ -152,7 +152,7 @@ void sand_sim()
             pixels[position].g = 0;
             pixels[position].b = 0;
             pixels[position].empty = true;
-            std::cout << "And another one bites the dust" << std::endl;
+            std::cout << "And another one bites the dust" << '\n';
         }
         else if (pixels[position + LOGICAL_WINDOW_WIDTH - 1].empty == true && pixels[position].y_pos != 256 && pixels[position].x_pos != 0 && pixels[position].empty == false)
         {
@@ -164,7 +164,7 @@ void sand_sim()
             pixels[position].g = 0;
             pixels[position].b = 0;
             pixels[position].empty = true;
-            std::cout << "And another one bites the dust" << std::endl;
+            std::cout << "And another one bites the dust" << '\n';
         }
         else if (pixels[position + LOGICAL_WINDOW_WIDTH + 1].empty == true && pixels[position].y_pos != 256 && pixels[position].x_pos != 256 && pixels[position].empty == false)
         {
@@ -176,11 +176,11 @@ void sand_sim()
             pixels[position].g = 0;
             pixels[position].b = 0;
             pixels[position].empty = true;
-            std::cout << "And another one bites the dust" << std::endl;
+            std::cout << "And another one bites the dust" << '\n';
         }
     }
     draw_and_render();
-    std::cout << "NEXT ITERATION IN 1 SECOND PLEASE STANDBY" << std::endl;
+    std::cout << "NEXT ITERATION IN 1 SECOND PLEASE STANDBY" << '\n';
     SDL_Delay(50);
 }
 

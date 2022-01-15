@@ -89,7 +89,7 @@ bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], po
                     changed[x_pos][y_pos] = true;
                 }
             }
-            // std::cout << "Right" << std::endl;
+            // std::cout << "Right" << '\n';
         }
         else if (right_down == true && shift == true)
         {
@@ -110,14 +110,14 @@ bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], po
         else if (left_down == true && shift == true)
         {
             SDL_GetMouseState(&mouse_x, &mouse_y);
-            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << '\n';
             usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = 190;
             usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 238;
             usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 254;
             usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
             usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = fluid;
             changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
-            // std::cout << "fluid" << std::endl;
+            // std::cout << "fluid" << '\n';
 
             for (int y_pos = (mouse_y / actual_2_logic_ratio) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / actual_2_logic_ratio) + 4; y_pos++)
             {

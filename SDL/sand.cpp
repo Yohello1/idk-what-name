@@ -102,7 +102,7 @@ int main()
     position = 0;
     // for (int iteration = 0; iteration < 100; iteration++)
     // {
-        // std::cout << "iteration = " << iteration << std::endl;
+        // std::cout << "iteration = " << iteration << '\n';
         position = 0;
 
         for (int y = LOGICAL_WINDOW_WIDTH; y > 0; y--)
