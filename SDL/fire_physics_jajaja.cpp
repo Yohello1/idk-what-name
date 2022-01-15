@@ -64,7 +64,7 @@ double wind_dir_degrees = 65;
 
 int main()
 {
-    std::cout << "MY BAGUETTES ARE ON FIRE" << std::endl;
+    std::cout << "MY BAGUETTES ARE ON FIRE" << '\n';
     // telling it how to scale
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     // Printing the time
@@ -93,7 +93,7 @@ int main()
     //Gonna make points
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-    std::cout << "Wait for 1 second pls" << std::endl;
+    std::cout << "Wait for 1 second pls" << '\n';
     SDL_Delay(1000);
 
     // draw fire
@@ -129,7 +129,7 @@ int main()
     // uh does this make sense?
     for (int i = 0; i > 1000; i++)
     {
-        std::cout << i << std::endl;
+        std::cout << i << '\n';
 
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
@@ -137,7 +137,7 @@ int main()
             {
                 if (pixels[x_pos][y_pos].state_now == burning)
                 {
-                    // std::cout << "There is a toasty baguette here" << std::endl;
+                    // std::cout << "There is a toasty baguette here" << '\n';
                     /*
                      . 3 .
                      2 X 4
@@ -211,7 +211,7 @@ void scr_dump()
         {
             std::cout << pixels[x_pos][y_pos].state_now;
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
 void redraw_and_render()

@@ -60,7 +60,7 @@ void excecution_finished();
 // So we do all this shid ourselves, may god have mercy upon my soul
 int main()
 {
-    std::cout << "MY BAGUETTES ARE ON FIRE" << std::endl;
+    std::cout << "MY BAGUETTES ARE ON FIRE" << '\n';
     // telling it how to scale
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     // Printing the time

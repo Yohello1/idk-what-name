@@ -160,7 +160,7 @@ void scr_dump()
         {
             std::cout << pixels[x_pos][y_pos].state_now;
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
 u

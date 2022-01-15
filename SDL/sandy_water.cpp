@@ -126,7 +126,7 @@ int main()
         fluid_1(fluid_pos, fluid_pos_num);
         SDL_Delay(20);
         draw_and_render();
-        std::cout << "Iteration : " << iterations << std::endl;
+        std::cout << "Iteration : " << iterations << '\n';
     }
     // scr_dump();
     std::cout << "Done\n";
@@ -215,7 +215,7 @@ void fluid_1(struct cord_2d fluid_pos[], int fluid_num)
     // Took me 3hr to start cause I forgot how to spell lol
     for(int i = 0; i < fluid_num; i++){
         if(pixels[fluid_pos[i].x_pos][fluid_pos[i].y_pos].state_now == fluid && pixels[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1].state_now == empty && fluid_pos[i].y_pos != 1 && new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1].state_now == empty){
-            // std::cout << "this might work" << std::endl;
+            // std::cout << "this might work" << '\n';
             new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1] = new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos];
             new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1].b = 255;
             new_version[fluid_pos[i].x_pos][fluid_pos[i].y_pos - 1].state_now = fluid;
@@ -237,7 +237,7 @@ void scr_dump()
         {
             std::cout << pixels[x_pos][y_pos].state_now;
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
 

@@ -76,7 +76,7 @@ int main()
     std::cout << "Does this work?" << std ::endl;
     if (pixels[500][300].state_now == empty)
     {
-        std::cout << "this should be false" << std::endl;
+        std::cout << "this should be false" << '\n';
         SDL_RenderDrawPoint(renderer, 500, 300);
         pixels[500][300].state_now = fluid;
     }
@@ -106,7 +106,7 @@ int main()
         fluid_1();
         SDL_Delay(20);
         draw_and_render();
-        std::cout << "Iteration : " << iterations << std::endl;
+        std::cout << "Iteration : " << iterations << '\n';
     }
     // scr_dump();
     std::cout << "Done\n";
@@ -212,7 +212,7 @@ void scr_dump()
         {
             std::cout << pixels[x_pos][y_pos].state_now;
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
 

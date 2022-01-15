@@ -88,7 +88,7 @@ const uint_fast8_t actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_W
 
 int main()
 {
-    std::cout << "MY BAGUETTES ARE ON FIRE" << std::endl;
+    std::cout << "MY BAGUETTES ARE ON FIRE" << '\n';
     // telling it how to scale
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     // Printing the time
@@ -120,14 +120,14 @@ int main()
 
     std::thread sand_pointer(simulation);
 
-    std::cout << "So the threads have started" << std::endl;
+    std::cout << "So the threads have started" << '\n';
     bool quit = false;
     uint i = 0;
     int mouse_x = 0, mouse_y = 0;
     while (!quit)
     {
         i++;
-        std::cout << "Itteration" << i << std::endl;
+        std::cout << "Itteration" << i << '\n';
         while (SDL_PollEvent(&event) != 0)
         {
             //User requests quit
@@ -141,7 +141,7 @@ int main()
         case SDL_BUTTON_LEFT:
             SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
             SDL_GetMouseState(&mouse_x, &mouse_y);
-            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << '\n';
             SDL_RenderDrawPoint(renderer, mouse_x / actual_2_logic_ratio, mouse_y / actual_2_logic_ratio);
             SDL_RenderPresent(renderer);
             pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].r = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = pixels[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
@@ -155,7 +155,7 @@ int main()
             // Get mouse position
             SDL_GetMouseState(&mouse_x, &mouse_y);
             //Output location
-            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << std::endl;
+            std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << '\n';
             // Get mouse position, convert to logical position, then make like a block around it which is 8x8 to make I think white
             for (int y_pos = (mouse_y / actual_2_logic_ratio) - 4; y_pos != LOGICAL_WINDOW_WIDTH - 1 && y_pos < (mouse_y / actual_2_logic_ratio) + 4; y_pos++)
             {
@@ -163,7 +163,7 @@ int main()
                 {
                     // Drawing , outputing position, draw, and seting new state
                     SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-                    std::cout << "(" << x_pos << "," << y_pos << ")" << std::endl;
+                    std::cout << "(" << x_pos << "," << y_pos << ")" << '\n';
                     pixels[x_pos][y_pos].state_now = solid;
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].b = 255;
                 }
@@ -179,7 +179,7 @@ int main()
         //         if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos][y_pos + 1].state_now == empty)
         //         {
 
-        // 	  // std::cout << "Valid move" << std::endl;
+        // 	  // std::cout << "Valid move" << '\n';
         //             pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
         //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
         //             pixels[x_pos][y_pos].state_now = empty;
@@ -187,7 +187,7 @@ int main()
         //         else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos + 1][y_pos + 1].state_now == empty)
         //         {
 
-        // 	  // std::cout << "Valid move" << std::endl;
+        // 	  // std::cout << "Valid move" << '\n';
         //             pixels[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
         //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
         //             pixels[x_pos][y_pos].state_now = empty;
@@ -195,7 +195,7 @@ int main()
         //         else if (pixels[x_pos][y_pos].state_now == solid && y_pos != 255 && pixels[x_pos - 1][y_pos + 1].state_now == empty)
         //         {
 
-        // 	  // std::cout << "Valid move" << std::endl;
+        // 	  // std::cout << "Valid move" << '\n';
         //             pixels[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
         //             pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
         //             pixels[x_pos][y_pos].state_now = empty;
@@ -215,7 +215,7 @@ int main()
         SDL_RenderPresent(renderer);
         // auto stop = high_resolution_clock::now();
         // auto duration = duration_cast<microseconds>(stop - start);
-        // std::cout << "Time taken by function: Rendering" << duration.count() << " microseconds" << std::endl;
+        // std::cout << "Time taken by function: Rendering" << duration.count() << " microseconds" << '\n';
     }
 
     sand_pointer.join();
@@ -248,7 +248,7 @@ void simulation()
                 if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && pixels[x_pos][y_pos + 1].state_now == empty)
                 {
 
-                    // std::cout << "Valid move" << std::endl;
+                    // std::cout << "Valid move" << '\n';
                     pixels[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                     pixels[x_pos][y_pos].state_now = empty;
@@ -256,7 +256,7 @@ void simulation()
                 else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && pixels[x_pos + 1][y_pos + 1].state_now == empty)
                 {
 
-                    // std::cout << "Valid move" << std::endl;
+                    // std::cout << "Valid move" << '\n';
                     pixels[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                     pixels[x_pos][y_pos].state_now = empty;
@@ -264,7 +264,7 @@ void simulation()
                 else if (pixels[x_pos][y_pos].state_now == solid && y_pos != (LOGICAL_WINDOW_WIDTH - 1) && pixels[x_pos - 1][y_pos + 1].state_now == empty)
                 {
 
-                    // std::cout << "Valid move" << std::endl;
+                    // std::cout << "Valid move" << '\n';
                     pixels[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
                     pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 0;
                     pixels[x_pos][y_pos].state_now = empty;
@@ -284,7 +284,7 @@ void scr_dump_state()
         {
             std::cout << pixels[x_pos][y_pos].state_now;
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
 void scr_dump_colour()
@@ -295,7 +295,7 @@ void scr_dump_colour()
         {
             std::cout << "(" << pixels[x_pos][y_pos].r << pixels[x_pos][y_pos].g << pixels[x_pos][y_pos].b << ")";
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
 void redraw_and_render()

@@ -57,7 +57,7 @@ typedef std::chrono::high_resolution_clock Clock;
 
 int main()
 {
-    std::cout << "MY BAGUETTES ARE ON FIRE" << std::endl;
+    std::cout << "MY BAGUETTES ARE ON FIRE" << '\n';
     // telling it how to scale
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     // Printing the time
@@ -124,7 +124,7 @@ int main()
             }
         }
 
-        std::cout << "Next Itteration" << std::endl;
+        std::cout << "Next Itteration" << '\n';
         SDL_RenderPresent(renderer);
 
         // 1/60 - time to run minus
@@ -137,8 +137,8 @@ int main()
 
     pressure_pointer.join();
     int end_pressure = pressure_total_dump();
-    std::cout << "Start  pressure: " << start_pressure << "\nEnd    pressure: " << end_pressure << std::endl
-              << "Total difference " << end_pressure - start_pressure << std::endl;
+    std::cout << "Start  pressure: " << start_pressure << "\nEnd    pressure: " << end_pressure << '\n'
+              << "Total difference " << end_pressure - start_pressure << '\n';
     // scr_dump();
     excecution_finished();
 }
@@ -176,7 +176,7 @@ void eqaulize()
                   0 4 0
                */
                     target_pressure = (pixels[x_pos][y_pos - 1].pressure + pixels[x_pos - 1][y_pos].pressure + pixels[x_pos + 1][y_pos].pressure + pixels[x_pos][y_pos + 1].pressure) / 4;
-                    // std::cout << "Target Pressure" << target_pressure << std::endl;
+                    // std::cout << "Target Pressure" << target_pressure << '\n';
                 }
 
                 // Below target
@@ -191,50 +191,50 @@ void eqaulize()
                     {
                         pixels[x_pos][y_pos].pressure++;
                         pixels[x_pos][y_pos - 1].pressure--;
-                        // std::cout << "Change be made1" << std::endl;
+                        // std::cout << "Change be made1" << '\n';
                     }
 
                     else if (pixels[x_pos - 1][y_pos].pressure > target_pressure)
                     {
                         pixels[x_pos][y_pos].pressure++;
                         pixels[x_pos - 1][y_pos].pressure--;
-                        // std::cout << "Change be made" << std::endl;
+                        // std::cout << "Change be made" << '\n';
                     }
                     else if (pixels[x_pos + 1][y_pos].pressure > target_pressure)
                     {
                         pixels[x_pos][y_pos].pressure++;
                         pixels[x_pos + 1][y_pos].pressure--;
-                        // std::cout << "Change be made" << std::endl;
+                        // std::cout << "Change be made" << '\n';
                     }
                     else if (pixels[x_pos][y_pos + 1].pressure > target_pressure)
                     {
                         pixels[x_pos][y_pos].pressure++;
                         pixels[x_pos][y_pos + 1].pressure--;
-                        //std::cout << "Change be made" << std::endl;
+                        //std::cout << "Change be made" << '\n';
                     }
                     else if (pixels[x_pos - 1][y_pos - 11].pressure > target_pressure)
                     {
                         pixels[x_pos][y_pos].pressure++;
                         pixels[x_pos - 1][y_pos - 1].pressure--;
-                        //std::cout << "Change be made" << std::endl;
+                        //std::cout << "Change be made" << '\n';
                     }
                     else if (pixels[x_pos + 1][y_pos - 1].pressure > target_pressure)
                     {
                         pixels[x_pos][y_pos].pressure++;
                         pixels[x_pos + 1][y_pos - 1].pressure--;
-                        // std::cout << "Change be made" << std::endl;
+                        // std::cout << "Change be made" << '\n';
                     }
                     else if (pixels[x_pos - 1][y_pos + 1].pressure > target_pressure)
                     {
                         pixels[x_pos][y_pos].pressure++;
                         pixels[x_pos - 1][y_pos + 1].pressure--;
-                        //std::cout << "Change be made" << std::endl;
+                        //std::cout << "Change be made" << '\n';
                     }
                     else if (pixels[x_pos + 1][y_pos + 1].pressure > target_pressure)
                     {
                         pixels[x_pos][y_pos].pressure++;
                         pixels[x_pos + 1][y_pos + 1].pressure--;
-                        //std::cout << "Change be made" << std::endl;
+                        //std::cout << "Change be made" << '\n';
                     }
                 }
             }
@@ -243,7 +243,7 @@ void eqaulize()
         if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 16000000)
         {
             SDL_Delay((16000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
-            std::cout << "sleep god dam it" << std::endl;
+            std::cout << "sleep god dam it" << '\n';
         }
     }
 }
@@ -264,7 +264,7 @@ void scr_dump()
         {
             std::cout << "(" << pixels[x_pos][y_pos].pressure << ")";
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
 
@@ -277,7 +277,7 @@ int pressure_total_dump()
         {
             end_pressure += pixels[x_pos][y_pos].pressure;
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 
     return end_pressure;
