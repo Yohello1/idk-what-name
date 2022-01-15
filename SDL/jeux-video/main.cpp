@@ -15,6 +15,7 @@
 #include "render.hpp"
 #include "input_large.hpp"
 #include "rand_testing.hpp"
+#include "generation/terain.hpp"
 
 struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
@@ -45,6 +46,10 @@ int main()
     const int actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH;
 
     std::cout << "Thingy started now" << '\n';
+
+    Terrain::Development Terrain_gen;
+
+    Terrain_gen.Development::generate_terrain(0,0,LOGICAL_WINDOW_WIDTH,LOGICAL_WINDOW_WIDTH,8,pixels);
 
     bool quit = false;
     std::thread physics(simulate, pixels,new_version, quit);
