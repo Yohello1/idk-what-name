@@ -20,7 +20,7 @@ namespace Terrain
 		{
 			std::cout << "This started" << '\n';
 			place_dots(x_lower, y_lower, x_upper, y_upper, amt_points);
-			points_inbetween(5);
+			points_inbetween(6);
 
 			std::cout << "This ended" << '\n';
 			for (int i = 1; i < points_old.size(); i++)
@@ -29,6 +29,7 @@ namespace Terrain
 				pixels[points_old[i].x_pos][points_old[i].y_pos].g = 255;
 				pixels[points_old[i].x_pos][points_old[i].y_pos].b = 255;
 				pixels[points_old[i].x_pos][points_old[i].y_pos].a = 255;
+				pixels[points_old[i].x_pos][points_old[i].y_pos].state_now = fixed_pos;
 			}
 		}
 
@@ -55,26 +56,27 @@ namespace Terrain
 
 		void points_inbetween(int times)
 		{
-			for (int i = 1; i < points_old.size()-1; i++)
+			for (int i = 1; i < points_old.size() - 1; i++)
 			{
 				std::cout << points_old[i].x_pos << ',' << points_old[i].y_pos << "  I: " << i << '\n';
 			}
 
 			for (int i = 1; i < points_old.size(); i++)
 			{
-				int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
-				int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
+				if (i != points_old.size() || i != points_old.size() - 1 || i != 0 || i != 1)
+				{
+					int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
+					int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
 
-				points_new.push_back(points_old[i - 1]);
+					points_new.push_back(points_old[i - 1]);
 
-				cord_2d temp;
-				temp.x_pos = x_mid;
-				temp.y_pos = y_mid;
-				points_new.push_back(temp);
+					cord_2d temp;
+					temp.x_pos = x_mid;
+					temp.y_pos = y_mid;
+					points_new.push_back(temp);
 
-				points_new.push_back(points_old[i]);
-
-
+					points_new.push_back(points_old[i]);
+				}
 			}
 
 			for (int i = 0; i < points_new.size(); i++)
@@ -87,19 +89,27 @@ namespace Terrain
 
 			for (int times_done = 0; times_done < times; times_done++)
 			{
-				for (int i = 1; i < points_old.size()-1; i++)
+				for (int i = 1; i < points_old.size() - 5; i++)
 				{
-					int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
-					int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
+					if (points_old[i].x_pos > points_old[i - 1].x_pos)
+					{
+						int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
+						int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
 
-					points_new.push_back(points_old[i - 1]);
+						points_new.push_back(points_old[i - 1]);
 
-					cord_2d temp;
-					temp.x_pos = x_mid;
-					temp.y_pos = y_mid;
+						cord_2d temp;
+						temp.x_pos = x_mid;
+						temp.y_pos = y_mid;
 
-					points_new.push_back(temp);
-					points_new.push_back(points_old[i]);
+						points_new.push_back(temp);
+						points_new.push_back(points_old[i]);
+					}
+					else
+					{
+						points_new.push_back(points_old[i - 1]);
+						points_new.push_back(points_old[i]);
+					}
 				}
 
 				points_old = points_new;
