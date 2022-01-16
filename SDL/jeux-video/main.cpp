@@ -49,7 +49,7 @@ int main()
 
     Terrain::Development Terrain_gen;
 
-    Terrain_gen.Development::generate_terrain(0,0,LOGICAL_WINDOW_WIDTH,LOGICAL_WINDOW_WIDTH,8,pixels);
+    Terrain_gen.Development::generate_terrain(0,LOGICAL_WINDOW_WIDTH/2,LOGICAL_WINDOW_WIDTH,LOGICAL_WINDOW_WIDTH,8,pixels);
 
     bool quit = false;
     // std::thread physics(simulate, pixels,new_version, quit);
