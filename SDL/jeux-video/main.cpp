@@ -52,7 +52,7 @@ int main()
     Terrain_gen.Development::generate_terrain(0,LOGICAL_WINDOW_WIDTH/2,LOGICAL_WINDOW_WIDTH,LOGICAL_WINDOW_WIDTH,8,pixels);
 
     bool quit = false;
-    // std::thread physics(simulate, pixels,new_version, quit);
+     std::thread physics(simulate, pixels,new_version, quit);
     int frame_count = 0;
     while (!quit)
     {
@@ -70,7 +70,7 @@ int main()
         auto end_time = Clock::now();
 
     }
-    // physics.join();
+    physics.join();
     std::cout << "ENDED" << '\n';
     std::cout << "Sand: " << count_sand(pixels) << '\n';
     excecution_finished();
