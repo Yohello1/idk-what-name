@@ -20,7 +20,7 @@ namespace Terrain
 		{
 			std::cout << "This started" << '\n';
 			place_dots(x_lower, y_lower, x_upper, y_upper, amt_points);
-			points_inbetween(2);
+			points_inbetween(5);
 
 			std::cout << "This ended" << '\n';
 			for (int i = 1; i < points_old.size(); i++)
@@ -49,32 +49,45 @@ namespace Terrain
 				cord_2d temp;
 				temp.x_pos = i * x_spacing;
 				temp.y_pos = y_pos;
-				points_original.push_back(temp);
+				points_old.push_back(temp);
 			}
 		}
 
 		void points_inbetween(int times)
 		{
-			for (int i = 1; i < points_original.size(); i++)
+			for (int i = 1; i < points_old.size()-1; i++)
 			{
-				int x_mid = (points_original[i - 1].x_pos + points_original[i].x_pos) / 2;
-				int y_mid = (points_original[i - 1].y_pos + points_original[i].y_pos) / 2;
+				std::cout << points_old[i].x_pos << ',' << points_old[i].y_pos << "  I: " << i << '\n';
+			}
 
-				points_new.push_back(points_original[i - 1]);
+			for (int i = 1; i < points_old.size(); i++)
+			{
+				int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
+				int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
+
+				points_new.push_back(points_old[i - 1]);
 
 				cord_2d temp;
 				temp.x_pos = x_mid;
 				temp.y_pos = y_mid;
 				points_new.push_back(temp);
 
-				points_new.push_back(points_original[i]);
+				points_new.push_back(points_old[i]);
+
+
 			}
 
+			for (int i = 0; i < points_new.size(); i++)
+			{
+				std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
+			}
+
+			std::cout << "Filling in time" << '\n';
 			points_old = points_new;
 
-			for(int times_done = 0; times_done < times; times_done++)
+			for (int times_done = 0; times_done < times; times_done++)
 			{
-				for (int i = 0; i < points_old.size(); i++)
+				for (int i = 1; i < points_old.size()-1; i++)
 				{
 					int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
 					int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
@@ -87,14 +100,14 @@ namespace Terrain
 
 					points_new.push_back(temp);
 					points_new.push_back(points_old[i]);
-
-					std::cout << points_new[i].x_pos << '\n';
 				}
 
 				points_old = points_new;
 
 				for (int i = 0; i < points_new.size(); i++)
-					std::cout << points_old[i].y_pos  << ',' << points_old[i].x_pos <<  "  I: " << i << '\n';
+				{
+					std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
+				}
 
 				points_new.clear();
 			}
