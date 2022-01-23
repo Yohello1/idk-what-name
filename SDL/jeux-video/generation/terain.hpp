@@ -21,9 +21,12 @@ namespace Terrain
 			std::cout << "This started" << '\n';
 			place_dots(x_lower, y_lower, x_upper, y_upper, amt_points);
 			points_inbetween(6);
+			remove_doubles();
+
+			std::cout << "The size of the vector/array is " << points_new.size()  << '\n';
 
 			std::cout << "This ended" << '\n';
-			for (int i = 1; i < points_old.size(); i++)
+			for (int unsigned i = 1; i < points_old.size(); i++)
 			{
 				pixels[points_old[i].x_pos][points_old[i].y_pos].r = 255;
 				pixels[points_old[i].x_pos][points_old[i].y_pos].g = 255;
@@ -56,30 +59,28 @@ namespace Terrain
 
 		void points_inbetween(int times)
 		{
-			for (int i = 1; i < points_old.size() - 1; i++)
+			for (int unsigned i = 1; i < points_old.size() - 1; i++)
 			{
 				std::cout << points_old[i].x_pos << ',' << points_old[i].y_pos << "  I: " << i << '\n';
 			}
 
-			for (int i = 1; i < points_old.size(); i++)
+			for (int unsigned i = 1; i < points_old.size(); i++)
 			{
-				if (i != points_old.size() || i != points_old.size() - 1 || i != 0 || i != 1)
-				{
-					int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
-					int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
 
-					points_new.push_back(points_old[i - 1]);
+				int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
+				int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
 
-					cord_2d temp;
-					temp.x_pos = x_mid;
-					temp.y_pos = y_mid;
-					points_new.push_back(temp);
+				points_new.push_back(points_old[i - 1]);
 
-					points_new.push_back(points_old[i]);
-				}
+				cord_2d temp;
+				temp.x_pos = x_mid;
+				temp.y_pos = y_mid;
+				points_new.push_back(temp);
+
+				points_new.push_back(points_old[i]);
 			}
 
-			for (int i = 0; i < points_new.size(); i++)
+			for (int unsigned i = 0; i < points_new.size(); i++)
 			{
 				std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
 			}
@@ -89,8 +90,9 @@ namespace Terrain
 
 			for (int times_done = 0; times_done < times; times_done++)
 			{
-				for (int i = 1; i < points_old.size() - 5; i++)
+				for (int unsigned i = 1; i < points_old.size() - 5; i++)
 				{
+					// I have no clue, this is the only thing that stops the streak across the window
 					if (points_old[i].x_pos > points_old[i - 1].x_pos)
 					{
 						int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
@@ -114,7 +116,7 @@ namespace Terrain
 
 				points_old = points_new;
 
-				for (int i = 0; i < points_new.size(); i++)
+				for (int unsigned i = 0; i < points_new.size(); i++)
 				{
 					std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
 				}
@@ -131,6 +133,36 @@ namespace Terrain
 
 			double output_double = dist(mt);
 			return (int)output_double;
+		}
+
+		void remove_doubles()
+		{
+			bool changes_0 = false;
+			while (changes_0 == false)
+			{
+				int i = 0;
+
+				points_new.clear();
+				points_new.push_back(points_old[1]);
+				for (int unsigned i = 1; i < points_old.size(); i++)
+				{
+					if (points_old[i].x_pos == points_old[i - 1].x_pos && points_old[i].y_pos == points_old[i - 1].y_pos)
+					{
+						// Do nothing lol
+						i++;
+					}
+					else
+					{
+						points_new.push_back(points_old[i]);
+					}
+				}
+
+				if(i == 0)
+				{
+					changes_0 = true;
+				}
+				points_old = points_new;
+			}
 		}
 	};
 

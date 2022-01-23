@@ -9,6 +9,9 @@ unsigned int current_time = (unsigned int)time(NULL);
 SDL_Renderer *renderer;
 SDL_Window *window;
 SDL_Event event;
+
+// something needs to bedone about this  
+// Use density, and type (static or dynamic)
 enum pixel_state
 {
     empty,
