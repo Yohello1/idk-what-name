@@ -22,8 +22,28 @@ namespace Terrain
 			place_dots(x_lower, y_lower, x_upper, y_upper, amt_points);
 			points_inbetween(6);
 			remove_doubles();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
 
-			std::cout << "The size of the vector/array is " << points_new.size()  << '\n';
+			std::cout << "The size of the vector/array is " << points_new.size() << '\n';
 
 			std::cout << "This ended" << '\n';
 			for (int unsigned i = 1; i < points_old.size(); i++)
@@ -141,28 +161,55 @@ namespace Terrain
 			while (changes_0 == false)
 			{
 				int i = 0;
+				int j = 0;
 
 				points_new.clear();
-				points_new.push_back(points_old[1]);
+				points_new.push_back(points_old[0]);
 				for (int unsigned i = 1; i < points_old.size(); i++)
 				{
-					if (points_old[i].x_pos == points_old[i - 1].x_pos && points_old[i].y_pos == points_old[i - 1].y_pos)
+					if (points_old[i].x_pos == points_old[i - 1].x_pos)
 					{
 						// Do nothing lol
 						i++;
+						// if(points_new[j].x_pos != points_old[i].x_pos && points_new[j].y_pos != points_old[i].y_pos)
+						// {
+						// 	points_new.push_back(points_old[i]);
+						// 	j++;
+						// }
 					}
 					else
 					{
 						points_new.push_back(points_old[i]);
+						j++;
 					}
 				}
 
-				if(i == 0)
+				if (i == 0)
 				{
 					changes_0 = true;
 				}
 				points_old = points_new;
 			}
+		}
+
+		void smoothen()
+		{
+			points_new.clear();
+			points_new.push_back(points_old[0]);
+			for (int i = 2; i < points_old.size() - 2; i++)
+			{
+				int y_previous = points_old[i - 2].y_pos;
+				int y_next = points_old[i + 2].y_pos;
+
+				cord_2d temp;
+				temp.x_pos = points_old[i].x_pos;
+				temp.y_pos = (y_next + y_previous) / 2;
+
+				points_new.push_back(temp);
+			}
+			// points_new.push_back(points_old.back());
+
+			points_old = points_new;
 		}
 	};
 
