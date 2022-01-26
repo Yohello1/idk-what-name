@@ -42,7 +42,27 @@ namespace Terrain
 			smoothen();
 			smoothen();
 			smoothen();
-
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			smoothen();
+			
 			std::cout << "The size of the vector/array is " << points_new.size() << '\n';
 
 			std::cout << "This ended" << '\n';
