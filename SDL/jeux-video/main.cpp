@@ -58,8 +58,8 @@ int main()
     while (!quit)
     {
         // auto start_time = Clock::now();
-        Debug_Printing::print_density(pixels);
-        std::cout << '\n';
+        // Debug_Printing::print_density(pixels);
+        // std::cout << '\n';
         quit = Input_Large::poll_usr_input(changed, usr_input,&event,quit, actual_2_logic_ratio);
 
         mtx2.lock();
@@ -72,7 +72,7 @@ int main()
         // auto end_time = Clock::now();
 
     }
-    Debug_Printing::print_density(pixels);
+    // Debug_Printing::print_density(pixels);
     physics.join();
     std::cout << "ENDED" << '\n';
     // std::cout << "Sand: " << Testing::count_sand(pixels) << '\n';

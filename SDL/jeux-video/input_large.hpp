@@ -89,7 +89,7 @@ namespace Input_Large
                         usr_input[x_pos][y_pos].b = 0;
                         usr_input[x_pos][y_pos].a = 255;
                         usr_input[x_pos][y_pos].state_now = solid;
-                        usr_input[x_pos][y_pos].density = 50;
+                        usr_input[x_pos][y_pos].density = 10;
                         changed[x_pos][y_pos] = true;
                     }
                 }
@@ -133,7 +133,7 @@ namespace Input_Large
                         usr_input[x_pos][y_pos].b = 254;
                         usr_input[x_pos][y_pos].a = 255;
                         usr_input[x_pos][y_pos].state_now = fluid;
-                        usr_input[x_pos][y_pos].density = 1;
+                        usr_input[x_pos][y_pos].density = 20;
                         changed[x_pos][y_pos] = true;
                     }
                 }
