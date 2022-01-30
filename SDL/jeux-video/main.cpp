@@ -67,6 +67,9 @@ int main()
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 
+		std::cout << "Quit Status " << quit << '\n';
+
+
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
         // auto end_time = Clock::now();
