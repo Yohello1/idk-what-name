@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <random>
-#define LOGICAL_WINDOW_WIDTH 256
+#define LOGICAL_WINDOW_WIDTH 128
 #define ACTUAL_WINDOW_WIDTH 1024
 
 //time
@@ -15,20 +15,22 @@ SDL_Event event;
 enum pixel_state
 {
     empty,
-    gas,
-    fluid,
+    // gas,
+	fluid,
     solid,
-    fire,
-    burning,
-    burnt,
+    // fire,
+    // burning,
+    // burnt,
     fixed_pos
 };
 struct position
 {
     pixel_state state_now;
+	// Yes I could do all these vars in one line, but this is "cleaner"
     uint8_t  r,g,b,a;
+	uint8_t density; 
+	uint8_t pressure;
     uint16_t temperature;
-    uint8_t pressure;
 };
 
 struct cord_2d

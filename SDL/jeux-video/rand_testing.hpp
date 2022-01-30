@@ -1,15 +1,18 @@
-int count_sand(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+namespace Testing
 {
-    int i = 0;
-    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+    int count_sand(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
     {
-        for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
+        int i = 0;
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
-            if(pixels[x_pos][y_pos].state_now == solid)
+            for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
             {
-                i++;
+                if (pixels[x_pos][y_pos].state_now == solid)
+                {
+                    i++;
+                }
             }
         }
+        return i;
     }
-    return i;
 }
