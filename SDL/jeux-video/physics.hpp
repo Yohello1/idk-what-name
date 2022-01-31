@@ -339,7 +339,7 @@ namespace Physics
 		std::cout << "It don't matter it done" << '\n';
 	}
 
-	void simulate_once(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], bool quit)
+	void simulate_once(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 	{
 
 		auto start_time = Clock::now();

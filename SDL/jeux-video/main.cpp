@@ -31,7 +31,6 @@ void draw_box(cord_2d start, cord_2d end);
 std::mutex mtx2;
 
 // TODO kibb said to use an atomic
-std::atomic<bool> quit_now = false;
 
 int main()
 {
@@ -55,8 +54,8 @@ int main()
 
     Terrain_gen.Development::generate_terrain(0,LOGICAL_WINDOW_WIDTH/2,LOGICAL_WINDOW_WIDTH,LOGICAL_WINDOW_WIDTH,8,pixels);
 
-    // bool quit_now = false;
-    std::thread physics(Physics::simulate, pixels,new_version, quit_now);
+    // bool quit = false;
+    std::thread physics(Physics::simulate, pixels,new_version);
     // int frame_count = 0;
     while (!quit_now)
     {
@@ -70,7 +69,7 @@ int main()
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 
-		std::cout << "quit_now Status " << quit_now << '\n';
+		std::cout << "Quit Status " << quit_now << '\n';
 
 
         Render::redraw_render(render, renderer);
