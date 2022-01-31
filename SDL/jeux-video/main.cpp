@@ -9,6 +9,7 @@
 #include <chrono>
 #include <mutex>
 #include <thread>
+#include <atomic>
 
 #include "init_funcs.hpp"
 #include "physics.hpp"
@@ -29,6 +30,8 @@ void draw_box(cord_2d start, cord_2d end);
 
 std::mutex mtx2;
 
+// TODO kibb said to use an atomic
+std::atomic<bool> quit_now = false;
 
 int main()
 {
@@ -52,22 +55,22 @@ int main()
 
     Terrain_gen.Development::generate_terrain(0,LOGICAL_WINDOW_WIDTH/2,LOGICAL_WINDOW_WIDTH,LOGICAL_WINDOW_WIDTH,8,pixels);
 
-    bool quit = false;
-    std::thread physics(Physics::simulate, pixels,new_version, quit);
+    // bool quit_now = false;
+    std::thread physics(Physics::simulate, pixels,new_version, quit_now);
     // int frame_count = 0;
-    while (!quit)
+    while (!quit_now)
     {
         // auto start_time = Clock::now();
         // Debug_Printing::print_density(pixels);
         // std::cout << '\n';
-        quit = Input_Large::poll_usr_input(changed, usr_input,&event,quit, actual_2_logic_ratio);
+        quit_now = Input_Large::poll_usr_input(changed, usr_input,&event,quit_now, actual_2_logic_ratio);
 
         mtx2.lock();
         Input_Large::mix_new_version_usr_input(changed, usr_input,pixels );
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 
-		std::cout << "Quit Status " << quit << '\n';
+		std::cout << "quit_now Status " << quit_now << '\n';
 
 
         Render::redraw_render(render, renderer);
