@@ -314,7 +314,7 @@ namespace Physics
 	void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 	{
 
-		while (!quit)
+		while (!quit_now)
 		{
 			auto start_time = Clock::now();
 
@@ -328,7 +328,7 @@ namespace Physics
 
 			auto end_time = Clock::now();
 
-			std::cout << "Quit Statys " << quit << '\n';
+			std::cout << "Quit Statys " << quit_now << '\n';
 
 			if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
 			{
