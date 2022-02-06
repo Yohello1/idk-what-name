@@ -16,9 +16,7 @@ https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixi
 Cause Im stupid
 TODO:
 Maps bigger than the screen
-New method for weight and such, using density to move
 Smoke mixing (Use the wind thing for gravity/things going up)
-Rework the physics system AGAIN to start using name spaces instead
 
 Am I going to do newtowian physics? NO
 
@@ -29,3 +27,5 @@ I dont have the time to get a PHD in like everything
 FIXED:
 Fix the sand only going one way
 Fluid fixed
+New method for weight and such, using density to move
+Rework the physics system AGAIN to start using name spaces instead

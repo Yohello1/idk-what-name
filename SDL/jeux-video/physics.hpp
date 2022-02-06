@@ -309,6 +309,13 @@ namespace Physics
 		}
 	}
 
+	/*
+	Gotta eat every bagguete, gotta eat your grains
+	Oranges too
+	I wonder if you could eat leafs
+	Probably, they're edible? Maybe? Whacky
+	In other news there is a water bottle which needs to be filled
+	*/
 	
 
 	void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
