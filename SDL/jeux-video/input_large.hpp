@@ -30,7 +30,8 @@ namespace Input_Large
 
         while (SDL_PollEvent(event) != 0)
         {
-            // Access the event type dumbass
+            // This is not a struct nor an object, I have no clue what this is
+            // Just point to it (using an error)
             switch (event->type)
             {
             case SDL_QUIT:
@@ -50,8 +51,7 @@ namespace Input_Large
                 break;
             case SDL_KEYUP:
                 shift = !shift;
-                std::cout << "hi" << '\n';
-                std::cout << "hi2" << '\n';
+                std::cout << "KEY UP EVENT" << '\n';
                 break;
             default:
                 break;
