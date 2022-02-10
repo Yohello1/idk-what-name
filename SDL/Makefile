@@ -9,7 +9,7 @@ CC = g++
 COMPILER_FLAGS = -Wall -O3
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2 -lSDL2_image -g `sdl2-config --cflags --libs` -lpthread -I/usr/include/freetype2/
+LINKER_FLAGS = -lSDL2 -lSDL2_image -g `sdl2-config --cflags --libs` -lpthread -I/usr/include/freetype2 -L/usr/include/libpng16 # -lfreetype2
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = draw2
