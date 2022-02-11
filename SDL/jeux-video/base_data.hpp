@@ -40,4 +40,4 @@ struct cord_2d
 };
 
 typedef std::chrono::high_resolution_clock Clock;
-std::atomic<bool> quit_now = false;
+std::atomic<bool> quit_now;
