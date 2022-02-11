@@ -335,11 +335,10 @@ namespace Physics
 
 			auto end_time = Clock::now();
 
-			std::cout << "Quit Statys " << quit_now << '\n';
-
 			if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
 			{
 				SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000);
+				std::cout << "NO" << '\n';
 			}
 		}
 
