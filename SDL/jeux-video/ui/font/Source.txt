@@ -1,0 +1,4 @@
+ https://github.com/source-foundry/Hack/blob/master/LICENSE.md
+ 
+ Hack font is under the MIT liscnes
+ go ask them
