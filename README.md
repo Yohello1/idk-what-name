@@ -22,3 +22,6 @@ Note: For SDL related projects, just change the file to compile in the Makefile
 - Spliting up simulation and rendering `SDL/mutli_array_test.cpp` 
 - For fire and random positions `SDL/im_on_fire.cpp` with fire direction
 - Broken attempt at `cellular-automata.cpp`
+
+## What about the "game engine"
+Go to `SDL/jeux-video/` and run the make file
