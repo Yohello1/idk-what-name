@@ -57,28 +57,32 @@ int main(int arg, char **argv)
         ++ch;
     }
 
-    // for (j = 0; j < vert; ++j)
-    // {
-    //     for (i = 0; i < horz; ++i)
-    //     {
-    //         if (screen[j][i] >> 5 != ' ')
-    //         {
-    //             // putchar(" ");
-    //             printf("#");
-    //         }
-    //         else
-    //         {
-    //             printf(" ");
+    for (j = 0; j < vert; ++j)
+    {
+        for (i = 0; i < horz; ++i)
+        {
+            char temp = screen[j][i] >> 5;
+            int temp2 = screen[j][i] >> 5;
+            // putchar("01234567" [screen[j][i] >> 5]);
+            // printf("%i", screen[j][i] >> 5);
+            if (temp2 > 2)
+            {
+                // putchar(" ");
+                printf("#");
+            }
+            else
+            {
+                printf(" ");
 
-    //             // putchar("#");
-    //         }
-    //         // putchar(" .:ioVM@"[screen[j][i] >> 5]);
-    //     }
-    //     putchar('\n');
-    // }
+                // putchar("#");
+            }
+            // putchar(" .:ioVM@"[screen[j][i] >> 5]);
+        }
+        putchar('\n');
+    }
 
-    printf("Hello \n");
-    putchar(screen[10][10]);
+    printf("Hello %c", screen[10][20]);
+    putchar(screen[10][10] >> 5);
     printf("\n");
 
     // for(int i = 0; i < vert*horz; i++)

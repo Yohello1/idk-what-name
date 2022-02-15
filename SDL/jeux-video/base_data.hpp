@@ -15,12 +15,8 @@ SDL_Event event;
 enum pixel_state
 {
     empty,
-    // gas,
 	fluid,
     solid,
-    // fire,
-    // burning,
-    // burnt,
     fixed_pos
 };
 struct position
@@ -39,5 +35,11 @@ struct cord_2d
     int y_pos;
 };
 
+struct colour
+{
+    uint8_t r = 255,g = 255,b = 255,a = 0;
+}; 
+
 typedef std::chrono::high_resolution_clock Clock;
 std::atomic<bool> quit_now;
+#define STB_TRUETYPE_IMPLEMENTATION

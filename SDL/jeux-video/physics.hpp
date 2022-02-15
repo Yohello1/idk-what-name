@@ -14,8 +14,10 @@ namespace Physics
 		{
 			for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
 			{
-				// sand ig
-
+				//
+				//
+				//
+				//
 				if (
 					pixels[x_pos][y_pos].state_now == solid &&
 					pixels[x_pos][y_pos + 1].state_now == fluid &&
@@ -23,23 +25,8 @@ namespace Physics
 					y_pos != (LOGICAL_WINDOW_WIDTH - 1))
 				{
 					position temp_4_swap = pixels[x_pos][y_pos + 1];
-					new_version[x_pos][y_pos + 1].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos][y_pos + 1].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos][y_pos + 1].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos][y_pos + 1].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos][y_pos + 1].density = pixels[x_pos][y_pos].density;
-
-					new_version[x_pos][y_pos].r = temp_4_swap.r;
-					new_version[x_pos][y_pos].g = temp_4_swap.g;
-					new_version[x_pos][y_pos].b = temp_4_swap.b;
-					new_version[x_pos][y_pos].a = temp_4_swap.a;
-					new_version[x_pos][y_pos].state_now = temp_4_swap.state_now;
-					new_version[x_pos][y_pos].temperature = temp_4_swap.temperature;
-					new_version[x_pos][y_pos].pressure = temp_4_swap.pressure;
-					new_version[x_pos][y_pos].density = temp_4_swap.density;
+					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+					new_version[x_pos][y_pos] = temp_4_swap;
 				}
 				if (
 					pixels[x_pos][y_pos].state_now == solid &&
@@ -48,23 +35,8 @@ namespace Physics
 					y_pos != (LOGICAL_WINDOW_WIDTH - 1))
 				{
 					position temp_4_swap = pixels[x_pos][y_pos - 1];
-					new_version[x_pos][y_pos - 1].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos][y_pos - 1].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos][y_pos - 1].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos][y_pos - 1].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos][y_pos - 1].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos][y_pos - 1].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos][y_pos - 1].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos][y_pos - 1].density = pixels[x_pos][y_pos].density;
-
-					new_version[x_pos][y_pos].r = temp_4_swap.r;
-					new_version[x_pos][y_pos].g = temp_4_swap.g;
-					new_version[x_pos][y_pos].b = temp_4_swap.b;
-					new_version[x_pos][y_pos].a = temp_4_swap.a;
-					new_version[x_pos][y_pos].state_now = temp_4_swap.state_now;
-					new_version[x_pos][y_pos].temperature = temp_4_swap.temperature;
-					new_version[x_pos][y_pos].pressure = temp_4_swap.pressure;
-					new_version[x_pos][y_pos].density = temp_4_swap.density;
+					new_version[x_pos][y_pos - 1] = pixels[x_pos][y_pos];
+					new_version[x_pos][y_pos] = temp_4_swap;
 				}
 
 				else if (
@@ -72,15 +44,7 @@ namespace Physics
 					pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
 					y_pos != (LOGICAL_WINDOW_WIDTH - 1))
 				{
-					new_version[x_pos][y_pos + 1].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos][y_pos + 1].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos][y_pos + 1].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos][y_pos + 1].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos][y_pos + 1].density = pixels[x_pos][y_pos].density;
-
+					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
 
 					pixels[x_pos][y_pos].r = 0;
 					pixels[x_pos][y_pos].g = 0;
@@ -96,15 +60,7 @@ namespace Physics
 					pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
 					y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != (LOGICAL_WINDOW_WIDTH - 1))
 				{
-					new_version[x_pos + 1][y_pos + 1].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos + 1][y_pos + 1].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos + 1][y_pos + 1].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos + 1][y_pos + 1].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos + 1][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos + 1][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos + 1][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos + 1][y_pos + 1].density = pixels[x_pos][y_pos].density;
-
+					new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
 
 					pixels[x_pos][y_pos].r = 0;
 					pixels[x_pos][y_pos].g = 0;
@@ -121,15 +77,7 @@ namespace Physics
 					pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
 					y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1)
 				{
-					new_version[x_pos - 1][y_pos + 1].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos - 1][y_pos + 1].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos - 1][y_pos + 1].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos - 1][y_pos + 1].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos - 1][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos - 1][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos - 1][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos - 1][y_pos + 1].density = pixels[x_pos][y_pos].density;
-
+					new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
 
 					pixels[x_pos][y_pos].r = 0;
 					pixels[x_pos][y_pos].g = 0;
@@ -146,15 +94,8 @@ namespace Physics
 					pixels[x_pos][y_pos].state_now == fluid &&
 					pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
 					y_pos != (LOGICAL_WINDOW_WIDTH - 1))
-				{					new_version[x_pos][y_pos + 1].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos][y_pos + 1].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos][y_pos + 1].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos][y_pos + 1].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos][y_pos + 1].density = pixels[x_pos][y_pos].density;
-
+				{
+					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
 
 					pixels[x_pos][y_pos].r = 0;
 					pixels[x_pos][y_pos].g = 0;
@@ -171,15 +112,7 @@ namespace Physics
 					pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
 					y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != (LOGICAL_WINDOW_WIDTH - 1))
 				{
-					new_version[x_pos + 1][y_pos + 1].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos + 1][y_pos + 1].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos + 1][y_pos + 1].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos + 1][y_pos + 1].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos + 1][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos + 1][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos + 1][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos + 1][y_pos + 1].density = pixels[x_pos][y_pos].density;
-
+					new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
 
 					pixels[x_pos][y_pos].r = 0;
 					pixels[x_pos][y_pos].g = 0;
@@ -196,15 +129,7 @@ namespace Physics
 					pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
 					y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1)
 				{
-					new_version[x_pos - 1][y_pos + 1].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos - 1][y_pos + 1].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos - 1][y_pos + 1].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos - 1][y_pos + 1].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos - 1][y_pos + 1].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos - 1][y_pos + 1].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos - 1][y_pos + 1].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos - 1][y_pos + 1].density = pixels[x_pos][y_pos].density;
-
+					new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
 
 					pixels[x_pos][y_pos].r = 0;
 					pixels[x_pos][y_pos].g = 0;
@@ -221,15 +146,7 @@ namespace Physics
 					pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty &&
 					x_pos != (LOGICAL_WINDOW_WIDTH - 1))
 				{
-					new_version[x_pos + 1][y_pos].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos + 1][y_pos].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos + 1][y_pos].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos + 1][y_pos].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos + 1][y_pos].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos + 1][y_pos].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos + 1][y_pos].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos + 1][y_pos].density = pixels[x_pos][y_pos].density;
-
+					new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
 
 					pixels[x_pos][y_pos].r = 0;
 					pixels[x_pos][y_pos].g = 0;
@@ -246,15 +163,7 @@ namespace Physics
 					pixels[x_pos - 1][y_pos].state_now == empty && new_version[x_pos - 1][y_pos].state_now == empty &&
 					x_pos != 1)
 				{
-					new_version[x_pos - 1][y_pos].r = pixels[x_pos][y_pos].r;
-					new_version[x_pos - 1][y_pos].g = pixels[x_pos][y_pos].g;
-					new_version[x_pos - 1][y_pos].b = pixels[x_pos][y_pos].b;
-					new_version[x_pos - 1][y_pos].a = pixels[x_pos][y_pos].a;
-					new_version[x_pos - 1][y_pos].state_now = pixels[x_pos][y_pos].state_now;
-					new_version[x_pos - 1][y_pos].temperature = pixels[x_pos][y_pos].temperature;
-					new_version[x_pos - 1][y_pos].pressure = pixels[x_pos][y_pos].pressure;
-					new_version[x_pos - 1][y_pos].density = pixels[x_pos][y_pos].density;
-
+					new_version[x_pos - 1][y_pos] = pixels[x_pos][y_pos];
 
 					pixels[x_pos][y_pos].r = 0;
 					pixels[x_pos][y_pos].g = 0;
@@ -316,7 +225,6 @@ namespace Physics
 	Probably, they're edible? Maybe? Whacky
 	In other news there is a water bottle which needs to be filled
 	*/
-	
 
 	void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 	{
@@ -328,9 +236,9 @@ namespace Physics
 			sand_and_water(pixels, new_version);
 
 			/*
-        	* FIXME My I better come back and take out the fluid related code from sand and move that into it's own function so there aren't
-        	* a ton of random eqautions just thrown everywehre and anywhere they fit
-        	*/
+			 * FIXME My I better come back and take out the fluid related code from sand and move that into it's own function so there aren't
+			 * a ton of random eqautions just thrown everywehre and anywhere they fit
+			 */
 			// water_sim(pixels, new_version);
 
 			auto end_time = Clock::now();
@@ -338,7 +246,7 @@ namespace Physics
 			if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
 			{
 				SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000);
-				std::cout << "NO" << '\n';
+				// std::cout << "NO" << '\n';
 			}
 		}
 
@@ -354,11 +262,11 @@ namespace Physics
 
 		auto end_time = Clock::now();
 
+		// if it took less than 1/30th of a second
+		// Wait for the difference
 		if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 22222)
 		{
 			SDL_Delay((22222 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
 		}
-
-		std::cout << "It don't matter it done" << '\n';
 	}
 }
