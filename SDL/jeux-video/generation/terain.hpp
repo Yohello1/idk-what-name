@@ -216,7 +216,7 @@ namespace Terrain
 		{
 			points_new.clear();
 			points_new.push_back(points_old[0]);
-			for (int i = 2; i < points_old.size() - 2; i++)
+			for (unsigned i = 2; i < points_old.size() - 2; i++)
 			{
 				int y_previous = points_old[i - 2].y_pos;
 				int y_next = points_old[i + 2].y_pos;
