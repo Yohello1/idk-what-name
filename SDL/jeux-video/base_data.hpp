@@ -1,8 +1,10 @@
 #include <SDL2/SDL.h>
 #include <random>
-#define LOGICAL_WINDOW_WIDTH 512
+#define LOGICAL_WINDOW_WIDTH 256
 #define ACTUAL_WINDOW_WIDTH 1024
-
+typedef std::chrono::high_resolution_clock Clock;
+std::atomic<bool> quit_now;
+#define STB_TRUETYPE_IMPLEMENTATION
 //time
 unsigned int current_time = (unsigned int)time(NULL);
 // pointers to these things
@@ -40,6 +42,4 @@ struct colour
     uint8_t r = 255,g = 255,b = 255,a = 0;
 }; 
 
-typedef std::chrono::high_resolution_clock Clock;
-std::atomic<bool> quit_now;
-#define STB_TRUETYPE_IMPLEMENTATION
+
