@@ -14,10 +14,7 @@ namespace Physics
 		{
 			for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
 			{
-				//
-				//
-				//
-				//
+
 				if (
 					pixels[x_pos][y_pos].state_now == solid &&
 					pixels[x_pos][y_pos + 1].state_now == fluid &&
