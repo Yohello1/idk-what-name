@@ -10,6 +10,9 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
+// #include <variant>
+// #include <cassert>
+#include <string>
 
 #include "init_funcs.hpp"
 #include "physics.hpp"
@@ -28,8 +31,8 @@ struct position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void excecution_finished();
 void draw_box(cord_2d start, cord_2d end);
-std::vector <ui::ui_element*> ui_elements;
 
+std::vector<std::unique_ptr<ui::boxes>> ui_elements;
 
 std::mutex mtx2;
 
@@ -62,8 +65,9 @@ int main()
     // draw_box_white_sand(box_verts[0],box_verts[1], pixels);
     // ui::draw_box(box_verts[0],box_verts[1], colour_to_change, user_interface);
 
-    ui::boxes boxy_1(box_verts[0], box_verts[1], colour_to_change);
-    ui_elements.push_back(boxy_1);
+    // ui::boxes boxy_1(box_verts[0], box_verts[1], colour_to_change);
+    std::unique_ptr<ui::boxes> ptr_to_boxy(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
+    ui_elements.push_back(std::move(ptr_to_boxy));
 
     // bool quit = false;
     std::thread physics(Physics::simulate, pixels, new_version);
@@ -80,8 +84,8 @@ int main()
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 
-        // boxy_1.draw_box(render);
-
+        ui_elements[0].draw(render);
+        // boxy_1.draw(render);
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
 
