@@ -84,7 +84,7 @@ int main()
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 
-        ui_elements[0].draw(render);
+        ui_elements[0]->draw(render);
         // boxy_1.draw(render);
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
