@@ -11,6 +11,7 @@
 #include <thread>
 #include <atomic>
 #include <string>
+#include <memory>
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "ui/stb_truetype.h"
 
@@ -33,7 +34,7 @@ void excecution_finished();
 void draw_box(cord_2d start, cord_2d end);
 
 // std::vector<std::unique_ptr<ui::boxes>> ui_elements;
-std::vector<std::shared_ptr<ui::single_ui_element>> ui_elements;
+std::vector<ui::single_ui_element *> ui_elements;
 
 std::mutex mtx2;
 
@@ -74,9 +75,13 @@ int main()
     // ui::boxes boxy_1(box_verts[0], box_verts[1], colour_to_change);
     // std::shared_ptr<ui::boxes> ptr_to_boxy(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
     // ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change);
-    ui::storeObject(std::make_shared<ui::single_ui_element>(ui::boxes(box_verts[0], box_verts[1], colour_to_change)), ui_elements);
+    // ui::storeObject(std::make_shared<ui::single_ui_element>(ui::boxes(box_verts[0], box_verts[1], colour_to_change)), ui_elements);
     // std::cout << "To make the text" << '\n';
     // std::shared_ptr<ui::text> ptr_to_texty(new ui::text(box_verts[0], box_verts[1], colour_to_change2, "Hello world", "ui/font/Hack-Regular.ttf"));
+
+    ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
+    ui_elements.push_back(new ui::text(box_verts[0], box_verts[1], colour_to_change2, "YOHELLO", "ui/font/Hack-Regular.ttf"));
+
 
     std::cout << "Done ui" << '\n';
 
@@ -88,16 +93,21 @@ int main()
         // auto start_time = Clock::now();
         // Debug_Printing::print_density(pixels);
         // std::cout << '\n';
-        mtx2.lock();
 
+        mtx2.lock();
         quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);
         Input_Large::mix_new_version_usr_input(changed, usr_input, pixels);
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
-        std::cout << "Made it?" << '\n';
-        // (ui::boxes) ui_elements[0]->draw(render);
-        ui::boxes temp_cast = dynamic_cast<ui::boxes&>(ui_elements[0]);
-        std::cout << "Made it" << '\n';
+
+        // std::cout << "Made it?" << '\n';
+        // ui_elements[0]->draw(render);
+
+        // ui::boxes *box_prt = dynamic_cast<ui::boxes *>(ui_elements[0]);
+        // box_prt->draw(render);
+        ui_elements[0]->draw(render);
+        ui_elements[1]->draw(render);
+        // std::cout << "Made it" << '\n';
 
         // boxy_1.draw(render);
         Render::redraw_render(render, renderer);
