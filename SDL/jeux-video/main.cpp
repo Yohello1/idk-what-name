@@ -10,9 +10,9 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
-// #include <variant>
-// #include <cassert>
 #include <string>
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "ui/stb_truetype.h"
 
 #include "init_funcs.hpp"
 #include "physics.hpp"
@@ -32,11 +32,10 @@ bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void excecution_finished();
 void draw_box(cord_2d start, cord_2d end);
 
-std::vector<std::unique_ptr<ui::boxes>> ui_elements;
+// std::vector<std::unique_ptr<ui::boxes>> ui_elements;
+std::vector<std::shared_ptr<ui::single_ui_element>> ui_elements;
 
 std::mutex mtx2;
-
-// TODO kibb said to use an atomic
 
 int main()
 {
@@ -62,12 +61,24 @@ int main()
     colour_to_change.b = 104;
     colour_to_change.a = 255;
 
+    colour colour_to_change2;
+    colour_to_change.r = 46;
+    colour_to_change.g = 253;
+    colour_to_change.b = 124;
+    colour_to_change.a = 255;
+
     // draw_box_white_sand(box_verts[0],box_verts[1], pixels);
     // ui::draw_box(box_verts[0],box_verts[1], colour_to_change, user_interface);
 
+    std::cout << "To make the box" << '\n';
     // ui::boxes boxy_1(box_verts[0], box_verts[1], colour_to_change);
-    std::unique_ptr<ui::boxes> ptr_to_boxy(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
-    ui_elements.push_back(std::move(ptr_to_boxy));
+    // std::shared_ptr<ui::boxes> ptr_to_boxy(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
+    // ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change);
+    ui::storeObject(std::make_shared<ui::single_ui_element>(ui::boxes(box_verts[0], box_verts[1], colour_to_change)), ui_elements);
+    // std::cout << "To make the text" << '\n';
+    // std::shared_ptr<ui::text> ptr_to_texty(new ui::text(box_verts[0], box_verts[1], colour_to_change2, "Hello world", "ui/font/Hack-Regular.ttf"));
+
+    std::cout << "Done ui" << '\n';
 
     // bool quit = false;
     std::thread physics(Physics::simulate, pixels, new_version);
@@ -83,8 +94,11 @@ int main()
         Input_Large::mix_new_version_usr_input(changed, usr_input, pixels);
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
+        std::cout << "Made it?" << '\n';
+        // (ui::boxes) ui_elements[0]->draw(render);
+        ui::boxes temp_cast = dynamic_cast<ui::boxes&>(ui_elements[0]);
+        std::cout << "Made it" << '\n';
 
-        ui_elements[0]->draw(render);
         // boxy_1.draw(render);
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
