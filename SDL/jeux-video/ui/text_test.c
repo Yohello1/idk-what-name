@@ -33,7 +33,7 @@ int main(int arg, char **argv)
         // Cords for each thing
         int advance, lsb, x0, y0, x1, y1;
 
-        // Gets the x_pos
+        // Gets the x_pos shift
         float x_shift = xpos - (float)floor(xpos);
 
         // Gets the data for this specific chacter

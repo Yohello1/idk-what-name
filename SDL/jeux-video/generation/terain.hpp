@@ -101,7 +101,7 @@ namespace Terrain
 		{
 			for (int unsigned i = 1; i < points_old.size() - 1; i++)
 			{
-				std::cout << points_old[i].x_pos << ',' << points_old[i].y_pos << "  I: " << i << '\n';
+				// std::cout << points_old[i].x_pos << ',' << points_old[i].y_pos << "  I: " << i << '\n';
 			}
 
 			for (int unsigned i = 1; i < points_old.size(); i++)
@@ -122,7 +122,7 @@ namespace Terrain
 
 			for (int unsigned i = 0; i < points_new.size(); i++)
 			{
-				std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
+				// std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
 			}
 
 			std::cout << "Filling in time" << '\n';
@@ -158,7 +158,7 @@ namespace Terrain
 
 				for (int unsigned i = 0; i < points_new.size(); i++)
 				{
-					std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
+					// std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
 				}
 
 				points_new.clear();
