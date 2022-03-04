@@ -199,17 +199,24 @@ namespace ui
             // `w` : width of specific charcter
             // `j` & `i` : like x_pos & y_pos, but reversed
 
+/* This was sort of working just not well
             cord_2d start;
             cord_2d end;
             end.x_pos = lower_x;
             end.y_pos = lower_y;
 
+            bitmap = stbtt_GetCodepointBitmap(&font, 0, stbtt_ScaleForPixelHeight(&font, s), 'Z', &w, &h, 0, 0);
+            uint8_t height = h;
+            uint8_t width = w;
+
+
             for (unsigned int index = 0; index < text_2_render.size(); index++)
             {
                 bitmap = stbtt_GetCodepointBitmap(&font, 0, stbtt_ScaleForPixelHeight(&font, s), text_2_render[index], &w, &h, 0, 0);
                 start = end;
+                start.y_pos = lower_y;
                 end.x_pos = lower_x + (w * index);
-                end.y_pos = lower_y + h;
+                end.y_pos = lower_y + height;
 
                 // for (j = 0; j < h; ++j)
                 // {
@@ -224,8 +231,8 @@ namespace ui
                 {
                     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
                     {
-
-                        if (start.x_pos < x_pos && x_pos < end.x_pos)
+                        // X_pos checks, then Y_pos checks
+                        if ((start.x_pos < x_pos && x_pos < end.x_pos) && (start.y_pos <= y_pos && y_pos < end.y_pos))
                         {
                             if ((bitmap[y_pos * w + x_pos] >> 5) > 3)
                             {
@@ -234,13 +241,20 @@ namespace ui
                                 render[x_pos][y_pos].b = box_colour.b;
                                 render[x_pos][y_pos].a = box_colour.a;
                             }
+                            else
+                            {
+                                render[x_pos][y_pos].r = 100;
+                                render[x_pos][y_pos].g = 100;
+                                render[x_pos][y_pos].b = 100;
+                                render[x_pos][y_pos].a = box_colour.a;
+                            }
                         }
                     }
                     // std::cout << '\n';
                 }
             }
         }
-
+*/
         void change_colour(colour colour_new)
         {
             box_colour = colour_new;

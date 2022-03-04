@@ -80,7 +80,7 @@ int main()
     // std::shared_ptr<ui::text> ptr_to_texty(new ui::text(box_verts[0], box_verts[1], colour_to_change2, "Hello world", "ui/font/Hack-Regular.ttf"));
 
     ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
-    ui_elements.push_back(new ui::text(box_verts[0], box_verts[1], colour_to_change2, "HI", "ui/font/Hack-Regular.ttf", 15));
+    ui_elements.push_back(new ui::text(box_verts[0], box_verts[1], colour_to_change2, " Hello", "ui/font/Hack-Regular.ttf", 15));
 
 
     std::cout << "Done ui" << '\n';
