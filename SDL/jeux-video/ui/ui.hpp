@@ -101,7 +101,6 @@ namespace ui
         uint16_t vert = 0;
         unsigned char *bitmap;
 
-        int w, h, i, j, c = ' ', s;
 
     public:
         text(cord_2d cord_1, cord_2d cord_2, colour colour_new, std::string text_to_render_new, const char *font_path, int font_size)
@@ -132,7 +131,8 @@ namespace ui
             // God know what this does
             // Go to `tex_test2.c, might help?
             // c = ' ';
-            s = font_size;
+
+
         }
 
         void draw(position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
@@ -199,62 +199,63 @@ namespace ui
             // `w` : width of specific charcter
             // `j` & `i` : like x_pos & y_pos, but reversed
 
-/* This was sort of working just not well
-            cord_2d start;
-            cord_2d end;
-            end.x_pos = lower_x;
-            end.y_pos = lower_y;
+            /* This was sort of working just not well
+                        cord_2d start;
+                        cord_2d end;
+                        end.x_pos = lower_x;
+                        end.y_pos = lower_y;
 
-            bitmap = stbtt_GetCodepointBitmap(&font, 0, stbtt_ScaleForPixelHeight(&font, s), 'Z', &w, &h, 0, 0);
-            uint8_t height = h;
-            uint8_t width = w;
+                        bitmap = stbtt_GetCodepointBitmap(&font, 0, stbtt_ScaleForPixelHeight(&font, s), 'Z', &w, &h, 0, 0);
+                        uint8_t height = h;
+                        uint8_t width = w;
 
 
-            for (unsigned int index = 0; index < text_2_render.size(); index++)
-            {
-                bitmap = stbtt_GetCodepointBitmap(&font, 0, stbtt_ScaleForPixelHeight(&font, s), text_2_render[index], &w, &h, 0, 0);
-                start = end;
-                start.y_pos = lower_y;
-                end.x_pos = lower_x + (w * index);
-                end.y_pos = lower_y + height;
-
-                // for (j = 0; j < h; ++j)
-                // {
-                //     for (i = 0; i < w; ++i)
-                //     {
-                //         // putchar(" .:ioVM@"[bitmap[j * w + i] >> 5]);
-                //     }
-                //     // putchar('\n');
-                // }
-
-                for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-                {
-                    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-                    {
-                        // X_pos checks, then Y_pos checks
-                        if ((start.x_pos < x_pos && x_pos < end.x_pos) && (start.y_pos <= y_pos && y_pos < end.y_pos))
+                        for (unsigned int index = 0; index < text_2_render.size(); index++)
                         {
-                            if ((bitmap[y_pos * w + x_pos] >> 5) > 3)
+                            bitmap = stbtt_GetCodepointBitmap(&font, 0, stbtt_ScaleForPixelHeight(&font, s), text_2_render[index], &w, &h, 0, 0);
+                            start = end;
+                            start.y_pos = lower_y;
+                            end.x_pos = lower_x + (w * index);
+                            end.y_pos = lower_y + height;
+
+                            // for (j = 0; j < h; ++j)
+                            // {
+                            //     for (i = 0; i < w; ++i)
+                            //     {
+                            //         // putchar(" .:ioVM@"[bitmap[j * w + i] >> 5]);
+                            //     }
+                            //     // putchar('\n');
+                            // }
+
+                            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
                             {
-                                render[x_pos][y_pos].r = box_colour.r;
-                                render[x_pos][y_pos].g = box_colour.g;
-                                render[x_pos][y_pos].b = box_colour.b;
-                                render[x_pos][y_pos].a = box_colour.a;
-                            }
-                            else
-                            {
-                                render[x_pos][y_pos].r = 100;
-                                render[x_pos][y_pos].g = 100;
-                                render[x_pos][y_pos].b = 100;
-                                render[x_pos][y_pos].a = box_colour.a;
+                                for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+                                {
+                                    // X_pos checks, then Y_pos checks
+                                    if ((start.x_pos < x_pos && x_pos < end.x_pos) && (start.y_pos <= y_pos && y_pos < end.y_pos))
+                                    {
+                                        if ((bitmap[y_pos * w + x_pos] >> 5) > 3)
+                                        {
+                                            render[x_pos][y_pos].r = box_colour.r;
+                                            render[x_pos][y_pos].g = box_colour.g;
+                                            render[x_pos][y_pos].b = box_colour.b;
+                                            render[x_pos][y_pos].a = box_colour.a;
+                                        }
+                                        else
+                                        {
+                                            render[x_pos][y_pos].r = 100;
+                                            render[x_pos][y_pos].g = 100;
+                                            render[x_pos][y_pos].b = 100;
+                                            render[x_pos][y_pos].a = box_colour.a;
+                                        }
+                                    }
+                                }
+                                // std::cout << '\n';
                             }
                         }
                     }
-                    // std::cout << '\n';
-                }
-            }
+            */
         }
-*/
         void change_colour(colour colour_new)
         {
             box_colour = colour_new;
