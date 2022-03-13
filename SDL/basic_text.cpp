@@ -88,6 +88,18 @@ int main()
     }
     std::cout << '\n';
 
+    std::vector<char> text_2_render2; // "I am tired";
+
+    {
+        char text_2_add[] = "I am tired";
+        for (int i = 0; i < (int)strlen(text_2_add); i++)
+        {
+            text_2_render2.push_back(text_2_add[i]);
+            std::cout << text_2_render2[i];
+        }
+    }
+    std::cout << '\n';
+
     // Reading the ttf file into memory
     fread(file_buffer, 1, 1000000, fopen("jeux-video/ui/font/Hack-Regular.ttf", "rb"));
     stbtt_InitFont(&font, file_buffer, 0);
@@ -99,29 +111,61 @@ int main()
 
     // I havent a clue what this does
     // Check the image
-    baseline = (int)(ascent * scale);
+    // add to this to move it down
+    baseline = (int)(ascent * scale)+15;
 
-    while (text_2_render[ch])
+    // while (text_2_render[ch])
+    // {
+    //     // Get the cords for evetyhing
+    //     int advance, lsb, x0, y0, x1, y1;
+
+    //     // not a single clue what this is supposed to do lol
+    //     // add to move it right
+    //     float x_shift = xpos - (float)floor(xpos)+60;
+
+    //     // Gets the data for this specific chacter
+    //     stbtt_GetCodepointHMetrics(&font, text_2_render[ch], &advance, &lsb);
+
+    //     // This tells us when the actual charcter starts & stops
+    //     stbtt_GetCodepointBitmapBoxSubpixel(&font, text_2_render[ch], scale, scale, x_shift, 0, &x0, &y0, &x1, &y1);
+
+    //     // Actually encode it?
+    //     stbtt_MakeCodepointBitmapSubpixel(&font, &screen[baseline + y0][(int)xpos + x0], x1 - x0, y1 - y0, LOGICAL_WINDOW_WIDTH, scale, scale, x_shift, 0, text_2_render[ch]);
+
+    //     xpos += (advance * scale);
+    //     if (text_2_render[ch + 1])
+    //     {
+    //         xpos += scale * stbtt_GetCodepointKernAdvance(&font, text_2_render[ch], text_2_render[ch + 1]);
+    //     }
+    //     ch++;
+    // }
+
+
+    baseline = (int)(ascent * scale) + 20;
+    while (text_2_render2[ch])
     {
         // Get the cords for evetyhing
         int advance, lsb, x0, y0, x1, y1;
 
         // not a single clue what this is supposed to do lol
-        float x_shift = xpos - (float)floor(xpos);
+        // add to move it right
+        float x_shift = xpos - (float)floor(xpos)+20;
+
+
 
         // Gets the data for this specific chacter
-        stbtt_GetCodepointHMetrics(&font, text_2_render[ch], &advance, &lsb);
+        stbtt_GetCodepointHMetrics(&font, text_2_render2[ch], &advance, &lsb);
 
         // This tells us when the actual charcter starts & stops
-        stbtt_GetCodepointBitmapBoxSubpixel(&font, text_2_render[ch], scale, scale, x_shift, 0, &x0, &y0, &x1, &y1);
+        stbtt_GetCodepointBitmapBoxSubpixel(&font, text_2_render2[ch], scale, scale, x_shift, 0, &x0, &y0, &x1, &y1);
 
         // Actually encode it?
-        stbtt_MakeCodepointBitmapSubpixel(&font, &screen[baseline + y0][(int)xpos + x0], x1 - x0, y1 - y0, LOGICAL_WINDOW_WIDTH, scale, scale, x_shift, 0, text_2_render[ch]);
+        stbtt_MakeCodepointBitmapSubpixel(&font, &screen[baseline + y0][(int)xpos + x0], x1 - x0, y1 - y0, LOGICAL_WINDOW_WIDTH, scale, scale, x_shift, 0, text_2_render2[ch]);
 
         xpos += (advance * scale);
-        if (text_2_render[ch + 1])
+        if (text_2_render2[ch + 1])
         {
-            xpos += scale * stbtt_GetCodepointKernAdvance(&font, text_2_render[ch], text_2_render[ch + 1]);
+            xpos += scale * stbtt_GetCodepointKernAdvance(&font, text_2_render2[ch], text_2_render2[ch + 1]);
         }
         ch++;
     }
@@ -134,14 +178,13 @@ int main()
             if ((int)screen[y_pos][x_pos] >> 5 > 2)
             {
                 // Without the minus one, none of this works lol
-                pixels[x_pos][y_pos].r = ((int)screen[y_pos][x_pos] >> 5)*((255/7) - 1);
-                pixels[x_pos][y_pos].g = ((int)screen[y_pos][x_pos] >> 5)*((255/7) - 1);
-                pixels[x_pos][y_pos].b = ((int)screen[y_pos][x_pos] >> 5)*((255/7) - 1);
-                pixels[x_pos][y_pos].a = ((int)screen[y_pos][x_pos] >> 5)*((255/7) - 1);
+                pixels[x_pos][y_pos].r = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
+                pixels[x_pos][y_pos].g = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
+                pixels[x_pos][y_pos].b = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
+                pixels[x_pos][y_pos].a = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
             }
         }
     }
-
     redraw_and_render();
 
     excecution_finished();
@@ -170,6 +213,8 @@ void redraw_and_render()
         for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
         {
             SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
+            // Doesnt work without this print statement???? I HAVE NO CLUE WHY
+            std::cout << "2" << std::endl;
             SDL_RenderDrawPoint(renderer, x_pos, y_pos);
 
             // if (pixels[x_pos][y_pos].state_now == solid)
