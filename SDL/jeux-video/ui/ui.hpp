@@ -106,32 +106,33 @@ namespace ui
         text(cord_2d cord_1, cord_2d cord_2, colour colour_new, std::string text_to_render_new, const char *font_path, int font_size)
         {
             std::copy(text_to_render_new.begin(), text_to_render_new.end(), std::back_inserter(text_2_render));
-            // perm = perm_new;
-            lower_x = std::min(cord_1.x_pos, cord_2.x_pos);
-            lower_y = std::min(cord_1.y_pos, cord_2.y_pos);
-            higher_x = std::max(cord_1.x_pos, cord_2.x_pos);
-            higher_y = std::max(cord_1.y_pos, cord_2.y_pos);
-            box_colour = colour_new;
+            // // perm = perm_new;
+            // lower_x = std::min(cord_1.x_pos, cord_2.x_pos);
+            // lower_y = std::min(cord_1.y_pos, cord_2.y_pos);
+            // higher_x = std::max(cord_1.x_pos, cord_2.x_pos);
+            // higher_y = std::max(cord_1.y_pos, cord_2.y_pos);
+            // box_colour = colour_new;
 
-            horz = higher_x - lower_x;
-            vert = higher_y - lower_y;
+            // horz = higher_x - lower_x;
+            // vert = higher_y - lower_y;
 
-            // screen = (unsigned char *)malloc(sizeof(unsigned char) * (horz * vert));
+            // // screen = (unsigned char *)malloc(sizeof(unsigned char) * (horz * vert));
 
-            std::cout << "Reading the file" << '\n';
-            fread(buffer, 1, 1000000, fopen(font_path, "rb"));
+            // std::cout << "Reading the file" << '\n';
+            // fread(buffer, 1, 1000000, fopen(font_path, "rb"));
 
-            // We really should be giving the developer control
-            // Over these vars but ehhhhh
-            stbtt_InitFont(&font, buffer, 0);
-            // scale = stbtt_ScaleForPixelHeight(&font, 80);
-            // stbtt_GetFontVMetrics(&font, &ascent, 0, 0);
-            // baseline = (int)(ascent * scale);
+            // // We really should be giving the developer control
+            // // Over these vars but ehhhhh
+            // stbtt_InitFont(&font, buffer, 0);
+            // // scale = stbtt_ScaleForPixelHeight(&font, 80);
+            // // stbtt_GetFontVMetrics(&font, &ascent, 0, 0);
+            // // baseline = (int)(ascent * scale);
 
-            // God know what this does
-            // Go to `tex_test2.c, might help?
-            // c = ' ';
+            // // God know what this does
+            // // Go to `tex_test2.c, might help?
+            // // c = ' ';
 
+            // Refer to basic
 
         }
 
