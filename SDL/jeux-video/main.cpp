@@ -57,9 +57,9 @@ int main()
     box_verts[1].y_pos = 25;
 
     colour colour_to_change;
-    colour_to_change.r = 115;
-    colour_to_change.g = 85;
-    colour_to_change.b = 104;
+    colour_to_change.r = 22;
+    colour_to_change.g = 7;
+    colour_to_change.b = 52;
     colour_to_change.a = 255;
 
     colour colour_to_change2;
@@ -78,10 +78,10 @@ int main()
     // ui::storeObject(std::make_shared<ui::single_ui_element>(ui::boxes(box_verts[0], box_verts[1], colour_to_change)), ui_elements);
     // std::cout << "To make the text" << '\n';
     // std::shared_ptr<ui::text> ptr_to_texty(new ui::text(box_verts[0], box_verts[1], colour_to_change2, "Hello world", "ui/font/Hack-Regular.ttf"));
+    ui::init_font_all();
 
     ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
     ui_elements.push_back(new ui::text(box_verts[0], box_verts[1], colour_to_change2, " Hello", "ui/font/Hack-Regular.ttf", 15));
-
 
     std::cout << "Done ui" << '\n';
 

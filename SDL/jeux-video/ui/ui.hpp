@@ -17,7 +17,7 @@ namespace ui
 {
 
     stbtt_fontinfo font;
-    unsigned char buffer[24 << 20];
+    unsigned char file_buffer[24 << 20];
 
     void draw_ui()
     {
@@ -31,6 +31,12 @@ namespace ui
     //     stbtt_InitFont(&font, buffer, 0);
     // }
 
+    void init_font_all()
+    {
+        fread(file_buffer, 1, 1000000, fopen("ui/font/Hack-Regular.ttf", "rb"));
+        stbtt_InitFont(&font, file_buffer, 0);
+    }
+
     class single_ui_element
     {
     public:
@@ -39,6 +45,7 @@ namespace ui
         {
             std::cout << "Wrong function" << '\n';
         }
+        
 
     protected:
         colour box_colour;
@@ -88,175 +95,111 @@ namespace ui
     class text : public single_ui_element
     {
     private:
-        int baseline;
+        int ascent, baseline, ch = 0;
         float scale, xpos = 2;
-        std::vector<char> text_2_render;
 
-        uint16_t higher_x = 0;
-        uint16_t higher_y = 0;
-        uint16_t lower_x = 0;
-        uint16_t lower_y = 0;
+        // std::vector<char> text_2_render;
+        char text_2_render[11] = "I am tired";
+
+        /*
+                uint16_t higher_x = 0;
+                uint16_t higher_y = 0;
+                uint16_t lower_x = 0;
+                uint16_t lower_y = 0;
+        */
+        uint16_t x_offset = 0;
+        uint16_t size;
 
         uint16_t horz = 0;
         uint16_t vert = 0;
-        unsigned char *bitmap;
-
+        unsigned char screen[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 
     public:
         text(cord_2d cord_1, cord_2d cord_2, colour colour_new, std::string text_to_render_new, const char *font_path, int font_size)
         {
-            std::copy(text_to_render_new.begin(), text_to_render_new.end(), std::back_inserter(text_2_render));
-            // // perm = perm_new;
-            // lower_x = std::min(cord_1.x_pos, cord_2.x_pos);
-            // lower_y = std::min(cord_1.y_pos, cord_2.y_pos);
-            // higher_x = std::max(cord_1.x_pos, cord_2.x_pos);
-            // higher_y = std::max(cord_1.y_pos, cord_2.y_pos);
-            // box_colour = colour_new;
+            // Why on bloody earth does this work, I was using some funky loop to do it before
+            /*{ // Port this over to whatever is being given before using this incase the std::copy thing doesnt work
+                char text_2_add[] = "Hallo World";
+                for (int i = 0; i < (int)strlen(text_2_add); i++)
+                {
+                    text_2_render.push_back(text_2_add[i]);
+                    std::cout << text_2_render[i];
+                }
+            }*/
+            std::cout << "Start text constructor thingy" << '\n';
+            // std::copy(text_to_render_new.begin(), text_to_render_new.end(), std::back_inserter(text_2_render));
+            stbtt_InitFont(&font, file_buffer, 0);
 
-            // horz = higher_x - lower_x;
-            // vert = higher_y - lower_y;
+            for (int i = 0; i < (int)strlen(text_2_render); i++)
+            {
+                std::cout << text_2_render[i];
+            }
+            std::cout << '\n';
 
-            // // screen = (unsigned char *)malloc(sizeof(unsigned char) * (horz * vert));
+            size = font_size;
+            scale = stbtt_ScaleForPixelHeight(&font, 30);
 
-            // std::cout << "Reading the file" << '\n';
-            // fread(buffer, 1, 1000000, fopen(font_path, "rb"));
+            // Dont know what this does
+            stbtt_GetFontVMetrics(&font, &ascent, 0, 0);
 
-            // // We really should be giving the developer control
-            // // Over these vars but ehhhhh
-            // stbtt_InitFont(&font, buffer, 0);
-            // // scale = stbtt_ScaleForPixelHeight(&font, 80);
-            // // stbtt_GetFontVMetrics(&font, &ascent, 0, 0);
-            // // baseline = (int)(ascent * scale);
-
-            // // God know what this does
-            // // Go to `tex_test2.c, might help?
-            // // c = ' ';
-
-            // Refer to basic
-
+            // Note: Find the funky math to do the thing
+            // do I just subtract the scale from the higher x?
+            // God knows what this does
+            baseline = (int)(ascent * scale);
+            x_offset = 0;
+            std::cout << "End text constructor thingy" << '\n';
         }
 
         void draw(position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
         {
-            /*
-                        while (text_2_render[ch])
-                        {
-                            // Cords for each thing
-                            int advance, lsb, x0, y0, x1, y1;
 
-                            // Gets the x_pos
-                            float x_shift = xpos - (float)floor(xpos);
+            while (text_2_render[ch])
+            {
+                // Get the cords for evetyhing
+                int advance, lsb, x0, y0, x1, y1;
 
-                            // Gets the data for this specific chacter
-                            stbtt_GetCodepointHMetrics(&font, text_2_render[ch], &advance, &lsb);
+                // not a single clue what this is supposed to do lol
+                // add to move it right
+                float x_shift = xpos - (float)floor(xpos) + 20;
 
-                            // How big is it gonna be huh?
-                            stbtt_GetCodepointBitmapBoxSubpixel(&font, text_2_render[ch], scale, scale, x_shift, 0, &x0, &y0, &x1, &y1);
+                // Gets the data for this specific chacter
+                stbtt_GetCodepointHMetrics(&font, text_2_render[ch], &advance, &lsb);
 
-                            // Actually encode it?
-                            // the math involved in the screen thingy
-                            // x_pos + (x_width*y_pos)
-                            // (baseline + y0) + (((int)xpos + x0)*horz)
-                            // ary[i*sizeY+j]
-                            // (baseline + y0)+((int)xpos + x0)*horz
-                            // baseline + y0
-                            // (int)xpos + x0
-                            stbtt_MakeCodepointBitmapSubpixel(&font, &screen[baseline + y0][(int)xpos + x0], x1 - x0, y1 - y0, horz, scale, scale, x_shift, 0, text_2_render[ch]);
+                // This tells us when the actual charcter starts & stops
+                stbtt_GetCodepointBitmapBoxSubpixel(&font, text_2_render[ch], scale, scale, x_shift, 0, &x0, &y0, &x1, &y1);
 
-                            // note that this stomps the old data, so where character boxes overlap (e.g. 'lj') it's wrong
-                            // because this API is really for baking character bitmaps into textures. if you want to render
-                            // a sequence of characters, you really need to render each bitmap to a temp buffer, then
-                            // "alpha blend" that into the working buffer
+                // Actually encode it?
+                stbtt_MakeCodepointBitmapSubpixel(&font, &screen[baseline + y0][(int)xpos + x0], x1 - x0, y1 - y0, LOGICAL_WINDOW_WIDTH, scale, scale, x_shift, 0, text_2_render[ch]);
 
-                            // This is some recursive stuff, dont touch it OK
-                            xpos += (advance * scale);
-                            if (text_2_render[ch + 1])
-                                xpos += scale * stbtt_GetCodepointKernAdvance(&font, text_2_render[ch], text_2_render[ch + 1]);
-                            ++ch;
-                        }
+                xpos += (advance * scale);
+                if (text_2_render[ch + 1])
+                {
+                    xpos += scale * stbtt_GetCodepointKernAdvance(&font, text_2_render[ch], text_2_render[ch + 1]);
+                }
+                ch++;
+            }
 
-                        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-                        {
-                            for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-                            {
-                                // if (lower_x < x_pos && x_pos < higher_x && lower_y < y_pos && y_pos < higher_y)
-                                // {
-                                int temp = screen[x_pos][y_pos] >> 5;
-                                if (temp > 3)
-                                {
-                                    render[x_pos][y_pos].r = box_colour.r;
-                                    render[x_pos][y_pos].g = box_colour.g;
-                                    render[x_pos][y_pos].b = box_colour.b;
-                                    render[x_pos][y_pos].a = box_colour.a;
-                                }
-                                // }
-                            }
-                        }
-            */
-            // can you read the docs before doing this
-            // Go to the `a` example
-            // also tex_test2.c
-            // `h` : height of specific charcter
-            // `w` : width of specific charcter
-            // `j` & `i` : like x_pos & y_pos, but reversed
-
-            /* This was sort of working just not well
-                        cord_2d start;
-                        cord_2d end;
-                        end.x_pos = lower_x;
-                        end.y_pos = lower_y;
-
-                        bitmap = stbtt_GetCodepointBitmap(&font, 0, stbtt_ScaleForPixelHeight(&font, s), 'Z', &w, &h, 0, 0);
-                        uint8_t height = h;
-                        uint8_t width = w;
-
-
-                        for (unsigned int index = 0; index < text_2_render.size(); index++)
-                        {
-                            bitmap = stbtt_GetCodepointBitmap(&font, 0, stbtt_ScaleForPixelHeight(&font, s), text_2_render[index], &w, &h, 0, 0);
-                            start = end;
-                            start.y_pos = lower_y;
-                            end.x_pos = lower_x + (w * index);
-                            end.y_pos = lower_y + height;
-
-                            // for (j = 0; j < h; ++j)
-                            // {
-                            //     for (i = 0; i < w; ++i)
-                            //     {
-                            //         // putchar(" .:ioVM@"[bitmap[j * w + i] >> 5]);
-                            //     }
-                            //     // putchar('\n');
-                            // }
-
-                            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-                            {
-                                for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-                                {
-                                    // X_pos checks, then Y_pos checks
-                                    if ((start.x_pos < x_pos && x_pos < end.x_pos) && (start.y_pos <= y_pos && y_pos < end.y_pos))
-                                    {
-                                        if ((bitmap[y_pos * w + x_pos] >> 5) > 3)
-                                        {
-                                            render[x_pos][y_pos].r = box_colour.r;
-                                            render[x_pos][y_pos].g = box_colour.g;
-                                            render[x_pos][y_pos].b = box_colour.b;
-                                            render[x_pos][y_pos].a = box_colour.a;
-                                        }
-                                        else
-                                        {
-                                            render[x_pos][y_pos].r = 100;
-                                            render[x_pos][y_pos].g = 100;
-                                            render[x_pos][y_pos].b = 100;
-                                            render[x_pos][y_pos].a = box_colour.a;
-                                        }
-                                    }
-                                }
-                                // std::cout << '\n';
-                            }
-                        }
+            ch = 0;
+xpos = 2;
+            for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+            {
+                for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+                {
+                    // Bit shift it a tad bit, and yeah
+                    if ((int)screen[y_pos][x_pos] >> 5 > 0)
+                    {
+                        // Without the minus one, none of this works lol
+                        render[x_pos][y_pos].r = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
+                        render[x_pos][y_pos].g = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
+                        render[x_pos][y_pos].b = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
+                        render[x_pos][y_pos].a = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
                     }
-            */
+                    // putchar(" .:ioVM@"[screen[x_pos][y_pos] >> 5]);
+                }
+                // putchar('\n');
+            }
         }
+
         void change_colour(colour colour_new)
         {
             box_colour = colour_new;
