@@ -76,7 +76,7 @@ int main()
 
     // I dont want to use a char star but ehhh
     // char *text = "Hi I am a bagguette";
-    std::vector<char> text_2_render; // "Hello World";
+    std::vector<char> text_2_render; // "Hello World"; 
 
     {
         char text_2_add[] = "Hallo World";

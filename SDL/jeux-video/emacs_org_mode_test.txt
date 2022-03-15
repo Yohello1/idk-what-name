@@ -1,0 +1,22 @@
+#-*- mode: org-*-
+#+STARTUP:  showall
+* Welcome To Org Mode
+
+Welcome, and thanks for trying out org mode. Making outlines and garbage
+* This is a headline, it starts with one or more starts
+* Working with lists
+** Moving around in our outlines
+** Moving around headlines
+** Lord Of The Rings
+My favorite Scenes (in order)
+1. The attack of Rohirrim
+2. Eowyn's fight with the witch king
+   + This was my favorite scene in the book
+   + I really like Miranda ottoman
+3. Peter Jackson
+   - On DVD only
+     He makes a really funy face when it happens
+But in the end, no individua; scenes matter but the film as a whole.
+Important actors in this film Arecibo
+- Elijah Wood :: He plays frodo
+- Sean Austin :: he plays samba
