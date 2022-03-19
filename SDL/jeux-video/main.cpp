@@ -23,6 +23,7 @@
 #include "generation/terain.hpp"
 #include "debug/printing.hpp"
 #include "ui/ui.hpp"
+#include "math/vector_math.hpp"
 
 struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
@@ -57,9 +58,9 @@ int main()
     box_verts[1].y_pos = 25;
 
     colour colour_to_change;
-    colour_to_change.r = 22;
-    colour_to_change.g = 7;
-    colour_to_change.b = 52;
+    colour_to_change.r = 55;
+    colour_to_change.g = 55;
+    colour_to_change.b = 55;
     colour_to_change.a = 255;
 
     colour colour_to_change2;
@@ -68,16 +69,6 @@ int main()
     colour_to_change.b = 124;
     colour_to_change.a = 255;
 
-    // draw_box_white_sand(box_verts[0],box_verts[1], pixels);
-    // ui::draw_box(box_verts[0],box_verts[1], colour_to_change, user_interface);
-
-    std::cout << "To make the box" << '\n';
-    // ui::boxes boxy_1(box_verts[0], box_verts[1], colour_to_change);
-    // std::shared_ptr<ui::boxes> ptr_to_boxy(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
-    // ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change);
-    // ui::storeObject(std::make_shared<ui::single_ui_element>(ui::boxes(box_verts[0], box_verts[1], colour_to_change)), ui_elements);
-    // std::cout << "To make the text" << '\n';
-    // std::shared_ptr<ui::text> ptr_to_texty(new ui::text(box_verts[0], box_verts[1], colour_to_change2, "Hello world", "ui/font/Hack-Regular.ttf"));
     ui::init_font_all();
 
     ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
@@ -90,9 +81,6 @@ int main()
     // int frame_count = 0;
     while (!quit_now)
     {
-        // auto start_time = Clock::now();
-        // Debug_Printing::print_density(pixels);
-        // std::cout << '\n';
 
         mtx2.lock();
         quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);
@@ -100,25 +88,15 @@ int main()
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 
-        // std::cout << "Made it?" << '\n';
-        // ui_elements[0]->draw(render);
-
-        // ui::boxes *box_prt = dynamic_cast<ui::boxes *>(ui_elements[0]);
-        // box_prt->draw(render);
         ui_elements[0]->draw(render);
         ui_elements[1]->draw(render);
-        // std::cout << "Made it" << '\n';
 
-        // boxy_1.draw(render);
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
 
-        // auto end_time = Clock::now();
     }
-    // Debug_Printing::print_density(pixels);
     physics.join();
     std::cout << "ENDED" << '\n';
-    // std::cout << "Sand: " << Testing::count_sand(pixels) << '\n';
     excecution_finished();
 }
 
