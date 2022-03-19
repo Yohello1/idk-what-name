@@ -45,7 +45,6 @@ namespace ui
         {
             std::cout << "Wrong function" << '\n';
         }
-        
 
     protected:
         colour box_colour;
@@ -97,9 +96,10 @@ namespace ui
     private:
         int ascent, baseline, ch = 0;
         float scale, xpos = 2;
+        colour txt_color;
 
-        // std::vector<char> text_2_render;
-        char text_2_render[11] = "I am tired";
+        std::vector<char> text_2_render;
+        // char text_2_render[11] = "I am tired";
 
         /*
                 uint16_t higher_x = 0;
@@ -107,11 +107,9 @@ namespace ui
                 uint16_t lower_x = 0;
                 uint16_t lower_y = 0;
         */
-        uint16_t x_offset = 0;
-        uint16_t size;
+        uint16_t x_offset, y_offset;
 
-        uint16_t horz = 0;
-        uint16_t vert = 0;
+
         unsigned char screen[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 
     public:
@@ -127,16 +125,19 @@ namespace ui
                 }
             }*/
             std::cout << "Start text constructor thingy" << '\n';
-            // std::copy(text_to_render_new.begin(), text_to_render_new.end(), std::back_inserter(text_2_render));
+            std::copy(text_to_render_new.begin(), text_to_render_new.end(), std::back_inserter(text_2_render));
             stbtt_InitFont(&font, file_buffer, 0);
+            txt_color = colour_new;
 
-            for (int i = 0; i < (int)strlen(text_2_render); i++)
-            {
-                std::cout << text_2_render[i];
-            }
+            std::cout << (int)txt_color.r << " "  << (int)txt_color.g << " " <<  (int)txt_color.b << " " << '\n'
+                      << (int)colour_new.r << " " << (int)colour_new.g << " " << (int)colour_new.b << " " << '\n';
+
+            // for (int i = 0; i < (int)strlen(text_2_render); i++)
+            // {
+            //     std::cout << text_2_render[i];
+            // }
             std::cout << '\n';
 
-            size = font_size;
             scale = stbtt_ScaleForPixelHeight(&font, 30);
 
             // Dont know what this does
@@ -180,7 +181,7 @@ namespace ui
             }
 
             ch = 0;
-xpos = 2;
+            xpos = 2;
             for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
             {
                 for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
@@ -189,10 +190,12 @@ xpos = 2;
                     if ((int)screen[y_pos][x_pos] >> 5 > 0)
                     {
                         // Without the minus one, none of this works lol
-                        render[x_pos][y_pos].r = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
-                        render[x_pos][y_pos].g = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
-                        render[x_pos][y_pos].b = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
-                        render[x_pos][y_pos].a = ((int)screen[y_pos][x_pos] >> 5) * ((255 / 7) - 1);
+                        render[x_pos][y_pos].r = ((int)screen[y_pos][x_pos] >> 5) * ((txt_color.r / 7) - 1);
+                        render[x_pos][y_pos].g = ((int)screen[y_pos][x_pos] >> 5) * ((txt_color.g / 7) - 1);
+                        render[x_pos][y_pos].b = ((int)screen[y_pos][x_pos] >> 5) * ((txt_color.b / 7) - 1);
+                        render[x_pos][y_pos].a = ((int)screen[y_pos][x_pos] >> 5) * ((txt_color.a / 7) - 1);
+
+                        // multiply the r,g,b values by the a value then use some funky vector math to mix them YAY
                     }
                     // putchar(" .:ioVM@"[screen[x_pos][y_pos] >> 5]);
                 }
