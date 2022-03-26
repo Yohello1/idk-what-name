@@ -13,17 +13,17 @@
 #include <string>
 #include <memory>
 #define STB_TRUETYPE_IMPLEMENTATION
+#define BLEND_TEXT 0
 #include "ui/stb_truetype.h"
-
+#include "math/vector_math.hpp"
 #include "init_funcs.hpp"
 #include "physics.hpp"
 #include "render.hpp"
 #include "input_large.hpp"
 #include "rand_testing.hpp"
 #include "generation/terain.hpp"
-#include "debug/printing.hpp"
+// #include "debug/printing.hpp"
 #include "ui/ui.hpp"
-#include "math/vector_math.hpp"
 
 struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
@@ -57,22 +57,27 @@ int main()
     box_verts[0].y_pos = 0;
     box_verts[1].y_pos = 25;
 
+    cord_2d text_position;
+    text_position.x_pos = 0;
+    text_position.y_pos = 5;
+    std::cout << "Txt pos " << text_position.x_pos << " " <<  text_position.y_pos << '\n';
+
     colour colour_to_change;
-    colour_to_change.r = 55;
-    colour_to_change.g = 55;
-    colour_to_change.b = 55;
+    colour_to_change.r = 231;
+    colour_to_change.g = 63;
+    colour_to_change.b = 0;
     colour_to_change.a = 255;
 
     colour colour_to_change2;
-    colour_to_change.r = 46;
-    colour_to_change.g = 253;
-    colour_to_change.b = 124;
-    colour_to_change.a = 255;
+    colour_to_change2.r = 46;
+    colour_to_change2.g = 253;
+    colour_to_change2.b = 124;
+    colour_to_change2.a = 255;
 
-    ui::init_font_all();
+    ui::init_font_all("ui/font/Hack-Regular.ttf");
 
     ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
-    ui_elements.push_back(new ui::text(box_verts[0], box_verts[1], colour_to_change2, " Hello", "ui/font/Hack-Regular.ttf", 15));
+    ui_elements.push_back(new ui::text(text_position, colour_to_change2, " Jackie", 40, 0));
 
     std::cout << "Done ui" << '\n';
 
@@ -93,7 +98,6 @@ int main()
 
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
-
     }
     physics.join();
     std::cout << "ENDED" << '\n';
