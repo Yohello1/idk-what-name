@@ -2,8 +2,8 @@
 #+AUTHOR: Yo Hello
 #+EMAIL: mp2702737@gmail.com
 
-* Current Dev path
-- [7/10] Text rendering
+* Current Dev pat
+- [11/11] Text rendering
   - [X] Conduct research on fesability to do it inhouse
   - [X] Chose to use STB_TrueType
   - [X] Read the docs
@@ -11,9 +11,10 @@
   - [X] Figuring out what needs to be split up
   - [X] Write out the parts needed
   - [X] Basic Implementation into engine
-  - [ ] Colours
-  - [ ] Cords
-  - [ ] Un cancerousising
+  - [X] Colours
+  - [X] Colour blending
+  - [X]  Cords
+  - [X] Un cancerousising
 
 - [ ] restructure it to not be cancerous
 - [ ] Do the `#if` things to run debug garbage
@@ -26,5 +27,5 @@
 * Resources
 
 * Notes
-- Colour thing is gonna be complex af https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixing-that-works-like-mixing-real-colors
+- Colour thing is gonna be complex (just turn them into vectors then ge the avg) https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixing-that-works-like-mixing-real-colors
 -

@@ -31,9 +31,9 @@ namespace ui
     //     stbtt_InitFont(&font, buffer, 0);
     // }
 
-    void init_font_all()
+    void init_font_all(const char *font_path)
     {
-        fread(file_buffer, 1, 1000000, fopen("ui/font/Hack-Regular.ttf", "rb"));
+        fread(file_buffer, 1, 1000000, fopen(font_path, "rb"));
         stbtt_InitFont(&font, file_buffer, 0);
     }
 
@@ -57,6 +57,7 @@ namespace ui
         int higher_y = 0;
         int lower_x = 0;
         int lower_y = 0;
+
 
     public:
         boxes(cord_2d cord_1, cord_2d cord_2, colour colour_new)
@@ -99,55 +100,32 @@ namespace ui
         colour txt_color;
 
         std::vector<char> text_2_render;
-        // char text_2_render[11] = "I am tired";
 
-        /*
-                uint16_t higher_x = 0;
-                uint16_t higher_y = 0;
-                uint16_t lower_x = 0;
-                uint16_t lower_y = 0;
-        */
-        uint16_t x_offset, y_offset;
-
-
+        uint8_t min_power = 0; 
+        cord_2d location;
         unsigned char screen[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 
     public:
-        text(cord_2d cord_1, cord_2d cord_2, colour colour_new, std::string text_to_render_new, const char *font_path, int font_size)
+        // Put a space at the begining of the string, idk why but if you dont it breaks everything
+        // like " hello" instead of "hello"
+        text(cord_2d location_in, colour colour_new, std::string text_to_render_new, int font_size, int min_power_in)
         {
-            // Why on bloody earth does this work, I was using some funky loop to do it before
-            /*{ // Port this over to whatever is being given before using this incase the std::copy thing doesnt work
-                char text_2_add[] = "Hallo World";
-                for (int i = 0; i < (int)strlen(text_2_add); i++)
-                {
-                    text_2_render.push_back(text_2_add[i]);
-                    std::cout << text_2_render[i];
-                }
-            }*/
-            std::cout << "Start text constructor thingy" << '\n';
+            // Why on bloody earth does this work
             std::copy(text_to_render_new.begin(), text_to_render_new.end(), std::back_inserter(text_2_render));
-            stbtt_InitFont(&font, file_buffer, 0);
+            // stbtt_InitFont(&font, file_buffer, 0);
             txt_color = colour_new;
+            location = location_in;
 
-            std::cout << (int)txt_color.r << " "  << (int)txt_color.g << " " <<  (int)txt_color.b << " " << '\n'
-                      << (int)colour_new.r << " " << (int)colour_new.g << " " << (int)colour_new.b << " " << '\n';
+            scale = stbtt_ScaleForPixelHeight(&font, font_size);
 
-            // for (int i = 0; i < (int)strlen(text_2_render); i++)
-            // {
-            //     std::cout << text_2_render[i];
-            // }
-            std::cout << '\n';
-
-            scale = stbtt_ScaleForPixelHeight(&font, 30);
-
-            // Dont know what this does
             stbtt_GetFontVMetrics(&font, &ascent, 0, 0);
 
             // Note: Find the funky math to do the thing
             // do I just subtract the scale from the higher x?
             // God knows what this does
-            baseline = (int)(ascent * scale);
-            x_offset = 0;
+            baseline = (int)(ascent * scale) + location.y_pos;
+            std::cout << (int)location.x_pos << '\n';
+            min_power = min_power_in;
             std::cout << "End text constructor thingy" << '\n';
         }
 
@@ -161,7 +139,7 @@ namespace ui
 
                 // not a single clue what this is supposed to do lol
                 // add to move it right
-                float x_shift = xpos - (float)floor(xpos) + 20;
+                float x_shift = xpos - (float)floor(xpos) + location.x_pos;
 
                 // Gets the data for this specific chacter
                 stbtt_GetCodepointHMetrics(&font, text_2_render[ch], &advance, &lsb);
@@ -187,19 +165,22 @@ namespace ui
                 for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
                 {
                     // Bit shift it a tad bit, and yeah
-                    if ((int)screen[y_pos][x_pos] >> 5 > 0)
+                    if ((int)screen[y_pos][x_pos] >> 5 > min_power)
                     {
-                        // Without the minus one, none of this works lol
-                        render[x_pos][y_pos].r = ((int)screen[y_pos][x_pos] >> 5) * ((txt_color.r / 7) - 1);
-                        render[x_pos][y_pos].g = ((int)screen[y_pos][x_pos] >> 5) * ((txt_color.g / 7) - 1);
-                        render[x_pos][y_pos].b = ((int)screen[y_pos][x_pos] >> 5) * ((txt_color.b / 7) - 1);
-                        render[x_pos][y_pos].a = ((int)screen[y_pos][x_pos] >> 5) * ((txt_color.a / 7) - 1);
+#if BLEND_TEXT == 0
+                        render[x_pos][y_pos].r = ((render[x_pos][y_pos].r * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.r / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5)));
+                        render[x_pos][y_pos].g = ((render[x_pos][y_pos].g * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.g / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5)));
+                        render[x_pos][y_pos].b = ((render[x_pos][y_pos].b * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.b / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5)));
+                        render[x_pos][y_pos].a = 255;
+#elif BLEND_TEXT == 1
+                        render[x_pos][y_pos].r = txt_color.r;
+                        render[x_pos][y_pos].g = txt_color.g;
+                        render[x_pos][y_pos].b = txt_color.b;
+                        render[x_pos][y_pos].a = 255;
+#endif
 
-                        // multiply the r,g,b values by the a value then use some funky vector math to mix them YAY
                     }
-                    // putchar(" .:ioVM@"[screen[x_pos][y_pos] >> 5]);
                 }
-                // putchar('\n');
             }
         }
 
@@ -210,7 +191,7 @@ namespace ui
 
         ~text()
         {
-            // free(screen);
+            free(screen);
         }
     };
 
