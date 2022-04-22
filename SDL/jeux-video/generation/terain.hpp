@@ -22,50 +22,17 @@ namespace Terrain
 			place_dots(x_lower, y_lower, x_upper, y_upper, amt_points);
 			points_inbetween(6);
 			remove_doubles();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			smoothen();
-			
-			std::cout << "The size of the vector/array is " << points_new.size() << '\n';
 
+			// Smoothen a crap ton
+			for(int i = 0; i < 38; i++)
+			{
+				smoothen();
+			}
+
+			#ifdef UI_DEBUG
+			std::cout << "The size of the vector/array is " << points_new.size() << '\n';
 			std::cout << "This ended" << '\n';
+			#endif
 			for (int unsigned i = 1; i < points_old.size(); i++)
 			{
 				pixels[points_old[i].x_pos][points_old[i].y_pos].r = 255;
@@ -82,33 +49,38 @@ namespace Terrain
 			std::cout << "Placing points" << '\n';
 			amt_points -= 1;
 			int x_spacing = (x_lower - x_upper) / amt_points * -1;
+
+            #ifdef UI_DEBUG
+			std::cout << "x Spacing for Gen Points" << x_spacing << '\n';
+			#endif
+
 			for (int i = 0; i < amt_points + 1; i++)
 			{
 				int y_pos = random_y_pos(y_lower, y_upper);
-				// pixels[i*x_spacing][y_pos].r = 255;
-				// pixels[i*x_spacing][y_pos].g = 255;
-				// pixels[i*x_spacing][y_pos].b = 255;
-				// pixels[i*x_spacing][y_pos].a = 255;
-
 				cord_2d temp;
 				temp.x_pos = i * x_spacing;
 				temp.y_pos = y_pos;
 				points_old.push_back(temp);
+
+            	#ifdef UI_DEBUG
+				std::cout << "Point " << i << " Position (" << temp.x_pos << "," << temp.y_pos << ")" << '\n';
+				#endif
+
 			}
 		}
 
 		void points_inbetween(int times)
 		{
-			for (int unsigned i = 1; i < points_old.size() - 1; i++)
-			{
-				// std::cout << points_old[i].x_pos << ',' << points_old[i].y_pos << "  I: " << i << '\n';
-			}
 
 			for (int unsigned i = 1; i < points_old.size(); i++)
 			{
 
 				int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
 				int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
+
+            	#ifdef UI_DEBUG
+				std::cout << "Point " << i << " Position (" << x_mid << "," << y_mid << ")" << '\n';
+				#endif
 
 				points_new.push_back(points_old[i - 1]);
 
@@ -120,10 +92,12 @@ namespace Terrain
 				points_new.push_back(points_old[i]);
 			}
 
+            #ifdef UI_DEBUG
 			for (int unsigned i = 0; i < points_new.size(); i++)
 			{
-				// std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
+				std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
 			}
+			#endif
 
 			std::cout << "Filling in time" << '\n';
 			points_old = points_new;
@@ -132,7 +106,7 @@ namespace Terrain
 			{
 				for (int unsigned i = 1; i < points_old.size() - 5; i++)
 				{
-					// I have no clue, this is the only thing that stops the streak across the window
+					// Checks if the next point is greater than the old point
 					if (points_old[i].x_pos > points_old[i - 1].x_pos)
 					{
 						int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
@@ -155,11 +129,6 @@ namespace Terrain
 				}
 
 				points_old = points_new;
-
-				for (int unsigned i = 0; i < points_new.size(); i++)
-				{
-					// std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
-				}
 
 				points_new.clear();
 			}

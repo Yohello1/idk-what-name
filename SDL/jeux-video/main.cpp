@@ -16,25 +16,28 @@
 #define BLEND_TEXT 0
 #include "ui/stb_truetype.h"
 #include "math/vector_math.hpp"
-#include "init_funcs.hpp"
-#include "physics.hpp"
-#include "render.hpp"
-#include "input_large.hpp"
-#include "rand_testing.hpp"
+#include "start/init_funcs.hpp"
+#include "physics/physics.hpp"
+#include "ui/render.hpp"
+#include "input/input_large.hpp"
 #include "generation/terain.hpp"
-// #include "debug/printing.hpp"
 #include "ui/ui.hpp"
 
+
+// A crap ton of arrays to deal with everything
+
+// Simulated array everything is being fed
 struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-struct colour user_interface[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-struct position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+// Array responsble for the UI
+struct colour user_interface[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+// USR input and changes, TODO SWITCH TO EQAUTION
+struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void excecution_finished();
 void draw_box(cord_2d start, cord_2d end);
 
-// std::vector<std::unique_ptr<ui::boxes>> ui_elements;
 std::vector<ui::single_ui_element *> ui_elements;
 
 std::mutex mtx2;
@@ -77,7 +80,9 @@ int main()
     ui::init_font_all("ui/font/Hack-Regular.ttf");
 
     ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
-    ui_elements.push_back(new ui::text(text_position, colour_to_change2, " Jackie", 40, 0));
+    // It needs to have a space at the start, idk why tbh
+    // OK OK it's cause it's looping through the thing???
+    ui_elements.push_back(new ui::text(text_position, colour_to_change2, "Ghost", 30, 0));
 
     std::cout << "Done ui" << '\n';
 
