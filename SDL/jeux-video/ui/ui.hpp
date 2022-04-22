@@ -25,14 +25,9 @@ namespace ui
         // I am not smort
     }
 
-    // void init_text(const char *font_path)
-    // {
-    //     fread(buffer, 1, 1000000, fopen(font_path, "rb"));
-    //     stbtt_InitFont(&font, buffer, 0);
-    // }
-
     void init_font_all(const char *font_path)
     {
+        // Puts it into the file buffer
         fread(file_buffer, 1, 1000000, fopen(font_path, "rb"));
         stbtt_InitFont(&font, file_buffer, 0);
     }
@@ -40,6 +35,8 @@ namespace ui
     class single_ui_element
     {
     public:
+    // java classes > c++ classes
+    // BASICALLY, "makes a destructor", and make a virtual draw function
         virtual ~single_ui_element() = default;
         virtual void draw(position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
         {
@@ -47,12 +44,15 @@ namespace ui
         }
 
     protected:
+        // this is the only inherited thing
+        // The colour
         colour box_colour;
     };
 
     class boxes : public single_ui_element
     {
     private:
+        // Its cords
         int higher_x = 0;
         int higher_y = 0;
         int lower_x = 0;
@@ -63,6 +63,7 @@ namespace ui
         boxes(cord_2d cord_1, cord_2d cord_2, colour colour_new)
         {
             // perm = perm_new;
+            // Does some funky stuff to figure out which ones are which
             lower_x = std::min(cord_1.x_pos, cord_2.x_pos);
             lower_y = std::min(cord_1.y_pos, cord_2.y_pos);
             higher_x = std::max(cord_1.x_pos, cord_2.x_pos);
@@ -111,13 +112,17 @@ namespace ui
         text(cord_2d location_in, colour colour_new, std::string text_to_render_new, int font_size, int min_power_in)
         {
             // Why on bloody earth does this work
+            // Copies the text from the string into a vector/array
             std::copy(text_to_render_new.begin(), text_to_render_new.end(), std::back_inserter(text_2_render));
-            // stbtt_InitFont(&font, file_buffer, 0);
+
+            // Sets the colour, and location
             txt_color = colour_new;
             location = location_in;
 
+            // Size
             scale = stbtt_ScaleForPixelHeight(&font, font_size);
 
+            // No clue
             stbtt_GetFontVMetrics(&font, &ascent, 0, 0);
 
             // Note: Find the funky math to do the thing
@@ -160,6 +165,9 @@ namespace ui
 
             ch = 0;
             xpos = 2;
+
+            // I can def speed this up
+            // Doing the same sort of thing i do for input drawing would work
             for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
             {
                 for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)

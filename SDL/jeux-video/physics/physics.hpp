@@ -4,7 +4,7 @@ namespace Physics
 
 	// No clue what this is for lol
 	std::mutex mtx;
-
+void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
 	void sand_and_water(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 	{
 		mtx.lock();
@@ -23,8 +23,9 @@ namespace Physics
 				{
 					position temp_4_swap = pixels[x_pos][y_pos + 1];
 					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
-					new_version[x_pos][y_pos] = temp_4_swap;
+					new_version[x_pos][y_pos] = temp_4_swap;	
 				}
+
 				if (
 					pixels[x_pos][y_pos].state_now == solid &&
 					pixels[x_pos][y_pos - 1].state_now == fluid &&
@@ -43,14 +44,7 @@ namespace Physics
 				{
 					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
 
-					pixels[x_pos][y_pos].r = 0;
-					pixels[x_pos][y_pos].g = 0;
-					pixels[x_pos][y_pos].b = 0;
-					pixels[x_pos][y_pos].a = 0;
-					pixels[x_pos][y_pos].state_now = empty;
-					pixels[x_pos][y_pos].temperature = 0;
-					pixels[x_pos][y_pos].pressure = 0;
-					pixels[x_pos][y_pos].density = 0;
+					clear_data(x_pos, y_pos, pixels);
 				}
 				else if (
 					pixels[x_pos][y_pos].state_now == solid &&
@@ -59,14 +53,7 @@ namespace Physics
 				{
 					new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
 
-					pixels[x_pos][y_pos].r = 0;
-					pixels[x_pos][y_pos].g = 0;
-					pixels[x_pos][y_pos].b = 0;
-					pixels[x_pos][y_pos].a = 0;
-					pixels[x_pos][y_pos].state_now = empty;
-					pixels[x_pos][y_pos].temperature = 0;
-					pixels[x_pos][y_pos].pressure = 0;
-					pixels[x_pos][y_pos].density = 0;
+					clear_data(x_pos, y_pos, pixels);
 				}
 
 				else if (
@@ -76,14 +63,7 @@ namespace Physics
 				{
 					new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
 
-					pixels[x_pos][y_pos].r = 0;
-					pixels[x_pos][y_pos].g = 0;
-					pixels[x_pos][y_pos].b = 0;
-					pixels[x_pos][y_pos].a = 0;
-					pixels[x_pos][y_pos].state_now = empty;
-					pixels[x_pos][y_pos].temperature = 0;
-					pixels[x_pos][y_pos].pressure = 0;
-					pixels[x_pos][y_pos].density = 0;
+					clear_data(x_pos, y_pos, pixels);
 				}
 
 				// Water oooo
@@ -94,14 +74,7 @@ namespace Physics
 				{
 					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
 
-					pixels[x_pos][y_pos].r = 0;
-					pixels[x_pos][y_pos].g = 0;
-					pixels[x_pos][y_pos].b = 0;
-					pixels[x_pos][y_pos].a = 0;
-					pixels[x_pos][y_pos].state_now = empty;
-					pixels[x_pos][y_pos].temperature = 0;
-					pixels[x_pos][y_pos].pressure = 0;
-					pixels[x_pos][y_pos].density = 0;
+					clear_data(x_pos, y_pos, pixels);
 				}
 
 				else if (
@@ -111,14 +84,7 @@ namespace Physics
 				{
 					new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
 
-					pixels[x_pos][y_pos].r = 0;
-					pixels[x_pos][y_pos].g = 0;
-					pixels[x_pos][y_pos].b = 0;
-					pixels[x_pos][y_pos].a = 0;
-					pixels[x_pos][y_pos].state_now = empty;
-					pixels[x_pos][y_pos].temperature = 0;
-					pixels[x_pos][y_pos].pressure = 0;
-					pixels[x_pos][y_pos].density = 0;
+					clear_data(x_pos, y_pos, pixels);
 				}
 
 				else if (
@@ -128,14 +94,7 @@ namespace Physics
 				{
 					new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
 
-					pixels[x_pos][y_pos].r = 0;
-					pixels[x_pos][y_pos].g = 0;
-					pixels[x_pos][y_pos].b = 0;
-					pixels[x_pos][y_pos].a = 0;
-					pixels[x_pos][y_pos].state_now = empty;
-					pixels[x_pos][y_pos].temperature = 0;
-					pixels[x_pos][y_pos].pressure = 0;
-					pixels[x_pos][y_pos].density = 0;
+					clear_data(x_pos, y_pos, pixels);
 				}
 
 				else if (
@@ -145,14 +104,7 @@ namespace Physics
 				{
 					new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
 
-					pixels[x_pos][y_pos].r = 0;
-					pixels[x_pos][y_pos].g = 0;
-					pixels[x_pos][y_pos].b = 0;
-					pixels[x_pos][y_pos].a = 0;
-					pixels[x_pos][y_pos].state_now = empty;
-					pixels[x_pos][y_pos].temperature = 0;
-					pixels[x_pos][y_pos].pressure = 0;
-					pixels[x_pos][y_pos].density = 0;
+					clear_data(x_pos, y_pos, pixels);
 				}
 
 				else if (
@@ -162,14 +114,7 @@ namespace Physics
 				{
 					new_version[x_pos - 1][y_pos] = pixels[x_pos][y_pos];
 
-					pixels[x_pos][y_pos].r = 0;
-					pixels[x_pos][y_pos].g = 0;
-					pixels[x_pos][y_pos].b = 0;
-					pixels[x_pos][y_pos].a = 0;
-					pixels[x_pos][y_pos].state_now = empty;
-					pixels[x_pos][y_pos].temperature = 0;
-					pixels[x_pos][y_pos].pressure = 0;
-					pixels[x_pos][y_pos].density = 0;
+					clear_data(x_pos, y_pos, pixels);
 				}
 
 				else if (pixels[x_pos][y_pos].state_now != empty && new_version[x_pos][y_pos].state_now == empty)
@@ -178,7 +123,7 @@ namespace Physics
 				}
 			}
 		}
-		// memcpy(&pixels, &new_version, sizeof(pixels));
+		// memcpy(&new_version, &pixels, sizeof(&pixels));
 		for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
 		{
 			for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
@@ -213,6 +158,18 @@ namespace Physics
 				pixels[x_pos][y_pos].state_now = solid;
 			}
 		}
+	}
+
+	void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+	{
+		pixels[x_pos][y_pos].r = 0;
+		pixels[x_pos][y_pos].g = 0;
+		pixels[x_pos][y_pos].b = 0;
+		pixels[x_pos][y_pos].a = 0;
+		pixels[x_pos][y_pos].state_now = empty;
+		pixels[x_pos][y_pos].temperature = 0;
+		pixels[x_pos][y_pos].pressure = 0;
+		pixels[x_pos][y_pos].density = 0;
 	}
 
 	/*

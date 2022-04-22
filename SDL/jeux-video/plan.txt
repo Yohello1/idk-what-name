@@ -14,11 +14,22 @@
   - [X] Colours
   - [X] Colour blending
   - [X]  Cords
-  - [X] Un cancerousising
+  - [X] Un cancerousingx
 
 - [ ] restructure it to not be cancerous
 - [ ] Do the `#if` things to run debug garbage
+  - [ ] Terrain.hpp
+  - [ ] input.hpp (and input_Large), should merge into one file though
+  - [ ] Vector math
+  - [ ] Physics .hpp
+  - [ ] Render.hpp
+  - [ ] ui.hpp
 - [ ] Write a test
+- [0/2] Enity
+  - [ ] Player
+  - [ ] Special type
+- [ ] Import/Export maps
+
 * Bugs
 
 * Future Problems

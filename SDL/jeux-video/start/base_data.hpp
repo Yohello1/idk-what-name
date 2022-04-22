@@ -1,5 +1,5 @@
 #define LOGICAL_WINDOW_WIDTH 256
-#define ACTUAL_WINDOW_WIDTH 1024
+#define ACTUAL_WINDOW_WIDTH 512
 typedef std::chrono::high_resolution_clock Clock;
 std::atomic<bool> quit_now;
 // time
@@ -16,7 +16,8 @@ enum pixel_state
     empty,
     fluid,
     solid,
-    fixed_pos
+    fixed_pos,
+    enity
 };
 struct position
 {
