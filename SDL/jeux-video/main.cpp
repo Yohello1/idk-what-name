@@ -86,11 +86,14 @@ int main()
 
     std::cout << "Done ui" << '\n';
 
+	std::cout << "Real addy " << &new_version  << ' ' << &pixels << '\n';
+
     // bool quit = false;
     std::thread physics(Physics::simulate, pixels, new_version);
     // int frame_count = 0;
     while (!quit_now)
     {
+	// std::cout << "Real addy " << &new_version  << ' ' << &pixels << '\n';
 
         mtx2.lock();
         quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);

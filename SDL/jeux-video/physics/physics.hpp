@@ -4,7 +4,7 @@ namespace Physics
 
 	// No clue what this is for lol
 	std::mutex mtx;
-void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
+	void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
 	void sand_and_water(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 	{
 		mtx.lock();
@@ -14,6 +14,12 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 		{
 			for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
 			{
+				// Note: X is current one, y is the one being checked
+				/* Swaps
+				 * 0 0 0
+				 * 0 X 0
+				 * 0 Y 0
+				 */
 
 				if (
 					pixels[x_pos][y_pos].state_now == solid &&
@@ -23,9 +29,14 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 				{
 					position temp_4_swap = pixels[x_pos][y_pos + 1];
 					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
-					new_version[x_pos][y_pos] = temp_4_swap;	
+					new_version[x_pos][y_pos] = temp_4_swap;
 				}
 
+				/* Swaps
+				 * 0 0 0
+				 * 0 y 0
+				 * 0 X 0
+				 */
 				if (
 					pixels[x_pos][y_pos].state_now == solid &&
 					pixels[x_pos][y_pos - 1].state_now == fluid &&
@@ -37,6 +48,12 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 					new_version[x_pos][y_pos] = temp_4_swap;
 				}
 
+				// Everything below this just moves it to relaveant position
+				/*
+				 * 0 X 0
+				 * 0 Y 0
+				 * 0 0 0
+				 */
 				else if (
 					pixels[x_pos][y_pos].state_now == solid &&
 					pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
@@ -46,6 +63,11 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 
 					clear_data(x_pos, y_pos, pixels);
 				}
+				/*
+				 * 0 X 0
+				 * 0 0 Y
+				 * 0 0 0
+				 */
 				else if (
 					pixels[x_pos][y_pos].state_now == solid &&
 					pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
@@ -56,6 +78,11 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 					clear_data(x_pos, y_pos, pixels);
 				}
 
+				/*
+				 * 0 X 0
+				 * Y 0 0
+				 * 0 0 0
+				 */
 				else if (
 					pixels[x_pos][y_pos].state_now == solid &&
 					pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
@@ -67,6 +94,11 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 				}
 
 				// Water oooo
+				/*
+				 * 0 X 0
+				 * 0 Y 0
+				 * 0 0 0
+				 */
 				else if (
 					pixels[x_pos][y_pos].state_now == fluid &&
 					pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
@@ -76,7 +108,11 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 
 					clear_data(x_pos, y_pos, pixels);
 				}
-
+				/*
+				 * 0 X 0
+				 * 0 0 Y
+				 * 0 0 0
+				 */
 				else if (
 					pixels[x_pos][y_pos].state_now == fluid &&
 					pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
@@ -86,7 +122,11 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 
 					clear_data(x_pos, y_pos, pixels);
 				}
-
+				/*
+				 * 0 X 0
+				 * Y 0 0
+				 * 0 0 0
+				 */
 				else if (
 					pixels[x_pos][y_pos].state_now == fluid &&
 					pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
@@ -96,7 +136,11 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 
 					clear_data(x_pos, y_pos, pixels);
 				}
-
+				/*
+				 * 0 X Y
+				 * 0 0 0
+				 * 0 0 0
+				 */
 				else if (
 					pixels[x_pos][y_pos].state_now == fluid &&
 					pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty &&
@@ -107,6 +151,11 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 					clear_data(x_pos, y_pos, pixels);
 				}
 
+				/*
+				 * Y X 0
+				 * 0 0 0
+				 * 0 0 0
+				 */
 				else if (
 					pixels[x_pos][y_pos].state_now == fluid &&
 					pixels[x_pos - 1][y_pos].state_now == empty && new_version[x_pos - 1][y_pos].state_now == empty &&
@@ -116,14 +165,19 @@ void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_W
 
 					clear_data(x_pos, y_pos, pixels);
 				}
-
+				// If this pixel didnt experience any changes, then use the same data, simple
 				else if (pixels[x_pos][y_pos].state_now != empty && new_version[x_pos][y_pos].state_now == empty)
 				{
 					new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
 				}
 			}
 		}
+		// Clears data, need to replace with memcpy
+		// TODO: Replace with memcpy
 		// memcpy(&new_version, &pixels, sizeof(&pixels));
+		// std::cout <<
+		// Just for memcpy debugging
+		// std::cout << "Memory addy " << &new_version << ' ' << &pixels << '\n';
 		for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
 		{
 			for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
