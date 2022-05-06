@@ -1,5 +1,5 @@
 #define LOGICAL_WINDOW_WIDTH 256
-#define ACTUAL_WINDOW_WIDTH 512
+#define ACTUAL_WINDOW_WIDTH 1024
 typedef std::chrono::high_resolution_clock Clock;
 std::atomic<bool> quit_now;
 // time
