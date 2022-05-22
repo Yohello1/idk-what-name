@@ -1,27 +1,12 @@
-#include <cstdlib>
-#include <cstring>
-#include <cstdio>
-#include <SDL2/SDL.h>
-#include <ctime>
-#include <iostream>
-#include <random>
-#include <cmath>
-#include <chrono>
-#include <mutex>
-#include <thread>
-#include <atomic>
-#include <string>
-#include <memory>
-#define STB_TRUETYPE_IMPLEMENTATION
-#define BLEND_TEXT 0
+#include "start/base_data.hpp"
 #include "ui/stb_truetype.h"
 #include "math/vector_math.hpp"
-#include "start/init_funcs.hpp"
 #include "physics/physics.hpp"
 #include "ui/render.hpp"
 #include "input/input_large.hpp"
 #include "generation/terain.hpp"
 #include "ui/ui.hpp"
+#include "physics/entity.hpp"
 
 
 // A crap ton of arrays to deal with everything

@@ -16,16 +16,20 @@
   - [X]  Cords
   - [X] Un cancerousingx
 
-- [ ] restructure it to not be cancerous
-- [-] Do the `#if` things to run debug garbage
+- [X] restructure it to not be cancerous
+- [3/6] Do the `#if` things to run debug garbage
   - [X] Terrain.hpp
   - [ ] input.hpp (and input_Large), should merge into one file though
   - [ ] Vector math
-  - [ ] Physics .hpp
-  - [ ] Render.hpp
+  - [X] Physics .hpp
+  - [X] Render.hpp
   - [ ] ui.hp
 - [ ] Write a test
-- [0/2] Enity
+- [ ] Proper ECS system
+  - [ ] manager
+  - [ ]
+- [0/3] Enity
+  - [ ] Base Class
   - [ ] Player
   - [ ] Special type
 - [ ] Import/Export maps
