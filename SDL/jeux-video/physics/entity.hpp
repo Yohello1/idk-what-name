@@ -23,19 +23,42 @@ namespace entites
     */
 // https://code.austinmorlan.com/austin/ecs/src/branch/master/LICENSE
     using Entity = std::uint32_t;
-    const Entity MAX_ENTITIES = 8192; // 2^13
+    const Entity MAX_ENTITIES = 16384; // 2^14
 
     struct location_bounds
     {
         u_int16_t x_pos;
         u_int16_t y_pos;
 
-        u_int16_t x_top_bound;
-        u_int16_t y_top_bound;
-
-        u_int16_t x_bot_bound;
-        u_int16_t y_bot_bound;
     };
+
+	struct health
+    {
+        u_int16_t health;
+        u_int16_t max_health;
+    };
+
+	struct mana
+    {
+        u_int16_t mana;
+        u_int16_t max_mana;
+    };
+
+	struct sqaure_box
+	{
+		cord_2d point1;
+		cord_2d point2;
+	};
+
+	struct basic_data
+	{
+		char name[31]; // I want to keep this under 256 bytes
+		// uint16_t time_of_creation; // No clue if this is worth having
+		uint8_t type_of_entity;
+		// Whether it needs to be "calculated" or not
+		bool live;
+
+	};
 
     // Nick
     using ComponentType = std::uint8_t;
@@ -421,3 +444,6 @@ private:
 	std::unique_ptr<SystemManager> mSystemManager;
 };
 }
+
+
+

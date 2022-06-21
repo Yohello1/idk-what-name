@@ -5,8 +5,8 @@
 #include <iostream>
 #include <random>
 #include <cmath>
-#define LOGICAL_WINDOW_WIDTH 512
-#define ACTUAL_WINDOW_WIDTH 512
+#define LOGICAL_WINDOW_WIDTH 1024
+#define ACTUAL_WINDOW_WIDTH 1024
 
 struct positions
 {

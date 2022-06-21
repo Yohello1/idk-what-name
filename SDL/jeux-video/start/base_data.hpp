@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cstring>
-#include <cstdio>
+#include <cstdio> 
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <iostream>
@@ -16,10 +16,12 @@
 #include <queue>
 #include <unordered_map>
 #include <set>
+
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
 #define LOGICAL_WINDOW_WIDTH 256
 #define ACTUAL_WINDOW_WIDTH 1024
+// #define INPUT_DEBUG 
 
 typedef std::chrono::high_resolution_clock Clock;
 std::atomic<bool> quit_now;
@@ -37,7 +39,7 @@ enum pixel_state
 {
     empty,
     fluid,
-    solid,
+    solid, 
     fixed_pos
 };
 struct position
