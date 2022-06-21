@@ -1,4 +1,4 @@
-#+TITLE: Engine Dev path
+#+TITLE Engine Dev path
 #+AUTHOR: Yo Hello
 #+EMAIL: mp2702737@gmail.com
 
@@ -33,7 +33,7 @@
   - [ ] Player
   - [ ] Special type
 - [ ] Import/Export maps
-- [ ]
+- [ ] Write a proper input system
 * Bugs
 
 * Future Problems

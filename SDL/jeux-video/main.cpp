@@ -7,7 +7,7 @@
 #include "generation/terain.hpp"
 #include "ui/ui.hpp"
 #include "physics/entity.hpp"
-
+#include "physics/entity_types.hpp"
 
 // A crap ton of arrays to deal with everything
 
@@ -26,6 +26,8 @@ void draw_box(cord_2d start, cord_2d end);
 std::vector<ui::single_ui_element *> ui_elements;
 
 std::mutex mtx2;
+
+entites::Coordinator Conductor;
 
 int main()
 {
@@ -48,7 +50,7 @@ int main()
     cord_2d text_position;
     text_position.x_pos = 0;
     text_position.y_pos = 5;
-    std::cout << "Txt pos " << text_position.x_pos << " " <<  text_position.y_pos << '\n';
+    std::cout << "Txt pos " << text_position.x_pos << " " << text_position.y_pos << '\n';
 
     colour colour_to_change;
     colour_to_change.r = 231;
@@ -62,6 +64,24 @@ int main()
     colour_to_change2.b = 124;
     colour_to_change2.a = 255;
 
+    Conductor.Init();
+
+
+    entites::Signature box_signature;
+
+    Conductor.RegisterComponent<entites::sqaure_box>();
+
+    auto movingBoxes = Conductor.RegisterSystem<Moving_day>();
+
+	box_signature.set(Conductor.GetComponentType<entites::sqaure_box>());
+
+	std::vector<entites::Entity> entities(entites::MAX_ENTITIES);
+
+	std::default_random_engine generator;
+	std::uniform_real_distribution<int> randPosition(20, LOGICAL_WINDOW_WIDTH);
+
+
+
     ui::init_font_all("ui/font/Hack-Regular.ttf");
 
     ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
@@ -71,14 +91,14 @@ int main()
 
     std::cout << "Done ui" << '\n';
 
-	std::cout << "Real addy " << &new_version  << ' ' << &pixels << '\n';
+    std::cout << "Real addy " << &new_version << ' ' << &pixels << '\n';
 
     // bool quit = false;
     std::thread physics(Physics::simulate, pixels, new_version);
     // int frame_count = 0;
     while (!quit_now)
     {
-	// std::cout << "Real addy " << &new_version  << ' ' << &pixels << '\n';
+        // std::cout << "Real addy " << &new_version  << ' ' << &pixels << '\n';
 
         mtx2.lock();
         quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);
