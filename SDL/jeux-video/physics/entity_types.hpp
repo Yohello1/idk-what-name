@@ -1,28 +1,98 @@
 extern entites::Coordinator Conductor;
 
-class Moving_day : public entites::System
+class Moving_Day : public entites::System
 {
 public:
-	void Init();
-
-	void Update(float dt);
+    void Init();
+    void Update(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
 };
 
-
-void Moving_day::Init()
+void Moving_Day::Init()
 {
+    // God knows how to use this
+    for (auto const &entity : mEntities)
+    {
+        // Fetching all the components
+        auto &location = Conductor.GetComponent<entites::sqaure_box>(entity);
+        auto &rotation = Conductor.GetComponent<entites::direction>(entity);
+        auto &colour = Conductor.GetComponent<entites::rgba_colour>(entity);
+
+        // Where they gon spawn
+        int new_x = 128;
+        int new_y = 128;
+
+        // Set location
+        location.point.x_pos = new_x;
+        location.point.y_pos = new_y;
+
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_int_distribution<std::mt19937::result_type> dist6(0,360); // distribution in range [1, 6]
+
+        rotation.degrees = (uint)(dist6(rng));
+
+        // Random colours
+        colour.red = (rand() % 255);
+        colour.green = (rand() % 255);
+        colour.blue = (rand() % 255);
+        colour.alpha = (rand() % 255);
+    }
 }
 
-void Moving_day::Update(float dt)
+void Moving_Day::Update(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
-	for (auto const& entity : mEntities)
-	{
-		// auto& rigidBody = gCoordinator.GetComponent<RigidBody>(entity);
-		// auto& transform = gCoordinator.GetComponent<Transform>(entity);
-		// auto const& gravity = gCoordinator.GetComponent<Gravity>(entity);
+    for (auto const &entity : mEntities)
+    {
+        auto &location = Conductor.GetComponent<entites::sqaure_box>(entity);
+        auto &rotation = Conductor.GetComponent<entites::direction>(entity);
+        auto &colour = Conductor.GetComponent<entites::rgba_colour>(entity);
 
-		// transform.position += rigidBody.velocity * dt;
+        for (int x_pos = location.point.x_pos - 5; x_pos < location.point.x_pos + 5; x_pos++)
+        {
+            for (int y_pos = location.point.y_pos - 5; y_pos < location.point.y_pos + 5; y_pos++)
+            {
 
-		// rigidBody.velocity += gravity.force * dt;
-	}
+                pixels[x_pos][y_pos].r = colour.red;
+                pixels[x_pos][y_pos].g = colour.green;
+                pixels[x_pos][y_pos].b = colour.blue;
+                pixels[x_pos][y_pos].a = colour.alpha;
+            }
+        }
+
+        if (location.point.y_pos < 5 ||
+            location.point.y_pos > (LOGICAL_WINDOW_WIDTH - 5))
+        {
+            rotation.degrees *= -1;
+            rotation.degrees %= 360;
+        }
+        else if (location.point.x_pos < 5 ||
+                 location.point.x_pos > (LOGICAL_WINDOW_WIDTH - 6))
+        {
+
+            // I assume nothing will ever be 0
+            if (rotation.degrees == 180)
+            {
+                rotation.degrees = 0;
+            }
+            else if (rotation.degrees < 180)
+            {
+                rotation.degrees -= 180;
+                rotation.degrees *= -1;
+            }
+            else if (180 < rotation.degrees)
+            {
+                rotation.degrees -= 180;
+                rotation.degrees *= -1;
+                rotation.degrees += 360;
+            }
+
+            rotation.degrees %= 360;
+        }
+        float y_shift = sin(rotation.degrees * 3.14 / 180);
+        float x_shift = cos(rotation.degrees * 3.14 / 180);
+
+        location.point.x_pos += x_shift;
+        location.point.y_pos += y_shift;
+
+    }
 }

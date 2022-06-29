@@ -16,10 +16,11 @@
 #include <queue>
 #include <unordered_map>
 #include <set>
+#include <vector> 
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
-#define LOGICAL_WINDOW_WIDTH 256
+#define LOGICAL_WINDOW_WIDTH 1024
 #define ACTUAL_WINDOW_WIDTH 1024
 // #define INPUT_DEBUG 
 
@@ -98,3 +99,4 @@ namespace init
         }
     }
 }
+

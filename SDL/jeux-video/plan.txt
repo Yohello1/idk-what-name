@@ -25,18 +25,24 @@
   - [X] Render.hpp
   - [ ] ui.hp
 - [ ] Write a test
-- [ ] Proper ECS system
-  - [ ] manager
-  - [ ]
-- [0/3] Enity
-  - [ ] Base Class
+- [X] Proper ECS system
+  - [X] manager
+  - [X] entntiy
+  - [X] Typies
+  - [X] TestOA
+- [1/3] Enity
+  - [X] Managers (Karens)
   - [ ] Player
   - [ ] Special type
+- [0/2] optimisation
+  - [ ] Chunk simulation
+  - [ ] Multi threading (Physics)
+  - [ ] Rewrite SDL code in uh, opengl (I dont have a choice)
 - [ ] Import/Export maps
 - [ ] Write a proper input system
 * Bugs
 
-* Future Problems
+* Future Problem
 - [ ] documentation
 - Parallize this
 * Resources
