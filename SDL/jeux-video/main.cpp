@@ -24,10 +24,9 @@ void excecution_finished();
 void draw_box(cord_2d start, cord_2d end);
 
 std::vector<ui::single_ui_element *> ui_elements;
-
+unsigned int currenttime = (unsigned int)time(NULL);
 std::mutex mtx2;
-
-entites::Coordinator Conductor;
+// entites::Coordinator Conductor;
 
 int main()
 {
@@ -64,22 +63,33 @@ int main()
     colour_to_change2.b = 124;
     colour_to_change2.a = 255;
 
+/* All just for entities testing lol
     Conductor.Init();
-
-
     entites::Signature box_signature;
-
     Conductor.RegisterComponent<entites::sqaure_box>();
-
-    auto movingBoxes = Conductor.RegisterSystem<Moving_day>();
-
+    Conductor.RegisterComponent<entites::direction>();
+    Conductor.RegisterComponent<entites::rgba_colour>();
+    auto movingBoxes = Conductor.RegisterSystem<Moving_Day>();
 	box_signature.set(Conductor.GetComponentType<entites::sqaure_box>());
+	std::vector<entites::Entity> entities(1024);
+    // Making all the entitites
+    for (auto& entity : entities)
+	{
+		entity = Conductor.CreateEntity();
 
-	std::vector<entites::Entity> entities(entites::MAX_ENTITIES);
+		Conductor.AddComponent( 
+			entity,
+			entites::sqaure_box{});
 
-	std::default_random_engine generator;
-	std::uniform_real_distribution<int> randPosition(20, LOGICAL_WINDOW_WIDTH);
+		Conductor.AddComponent(
+			entity,
+			entites::direction{});
 
+		Conductor.AddComponent(
+			entity,
+			entites::rgba_colour{});
+	}
+	movingBoxes->Init(); */
 
 
     ui::init_font_all("ui/font/Hack-Regular.ttf");
@@ -96,6 +106,8 @@ int main()
     // bool quit = false;
     std::thread physics(Physics::simulate, pixels, new_version);
     // int frame_count = 0;
+
+
     while (!quit_now)
     {
         // std::cout << "Real addy " << &new_version  << ' ' << &pixels << '\n';
@@ -106,8 +118,12 @@ int main()
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 
+        // std::cout << "Start drawing words" << '\n';
         ui_elements[0]->draw(render);
         ui_elements[1]->draw(render);
+        // std::cout << "Done drawing words, drawing sqaures" << '\n';
+	    // movingBoxes->Update(render);
+        // std::cout << "Done drawing sqaures" << '\n';
 
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);

@@ -1,0 +1,122 @@
+g++ main.cpp -Wall -std=c++17  -lSDL2 -lSDL2main -lSDL2_image -g `sdl2-config --cflags --libs` -lpthread  -o draw2
+./draw2
+Starting
+Time = 1656102736
+Started, allocating memory
+Thingy started now
+This started
+Placing points
+Filling in time
+Txt pos 0 5
+0
+End text constructor thingy
+Done ui
+Real addy 0x55b09c983560 0x55b09c8c3560
+Switched
+Switched
+Switched
+Switched
+248 46148
+Switched
+246 46146
+Switched
+Switched
+Switched
+96 45996
+Switched
+93 45993
+Switched
+Switched
+89 45989
+Switched
+89 45989
+Switched
+Switched
+92 45992
+Switched
+242 46142
+Switched
+80 45980
+Switched
+99 45999
+Switched
+241 46141
+Switched
+241 46141
+Switched
+Switched
+81 45981
+Switched
+78 45978
+Switched
+Switched
+103 46003
+Switched
+103 46003
+Switched
+75 45975
+Switched
+Switched
+Switched
+105 46005
+Switched
+Switched
+Switched
+Switched
+71 45971
+Switched
+Switched
+69 45969
+Switched
+Switched
+111 46011
+Switched
+68 45968
+Switched
+Switched
+235 46135
+Switched
+Switched
+Switched
+Switched
+233 46133
+Switched
+63 45963
+Switched
+117 46017
+Switched
+63 45963
+Switched
+61 45961
+Switched
+120 46020
+Switched
+60 45960
+Switched
+122 46022
+Switched
+57 45957
+Switched
+124 46024
+Switched
+Switched
+Switched
+55 45955
+Switched
+125 46025
+Switched
+125 46025
+Switched
+Switched
+Switched
+Switched
+48 45948
+Switched
+45 45945
+Switched
+45 45945
+Switched
+Switched
+Switched
+It don't matter it done
+ENDED
