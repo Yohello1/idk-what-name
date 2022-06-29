@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 10 00:09:31 2022
+# Make data base, printed on Fri Jun 24 15:55:45 2022
 
 # Variables
 
@@ -23,7 +21,7 @@ CMAKE_PREFIX_PATH = /opt/intel/oneapi/tbb/2021.6.0/env/..
 # environment
 OSH = /home/yohello/.oh-my-bash
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-bb851005-8663-47ba-adef-9282e569e798.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-5f541e2e-0a9f-43eb-8ad6-122b48452120.sock
 # environment
 VSCODE_CWD = /home/yohello
 # default
@@ -42,6 +40,8 @@ PWD = /media/yohello/hrm2/code-stuff/generation
 %D = $(patsubst %/,%,$(dir $%))
 # environment
 LSCOLORS = Gxfxcxdxdxegedabagacad
+# environment
+XDG_DATA_DIRS = /home/yohello/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
@@ -49,7 +49,7 @@ VSCODE_LOG_STACK = false
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/yohello/.config/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+VSCODE_CODE_CACHE_PATH = /home/yohello/.config/Code/CachedData/30d9c6cd9483b2cc586687151bcbcd635f373630
 # environment
 XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session1
 # environment
@@ -79,7 +79,7 @@ PAM_KWALLET5_LOGIN = /run/user/1000/kwallet5.socket
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_AUTH_SOCK = /tmp/ssh-DYLneIIAxhOD/agent.1659
+SSH_AUTH_SOCK = /tmp/ssh-ROESIExjlzre/agent.1791
 # default
 .SHELLFLAGS := -c
 # automatic
@@ -95,7 +95,7 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 7580
+VSCODE_PID = 416985
 # environment
 HISTIGNORE = &:[ ]*:exit:ls:bg:fg:history:clear
 # environment
@@ -103,7 +103,7 @@ XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/yohello-deb:@/tmp/.ICE-unix/1954,unix/yohello-deb:/tmp/.ICE-unix/1954
+SESSION_MANAGER = local/yohello-deb:@/tmp/.ICE-unix/2090,unix/yohello-deb:/tmp/.ICE-unix/2090
 # automatic
 *F = $(notdir $*)
 # environment
@@ -177,6 +177,8 @@ ORIGINAL_XDG_CURRENT_DESKTOP = KDE
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
+QT_SCREEN_SCALE_FACTORS = DVI-D-0=1;HDMI-0=1;DP-0=1;DP-1=1;
+# environment
 CLUTTER_IM_MODULE = ibus
 # environment
 CPATH = /opt/intel/oneapi/tbb/2021.6.0/env/../include:/opt/intel/oneapi/mpi/2021.6.0//include
@@ -201,7 +203,7 @@ KDE_SESSION_UID = 1000
 # environment
 PYTHONPATH = /opt/intel/oneapi/ospray_studio/0.10.0/lib
 # environment
-SSH_AGENT_PID = 1761
+SSH_AGENT_PID = 1892
 # environment
 PAGER = less
 # environment
@@ -225,7 +227,7 @@ QT_IM_MODULE = ibus
 # environment
 TBBROOT = /opt/intel/oneapi/tbb/2021.6.0/env/..
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-1014eca9-1.67.2-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-1014eca9-1.68.1-main.sock
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
@@ -249,7 +251,7 @@ KDE_SESSION_VERSION = 5
 # environment
 KDE_FULL_SESSION = true
 # variable set hash-table stats:
-# Load=118/1024=12%, Rehash=0, Collisions=8/145=6%
+# Load=120/1024=12%, Rehash=0, Collisions=8/147=5%
 
 # Pattern-specific Variable Values
 
@@ -277,7 +279,6 @@ Makefile:
 # Not a target:
 .DEFAULT:
 #  Implicit rule search has not been done.
- 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -294,6 +295,9 @@ makefile:
 #  File does not exist.
 #  File has been updated.
 #  Failed to be updated.
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 
 # Not a target:
 GNUmakefile:
@@ -316,6 +320,6 @@ GNUmakefile:
 # strcache performance: lookups = 22 / hit rate = 13%
 # hash-table stats:
 # Load=19/8192=0%, Rehash=0, Collisions=0/22=0%
-# Finished Make data base on Fri Jun 10 00:09:31 2022
+# Finished Make data base on Fri Jun 24 15:55:45 2022
 
  
