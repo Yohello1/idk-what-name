@@ -1,0 +1,3 @@
+/media/yohello/hrm2/code-stuff/generation/SDL/opengl_migration/CMakeFiles/tri.dir
+/media/yohello/hrm2/code-stuff/generation/SDL/opengl_migration/CMakeFiles/edit_cache.dir
+/media/yohello/hrm2/code-stuff/generation/SDL/opengl_migration/CMakeFiles/rebuild_cache.dir
