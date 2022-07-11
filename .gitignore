@@ -1,3 +1,5 @@
 hello
 SDL/text.txt
-*/CMakeFiles/*
+SDL/opengl_migration/CMakeFiles/
+CMakeFiles/
+/CMakeFiles/
