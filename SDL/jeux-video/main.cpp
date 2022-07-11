@@ -26,7 +26,7 @@ void draw_box(cord_2d start, cord_2d end);
 std::vector<ui::single_ui_element *> ui_elements;
 unsigned int currenttime = (unsigned int)time(NULL);
 std::mutex mtx2;
-// entites::Coordinator Conductor;
+entites::Coordinator Conductor;
 
 int main()
 {
@@ -63,7 +63,7 @@ int main()
     colour_to_change2.b = 124;
     colour_to_change2.a = 255;
 
-/* All just for entities testing lol
+// All just for entities testing lol
     Conductor.Init();
     entites::Signature box_signature;
     Conductor.RegisterComponent<entites::sqaure_box>();
@@ -89,7 +89,7 @@ int main()
 			entity,
 			entites::rgba_colour{});
 	}
-	movingBoxes->Init(); */
+	movingBoxes->Init(); 
 
 
     ui::init_font_all("ui/font/Hack-Regular.ttf");
@@ -122,7 +122,7 @@ int main()
         ui_elements[0]->draw(render);
         ui_elements[1]->draw(render);
         // std::cout << "Done drawing words, drawing sqaures" << '\n';
-	    // movingBoxes->Update(render);
+	    movingBoxes->Update(render);
         // std::cout << "Done drawing sqaures" << '\n';
 
         Render::redraw_render(render, renderer);

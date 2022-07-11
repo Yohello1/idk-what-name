@@ -28,7 +28,6 @@ namespace Render
     //     uint16_t lower_y = std::min(point1.y_pos, point1.y_pos);
     //     uint16_t higher_x = std::max(point2.x_pos, point2.x_pos);
     //     uint16_t higher_y = std::max(point2.y_pos, point2.y_pos);
-
     //     for (int x_pos = 0; lower_x < x_pos < higher_x; x_pos++)
     //     {
     //         for (int y_pos = 0; lower_y < y_pos < higher_y; y_pos++)
@@ -37,7 +36,6 @@ namespace Render
     //             pixels[x_pos][y_pos].g = colour.green;
     //             pixels[x_pos][y_pos].b = colour.blue;
     //             pixels[x_pos][y_pos].a = colour.alpha;
-
     //         }
     //     }
     // }

@@ -32,9 +32,8 @@ struct sqaure_box
 // https://www.mathsisfun.com/geometry/unit-circle.html
 // Ur gonna forget how this works in two hours time
 // 0 = right direction
-// 90 = top
-// 180 (or -180) = left
-// -90 = bottom
+// Actually this is just a 0-2^16 degrees
+// Makesure to do a modulo 360 afta every operation
 struct direction
 {
     int16_t degrees;
