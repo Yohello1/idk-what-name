@@ -21,20 +21,23 @@ void Moving_Day::Init()
         int new_x = 128;
         int new_y = 128;
 
-        // Set location
-        location.point.x_pos = new_x;
-        location.point.y_pos = new_y;
-
         std::random_device dev;
         std::mt19937 rng(dev());
-        std::uniform_int_distribution<std::mt19937::result_type> dist6(0,360); // distribution in range [1, 6]
+
+        std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 360); // distribution in range [1, 6]
+
+        // Set location
+        location.point.x_pos = 64;
+        location.point.y_pos = 64;
+
+        // std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 360); // distribution in range [1, 6]
 
         rotation.degrees = (uint)(dist6(rng));
 
         // Random colours
-        colour.red = (rand() % 255);
+        colour.red   = (rand() % 255);
         colour.green = (rand() % 255);
-        colour.blue = (rand() % 255);
+        colour.blue  = (rand() % 255);
         colour.alpha = (rand() % 255);
     }
 }
@@ -60,7 +63,7 @@ void Moving_Day::Update(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WID
         }
 
         if (location.point.y_pos < 5 ||
-            location.point.y_pos > (LOGICAL_WINDOW_WIDTH - 5))
+            location.point.y_pos > (LOGICAL_WINDOW_WIDTH - 6))
         {
             rotation.degrees *= -1;
             rotation.degrees %= 360;
@@ -88,11 +91,23 @@ void Moving_Day::Update(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WID
 
             rotation.degrees %= 360;
         }
+        else if (location.point.y_pos < 3 ||
+                 location.point.y_pos > (LOGICAL_WINDOW_WIDTH - 3))
+        {
+            location.point.x_pos = 64;
+            location.point.y_pos = 64;
+        }
+
+        else if (location.point.x_pos < 3 ||
+                 location.point.x_pos > (LOGICAL_WINDOW_WIDTH - 3))
+        {
+            location.point.x_pos = 64;
+            location.point.y_pos = 64;
+        }
         float y_shift = sin(rotation.degrees * 3.14 / 180);
         float x_shift = cos(rotation.degrees * 3.14 / 180);
 
         location.point.x_pos += x_shift;
         location.point.y_pos += y_shift;
-
     }
 }

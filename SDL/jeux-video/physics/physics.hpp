@@ -1,183 +1,237 @@
 namespace Physics
-{ // #include "render.hpp"
-	// #include "base_data.hpp"
+{
+	bool chunk_checker[LOGICAL_WINDOW_WIDTH / 8][LOGICAL_WINDOW_WIDTH / 8];
 
 	// No clue what this is for lol
 	std::mutex mtx;
-	void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
+	void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+	{
+		pixels[x_pos][y_pos].r = 0;
+		pixels[x_pos][y_pos].g = 0;
+		pixels[x_pos][y_pos].b = 0;
+		pixels[x_pos][y_pos].a = 0;
+		pixels[x_pos][y_pos].state_now = empty;
+		pixels[x_pos][y_pos].temperature = 0;
+		pixels[x_pos][y_pos].pressure = 0;
+		pixels[x_pos][y_pos].density = 0;
+	}
 	void sand_and_water(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 	{
-		mtx.lock();
 
-		// it works don't ask
-		for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
+		for (int x_chunk = 0; x_chunk < (LOGICAL_WINDOW_WIDTH / 8) - 1; x_chunk++)
 		{
-			for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+			for (int y_chunk = 0; y_chunk < (LOGICAL_WINDOW_WIDTH / 8) - 1; y_chunk++)
 			{
-				// Note: X is current one, y is the one being checked
-				/* Swaps
-				 * 0 0 0
-				 * 0 X 0
-				 * 0 Y 0
-				 */
-
-				if (
-					pixels[x_pos][y_pos].state_now == solid &&
-					pixels[x_pos][y_pos + 1].state_now == fluid &&
-					pixels[x_pos][y_pos + 1].density < pixels[x_pos][y_pos].density &&
-					y_pos != (LOGICAL_WINDOW_WIDTH - 1))
+				if (chunk_checker[x_chunk][y_chunk] == true)
 				{
-					position temp_4_swap = pixels[x_pos][y_pos + 1];
-					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
-					new_version[x_pos][y_pos] = temp_4_swap;
-				}
+					int un_changed = 0;
+					// it works don't ask
+					// Started from the bottom, now we here (hint)
+					mtx.lock();
+					for (int y_pos = y_chunk * 8; y_pos > (y_chunk * 8 - 8); y_pos--)
+					{
+						for (int x_pos = (x_chunk * 8 - 8); x_pos < x_chunk * 8; x_pos++)
+						{
+							// Note: X is current one, y is the one being checked
+							/* Swaps
+							 * 0 0 0
+							 * 0 X 0
+							 * 0 Y 0
+							 */
 
-				/* Swaps
-				 * 0 0 0
-				 * 0 y 0
-				 * 0 X 0
-				 */
-				if (
-					pixels[x_pos][y_pos].state_now == solid &&
-					pixels[x_pos][y_pos - 1].state_now == fluid &&
-					pixels[x_pos][y_pos - 1].density > pixels[x_pos][y_pos].density &&
-					y_pos != (LOGICAL_WINDOW_WIDTH - 1))
-				{
-					position temp_4_swap = pixels[x_pos][y_pos - 1];
-					new_version[x_pos][y_pos - 1] = pixels[x_pos][y_pos];
-					new_version[x_pos][y_pos] = temp_4_swap;
-				}
+							if (
+								pixels[x_pos][y_pos].state_now == solid &&
+								pixels[x_pos][y_pos + 1].state_now == fluid &&
+								pixels[x_pos][y_pos + 1].density < pixels[x_pos][y_pos].density &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1))
+							{
+								position temp_4_swap = pixels[x_pos][y_pos + 1];
+								new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+								new_version[x_pos][y_pos] = temp_4_swap;
+							}
 
-				// Everything below this just moves it to relaveant position
-				/*
-				 * 0 X 0
-				 * 0 Y 0
-				 * 0 0 0
-				 */
-				else if (
-					pixels[x_pos][y_pos].state_now == solid &&
-					pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
-					y_pos != (LOGICAL_WINDOW_WIDTH - 1))
-				{
-					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+							/* Swaps
+							 * 0 0 0
+							 * 0 y 0
+							 * 0 X 0
+							 */
+							if (
+								pixels[x_pos][y_pos].state_now == solid &&
+								pixels[x_pos][y_pos - 1].state_now == fluid &&
+								pixels[x_pos][y_pos - 1].density > pixels[x_pos][y_pos].density &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1))
+							{
+								position temp_4_swap = pixels[x_pos][y_pos - 1];
+								new_version[x_pos][y_pos - 1] = pixels[x_pos][y_pos];
+								new_version[x_pos][y_pos] = temp_4_swap;
+							}
 
-					clear_data(x_pos, y_pos, pixels);
-				}
-				/*
-				 * 0 X 0
-				 * 0 0 Y
-				 * 0 0 0
-				 */
-				else if (
-					pixels[x_pos][y_pos].state_now == solid &&
-					pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
-					y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != (LOGICAL_WINDOW_WIDTH - 1))
-				{
-					new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
+							// Everything below this just moves it to relaveant position
+							/*
+							 * 0 X 0
+							 * 0 Y 0
+							 * 0 0 0
+							 */
+							else if (
+								pixels[x_pos][y_pos].state_now == solid &&
+								pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1))
+							{
+								new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
 
-					clear_data(x_pos, y_pos, pixels);
-				}
+								clear_data(x_pos, y_pos, pixels);
+								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[(x_pos / 8)][((y_pos + 1) / 8)] = true;
+							}
+							/*
+							 * 0 X 0
+							 * 0 0 Y
+							 * 0 0 0
+							 */
+							else if (
+								pixels[x_pos][y_pos].state_now == solid &&
+								pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != (LOGICAL_WINDOW_WIDTH - 1))
+							{
+								new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
 
-				/*
-				 * 0 X 0
-				 * Y 0 0
-				 * 0 0 0
-				 */
-				else if (
-					pixels[x_pos][y_pos].state_now == solid &&
-					pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
-					y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1)
-				{
-					new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
+								clear_data(x_pos, y_pos, pixels);
 
-					clear_data(x_pos, y_pos, pixels);
-				}
+								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[((x_pos + 1) / 8)][((y_pos + 1) / 8)] = true;
+							}
 
-				// Water oooo
-				/*
-				 * 0 X 0
-				 * 0 Y 0
-				 * 0 0 0
-				 */
-				else if (
-					pixels[x_pos][y_pos].state_now == fluid &&
-					pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
-					y_pos != (LOGICAL_WINDOW_WIDTH - 1))
-				{
-					new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
+							/*
+							 * 0 X 0
+							 * Y 0 0
+							 * 0 0 0
+							 */
+							else if (
+								pixels[x_pos][y_pos].state_now == solid &&
+								pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1)
+							{
+								new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
 
-					clear_data(x_pos, y_pos, pixels);
-				}
-				/*
-				 * 0 X 0
-				 * 0 0 Y
-				 * 0 0 0
-				 */
-				else if (
-					pixels[x_pos][y_pos].state_now == fluid &&
-					pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
-					y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != (LOGICAL_WINDOW_WIDTH - 1))
-				{
-					new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
+								clear_data(x_pos, y_pos, pixels);
 
-					clear_data(x_pos, y_pos, pixels);
-				}
-				/*
-				 * 0 X 0
-				 * Y 0 0
-				 * 0 0 0
-				 */
-				else if (
-					pixels[x_pos][y_pos].state_now == fluid &&
-					pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
-					y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1)
-				{
-					new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
+								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[((x_pos + 1) / 8)][((y_pos - 1) / 8)] = true;
+							}
 
-					clear_data(x_pos, y_pos, pixels);
-				}
-				/*
-				 * 0 X Y
-				 * 0 0 0
-				 * 0 0 0
-				 */
-				else if (
-					pixels[x_pos][y_pos].state_now == fluid &&
-					pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty &&
-					x_pos != (LOGICAL_WINDOW_WIDTH - 1))
-				{
-					new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
+							// Water oooo
+							/*
+							 * 0 X 0
+							 * 0 Y 0
+							 * 0 0 0
+							 */
+							else if (
+								pixels[x_pos][y_pos].state_now == fluid &&
+								pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1))
+							{
+								new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
 
-					clear_data(x_pos, y_pos, pixels);
-				}
+								clear_data(x_pos, y_pos, pixels);
 
-				/*
-				 * Y X 0
-				 * 0 0 0
-				 * 0 0 0
-				 */
-				else if (
-					pixels[x_pos][y_pos].state_now == fluid &&
-					pixels[x_pos - 1][y_pos].state_now == empty && new_version[x_pos - 1][y_pos].state_now == empty &&
-					x_pos != 1)
-				{
-					new_version[x_pos - 1][y_pos] = pixels[x_pos][y_pos];
+								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[((x_pos) / 8)][((y_pos + 1) / 8)] = true;
+							}
+							/*
+							 * 0 X 0
+							 * 0 0 Y
+							 * 0 0 0
+							 */
+							else if (
+								pixels[x_pos][y_pos].state_now == fluid &&
+								pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != (LOGICAL_WINDOW_WIDTH - 1))
+							{
+								new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
 
-					clear_data(x_pos, y_pos, pixels);
-				}
-				// If this pixel didnt experience any changes, then use the same data, simple
-				else if (pixels[x_pos][y_pos].state_now != empty && new_version[x_pos][y_pos].state_now == empty)
-				{
-					new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+								clear_data(x_pos, y_pos, pixels);
+
+								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[((x_pos + 1) / 8)][((y_pos + 1) / 8)] = true;
+							}
+							/*
+							 * 0 X 0
+							 * Y 0 0
+							 * 0 0 0
+							 */
+							else if (
+								pixels[x_pos][y_pos].state_now == fluid &&
+								pixels[x_pos - 1][y_pos + 1].state_now == empty && new_version[x_pos - 1][y_pos + 1].state_now == empty &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != 1)
+							{
+								new_version[x_pos - 1][y_pos + 1] = pixels[x_pos][y_pos];
+
+								clear_data(x_pos, y_pos, pixels);
+
+								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[((x_pos - 1) / 8)][((y_pos + 1) / 8)] = true;
+							}
+							/*
+							 * 0 X Y
+							 * 0 0 0
+							 * 0 0 0
+							 */
+							else if (
+								pixels[x_pos][y_pos].state_now == fluid &&
+								pixels[x_pos + 1][y_pos].state_now == empty && new_version[x_pos + 1][y_pos].state_now == empty &&
+								x_pos != (LOGICAL_WINDOW_WIDTH - 1))
+							{
+								new_version[x_pos + 1][y_pos] = pixels[x_pos][y_pos];
+
+								clear_data(x_pos, y_pos, pixels);
+
+								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[((x_pos + 1) / 8)][((y_pos) / 8)] = true;
+							}
+
+							/*
+							 * Y X 0
+							 * 0 0 0
+							 * 0 0 0
+							 */
+							else if (
+								pixels[x_pos][y_pos].state_now == fluid &&
+								pixels[x_pos - 1][y_pos].state_now == empty && new_version[x_pos - 1][y_pos].state_now == empty &&
+								x_pos != 1)
+							{
+								new_version[x_pos - 1][y_pos] = pixels[x_pos][y_pos];
+
+								clear_data(x_pos, y_pos, pixels);
+
+								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[((x_pos - 1) / 8)][((y_pos) / 8)] = true;
+							}
+							// If this pixel didnt experience any changes, then use the same data, simple
+							else if (pixels[x_pos][y_pos].state_now != empty && new_version[x_pos][y_pos].state_now == empty)
+							{
+								new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+								un_changed++;
+							}
+						}
+					}
+
+					if (un_changed == 64)
+					{
+						chunk_checker[x_chunk][y_chunk] = false;
+					}
+					mtx.unlock();
 				}
 			}
 		}
+
 		// Clears data, need to replace with memcpy
 		// TODO: Replace with memcpy
 		// memcpy(&new_version, &pixels, sizeof(&pixels));
 		// std::cout <<
 		// Just for memcpy debugging
 		// std::cout << "Memory addy " << &new_version << ' ' << &pixels << '\n';
+		mtx.lock();
+
 		for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
 		{
 			for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
@@ -214,18 +268,6 @@ namespace Physics
 		}
 	}
 
-	void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
-	{
-		pixels[x_pos][y_pos].r = 0;
-		pixels[x_pos][y_pos].g = 0;
-		pixels[x_pos][y_pos].b = 0;
-		pixels[x_pos][y_pos].a = 0;
-		pixels[x_pos][y_pos].state_now = empty;
-		pixels[x_pos][y_pos].temperature = 0;
-		pixels[x_pos][y_pos].pressure = 0;
-		pixels[x_pos][y_pos].density = 0;
-	}
-
 	/*
 	Gotta eat every bagguete, gotta eat your grains
 	Oranges too
@@ -241,16 +283,19 @@ namespace Physics
 		{
 			auto start_time = Clock::now();
 
-			sand_and_water(pixels, new_version);
+			// if(recheck)
+			// {
+			// chunk_checker.fill(true);
+			// array::fill
+			// chunk_checker.assign(chunk_checker.size(), false);
+			memset(chunk_checker, 1, sizeof(chunk_checker));
 
-			/*
-			 * FIXME My I better come back and take out the fluid related code from sand and move that into it's own function so there aren't
-			 * a ton of random eqautions just thrown everywehre and anywhere they fit
-			 */
-			// water_sim(pixels, new_version);
+			//}
+			sand_and_water(pixels, new_version);
 
 			auto end_time = Clock::now();
 
+			// TODO: Change this over to a proper delay thingy
 			if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
 			{
 				SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000);

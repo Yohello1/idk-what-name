@@ -9,6 +9,7 @@
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 
+
 // A crap ton of arrays to deal with everything
 
 // Simulated array everything is being fed
@@ -71,7 +72,7 @@ int main()
     Conductor.RegisterComponent<entites::rgba_colour>();
     auto movingBoxes = Conductor.RegisterSystem<Moving_Day>();
 	box_signature.set(Conductor.GetComponentType<entites::sqaure_box>());
-	std::vector<entites::Entity> entities(1024);
+	std::vector<entites::Entity> entities(0);
     // Making all the entitites
     for (auto& entity : entities)
 	{

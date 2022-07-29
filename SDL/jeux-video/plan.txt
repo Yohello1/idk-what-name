@@ -37,7 +37,7 @@
 - [0/2] optimisation
   - [ ] Chunk simulation
   - [ ] Multi threading (Physics)
-  - [ ] Rewrite SDL code in uh, opengl (I dont have a choice)
+  - [ ] Rewrite SDL code in uh, opengl (I dont have a choic
 - [ ] Import/Export maps
 - [ ] Write a proper input system
 * Bugs
