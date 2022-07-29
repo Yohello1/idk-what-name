@@ -56,6 +56,7 @@ namespace Input_Large
                 // Access to data abt the button pressed,
                 // Inside that function it changes its state
                 mouse_Press(event->button);
+                recheck = true;
                 break;
             case SDL_MOUSEBUTTONUP:
                 // Refer to figure 2
@@ -95,6 +96,8 @@ namespace Input_Large
             // Figure 1
             if (left_down == true && shift == false)
             {
+                                recheck = true;
+
                 // Fetch mouse state, or cords
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 #ifdef INPUT_DEBUG

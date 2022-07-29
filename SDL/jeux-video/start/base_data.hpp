@@ -17,15 +17,20 @@
 #include <unordered_map>
 #include <set>
 #include <vector> 
+#include <array>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
-#define LOGICAL_WINDOW_WIDTH 1024
+#define LOGICAL_WINDOW_WIDTH 256
 #define ACTUAL_WINDOW_WIDTH 1024
 // #define INPUT_DEBUG 
 
 typedef std::chrono::high_resolution_clock Clock;
 std::atomic<bool> quit_now;
+
+// TODO: change the input system to properly check this stuff
+std::atomic<bool> recheck;
+
 // time
 unsigned int current_time = (unsigned int)time(NULL);
 // pointers to these things
