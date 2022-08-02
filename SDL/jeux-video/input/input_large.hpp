@@ -96,8 +96,8 @@ namespace Input_Large
             // Figure 1
             if (left_down == true && shift == false)
             {
-                                recheck = true;
-
+                recheck = true;
+                std::cout << recheck << "Status\n";
                 // Fetch mouse state, or cords
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 #ifdef INPUT_DEBUG
