@@ -8,8 +8,7 @@
 #include "ui/ui.hpp"
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
-
-
+#include "debug/debug.hpp"
 // A crap ton of arrays to deal with everything
 
 // Simulated array everything is being fed
@@ -64,34 +63,33 @@ int main()
     colour_to_change2.b = 124;
     colour_to_change2.a = 255;
 
-// All just for entities testing lol
+    // All just for entities testing lol
     Conductor.Init();
     entites::Signature box_signature;
     Conductor.RegisterComponent<entites::sqaure_box>();
     Conductor.RegisterComponent<entites::direction>();
     Conductor.RegisterComponent<entites::rgba_colour>();
     auto movingBoxes = Conductor.RegisterSystem<Moving_Day>();
-	box_signature.set(Conductor.GetComponentType<entites::sqaure_box>());
-	std::vector<entites::Entity> entities(0);
+    box_signature.set(Conductor.GetComponentType<entites::sqaure_box>());
+    std::vector<entites::Entity> entities(0);
     // Making all the entitites
-    for (auto& entity : entities)
-	{
-		entity = Conductor.CreateEntity();
+    for (auto &entity : entities)
+    {
+        entity = Conductor.CreateEntity();
 
-		Conductor.AddComponent( 
-			entity,
-			entites::sqaure_box{});
+        Conductor.AddComponent(
+            entity,
+            entites::sqaure_box{});
 
-		Conductor.AddComponent(
-			entity,
-			entites::direction{});
+        Conductor.AddComponent(
+            entity,
+            entites::direction{});
 
-		Conductor.AddComponent(
-			entity,
-			entites::rgba_colour{});
-	}
-	movingBoxes->Init(); 
-
+        Conductor.AddComponent(
+            entity,
+            entites::rgba_colour{});
+    }
+    movingBoxes->Init();
 
     ui::init_font_all("ui/font/Hack-Regular.ttf");
 
@@ -108,7 +106,6 @@ int main()
     std::thread physics(Physics::simulate, pixels, new_version);
     // int frame_count = 0;
 
-
     while (!quit_now)
     {
         // std::cout << "Real addy " << &new_version  << ' ' << &pixels << '\n';
@@ -123,11 +120,14 @@ int main()
         ui_elements[0]->draw(render);
         ui_elements[1]->draw(render);
         // std::cout << "Done drawing words, drawing sqaures" << '\n';
-	    movingBoxes->Update(render);
-        // std::cout << "Done drawing sqaures" << '\n';
+        movingBoxes->Update(render);
+        Debug::chunk_update_status(render, Physics::chunk_checker);
 
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
+
+        // just want to test this out, remove it later
+        // std::cout << "Status" << Physics::chunk_checker[1][0];
     }
     physics.join();
     std::cout << "ENDED" << '\n';

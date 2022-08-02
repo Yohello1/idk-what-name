@@ -15,12 +15,27 @@ namespace Physics
 		pixels[x_pos][y_pos].pressure = 0;
 		pixels[x_pos][y_pos].density = 0;
 	}
+
+	// TODO: Make chunk copier
+
+	void chunk_copier(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], u_int16_t x_chunk, u_int16_t y_chunk)
+	{
+		// TODO: Switch this to memcpy
+		for (int y_pos = y_chunk * 8; y_pos > (y_chunk * 8 - 8); y_pos--)
+		{
+			for (int x_pos = (x_chunk * 8 - 8); x_pos < x_chunk * 8; x_pos++)
+			{
+				new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+			}
+		}
+	}
+
 	void sand_and_water(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 	{
 
-		for (int x_chunk = 0; x_chunk < (LOGICAL_WINDOW_WIDTH / 8) - 1; x_chunk++)
+		for (int x_chunk = 0; x_chunk < (LOGICAL_WINDOW_WIDTH / 8); x_chunk++)
 		{
-			for (int y_chunk = 0; y_chunk < (LOGICAL_WINDOW_WIDTH / 8) - 1; y_chunk++)
+			for (int y_chunk = 0; y_chunk < (LOGICAL_WINDOW_WIDTH / 8); y_chunk++)
 			{
 				if (chunk_checker[x_chunk][y_chunk] == true)
 				{
@@ -30,7 +45,7 @@ namespace Physics
 					mtx.lock();
 					for (int y_pos = y_chunk * 8; y_pos > (y_chunk * 8 - 8); y_pos--)
 					{
-						for (int x_pos = (x_chunk * 8 - 8); x_pos < x_chunk * 8; x_pos++)
+						for (int x_pos = x_chunk * 8; x_pos < x_chunk * 8 +8; x_pos++)
 						{
 							// Note: X is current one, y is the one being checked
 							/* Swaps
@@ -80,7 +95,7 @@ namespace Physics
 								new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
 
 								clear_data(x_pos, y_pos, pixels);
-								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								// chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
 								chunk_checker[(x_pos / 8)][((y_pos + 1) / 8)] = true;
 							}
 							/*
@@ -97,7 +112,7 @@ namespace Physics
 
 								clear_data(x_pos, y_pos, pixels);
 
-								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								// chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
 								chunk_checker[((x_pos + 1) / 8)][((y_pos + 1) / 8)] = true;
 							}
 
@@ -115,8 +130,8 @@ namespace Physics
 
 								clear_data(x_pos, y_pos, pixels);
 
-								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
-								chunk_checker[((x_pos + 1) / 8)][((y_pos - 1) / 8)] = true;
+								// chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								chunk_checker[((x_pos - 1) / 8)][((y_pos + 1) / 8)] = true;
 							}
 
 							// Water oooo
@@ -134,7 +149,7 @@ namespace Physics
 
 								clear_data(x_pos, y_pos, pixels);
 
-								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								// chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
 								chunk_checker[((x_pos) / 8)][((y_pos + 1) / 8)] = true;
 							}
 							/*
@@ -151,7 +166,7 @@ namespace Physics
 
 								clear_data(x_pos, y_pos, pixels);
 
-								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								// chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
 								chunk_checker[((x_pos + 1) / 8)][((y_pos + 1) / 8)] = true;
 							}
 							/*
@@ -168,7 +183,7 @@ namespace Physics
 
 								clear_data(x_pos, y_pos, pixels);
 
-								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								// chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
 								chunk_checker[((x_pos - 1) / 8)][((y_pos + 1) / 8)] = true;
 							}
 							/*
@@ -185,7 +200,7 @@ namespace Physics
 
 								clear_data(x_pos, y_pos, pixels);
 
-								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								// chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
 								chunk_checker[((x_pos + 1) / 8)][((y_pos) / 8)] = true;
 							}
 
@@ -203,7 +218,7 @@ namespace Physics
 
 								clear_data(x_pos, y_pos, pixels);
 
-								chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
+								// chunk_checker[(x_pos / 8)][(y_pos / 8)] = false;
 								chunk_checker[((x_pos - 1) / 8)][((y_pos) / 8)] = true;
 							}
 							// If this pixel didnt experience any changes, then use the same data, simple
@@ -218,8 +233,14 @@ namespace Physics
 					if (un_changed == 64)
 					{
 						chunk_checker[x_chunk][y_chunk] = false;
+						std::cout << "Empty chunk" << '\n';
 					}
 					mtx.unlock();
+				}
+				else if(chunk_checker[x_chunk][y_chunk] == false)
+				{
+					chunk_copier(pixels, new_version, x_chunk, y_chunk);
+					std::cout << "Being copied" << '\n';
 				}
 			}
 		}
@@ -283,14 +304,14 @@ namespace Physics
 		{
 			auto start_time = Clock::now();
 
-			// if(recheck)
-			// {
-			// chunk_checker.fill(true);
-			// array::fill
-			// chunk_checker.assign(chunk_checker.size(), false);
-			memset(chunk_checker, 1, sizeof(chunk_checker));
-
-			//}
+			if (recheck == true)
+			{
+				// chunk_checker.fill(true);
+				// array::fill
+				// chunk_checker.assign(chunk_checker.size(), false);
+				memset(chunk_checker, 1, sizeof(chunk_checker));
+				recheck = false;
+			}
 			sand_and_water(pixels, new_version);
 
 			auto end_time = Clock::now();
