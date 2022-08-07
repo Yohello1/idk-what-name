@@ -37,8 +37,8 @@ int main()
     init::array_clean_start(pixels);
     const int actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
     std::cout << "Thingy started now" << '\n';
-    Terrain::Development Terrain_gen;
-    Terrain_gen.Development::generate_terrain(0, LOGICAL_WINDOW_WIDTH / 2, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH, 8, pixels);
+    // Terrain::Development Terrain_gen;
+    // Terrain_gen.Development::generate_terrain(0, LOGICAL_WINDOW_WIDTH / 2, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH, 8, pixels);
 
     cord_2d box_verts[2];
     box_verts[0].x_pos = 0;
