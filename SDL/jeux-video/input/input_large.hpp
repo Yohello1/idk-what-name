@@ -91,6 +91,7 @@ namespace Input_Large
             default:
                 break;
             }
+                recheck = true;
 
             // This is all scuffed, im gonna make a proper way to look for inputs... later
             // Figure 1
@@ -147,7 +148,7 @@ namespace Input_Large
                          x_pos++)
                     {
                         usr_input[x_pos][y_pos].r = 153;
-                        usr_input[x_pos][y_pos].g = 0;
+                        usr_input[x_pos][y_pos].g = 80;
                         usr_input[x_pos][y_pos].b = 0;
                         usr_input[x_pos][y_pos].a = 255;
                         usr_input[x_pos][y_pos].state_now = solid;

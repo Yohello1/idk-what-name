@@ -1,7 +1,7 @@
 namespace Physics
 {
 	bool chunk_checker[LOGICAL_WINDOW_WIDTH / 8][LOGICAL_WINDOW_WIDTH / 8];
-	bool chunk_empty[LOGICAL_WINDOW_WIDTH / 8][LOGICAL_WINDOW_WIDTH / 8];
+	// bool chunk_empty[LOGICAL_WINDOW_WIDTH / 8][LOGICAL_WINDOW_WIDTH / 8];
 	// No clue what this is for lol
 	std::mutex mtx;
 	void clear_data(uint16_t x_pos, uint16_t y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
@@ -34,7 +34,7 @@ namespace Physics
 	{
 		for (int y_chunk = (LOGICAL_WINDOW_WIDTH / 8); y_chunk > 0; y_chunk--)
 		{
-			for (int x_chunk = 0; x_chunk < (LOGICAL_WINDOW_WIDTH / 8); x_chunk++)
+			for (int x_chunk = (LOGICAL_WINDOW_WIDTH / 8); x_chunk > 0; x_chunk--)
 			{
 				if (chunk_checker[x_chunk][y_chunk] == true)
 				{
@@ -59,6 +59,7 @@ namespace Physics
 								pixels[x_pos][y_pos + 1].density < pixels[x_pos][y_pos].density &&
 								y_pos != (LOGICAL_WINDOW_WIDTH - 1))
 							{
+								// TODO: Remove the first line here, can just move it down
 								position temp_4_swap = pixels[x_pos][y_pos + 1];
 								new_version[x_pos][y_pos + 1] = pixels[x_pos][y_pos];
 								new_version[x_pos][y_pos] = temp_4_swap;
@@ -86,6 +87,7 @@ namespace Physics
 							 * 0 Y 0
 							 * 0 0 0
 							 */
+
 							else if (
 								pixels[x_pos][y_pos].state_now == solid &&
 								pixels[x_pos][y_pos + 1].state_now == empty && new_version[x_pos][y_pos + 1].state_now == empty &&
@@ -316,6 +318,9 @@ namespace Physics
 				memset(chunk_checker, 1, sizeof(chunk_checker));
 				recheck = false;
 			}
+
+			// memset(chunk_checker, 1, sizeof(chunk_checker));
+
 			sand_and_water(pixels, new_version);
 
 			auto end_time = Clock::now();
@@ -323,8 +328,8 @@ namespace Physics
 			// TODO: Change this over to a proper delay thingy
 			if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
 			{
-				SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000);
-				// std::cout << "NO" << '\n';
+				// SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000);
+				std::this_thread::sleep_for(std::chrono::nanoseconds((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count())));
 			}
 		}
 
