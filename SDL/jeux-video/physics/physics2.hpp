@@ -1,3 +1,14 @@
+/*
+By Yohwllooooo
+
+Created: 2022-08-20
+Last modified: 2022-08-20
+
+Modifications: 
+Creating the file, and adding all but simulation function
+Creating comments to explain search/simulation thing
+*/
+
 namespace
 {
     // Remember what chunks need to checked, and which ones can be skipped
@@ -97,4 +108,50 @@ namespace
     // I cant even hold one w hao at this point, what hope do I have to hold it with other people
     // Dam, Im a horrible person to be a friend with, I cant hold a convo, nor do I really have much to talk abt
     // Why would anyone be friends with me???? At this point the only thing I can think of is cause they want smth
+
+    // So we start with a grid of 256x256
+    // Simulating all of it is hard, and takes a long time
+    // So we divide it into 8x8 chunks to speed it up
+    // The original grid is split into a 32x32 grid of chunks
+    // I should learn chinese
+    // Of course chunk 0x0, and 32x32 exist
+    // To get around this when doing loops to do checks we do
+    // s = start point
+    // t = Given
+    // c = current point
+    // - OR |= border
+    // + = corner
+    /*
+    +--------+
+    |t       |
+    |        |
+    |        |
+    |        |
+    |        |
+    |        |
+    |       s|
+    +--------+
+    +--------+
+    |t       |
+    |        |
+    |        |
+    |        |
+    |        |
+    |        |
+    |      cs|
+    +--------+
+    |t       |
+    |        |
+    |        |
+    |        |
+    |        |
+    |        |
+    |     c s|
+    +--------+
+    etc etc
+    */
+    // Using chunk * 8 we get it's min value, or the bottom right corner's value
+    // From there, we just go to the right and to the left
+    // To find the target point we use ((chunk*8)-8)
+
 }
