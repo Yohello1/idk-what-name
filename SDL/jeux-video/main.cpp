@@ -2,6 +2,7 @@
 #include "ui/stb_truetype.h"
 #include "math/vector_math.hpp"
 #include "physics/physics.hpp"
+#include "physics/physics2.hpp"
 #include "ui/render.hpp"
 #include "input/input_large.hpp"
 #include "generation/terain.hpp"
