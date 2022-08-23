@@ -1,7 +1,7 @@
 #include "start/base_data.hpp"
 #include "ui/stb_truetype.h"
 #include "math/vector_math.hpp"
-#include "physics/physics.hpp"
+// #include "physics/physics.hpp"
 #include "physics/physics2.hpp"
 #include "ui/render.hpp"
 #include "input/input_large.hpp"
@@ -12,6 +12,8 @@
 #include "debug/debug.hpp"
 // A crap ton of arrays to deal with everything
 
+
+
 // Simulated array everything is being fed
 cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
@@ -20,7 +22,7 @@ struct colour user_interface[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 // USR input and changes, TODO SWITCH TO EQAUTION
 cell usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-struct position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+cell render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void excecution_finished();
 void draw_box(cord_2d start, cord_2d end);
 
@@ -28,6 +30,7 @@ std::vector<ui::single_ui_element *> ui_elements;
 unsigned int currenttime = (unsigned int)time(NULL);
 std::mutex mtx2;
 entites::Coordinator Conductor;
+const int actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
 
 int main()
 {
@@ -36,7 +39,6 @@ int main()
     std::cout << "Started, allocating memory" << '\n';
 
     init::array_clean_start(pixels);
-    const int actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
     std::cout << "Thingy started now" << '\n';
     // Terrain::Development Terrain_gen;
     // Terrain_gen.Development::generate_terrain(0, LOGICAL_WINDOW_WIDTH / 2, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH, 8, pixels);
@@ -101,7 +103,7 @@ int main()
     std::cout << "Done ui" << '\n';
     std::cout << "Real addy " << &new_version << ' ' << &pixels << '\n';
 
-    // std::thread physics(Physics::simulate, pixels, new_version);
+    std::thread physics(physics::simulate, pixels, new_version);
 
 
     while (!quit_now)
@@ -116,13 +118,13 @@ int main()
         ui_elements[0]->draw(render);
         ui_elements[1]->draw(render);
         movingBoxes->Update(render);
-        Debug::chunk_update_status(render, Physics::chunk_checker);
+        // Debug::chunk_update_status(render, Physics::chunk_checker);
 
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
 
     }
-    // physics.join();
+    physics.join();
     std::cout << "ENDED" << '\n';
     excecution_finished();
 }

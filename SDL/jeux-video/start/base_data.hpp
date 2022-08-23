@@ -19,12 +19,15 @@
 #include <vector>
 #include <array>
 #include <boost/algorithm/clamp.hpp>
+#include <algorithm> 
+#include <SDL2/SDL.h>
+
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
 #define LOGICAL_WINDOW_WIDTH 256
 #define ACTUAL_WINDOW_WIDTH 1024
-// #define INPUT_DEBUG
+#define INPUT_DEBUG
 
 typedef std::chrono::high_resolution_clock Clock;
 std::atomic<bool> quit_now;
@@ -63,9 +66,9 @@ class cell
 {
 public:
     uint8_t r, g, b, a;
-    uint8_t pressure;
-    uint8_t density;
-    uint8_t temperature;
+    float pressure;
+    float density;
+    float temperature;
     // Flow is 0 for solid stuff?
     uint8_t flow;
     bool inert = false;
@@ -121,6 +124,7 @@ namespace init
                 pixels[x_pos][y_pos].pressure = 0;
                 pixels[x_pos][y_pos].temperature = 0;
                 pixels[x_pos][y_pos].flow = 0;
+                pixels[x_pos][y_pos].inert = false;
             }
         }
     }

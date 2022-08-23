@@ -9,7 +9,7 @@ Creating the file, and adding all but simulation function
 Creating comments to explain search/simulation thing
 */
 
-namespace physics2
+namespace physics
 {
     // Remember what chunks need to checked, and which ones can be skipped
     bool chunk_checker[LOGICAL_WINDOW_WIDTH / 8][LOGICAL_WINDOW_WIDTH / 8];
@@ -73,8 +73,6 @@ namespace physics2
             }
         }
     }
-
-
 
     // I think I should also try and improve my friendship with my irl friend group?
     // Who am I kidding
@@ -159,9 +157,9 @@ namespace physics2
         //     }
         // }
 
-        for (int y_pos = LOGICAL_WINDOW_WIDTH - 1; y_pos > -1; y_pos--)
+        for (int y_pos = LOGICAL_WINDOW_WIDTH - 1; y_pos > 0; y_pos--)
         {
-            for (int x_pos = LOGICAL_WINDOW_WIDTH - 1; x_pos > -1; x_pos--)
+            for (int x_pos = LOGICAL_WINDOW_WIDTH - 1; x_pos > 0; x_pos--)
             {
                 // TODO: When this is final, just use less declerations and get right to the point
                 //  There is a faster way to do it, it's just messier and more bug prone when
@@ -172,30 +170,41 @@ namespace physics2
                 update_cord[2].y_pos = y_pos;
                 update_cord[3].y_pos = y_pos;
 
-                update_cord[0].y_pos = std::min((y_pos - 1), LOGICAL_WINDOW_WIDTH);
-                update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH);
-                update_cord[2].x_pos = std::min((x_pos - 1), LOGICAL_WINDOW_WIDTH);
-                update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH);
+                update_cord[0].y_pos = std::min((y_pos - 1), LOGICAL_WINDOW_WIDTH - 1);
+                update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
+                update_cord[2].x_pos = std::min((x_pos - 1), LOGICAL_WINDOW_WIDTH - 1);
+                update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
+
+                // std::cout << '(' << x_pos << ',' << y_pos << ')' << '\n';
 
                 for (int i = 0; i < 4; i++)
                 {
-                    if (!pixels[update_cord[i].x_pos][update_cord[i].y_pos].inert && pixels[update_cord[i].x_pos][update_cord[i].y_pos].flow > 0)
+                    if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].inert != true && pixels[update_cord[i].x_pos][update_cord[i].y_pos].flow > 0)
                     {
+                        // std::cout << "Running" << '\n';
                         // Get the difference of pressure
                         float DPress = pixels[x_pos][y_pos].pressure - pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure;
                         // Find some way so that I can do pressure*DPress*neigh.pressure/neigh.pressure
                         // But find a way to deal with being divided by 0
                         float Flow = pixels[x_pos][y_pos].pressure * DPress;
-                        //TODO: Change this to std::clamp when it starts compiling?
+                        // TODO: Change this to std::clamp when it starts compiling?
                         Flow = boost::algorithm::clamp(Flow, pixels[x_pos][y_pos].pressure / 6.0f, (-1 * pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure) / 6.0f);
                         new_version[x_pos][y_pos].pressure -= Flow;
-                        pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure += Flow;
+                        new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure += Flow;
+                        // std::cout << "Change" << Flow << '\n';
                     }
                 }
+                std::cout << new_version[x_pos][y_pos].pressure << ',';
             }
+            std::cout << '\n';
         }
-    }
+        std::cout << '\n';
+        std::cout << '\n';
 
+        // pixels.std::swap (new_version);
+        std::swap(pixels, new_version);
+        // std::memcpy(pixels, new_version, sizeof(new_version));
+    }
 
     // Must be final function
     void simulate(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])

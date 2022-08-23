@@ -4,7 +4,7 @@ class Moving_Day : public entites::System
 {
 public:
     void Init();
-    void Update(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
+    void Update(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
 };
 
 void Moving_Day::Init()
@@ -42,7 +42,7 @@ void Moving_Day::Init()
     }
 }
 
-void Moving_Day::Update(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+void Moving_Day::Update(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
     for (auto const &entity : mEntities)
     {

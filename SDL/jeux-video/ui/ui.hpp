@@ -38,7 +38,7 @@ namespace ui
     // java classes > c++ classes
     // BASICALLY, "makes a destructor", and make a virtual draw function
         virtual ~single_ui_element() = default;
-        virtual void draw(position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+        virtual void draw(cell render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
         {
             std::cout << "Wrong function" << '\n';
         }
@@ -71,7 +71,7 @@ namespace ui
             box_colour = colour_new;
         }
 
-        void draw(position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+        void draw(cell render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
         {
             // std::cout << "bagguette" << '\n';
             for (int x_pos = lower_x; x_pos < higher_x; x_pos++)
@@ -134,7 +134,7 @@ namespace ui
             std::cout << "End text constructor thingy" << '\n';
         }
 
-        void draw(position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+        void draw(cell render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
         {
 
             while (text_2_render[ch])
