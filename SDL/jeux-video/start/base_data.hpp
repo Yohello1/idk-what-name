@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cstring>
-#include <cstdio> 
+#include <cstdio>
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <iostream>
@@ -16,14 +16,14 @@
 #include <queue>
 #include <unordered_map>
 #include <set>
-#include <vector> 
+#include <vector>
 #include <array>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
 #define LOGICAL_WINDOW_WIDTH 256
 #define ACTUAL_WINDOW_WIDTH 1024
-// #define INPUT_DEBUG 
+// #define INPUT_DEBUG
 
 typedef std::chrono::high_resolution_clock Clock;
 std::atomic<bool> quit_now;
@@ -45,7 +45,7 @@ enum pixel_state
 {
     empty,
     fluid,
-    solid, 
+    solid,
     fixed_pos
 };
 struct position
@@ -58,6 +58,27 @@ struct position
     uint16_t temperature;
 };
 
+class cell
+{
+public:
+    uint8_t r, g, b, a;
+    uint8_t pressure;
+    uint8_t density;
+    uint8_t temperature;
+    // Flow is 0 for solid stuff?
+    uint8_t flow;
+    bool inert = false;
+
+    // Function to return whether it can be interacted with or not
+    // I dunno why Im making this a function lmao
+    bool is_inert()
+    {
+        return inert;
+    }
+private:
+protected:
+};
+
 struct cord_2d
 {
     u_int16_t x_pos;
@@ -68,8 +89,6 @@ struct colour
 {
     uint8_t r, g, b, a;
 };
-
-
 
 namespace init
 {
@@ -104,4 +123,3 @@ namespace init
         }
     }
 }
-

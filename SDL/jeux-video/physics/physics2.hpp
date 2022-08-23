@@ -4,12 +4,12 @@ By Yohwllooooo
 Created: 2022-08-20
 Last modified: 2022-08-20
 
-Modifications: 
+Modifications:
 Creating the file, and adding all but simulation function
 Creating comments to explain search/simulation thing
 */
 
-namespace
+namespace physics2
 {
     // Remember what chunks need to checked, and which ones can be skipped
     bool chunk_checker[LOGICAL_WINDOW_WIDTH / 8][LOGICAL_WINDOW_WIDTH / 8];
@@ -78,9 +78,9 @@ namespace
 
             basic_cellular_automata(pixels, new_version);
             end_time = Clock::now();
-            
+
             // If the frame took less than what ever 1/60th of a second is, then wait for that long
-            // Or really just sleep for that long 
+            // Or really just sleep for that long
             if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
             {
                 std::this_thread::sleep_for(std::chrono::nanoseconds((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count())));
@@ -153,5 +153,58 @@ namespace
     // Using chunk * 8 we get it's min value, or the bottom right corner's value
     // From there, we just go to the right and to the left
     // To find the target point we use ((chunk*8)-8)
+
+    // So many people I grew up with as role models, and saw like weekly have grown up
+    // They've all moved, gotten jobs, homes, and such
+    // Next thing I know, they'll have kids, and companies lmao
+
+    // TODO: Use an Octree to store the data
+    //  TODO: Turn this into a sort of queue, which mutliple threads can work on
+    void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+    {
+        // Itterate through chunks
+        // for (int y_chunk = (LOGICAL_WINDOW_WIDTH / 8); y_chunk > 0; y_chunk--)
+        // {
+        //     for (int x_chunk = (LOGICAL_WINDOW_WIDTH / 8); x_chunk > 0; x_chunk--)
+        //     {
+
+        //     }
+        // }
+
+        for (int y_pos = LOGICAL_WINDOW_WIDTH - 1; y_pos > -1; y_pos--)
+        {
+            for (int x_pos = LOGICAL_WINDOW_WIDTH - 1; x_pos > -1; x_pos--)
+            {
+                // TODO: When this is final, just use less declerations and get right to the point
+                //  There is a faster way to do it, it's just messier and more bug prone when
+                //  Being developed
+                cord_2d update_cord[4];
+                update_cord[0].x_pos = x_pos;
+                update_cord[1].x_pos = x_pos;
+                update_cord[2].y_pos = y_pos;
+                update_cord[3].y_pos = y_pos;
+
+                update_cord[0].y_pos = std::min((y_pos - 1), LOGICAL_WINDOW_WIDTH);
+                update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH);
+                update_cord[2].x_pos = std::min((x_pos - 1), LOGICAL_WINDOW_WIDTH);
+                update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH);
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if (!pixels[update_cord[i].x_pos][update_cord[i].y_pos].inert && pixels[update_cord[i].x_pos][update_cord[i].y_pos].flow > 0)
+                    {
+                        // Get the difference of pressure
+                        float DPress = pixels[x_pos][y_pos].pressure - pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure;
+                        // Find some way so that I can do pressure*DPress*neigh.pressure/neigh.pressure
+                        // But find a way to deal with being divided by 0
+                        float Flow = pixels[x_pos][y_pos].pressure * DPress;
+                        Flow = std::clamp(Flow, pixel[x_pos][y_pos].pressure / 6.0f, (-1 * pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure) / 6.0f);
+                        new_version[x_pos][y_pos].pressure -= Flow;
+                        pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure += Flow;
+                    }
+                }
+            }
+        }
+    }
 
 }

@@ -155,6 +155,7 @@ namespace ui
                 // Actually encode it?
                 stbtt_MakeCodepointBitmapSubpixel(&font, &screen[baseline + y0][(int)xpos + x0], x1 - x0, y1 - y0, LOGICAL_WINDOW_WIDTH, scale, scale, x_shift, 0, text_2_render[ch]);
 
+                // fuck if I know
                 xpos += (advance * scale);
                 if (text_2_render[ch + 1])
                 {
