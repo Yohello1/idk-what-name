@@ -16,18 +16,28 @@ namespace physics2
     // A mutex lmfao
     std::mutex mtx;
 
-    // Clears the data of a pixel
-    void clear_data(position the_pixel)
-    {
-        memset(the_pixel, 0, sizeof(the_pixel));
-    }
+    // // Clears the data of a pixel
+    // NOTE: DOES NOT WORK
+    // void clear_data(cell the_pixel)
+    // {
+    //     memset(the_pixel, 0, sizeof(the_pixel));
+    // }
 
-    void chunk_copier(position pixels[LOGICAL_WINDOW_WINDOW][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WINDOW][LOGICAL_WINDOW_WIDTH], u_int16_t x_chunk, u_int16_t y_chunk)
+    void chunk_copier(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], u_int16_t x_chunk, u_int16_t y_chunk)
     {
+
+        // for (int y_pos = y_chunk * 8; y_pos > (y_chunk * 8 - 8); y_pos--)
+        // {
+        //     // Cannot memcpy classes
+        //     memcpy(new_version[x_chunk * 8][y_pos], pixels[x_chunk * 8][y_pos], sizeof(new_version[0][0])*8);
+        // }
 
         for (int y_pos = y_chunk * 8; y_pos > (y_chunk * 8 - 8); y_pos--)
         {
-            memcpy(new_version[x_chunk * 8][y_pos], pixels[x_chunk * 8][y_pos], sizeof(new_version[0][0] * 8));
+            for (int x_pos = x_chunk * 8; x_pos > (x_chunk * 8 - 8); x_pos--)
+            {
+                new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+            }
         }
     }
     // Hao, Mandy, and Chloe are nice tbh
@@ -42,7 +52,7 @@ namespace physics2
     /*
     Deprecated, not to be used
     */
-    void draw_box_white_sand(cord_2d start, cord_2d end, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+    void draw_box_white_water(cord_2d start, cord_2d end, cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
     {
         // The location is relative to where it is on the screen/window :P
         // That made no sense
@@ -55,38 +65,16 @@ namespace physics2
         {
             for (int y_pos = higher_y; y_pos < lower_y; y_pos++)
             {
-                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].a = 255;
-                pixels[x_pos][y_pos].state_now = solid;
+                pixels[x_pos][y_pos].r = 212;
+                pixels[x_pos][y_pos].g = 241;
+                pixels[x_pos][y_pos].b = 249;
+                pixels[x_pos][y_pos].a = 255;
+                pixels[x_pos][y_pos].pressure = 10;
             }
         }
     }
 
-    void simulate(positions pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
-    {
-        // Decleration of the time variables
-        auto start_time, end_time;
-        while (!quit_now)
-        {
-            start_time = Clock::now();
 
-            // TODO: Remove this, and find alternative
-            if (recheck == true)
-            {
-                memset(chunk_checker, 1, sizeof(chunk_checker));
-                recheck = false;
-            }
-
-            basic_cellular_automata(pixels, new_version);
-            end_time = Clock::now();
-
-            // If the frame took less than what ever 1/60th of a second is, then wait for that long
-            // Or really just sleep for that long
-            if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
-            {
-                std::this_thread::sleep_for(std::chrono::nanoseconds((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count())));
-            }
-        }
-    }
 
     // I think I should also try and improve my friendship with my irl friend group?
     // Who am I kidding
@@ -160,7 +148,7 @@ namespace physics2
 
     // TODO: Use an Octree to store the data
     //  TODO: Turn this into a sort of queue, which mutliple threads can work on
-    void simulate(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+    void cellular_automata(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
     {
         // Itterate through chunks
         // for (int y_chunk = (LOGICAL_WINDOW_WIDTH / 8); y_chunk > 0; y_chunk--)
@@ -198,7 +186,8 @@ namespace physics2
                         // Find some way so that I can do pressure*DPress*neigh.pressure/neigh.pressure
                         // But find a way to deal with being divided by 0
                         float Flow = pixels[x_pos][y_pos].pressure * DPress;
-                        Flow = std::clamp(Flow, pixel[x_pos][y_pos].pressure / 6.0f, (-1 * pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure) / 6.0f);
+                        //TODO: Change this to std::clamp when it starts compiling?
+                        Flow = boost::algorithm::clamp(Flow, pixels[x_pos][y_pos].pressure / 6.0f, (-1 * pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure) / 6.0f);
                         new_version[x_pos][y_pos].pressure -= Flow;
                         pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure += Flow;
                     }
@@ -207,4 +196,30 @@ namespace physics2
         }
     }
 
+
+    // Must be final function
+    void simulate(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+    {
+        while (!quit_now)
+        {
+            auto start_time = Clock::now();
+
+            // TODO: Remove this, and find alternative
+            if (recheck == true)
+            {
+                memset(chunk_checker, 1, sizeof(chunk_checker));
+                recheck = false;
+            }
+
+            cellular_automata(pixels, new_version);
+            auto end_time = Clock::now();
+
+            // If the frame took less than what ever 1/60th of a second is, then wait for that long
+            // Or really just sleep for that long
+            if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
+            {
+                std::this_thread::sleep_for(std::chrono::nanoseconds((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count())));
+            }
+        }
+    }
 }

@@ -13,12 +13,12 @@
 // A crap ton of arrays to deal with everything
 
 // Simulated array everything is being fed
-struct position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-struct position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 // Array responsble for the UI
 struct colour user_interface[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 // USR input and changes, TODO SWITCH TO EQAUTION
-struct position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+cell usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 struct position render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 void excecution_finished();
@@ -98,18 +98,14 @@ int main()
     // It needs to have a space at the start, idk why tbh
     // OK OK it's cause it's looping through the thing???
     ui_elements.push_back(new ui::text(text_position, colour_to_change2, "Ghost", 30, 0));
-
     std::cout << "Done ui" << '\n';
-
     std::cout << "Real addy " << &new_version << ' ' << &pixels << '\n';
 
-    // bool quit = false;
-    std::thread physics(Physics::simulate, pixels, new_version);
-    // int frame_count = 0;
+    // std::thread physics(Physics::simulate, pixels, new_version);
+
 
     while (!quit_now)
     {
-        // std::cout << "Real addy " << &new_version  << ' ' << &pixels << '\n';
 
         mtx2.lock();
         quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);
@@ -117,20 +113,16 @@ int main()
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 
-        // std::cout << "Start drawing words" << '\n';
         ui_elements[0]->draw(render);
         ui_elements[1]->draw(render);
-        // std::cout << "Done drawing words, drawing sqaures" << '\n';
         movingBoxes->Update(render);
         Debug::chunk_update_status(render, Physics::chunk_checker);
 
         Render::redraw_render(render, renderer);
         SDL_RenderPresent(renderer);
 
-        // just want to test this out, remove it later
-        // std::cout << "Status" << Physics::chunk_checker[1][0];
     }
-    physics.join();
+    // physics.join();
     std::cout << "ENDED" << '\n';
     excecution_finished();
 }

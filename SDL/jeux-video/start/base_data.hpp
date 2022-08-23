@@ -18,6 +18,7 @@
 #include <set>
 #include <vector>
 #include <array>
+#include <boost/algorithm/clamp.hpp>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
@@ -75,6 +76,7 @@ public:
     {
         return inert;
     }
+
 private:
 protected:
 };
@@ -108,17 +110,17 @@ namespace init
         SDL_RenderClear(renderer);
     }
 
-    void array_clean_start(position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+    void array_clean_start(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
     {
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
                 pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].r = 0;
-                pixels[x_pos][y_pos].state_now = empty;
-                pixels[x_pos][y_pos].temperature = 0;
-                pixels[x_pos][y_pos].pressure = 0;
                 pixels[x_pos][y_pos].density = 0;
+                pixels[x_pos][y_pos].pressure = 0;
+                pixels[x_pos][y_pos].temperature = 0;
+                pixels[x_pos][y_pos].flow = 0;
             }
         }
     }
