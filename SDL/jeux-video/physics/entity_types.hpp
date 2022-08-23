@@ -18,8 +18,8 @@ void Moving_Day::Init()
         auto &colour = Conductor.GetComponent<entites::rgba_colour>(entity);
 
         // Where they gon spawn
-        int new_x = 128;
-        int new_y = 128;
+        // int new_x = 128;
+        // int new_y = 128;
 
         std::random_device dev;
         std::mt19937 rng(dev());

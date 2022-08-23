@@ -28,7 +28,7 @@ namespace Input_Large
         }
     }
 
-    bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Event *event, bool quit, int actual_2_logic_ratio)
+    bool poll_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], cell usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Event *event, bool quit, int actual_2_logic_ratio)
     {
         // Failed experiement,
         // give up on your dreams and die - levi
@@ -123,8 +123,8 @@ namespace Input_Large
                         usr_input[x_pos][y_pos].g = 204;
                         usr_input[x_pos][y_pos].b = 222;
                         usr_input[x_pos][y_pos].a = 255;
-                        usr_input[x_pos][y_pos].density = 50;
-                        usr_input[x_pos][y_pos].state_now = solid;
+                        usr_input[x_pos][y_pos].pressure = 50;
+                        usr_input[x_pos][y_pos].flow = 0;
                         // Tells us later on which one changed
                         changed[x_pos][y_pos] = true;
                     }
@@ -151,8 +151,8 @@ namespace Input_Large
                         usr_input[x_pos][y_pos].g = 80;
                         usr_input[x_pos][y_pos].b = 0;
                         usr_input[x_pos][y_pos].a = 255;
-                        usr_input[x_pos][y_pos].state_now = solid;
-                        usr_input[x_pos][y_pos].density = 10;
+                        usr_input[x_pos][y_pos].flow = 0;
+                        usr_input[x_pos][y_pos].pressure = 10;
                         changed[x_pos][y_pos] = true;
                     }
                 }
@@ -179,8 +179,9 @@ namespace Input_Large
                         usr_input[x_pos][y_pos].g = 27;
                         usr_input[x_pos][y_pos].b = 21;
                         usr_input[x_pos][y_pos].a = 255;
-                        usr_input[x_pos][y_pos].state_now = fixed_pos;
-                        usr_input[x_pos][y_pos].density = 255;
+                        usr_input[x_pos][y_pos].flow = 0;
+                        usr_input[x_pos][y_pos].inert = true;
+                        usr_input[x_pos][y_pos].pressure = 255;
                         changed[x_pos][y_pos] = true;
                     }
                 }
@@ -197,7 +198,7 @@ namespace Input_Large
                 usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].g = 238;
                 usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].b = 254;
                 usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].a = 255;
-                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].state_now = fluid;
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].flow = fluid;
                 changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
 
                 for (int y_pos = (mouse_y / actual_2_logic_ratio) - 4;
@@ -214,8 +215,8 @@ namespace Input_Large
                         usr_input[x_pos][y_pos].g = 238;
                         usr_input[x_pos][y_pos].b = 254;
                         usr_input[x_pos][y_pos].a = 255;
-                        usr_input[x_pos][y_pos].state_now = fluid;
-                        usr_input[x_pos][y_pos].density = 20;
+                        usr_input[x_pos][y_pos].flow = 1;
+                        usr_input[x_pos][y_pos].pressure = 20;
                         changed[x_pos][y_pos] = true;
                     }
                 }
@@ -228,7 +229,7 @@ namespace Input_Large
     }
 
     // Gonna throw this part onto the backburner for now whilst I figure out what the heck is going on
-    void mix_new_version_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], position new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+    void mix_new_version_usr_input(bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], cell usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
     {
 
         for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
@@ -241,8 +242,12 @@ namespace Input_Large
                     new_version[x_pos][y_pos] = usr_input[x_pos][y_pos];
 
                     // Resets it to 0
-                    usr_input[x_pos][y_pos].r = usr_input[x_pos][y_pos].g = usr_input[x_pos][y_pos].b = usr_input[x_pos][y_pos].a = usr_input[x_pos][y_pos].temperature = usr_input[x_pos][y_pos].pressure = usr_input[x_pos][y_pos].density = 0;
-                    usr_input[x_pos][y_pos].state_now = empty;
+                    usr_input[x_pos][y_pos].r = 0;
+                    usr_input[x_pos][y_pos].g = 0;
+                    usr_input[x_pos][y_pos].b = 0;
+                    usr_input[x_pos][y_pos].a = 0;
+                    usr_input[x_pos][y_pos].temperature = 0;
+                    usr_input[x_pos][y_pos].pressure = 0;
                     changed[x_pos][y_pos] = false;
                 }
             }
