@@ -52,6 +52,10 @@ enum pixel_state
     solid,
     fixed_pos
 };
+struct colour
+{
+    uint8_t r, g, b, a;
+};
 struct position
 {
     pixel_state state_now;
@@ -66,8 +70,8 @@ class cell
 {
 public:
     uint8_t r, g, b, a;
-    float pressure;
-    float density;
+    uint16_t pressure;
+    uint16_t density;
     float temperature;
     // Flow is 0 for solid stuff?
     uint8_t flow;
@@ -80,50 +84,79 @@ public:
         return inert;
     }
 
-    // If input2 minus change is below 0 it fais
     /**
-     * @brief Adds `change`, to input1, and subtracts from input2
-     * Fails if it will lower input 2 below 0
-     *
-     * @param input1
-     * @param input2
-     * @param change
-     * @return true
-     * @return false
-     */
-    bool add_and_remove(float input1, float input2, float change)
-    {
-        bool success = false;
-
-        if ((input2 - change) > 0)
-        {
-            success = true;
-            input1 += change;
-            input2 -= change;
-        }
-
-        return success;
-    }
-
-    /**
-     * @brief Adds a value to the input, but only if the result is bigger than 0
+     * @brief change it's colour, takes the colour construct as input
      * 
      * @param input 
-     * @param change 
-     * @return true 
-     * @return false 
      */
-    float add(float input, float change)
+    void change_colour(colour input)
     {
-        float value = input;
-
-        if((input + change) > 0.001)
-        {
-            value += change;
-        }
-
-        return value;
+        r = input.r;
+        g = input.g;
+        b = input.b;
+        a = input.a;
     }
+    /*
+    I wonder if I'll ever find someone I can take my mask off infront of
+    I bet it'll never happen
+    */
+
+    /**
+     * @brief change pressure
+     * 
+     * @param change 
+     */
+    int16_t pressure_change(int16_t change)
+    {
+        pressure += change;
+
+        return pressure;
+    }
+
+    /**
+     * @brief change density
+     * 
+     * @param change 
+     */
+    int16_t density_change(uint16_t change)
+    {
+        density += change;
+
+        return density;
+    }
+
+    /**
+     * @brief change temperature
+     * 
+     * @param new_temp 
+     */
+    float temperature_change(float new_temp)
+    {
+        temperature = new_temp;
+
+        return temperature;
+    }
+
+    /**
+     * @brief 
+     * 
+     * @return int16_t 
+     */
+    int16_t fetch_pressure()
+    {
+        return pressure;
+    }
+
+    /**
+     * @brief 
+     * 
+     * @return int16_t 
+     */
+    int16_t fetch_density()
+    {
+        return density;
+    }
+
 
 private:
 protected:
@@ -133,11 +166,6 @@ struct cord_2d
 {
     u_int16_t x_pos;
     u_int16_t y_pos;
-};
-
-struct colour
-{
-    uint8_t r, g, b, a;
 };
 
 namespace init

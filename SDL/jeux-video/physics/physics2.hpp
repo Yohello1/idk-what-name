@@ -186,22 +186,33 @@ namespace physics
                     if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].inert != true)
                     {
 
-                        if(pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure != pixels[x_pos][y_pos].pressure)
+                        if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure != pixels[x_pos][y_pos].pressure)
                         {
                             // Difference in pressure
                             int DPress = pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure - pixels[x_pos][y_pos].pressure;
-                            DPress /= DPress * -1;
+                            DPress /= DPress;
+                            // std::cout << DPress;
+                            new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
 
-                            new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].pressure - DPress;
-                            new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure - DPress;
+                            new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].fetch_pressure() + (-1 * DPress);
+                            new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + DPress;
 
+
+                            if( (new_version[x_pos][y_pos].pressure + new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure) != (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + pixels[x_pos][y_pos].pressure))
+                            { 
+                                std::cout << "ERROR PRESSURE IS NOT SAME";
+                            }
+
+                            // new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].pressure_change(DPress * -1);
+                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure_change(DPress);
+
+                            // new_version[x_pos][y_pos].pressure = new_version[x_pos][y_pos].add(pixels[x_pos][y_pos].pressure, +DPress);
+                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].add(pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure,-DPress);
                         }
                         else
                         {
                             new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
                         }
-
-                        
 
                         // // std::cout << "Running" << '\n';
                         // // Get the difference of pressure
@@ -251,7 +262,15 @@ namespace physics
 
         // pixels.std::swap (new_version);
         // std::swap(pixels, new_version);
-        std::memcpy(pixels, new_version, sizeof(new_version[0][0]) * LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH);
+        // std::memcpy(pixels, new_version, sizeof(new_version[0][0]) * LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH);
+
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        {
+            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+            {
+                pixels[x_pos][y_pos] = new_version[x_pos][y_pos];
+            }
+        }
     }
 
     // Must be final function
@@ -279,11 +298,9 @@ namespace physics
             }
         }
 
-
-        for(int i = 0; i < differences.size(); i++)
+        for (int i = 0; i < differences.size(); i++)
         {
             std::cout << differences[i] << ',';
         }
-
     }
 }
