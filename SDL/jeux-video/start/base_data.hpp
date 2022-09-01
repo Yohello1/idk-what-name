@@ -19,13 +19,13 @@
 #include <vector>
 #include <array>
 #include <boost/algorithm/clamp.hpp>
-#include <algorithm> 
+#include <algorithm>
+#include <iomanip>
 #include <SDL2/SDL.h>
-
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
-#define LOGICAL_WINDOW_WIDTH 256
+#define LOGICAL_WINDOW_WIDTH 128
 #define ACTUAL_WINDOW_WIDTH 1024
 #define INPUT_DEBUG
 
@@ -80,6 +80,51 @@ public:
         return inert;
     }
 
+    // If input2 minus change is below 0 it fais
+    /**
+     * @brief Adds `change`, to input1, and subtracts from input2
+     * Fails if it will lower input 2 below 0
+     *
+     * @param input1
+     * @param input2
+     * @param change
+     * @return true
+     * @return false
+     */
+    bool add_and_remove(float input1, float input2, float change)
+    {
+        bool success = false;
+
+        if ((input2 - change) > 0)
+        {
+            success = true;
+            input1 += change;
+            input2 -= change;
+        }
+
+        return success;
+    }
+
+    /**
+     * @brief Adds a value to the input, but only if the result is bigger than 0
+     * 
+     * @param input 
+     * @param change 
+     * @return true 
+     * @return false 
+     */
+    float add(float input, float change)
+    {
+        float value = input;
+
+        if((input + change) > 0.001)
+        {
+            value += change;
+        }
+
+        return value;
+    }
+
 private:
 protected:
 };
@@ -113,19 +158,19 @@ namespace init
         SDL_RenderClear(renderer);
     }
 
-    void array_clean_start(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+}
+void array_clean_start(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+{
+    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
-        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
         {
-            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-            {
-                pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].r = 0;
-                pixels[x_pos][y_pos].density = 0;
-                pixels[x_pos][y_pos].pressure = 0;
-                pixels[x_pos][y_pos].temperature = 0;
-                pixels[x_pos][y_pos].flow = 0;
-                pixels[x_pos][y_pos].inert = false;
-            }
+            pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].r = 0;
+            pixels[x_pos][y_pos].density = 0;
+            pixels[x_pos][y_pos].pressure = 0;
+            pixels[x_pos][y_pos].temperature = 0;
+            pixels[x_pos][y_pos].flow = 0;
+            pixels[x_pos][y_pos].inert = false;
         }
     }
 }

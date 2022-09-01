@@ -38,7 +38,7 @@ int main()
     init::start();
     std::cout << "Started, allocating memory" << '\n';
 
-    init::array_clean_start(pixels);
+    array_clean_start(pixels);
     std::cout << "Thingy started now" << '\n';
     // Terrain::Development Terrain_gen;
     // Terrain_gen.Development::generate_terrain(0, LOGICAL_WINDOW_WIDTH / 2, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH, 8, pixels);
@@ -102,7 +102,7 @@ int main()
     ui_elements.push_back(new ui::text(text_position, colour_to_change2, "Ghost", 30, 0));
     std::cout << "Done ui" << '\n';
     std::cout << "Real addy " << &new_version << ' ' << &pixels << '\n';
-
+    
     std::thread physics(physics::simulate, pixels, new_version);
 
 

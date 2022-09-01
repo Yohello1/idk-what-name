@@ -132,11 +132,11 @@ namespace Input_Large
                          x_pos++)
                     {
                         // Changes colours, properites etc
-                        usr_input[x_pos][y_pos].r = 148;
-                        usr_input[x_pos][y_pos].g = 204;
-                        usr_input[x_pos][y_pos].b = 222;
+                        usr_input[x_pos][y_pos].r = 0;
+                        usr_input[x_pos][y_pos].g = 0;
+                        usr_input[x_pos][y_pos].b = 0;
                         usr_input[x_pos][y_pos].a = 255;
-                        usr_input[x_pos][y_pos].pressure = 50;
+                        usr_input[x_pos][y_pos].pressure = 10;
                         usr_input[x_pos][y_pos].flow = 4;
                         usr_input[x_pos][y_pos].inert = false;
                         // Tells us later on which one changed
