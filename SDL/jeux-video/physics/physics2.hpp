@@ -194,13 +194,15 @@ namespace physics
                             // std::cout << DPress;
                             new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
 
-                            new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].fetch_pressure() + (-1 * DPress);
+                            new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].fetch_pressure() - DPress;
                             new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + DPress;
 
 
                             if( (new_version[x_pos][y_pos].pressure + new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure) != (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + pixels[x_pos][y_pos].pressure))
                             { 
-                                std::cout << "ERROR PRESSURE IS NOT SAME";
+                                std::cout << "ERROR PRESSURE IS NOT SAME" << '\n';
+                                std::cout << (-1 * DPress) <<',' << DPress << '\n';
+
                             }
 
                             // new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].pressure_change(DPress * -1);
