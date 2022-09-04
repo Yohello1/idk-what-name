@@ -136,7 +136,7 @@ namespace Input_Large
                         usr_input[x_pos][y_pos].g = 0;
                         usr_input[x_pos][y_pos].b = 0;
                         usr_input[x_pos][y_pos].a = 255;
-                        usr_input[x_pos][y_pos].pressure = 10;
+                        usr_input[x_pos][y_pos].pressure = 100;
                         usr_input[x_pos][y_pos].flow = 4;
                         usr_input[x_pos][y_pos].inert = false;
                         // Tells us later on which one changed
