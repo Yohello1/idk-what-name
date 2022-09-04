@@ -69,14 +69,6 @@ struct position
 class cell
 {
 public:
-    uint8_t r, g, b, a;
-    uint16_t pressure;
-    uint16_t density;
-    float temperature;
-    // Flow is 0 for solid stuff?
-    uint8_t flow;
-    bool inert = false;
-
     void reset_state()
     {
         pressure = 0;
@@ -93,10 +85,10 @@ public:
 
     /**
      * @brief changes the value of 2 cells, will only happen if possible, subtracts from first, adds to second
-     * 
-     * @param orignal_ptr 
-     * @param succesor 
-     * @param change 
+     *
+     * @param orignal_ptr
+     * @param succesor
+     * @param change
      */
     void modify_pressure_2(cell *orignal_ptr, cell *succesor, int16_t change)
     {
@@ -104,7 +96,7 @@ public:
         // (*orignal_ptr).pressure;
         if (((*orignal_ptr).pressure - change) > 1 && ((*succesor).pressure + change) < 65534)
         {
-            if(((*orignal_ptr).pressure - change) == 0)
+            if (((*orignal_ptr).pressure - change) == 0)
             {
                 std::cout << "this is not possible" << '\n';
             }
@@ -115,9 +107,9 @@ public:
 
     /**
      * @brief changes the value of one cell, just add
-     * 
-     * @param orignal_ptr 
-     * @param change 
+     *
+     * @param orignal_ptr
+     * @param change
      */
     void modify_pressure(cell *orignal_ptr, int16_t change)
     {
@@ -128,6 +120,48 @@ public:
             (*orignal_ptr).pressure -= change;
         }
     }
+
+    /**
+     * @brief changes the value of 2 cells, will only happen if possible, subtracts from first, adds to second
+     *
+     * @param orignal_ptr
+     * @param succesor
+     * @param change
+     */
+    void modify_density_2(cell *orignal_ptr, cell *succesor, int16_t change)
+    {
+        // cell* original = orignal_ptr;
+        // (*orignal_ptr).pressure;
+        if (((*orignal_ptr).density - change) > 1 && ((*succesor).density + change) < 65534)
+        {
+            if (((*orignal_ptr).density - change) == 0)
+            {
+                std::cout << "this is not possible" << '\n';
+            }
+            (*orignal_ptr).density -= change;
+            (*succesor).density += change;
+        }
+    }
+
+    /**
+     * @brief changes the value of one cell, just add
+     *
+     * @param orignal_ptr
+     * @param change
+     */
+    void modify_density(cell *orignal_ptr, int16_t change)
+    {
+        // cell* original = orignal_ptr;
+        // (*orignal_ptr).pressure;
+        if (((*orignal_ptr).density - change) > 0)
+        {
+            (*orignal_ptr).density -= change;
+        }
+    }
+
+    /*
+    I wonder if Im driving away my friends, I hope im not
+    */
 
     /**
      * @brief change it's colour, takes the colour construct as input
@@ -202,7 +236,154 @@ public:
         return density;
     }
 
+    /**
+     * @brief Set the pressure object
+     *
+     * @param new_val
+     */
+    void set_pressure(uint16_t new_val)
+    {
+        pressure = new_val;
+    }
+
+    /**
+     * @brief
+     *
+     * @return uint8_t
+     */
+    uint8_t fetch_r()
+    {
+        return r;
+    }
+    /**
+     * @brief
+     *
+     * @return uint8_t
+     */
+    uint8_t fetch_g()
+    {
+        return g;
+    }
+    /**
+     * @brief
+     *
+     * @return uint8_t
+     */
+    uint8_t fetch_b()
+    {
+        return b;
+    }
+    /**
+     * @brief
+     *
+     * @return uint8_t
+     */
+    uint8_t fetch_a()
+    {
+        return a;
+    }
+
+    /**
+     * @brief
+     *
+     * @param new_val
+     */
+    void change_r(uint8_t new_val)
+    {
+        r = new_val;
+    }
+    /**
+     * @brief
+     *
+     * @param new_val
+     */
+    void change_g(uint8_t new_val)
+    {
+        g = new_val;
+    }
+    /**
+     * @brief
+     *
+     * @param new_val
+     */
+    void change_b(uint8_t new_val)
+    {
+        b = new_val;
+    }
+    /**
+     * @brief
+     *
+     * @param new_val
+     */
+    void change_a(uint8_t new_val)
+    {
+        a = new_val;
+    }
+
+    /**
+     * @brief
+     *
+     * @return float
+     */
+    float fetch_temp()
+    {
+        return temperature;
+    }
+
+    /**
+     * @brief It just SETS IT, does not add or subtract
+     * 
+     * @param new_temp 
+     */
+    void modify_temp(float new_temp)
+    {
+        temperature = new_temp;
+    }
+
+    /**
+     * @brief 
+     * 
+     * @return uint8_t 
+     */
+    uint8_t fetch_flow()
+    {
+        return flow;
+    }
+
+    /**
+     * @brief Set the flow object, JUST SETS NO ADD NO SUBTRACT
+     * 
+     * @param new_val 
+     */
+    void set_flow(uint8_t new_val)
+    {
+        flow = new_val;
+    }
+
+    /**
+     * @brief SETS DENSITY
+     * 
+     * @param new_val 
+     */
+    void modify_density(uint16_t new_val)
+    {
+        density = new_val;
+    }
+
+    void set_inert(bool new_val)
+    {
+        inert = new_val;
+    }
 private:
+    uint16_t pressure;
+    uint16_t density;
+    float temperature;
+    uint8_t r, g, b, a;
+
+    // Flow is 0 for solid stuff?
+    uint8_t flow;
+    bool inert = false;
+
 protected:
 };
 
@@ -237,12 +418,15 @@ void array_clean_start(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
     {
         for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
         {
-            pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].r = 0;
-            pixels[x_pos][y_pos].density = 0;
-            pixels[x_pos][y_pos].pressure = 0;
-            pixels[x_pos][y_pos].temperature = 0;
-            pixels[x_pos][y_pos].flow = 0;
-            pixels[x_pos][y_pos].inert = false;
+            pixels[x_pos][y_pos].change_a(0);
+            pixels[x_pos][y_pos].change_g(0);
+            pixels[x_pos][y_pos].change_b(0);
+            pixels[x_pos][y_pos].change_r(0);
+            pixels[x_pos][y_pos].modify_density(0);
+            pixels[x_pos][y_pos].set_pressure(0);
+            pixels[x_pos][y_pos].modify_temp(0);
+            pixels[x_pos][y_pos].set_flow(0);
+            pixels[x_pos][y_pos].set_inert(false);
         }
     }
 }

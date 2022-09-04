@@ -55,10 +55,10 @@ void Moving_Day::Update(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
             for (int y_pos = location.point.y_pos - 5; y_pos < location.point.y_pos + 5; y_pos++)
             {
 
-                pixels[x_pos][y_pos].r = colour.red;
-                pixels[x_pos][y_pos].g = colour.green;
-                pixels[x_pos][y_pos].b = colour.blue;
-                pixels[x_pos][y_pos].a = colour.alpha;
+                pixels[x_pos][y_pos].change_r(colour.red  );
+                pixels[x_pos][y_pos].change_g(colour.green);
+                pixels[x_pos][y_pos].change_b(colour.blue );
+                pixels[x_pos][y_pos].change_a(colour.alpha);
             }
         }
 
