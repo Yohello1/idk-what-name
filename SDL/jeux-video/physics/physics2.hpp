@@ -170,24 +170,40 @@ namespace physics
                 //  There is a faster way to do it, it's just messier
                 cord_2d update_cord[4];
                 update_cord[0].x_pos = x_pos;
-                update_cord[1].x_pos = x_pos;
-                update_cord[2].y_pos = y_pos;
-                update_cord[3].y_pos = y_pos;
+                // update_cord[1].x_pos = x_pos;
+                // update_cord[2].y_pos = y_pos;
+                // update_cord[3].y_pos = y_pos;
 
-                update_cord[0].y_pos = std::min((y_pos - 1), LOGICAL_WINDOW_WIDTH - 1);
-                update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
-                update_cord[2].x_pos = std::min((x_pos - 1), LOGICAL_WINDOW_WIDTH - 1);
-                update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
+                update_cord[0].y_pos = std::max((y_pos - 1), 1);
+                // update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
+                // update_cord[2].x_pos = std::max((x_pos - 1), 0);
+                // update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
+
+
+                // update_cord[0].x_pos = 50;
+                update_cord[1].x_pos = 50;
+                update_cord[2].y_pos = 50;
+                update_cord[3].y_pos = 50;
+
+                // update_cord[0].y_pos = 50;
+                update_cord[1].y_pos = 50;
+                update_cord[2].x_pos = 50;
+                update_cord[3].x_pos = 50;
 
                 // std::cout << '(' << x_pos << ',' << y_pos << ')' << '\n';
 
                 for (int i = 0; i < 4; i++)
                 {
+
                     if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].inert != true)
                     {
 
-                        if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure != pixels[x_pos][y_pos].pressure)
+                        if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())
                         {
+                            pixels[x_pos][y_pos].modify_pressure_2(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], 1);
+                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + 1;
+                            // new_version[x_pos][y_pos].pressure =  pixels[x_pos][y_pos].pressure + 1;
+                            /*
                             // Difference in pressure
                             int DPress = pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure - pixels[x_pos][y_pos].pressure;
                             DPress /= DPress;
@@ -195,14 +211,15 @@ namespace physics
                             new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
 
                             new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].fetch_pressure() - DPress;
+                            pixels[x_pos][y_pos].pressure = pixels[x_pos][y_pos].fetch_pressure() - DPress;
                             new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + DPress;
+                            pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + DPress;
 
-
-                            if( (new_version[x_pos][y_pos].pressure + new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure) != (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + pixels[x_pos][y_pos].pressure))
-                            { 
+                            if ((new_version[x_pos][y_pos].pressure + new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure) != (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + pixels[x_pos][y_pos].pressure))
+                            {
                                 std::cout << "ERROR PRESSURE IS NOT SAME" << '\n';
-                                std::cout << (-1 * DPress) <<',' << DPress << '\n';
-
+                                std::cout << (-1 * DPress) << ',' << DPress << '\n';
+                                std::cout << (new_version[x_pos][y_pos].pressure + new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure) << ',' << (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + pixels[x_pos][y_pos].pressure) << '\n';
                             }
 
                             // new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].pressure_change(DPress * -1);
@@ -210,11 +227,12 @@ namespace physics
 
                             // new_version[x_pos][y_pos].pressure = new_version[x_pos][y_pos].add(pixels[x_pos][y_pos].pressure, +DPress);
                             // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].add(pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure,-DPress);
+                            */
                         }
                         else
                         {
-                            new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
-                        }
+                            // new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+                        }   
 
                         // // std::cout << "Running" << '\n';
                         // // Get the difference of pressure
@@ -246,11 +264,11 @@ namespace physics
                         // // }
                         // // if( pixels[x_pos][y_pos].pressure !=)
 
-                        total_val += pixels[x_pos][y_pos].pressure;
+                      total_val += pixels[x_pos][y_pos].pressure;
                     }
                     else
                     {
-                        // new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+                     new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
                     }
                 }
                 // std::cout << new_version[x_pos][y_pos].pressure << ',';
@@ -270,7 +288,9 @@ namespace physics
         {
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
-                pixels[x_pos][y_pos] = new_version[x_pos][y_pos];
+                // pixels[x_pos][y_pos] = new_version[x_pos][y_pos];
+
+                // new_version[x_pos][y_pos].reset_state();
             }
         }
     }

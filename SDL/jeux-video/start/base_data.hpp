@@ -77,6 +77,13 @@ public:
     uint8_t flow;
     bool inert = false;
 
+    void reset_state()
+    {
+        pressure = 0;
+        density = 0;
+        temperature = 0;
+    }
+
     // Function to return whether it can be interacted with or not
     // I dunno why Im making this a function lmao
     bool is_inert()
@@ -85,9 +92,47 @@ public:
     }
 
     /**
-     * @brief change it's colour, takes the colour construct as input
+     * @brief changes the value of 2 cells, will only happen if possible, subtracts from first, adds to second
      * 
-     * @param input 
+     * @param orignal_ptr 
+     * @param succesor 
+     * @param change 
+     */
+    void modify_pressure_2(cell *orignal_ptr, cell *succesor, int16_t change)
+    {
+        // cell* original = orignal_ptr;
+        // (*orignal_ptr).pressure;
+        if (((*orignal_ptr).pressure - change) > 1 && ((*succesor).pressure + change) < 65534)
+        {
+            if(((*orignal_ptr).pressure - change) == 0)
+            {
+                std::cout << "this is not possible" << '\n';
+            }
+            (*orignal_ptr).pressure -= change;
+            (*succesor).pressure += change;
+        }
+    }
+
+    /**
+     * @brief changes the value of one cell, just add
+     * 
+     * @param orignal_ptr 
+     * @param change 
+     */
+    void modify_pressure(cell *orignal_ptr, int16_t change)
+    {
+        // cell* original = orignal_ptr;
+        // (*orignal_ptr).pressure;
+        if (((*orignal_ptr).pressure - change) > 0)
+        {
+            (*orignal_ptr).pressure -= change;
+        }
+    }
+
+    /**
+     * @brief change it's colour, takes the colour construct as input
+     *
+     * @param input
      */
     void change_colour(colour input)
     {
@@ -103,8 +148,8 @@ public:
 
     /**
      * @brief change pressure
-     * 
-     * @param change 
+     *
+     * @param change
      */
     int16_t pressure_change(int16_t change)
     {
@@ -115,8 +160,8 @@ public:
 
     /**
      * @brief change density
-     * 
-     * @param change 
+     *
+     * @param change
      */
     int16_t density_change(uint16_t change)
     {
@@ -127,8 +172,8 @@ public:
 
     /**
      * @brief change temperature
-     * 
-     * @param new_temp 
+     *
+     * @param new_temp
      */
     float temperature_change(float new_temp)
     {
@@ -138,9 +183,9 @@ public:
     }
 
     /**
-     * @brief 
-     * 
-     * @return int16_t 
+     * @brief
+     *
+     * @return int16_t
      */
     int16_t fetch_pressure()
     {
@@ -148,15 +193,14 @@ public:
     }
 
     /**
-     * @brief 
-     * 
-     * @return int16_t 
+     * @brief
+     *
+     * @return int16_t
      */
     int16_t fetch_density()
     {
         return density;
     }
-
 
 private:
 protected:
