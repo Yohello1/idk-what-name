@@ -65,11 +65,11 @@ namespace physics
         {
             for (int y_pos = higher_y; y_pos < lower_y; y_pos++)
             {
-                pixels[x_pos][y_pos].r = 212;
-                pixels[x_pos][y_pos].g = 241;
-                pixels[x_pos][y_pos].b = 249;
-                pixels[x_pos][y_pos].a = 255;
-                pixels[x_pos][y_pos].pressure = 10;
+                pixels[x_pos][y_pos].change_r(212);
+                pixels[x_pos][y_pos].change_g(241);
+                pixels[x_pos][y_pos].change_b(249);
+                pixels[x_pos][y_pos].change_a(255);
+                pixels[x_pos][y_pos].set_pressure(10);
             }
         }
     }
@@ -201,32 +201,32 @@ namespace physics
                         if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())
                         {
                             pixels[x_pos][y_pos].modify_pressure_2(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], 1);
-                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + 1;
-                            // new_version[x_pos][y_pos].pressure =  pixels[x_pos][y_pos].pressure + 1;
+                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + 1;
+                            // new_version[x_pos][y_pos].fetch_pressure() =  pixels[x_pos][y_pos].fetch_pressure() + 1;
                             /*
                             // Difference in pressure
-                            int DPress = pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure - pixels[x_pos][y_pos].pressure;
+                            int DPress = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() - pixels[x_pos][y_pos].fetch_pressure();
                             DPress /= DPress;
                             // std::cout << DPress;
                             new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
 
-                            new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].fetch_pressure() - DPress;
-                            pixels[x_pos][y_pos].pressure = pixels[x_pos][y_pos].fetch_pressure() - DPress;
-                            new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + DPress;
-                            pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + DPress;
+                            new_version[x_pos][y_pos].fetch_pressure() = pixels[x_pos][y_pos].fetch_pressure() - DPress;
+                            pixels[x_pos][y_pos].fetch_pressure() = pixels[x_pos][y_pos].fetch_pressure() - DPress;
+                            new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + DPress;
+                            pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + DPress;
 
-                            if ((new_version[x_pos][y_pos].pressure + new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure) != (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + pixels[x_pos][y_pos].pressure))
+                            if ((new_version[x_pos][y_pos].fetch_pressure() + new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure()) != (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + pixels[x_pos][y_pos].fetch_pressure()))
                             {
                                 std::cout << "ERROR PRESSURE IS NOT SAME" << '\n';
                                 std::cout << (-1 * DPress) << ',' << DPress << '\n';
-                                std::cout << (new_version[x_pos][y_pos].pressure + new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure) << ',' << (pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure + pixels[x_pos][y_pos].pressure) << '\n';
+                                std::cout << (new_version[x_pos][y_pos].fetch_pressure() + new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure()) << ',' << (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + pixels[x_pos][y_pos].fetch_pressure()) << '\n';
                             }
 
-                            // new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].pressure_change(DPress * -1);
-                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure_change(DPress);
+                            // new_version[x_pos][y_pos].fetch_pressure() = pixels[x_pos][y_pos].fetch_pressure()_change(DPress * -1);
+                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure()_change(DPress);
 
-                            // new_version[x_pos][y_pos].pressure = new_version[x_pos][y_pos].add(pixels[x_pos][y_pos].pressure, +DPress);
-                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = pixels[update_cord[i].x_pos][update_cord[i].y_pos].add(pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure,-DPress);
+                            // new_version[x_pos][y_pos].fetch_pressure() = new_version[x_pos][y_pos].add(pixels[x_pos][y_pos].fetch_pressure(), +DPress);
+                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() = pixels[update_cord[i].x_pos][update_cord[i].y_pos].add(pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure(),-DPress);
                             */
                         }
                         else
@@ -236,42 +236,42 @@ namespace physics
 
                         // // std::cout << "Running" << '\n';
                         // // Get the difference of pressure
-                        // float DPress = pixels[x_pos][y_pos].pressure - pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure;
+                        // float DPress = pixels[x_pos][y_pos].fetch_pressure() - pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure();
 
-                        // // // Find some way so that I can do pressure*DPress*neigh.pressure/neigh.pressure
+                        // // // Find some way so that I can do pressure*DPress*neigh.fetch_pressure()/neigh.fetch_pressure()
                         // // // But find a way to deal with being divided by 0
-                        // float Flow = pixels[x_pos][y_pos].pressure * DPress;
+                        // float Flow = pixels[x_pos][y_pos].fetch_pressure() * DPress;
                         // // // TODO: Change this to std::clamp when it starts compiling?
-                        // Flow = boost::algorithm::clamp(Flow, pixels[x_pos][y_pos].pressure / 6.0f, (-1 * pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure) / 6.0f);
-                        // // new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].pressure - Flow;
-                        // pixels[x_pos][y_pos].pressure = pixels[x_pos][y_pos].add(pixels[x_pos][y_pos].pressure, -Flow);
-                        // new_version[x_pos][y_pos].pressure = pixels[x_pos][y_pos].pressure;
-                        // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure = new_version[update_cord[i].x_pos][update_cord[i].y_pos].add(new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure, Flow);
+                        // Flow = boost::algorithm::clamp(Flow, pixels[x_pos][y_pos].fetch_pressure() / 6.0f, (-1 * pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure()) / 6.0f);
+                        // // new_version[x_pos][y_pos].fetch_pressure() = pixels[x_pos][y_pos].fetch_pressure() - Flow;
+                        // pixels[x_pos][y_pos].fetch_pressure() = pixels[x_pos][y_pos].add(pixels[x_pos][y_pos].fetch_pressure(), -Flow);
+                        // new_version[x_pos][y_pos].fetch_pressure() = pixels[x_pos][y_pos].fetch_pressure();
+                        // new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() = new_version[update_cord[i].x_pos][update_cord[i].y_pos].add(new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure(), Flow);
 
-                        // // pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure += Flow;
+                        // // pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() += Flow;
 
                         // // new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
 
-                        // // if (pixels[x_pos][y_pos].pressure > 0)
+                        // // if (pixels[x_pos][y_pos].fetch_pressure() > 0)
                         // // {
-                        // //     std::cout << "Change" << std::setw(5) << pixels[x_pos][y_pos].pressure << ',' << pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure << '\n';
-                        // //     // pixels[x_pos][y_pos].pressure -= 0.1;
-                        // //     pixels[x_pos][y_pos].pressure = pixels[x_pos][y_pos].add(pixels[x_pos][y_pos].pressure, -.01);
+                        // //     std::cout << "Change" << std::setw(5) << pixels[x_pos][y_pos].fetch_pressure() << ',' << pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() << '\n';
+                        // //     // pixels[x_pos][y_pos].fetch_pressure() -= 0.1;
+                        // //     pixels[x_pos][y_pos].fetch_pressure() = pixels[x_pos][y_pos].add(pixels[x_pos][y_pos].fetch_pressure(), -.01);
                         // // }
-                        // // if (DPress != 0 && pixels[x_pos][y_pos].pressure > 0)
+                        // // if (DPress != 0 && pixels[x_pos][y_pos].fetch_pressure() > 0)
                         // // {
-                        // //     std::cout << "Change" << Flow << ',' << DPress << '\n' << pixels[x_pos][y_pos].pressure  << pixels[x_pos][y_pos].pressure << ',' << pixels[update_cord[i].x_pos][update_cord[i].y_pos].pressure << '\n';
+                        // //     std::cout << "Change" << Flow << ',' << DPress << '\n' << pixels[x_pos][y_pos].fetch_pressure()  << pixels[x_pos][y_pos].fetch_pressure() << ',' << pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() << '\n';
                         // // }
-                        // // if( pixels[x_pos][y_pos].pressure !=)
+                        // // if( pixels[x_pos][y_pos].fetch_pressure() !=)
 
-                      total_val += pixels[x_pos][y_pos].pressure;
+                      total_val += pixels[x_pos][y_pos].fetch_pressure();
                     }
                     else
                     {
                      new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
                     }
                 }
-                // std::cout << new_version[x_pos][y_pos].pressure << ',';
+                // std::cout << new_version[x_pos][y_pos].fetch_pressure() << ',';
             }
             // std::cout << '\n';
         }
