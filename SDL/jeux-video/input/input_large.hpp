@@ -42,9 +42,9 @@ namespace Input_Large
             switch (event->type)
             {
             case SDL_QUIT:
-                #ifdef INPUT_DEBUG
+#ifdef INPUT_DEBUG
                 std::cout << "QUIT" << '\n';
-                #endif
+#endif
                 quit = true;
                 break;
             // When I wrote this, only two people knew how this worked, me and god
@@ -75,22 +75,22 @@ namespace Input_Large
                 {
                     shift = !shift;
                 }
-                #ifdef INPUT_DEBUG
+#ifdef INPUT_DEBUG
                 std::cout << "KEY DOWN EVENT" << '\n';
-                #endif
+#endif
                 break;
             case SDL_KEYUP:
                 // wtf
                 // I dont know why or how
                 shift = !shift;
-                #ifdef INPUT_DEBUG
+#ifdef INPUT_DEBUG
                 std::cout << "KEY UP EVENT" << '\n';
-                #endif
+#endif
                 break;
             default:
                 break;
             }
-                recheck = true;
+            recheck = true;
 
             // This is all scuffed, im gonna make a proper way to look for inputs... later
             // Figure 1
@@ -100,26 +100,24 @@ namespace Input_Large
                 std::cout << recheck << "Status\n";
                 // Fetch mouse state, or cords
                 SDL_GetMouseState(&mouse_x, &mouse_y);
-                #ifdef INPUT_DEBUG
+#ifdef INPUT_DEBUG
                 std::cout << "(" << mouse_x / actual_2_logic_ratio << "," << mouse_y / actual_2_logic_ratio << ")" << '\n';
-                #endif
+#endif
 
-                usr_input[mouse_x/actual_2_logic_ratio][mouse_y/actual_2_logic_ratio].r = 255;
-                usr_input[mouse_x/actual_2_logic_ratio][mouse_y/actual_2_logic_ratio].g = 255;
-                usr_input[mouse_x/actual_2_logic_ratio][mouse_y/actual_2_logic_ratio].b = 255;
-                usr_input[mouse_x/actual_2_logic_ratio][mouse_y/actual_2_logic_ratio].a = 255;
-                usr_input[mouse_x/actual_2_logic_ratio][mouse_y/actual_2_logic_ratio].temperature = 0;
-                usr_input[mouse_x/actual_2_logic_ratio][mouse_y/actual_2_logic_ratio].set_pressure(0);
-                  changed[mouse_x/actual_2_logic_ratio][mouse_y/actual_2_logic_ratio] = true;
-
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].change_r(255);
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].change_g(255);
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].change_b(255);
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].change_a(255);
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].temperature_change(0);
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].set_pressure(0);
+                changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
             }
-            else if(left_down == true && shift == true)
+            else if (left_down == true && shift == true)
             {
                 recheck = true;
                 std::cout << recheck << "Status\n";
                 // Fetch mouse state, or cords
                 SDL_GetMouseState(&mouse_x, &mouse_y);
-
 
                 for (int y_pos = (mouse_y / actual_2_logic_ratio) - 4;
                      y_pos != LOGICAL_WINDOW_WIDTH - 1 &&
@@ -132,19 +130,18 @@ namespace Input_Large
                          x_pos++)
                     {
                         // Changes colours, properites etc
-                        usr_input[x_pos][y_pos].r = 0;
-                        usr_input[x_pos][y_pos].g = 0;
-                        usr_input[x_pos][y_pos].b = 0;
-                        usr_input[x_pos][y_pos].a = 255;
+                        usr_input[x_pos][y_pos].change_r(0);
+                        usr_input[x_pos][y_pos].change_g(0);
+                        usr_input[x_pos][y_pos].change_b(0);
+                        usr_input[x_pos][y_pos].change_a(0);
                         usr_input[x_pos][y_pos].set_pressure(100);
-                        usr_input[x_pos][y_pos].flow = 4;
-                        usr_input[x_pos][y_pos].inert = false;
+                        usr_input[x_pos][y_pos].set_flow(0);
+                        usr_input[x_pos][y_pos].set_inert(false);
                         // Tells us later on which one changed
                         changed[x_pos][y_pos] = true;
                     }
                 }
             }
-            
         }
 
         // i gotta change this
@@ -166,11 +163,11 @@ namespace Input_Large
                     new_version[x_pos][y_pos] = usr_input[x_pos][y_pos];
 
                     // Resets it to 0
-                    usr_input[x_pos][y_pos].r = 0;
-                    usr_input[x_pos][y_pos].g = 0;
-                    usr_input[x_pos][y_pos].b = 0;
-                    usr_input[x_pos][y_pos].a = 0;
-                    usr_input[x_pos][y_pos].temperature = 0;
+                    usr_input[x_pos][y_pos].change_r(0);
+                    usr_input[x_pos][y_pos].change_g(0);
+                    usr_input[x_pos][y_pos].change_b(0);
+                    usr_input[x_pos][y_pos].change_a(0);
+                    usr_input[x_pos][y_pos].temperature_change(0);
                     usr_input[x_pos][y_pos].set_pressure(100);
                     changed[x_pos][y_pos] = false;
                 }

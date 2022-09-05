@@ -45,27 +45,11 @@ SDL_Event event;
 // something needs to bedone about this
 // Use density, and type (static or dynamic)
 // entity is rlly just fixed_pos with extra steps
-enum pixel_state
-{
-    empty,
-    fluid,
-    solid,
-    fixed_pos
-};
+
 struct colour
 {
     uint8_t r, g, b, a;
 };
-struct position
-{
-    pixel_state state_now;
-    // Yes I could do all these vars in one line, but this is "cleaner"
-    uint8_t r, g, b, a;
-    uint8_t density;
-    uint8_t pressure;
-    uint16_t temperature;
-};
-
 class cell
 {
 public:

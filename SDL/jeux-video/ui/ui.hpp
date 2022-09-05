@@ -78,10 +78,10 @@ namespace ui
             {
                 for (int y_pos = lower_y; y_pos < higher_y; y_pos++)
                 {
-                    render[x_pos][y_pos].r = box_colour.r;
-                    render[x_pos][y_pos].g = box_colour.g;
-                    render[x_pos][y_pos].b = box_colour.b;
-                    render[x_pos][y_pos].a = box_colour.a;
+                    render[x_pos][y_pos].change_r(box_colour.r);
+                    render[x_pos][y_pos].change_g(box_colour.g);
+                    render[x_pos][y_pos].change_b(box_colour.b);
+                    render[x_pos][y_pos].change_a(box_colour.a);
                     // std::cout << "Hellow rodl" << '\n';
                 }
             }
@@ -177,15 +177,15 @@ namespace ui
                     if ((int)screen[y_pos][x_pos] >> 5 > min_power)
                     {
 #if BLEND_TEXT == 0
-                        render[x_pos][y_pos].r = ((render[x_pos][y_pos].r * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.r / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5)));
-                        render[x_pos][y_pos].g = ((render[x_pos][y_pos].g * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.g / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5)));
-                        render[x_pos][y_pos].b = ((render[x_pos][y_pos].b * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.b / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5)));
-                        render[x_pos][y_pos].a = 255;
+                        render[x_pos][y_pos].change_r(((render[x_pos][y_pos].fetch_r() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.r / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
+                        render[x_pos][y_pos].change_g(((render[x_pos][y_pos].fetch_g() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.g / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
+                        render[x_pos][y_pos].change_b(((render[x_pos][y_pos].fetch_b() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.b / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
+                        render[x_pos][y_pos].change_a(255);
 #elif BLEND_TEXT == 1
-                        render[x_pos][y_pos].r = txt_color.r;
-                        render[x_pos][y_pos].g = txt_color.g;
-                        render[x_pos][y_pos].b = txt_color.b;
-                        render[x_pos][y_pos].a = 255;
+                        render[x_pos][y_pos].change_r(txt_color.r);
+                        render[x_pos][y_pos].change_g(txt_color.g);
+                        render[x_pos][y_pos].change_b(txt_color.b);
+                        render[x_pos][y_pos].change_a(255);
 #endif
 
                     }
