@@ -16,7 +16,7 @@ namespace Terrain
 		//      std::cout << "Hello does this work?" << '\n';
 		//  }
 
-		void generate_terrain(int x_lower, int y_lower, int x_upper, int y_upper, int amt_points, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+		void generate_terrain(int x_lower, int y_lower, int x_upper, int y_upper, int amt_points, cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 		{
 			std::cout << "This started" << '\n';
 			place_dots(x_lower, y_lower, x_upper, y_upper, amt_points);
@@ -29,17 +29,20 @@ namespace Terrain
 				smoothen();
 			}
 
+			// I didnt leave their party cause I was gonna head off
+			// It was cause I hated myself for doing so badly
+
 			#ifdef UI_DEBUG
 			std::cout << "The size of the vector/array is " << points_new.size() << '\n';
 			std::cout << "This ended" << '\n';
 			#endif
 			for (int unsigned i = 1; i < points_old.size(); i++)
 			{
-				pixels[points_old[i].x_pos][points_old[i].y_pos].r = 255;
-				pixels[points_old[i].x_pos][points_old[i].y_pos].g = 255;
-				pixels[points_old[i].x_pos][points_old[i].y_pos].b = 255;
-				pixels[points_old[i].x_pos][points_old[i].y_pos].a = 255;
-				pixels[points_old[i].x_pos][points_old[i].y_pos].state_now = fixed_pos;
+				pixels[points_old[i].x_pos][points_old[i].y_pos].change_r(255);
+				pixels[points_old[i].x_pos][points_old[i].y_pos].change_g(255);
+				pixels[points_old[i].x_pos][points_old[i].y_pos].change_b(255);
+				pixels[points_old[i].x_pos][points_old[i].y_pos].change_a(255);
+				pixels[points_old[i].x_pos][points_old[i].y_pos].set_inert(true);
 			}
 		}
 

@@ -195,7 +195,7 @@ namespace physics
                 for (int i = 0; i < 4; i++)
                 {
 
-                    if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].inert != true)
+                    if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].is_inert() != true)
                     {
 
                         if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())

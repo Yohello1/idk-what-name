@@ -8,15 +8,18 @@ namespace Render
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
                 // TODO: Switch this back
-                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].fetch_pressure(), pixels[x_pos][y_pos].a);
+                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].fetch_r(), pixels[x_pos][y_pos].fetch_g(), pixels[x_pos][y_pos].fetch_b(), pixels[x_pos][y_pos].fetch_a());
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
             }
         }
     }
 
-    void draw_point(int x_pos, int y_pos, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
+    void draw_point(int x_pos, int y_pos, cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
     {
-        SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
+        SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].fetch_r(), 
+                                         pixels[x_pos][y_pos].fetch_g(), 
+                                         pixels[x_pos][y_pos].fetch_b(), 
+                                         pixels[x_pos][y_pos].fetch_a());
         SDL_RenderDrawPoint(renderer, x_pos, y_pos);
     }
 
