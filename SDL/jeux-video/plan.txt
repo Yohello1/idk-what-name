@@ -17,13 +17,13 @@
   - [X] Un cancerousingx
 
 - [X] restructure it to not be cancerous
-- [3/6] Do the `#if` things to run debug garbage
+- [5/6] Do the `#if` things to run debug garbage
   - [X] Terrain.hpp
   - [ ] input.hpp (and input_Large), should merge into one file though
-  - [ ] Vector math
+  - [X] Vector math
   - [X] Physics .hpp
   - [X] Render.hpp
-  - [ ] ui.hp
+  - [X] ui.hp
 - [ ] Write a test
 - [X] Proper ECS system
   - [X] manager
@@ -34,12 +34,18 @@
   - [X] Managers (Karens)
   - [ ] Player
   - [ ] Special type
-- [0/2] optimisation
+- [0/3] optimisation
   - [ ] Chunk simulation
   - [ ] Multi threading (Physics)
   - [ ] Rewrite SDL code in uh, opengl (I dont have a choic
 - [ ] Import/Export maps
 - [ ] Write a proper input system
+- [2/3] Final version of physics system
+  - [X] Correct types
+  - [X] Data handling
+  - [ ] Basic add and subtract from neighbours
+  - [ ] Write render method
+
 * Bugs
 
 * Future Problem

@@ -4,9 +4,13 @@ By Yohwllooooo
 Created: 2022-08-20
 Last modified: 2022-08-20
 
+IMPORTANT:
+DO NOT DO RENDERING IN THIS SECTION
+
 Modifications:
 Creating the file, and adding all but simulation function
 Creating comments to explain search/simulation thing
+
 */
 
 namespace physics
@@ -171,23 +175,22 @@ namespace physics
                 cord_2d update_cord[4];
                 update_cord[0].x_pos = x_pos;
                 // update_cord[1].x_pos = x_pos;
-                // update_cord[2].y_pos = y_pos;
+                update_cord[2].y_pos = y_pos;
                 // update_cord[3].y_pos = y_pos;
 
                 update_cord[0].y_pos = std::max((y_pos - 1), 1);
-                // update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
-                // update_cord[2].x_pos = std::max((x_pos - 1), 0);
+                // update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
+                update_cord[2].x_pos = std::max((x_pos - 1), 1);
                 // update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
-
 
                 // update_cord[0].x_pos = 50;
                 update_cord[1].x_pos = 50;
-                update_cord[2].y_pos = 50;
+                // update_cord[2].y_pos = 50;
                 update_cord[3].y_pos = 50;
 
                 // update_cord[0].y_pos = 50;
                 update_cord[1].y_pos = 50;
-                update_cord[2].x_pos = 50;
+                // update_cord[2].x_pos = 50;
                 update_cord[3].x_pos = 50;
 
                 // std::cout << '(' << x_pos << ',' << y_pos << ')' << '\n';
@@ -201,8 +204,10 @@ namespace physics
                         if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())
                         {
                             pixels[x_pos][y_pos].modify_pressure_2(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], 1);
-                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + 1;
-                            // new_version[x_pos][y_pos].fetch_pressure() =  pixels[x_pos][y_pos].fetch_pressure() + 1;
+                            pixels[x_pos][y_pos].modify_pressure_2(&new_version[x_pos][y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
+
+                            // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure_change(pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + 1);
+                            // new_version[x_pos][y_pos].pressure_change(pixels[x_pos][y_pos].fetch_pressure() - 1);
                             /*
                             // Difference in pressure
                             int DPress = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() - pixels[x_pos][y_pos].fetch_pressure();
@@ -232,7 +237,7 @@ namespace physics
                         else
                         {
                             // new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
-                        }   
+                        }
 
                         // // std::cout << "Running" << '\n';
                         // // Get the difference of pressure
@@ -264,11 +269,11 @@ namespace physics
                         // // }
                         // // if( pixels[x_pos][y_pos].fetch_pressure() !=)
 
-                      total_val += pixels[x_pos][y_pos].fetch_pressure();
+                        total_val += pixels[x_pos][y_pos].fetch_pressure();
                     }
                     else
                     {
-                     new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+                        new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
                     }
                 }
                 // std::cout << new_version[x_pos][y_pos].fetch_pressure() << ',';
