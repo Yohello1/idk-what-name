@@ -7,7 +7,9 @@ namespace Render
         {
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
-                // TODO: Switch this back
+                // It'll get optimisied by the compiler anyways
+                pixels[x_pos][y_pos].change_b(std::min(pixels[x_pos][y_pos].fetch_b() + pixels[x_pos][y_pos].fetch_pressure(), 255));
+
                 SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].fetch_r(), pixels[x_pos][y_pos].fetch_g(), pixels[x_pos][y_pos].fetch_b(), pixels[x_pos][y_pos].fetch_a());
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
             }
