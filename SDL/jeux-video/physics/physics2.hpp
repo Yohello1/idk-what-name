@@ -203,8 +203,8 @@ namespace physics
 
                         if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())
                         {
-                            pixels[x_pos][y_pos].modify_pressure_2(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], 1);
-                            pixels[x_pos][y_pos].modify_pressure_2(&new_version[x_pos][y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
+                            pixels[x_pos][y_pos].modify_cross_die_pressure(     &pixels[x_pos][y_pos],      &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
+                            // pixels[x_pos][y_pos].modify_cross_die_pressure(&new_version[x_pos][y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
 
                             // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure_change(pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + 1);
                             // new_version[x_pos][y_pos].pressure_change(pixels[x_po⎄s][y_pos].fetch_pressure() - 1);
@@ -293,9 +293,9 @@ namespace physics
         {
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
-                // pixels[x_pos][y_pos] = new_version[x_pos][y_pos];
+                pixels[x_pos][y_pos] = new_version[x_pos][y_pos];
 
-                // new_version[x_pos][y_pos].reset_state();
+                new_version[x_pos][y_pos].reset_state();
             }
         }
     }

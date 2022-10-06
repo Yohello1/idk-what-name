@@ -80,14 +80,61 @@ public:
         // (*orignal_ptr).pressure;
         if (((*orignal_ptr).pressure - change) > 1 && ((*succesor).pressure + change) < 65534)
         {
+            // if (((*orignal_ptr).pressure - change) == 0)
+            // {
+            //     std::cout << "this is not possible" << '\n';
+            // }
+            (*orignal_ptr).pressure -= change;
+            (*succesor).pressure += change;
+        }
+    }
+
+    /**
+     * @brief will subtract from one cell, subtract if possible
+     *
+     * @param orignal_ptr
+     * @param succesor
+     * @param change
+     */
+    void sub_pressure_if_possible(cell *orignal_ptr, cell *succesor, int16_t change)
+    {
+        // cell* original = orignal_ptr;
+        // (*orignal_ptr).pressure;
+        if (((*orignal_ptr).pressure - change) > 1)
+        {
+            // if (((*orignal_ptr).pressure - change) == 0)
+            // {
+            //     std::cout << "this is not possible" << '\n';
+            // }
+            (*orignal_ptr).pressure -= change;
+            // (*succesor).pressure += change;
+        }
+    }
+
+        /**
+     * @brief First val is current cell, second is the old version of the one presure ismoving to, third is the new vresion where the pressure is moving to
+     *
+     * @param orignal_ptr
+     * @param succesor
+     * @param predecessor
+     * @param change
+     */
+    void modify_cross_die_pressure(cell *orignal_ptr, cell *predecessor, cell *succesor, int16_t change)
+    {
+        // cell* original = orignal_ptr;
+        // (*orignal_ptr).pressure;
+        if (((*orignal_ptr).pressure - change) > 1 && ((*predecessor).pressure + change) < 65534)
+        {
             if (((*orignal_ptr).pressure - change) == 0)
             {
                 std::cout << "this is not possible" << '\n';
             }
             (*orignal_ptr).pressure -= change;
-            (*succesor).pressure += change;
+            (*succesor).pressure += change + (*predecessor).pressure;
         }
     }
+
+
 
     /**
      * @brief changes the value of one cell, just add
