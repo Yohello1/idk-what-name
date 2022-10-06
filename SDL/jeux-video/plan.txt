@@ -40,10 +40,14 @@
   - [ ] Rewrite SDL code in uh, opengl (I dont have a choic
 - [ ] Import/Export maps
 - [ ] Write a proper input system
-- [2/3] Final version of physics system
+- [3/5] Final version of physics system
   - [X] Correct types
   - [X] Data handling
-  - [ ] Basic add and subtract from neighbours
+  - [X] Basic add and subtract from neighbouxr
+  - [ ] Method to put new_version to pixels
+    - [ ] Add value to new_version
+    - [ ] Add data from new_version + pixels -> pixels, new_versio.reset()
+    - [ ] stuff u can figure it out future me
   - [ ] Write render method
 
 * Bugs

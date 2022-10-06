@@ -166,32 +166,32 @@ namespace physics
 
         float total_val = 0;
 
-        for (int y_pos = LOGICAL_WINDOW_WIDTH - 1; y_pos > 0; y_pos--)
+        for (int y_pos = LOGICAL_WINDOW_WIDTH - 2; y_pos > -1; y_pos--)
         {
-            for (int x_pos = LOGICAL_WINDOW_WIDTH - 1; x_pos > 0; x_pos--)
+            for (int x_pos = LOGICAL_WINDOW_WIDTH - 2; x_pos > -1; x_pos--)
             {
                 // TODO: When this is final, just use less declerations and get right to the point
                 //  There is a faster way to do it, it's just messier
                 cord_2d update_cord[4];
                 update_cord[0].x_pos = x_pos;
-                // update_cord[1].x_pos = x_pos;
+                update_cord[1].x_pos = x_pos;
                 update_cord[2].y_pos = y_pos;
-                // update_cord[3].y_pos = y_pos;
+                update_cord[3].y_pos = y_pos;
 
-                update_cord[0].y_pos = std::max((y_pos - 1), 1);
-                // update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
-                update_cord[2].x_pos = std::max((x_pos - 1), 1);
-                // update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 1);
+                update_cord[0].y_pos = std::max((y_pos - 1), 2);
+                update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
+                update_cord[2].x_pos = std::max((x_pos - 1), 2);
+                update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
 
                 // update_cord[0].x_pos = 50;
-                update_cord[1].x_pos = 50;
+                // update_cord[1].x_pos = 50;
                 // update_cord[2].y_pos = 50;
-                update_cord[3].y_pos = 50;
+                // update_cord[3].y_pos = 50;
 
                 // update_cord[0].y_pos = 50;
-                update_cord[1].y_pos = 50;
+                // update_cord[1].y_pos = 50;
                 // update_cord[2].x_pos = 50;
-                update_cord[3].x_pos = 50;
+                // update_cord[3].x_pos = 50;
 
                 // std::cout << '(' << x_pos << ',' << y_pos << ')' << '\n';
 
@@ -207,7 +207,7 @@ namespace physics
                             pixels[x_pos][y_pos].modify_pressure_2(&new_version[x_pos][y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
 
                             // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure_change(pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + 1);
-                            // new_version[x_pos][y_pos].pressure_change(pixels[x_pos][y_pos].fetch_pressure() - 1);
+                            // new_version[x_pos][y_pos].pressure_change(pixels[x_po⎄s][y_pos].fetch_pressure() - 1);
                             /*
                             // Difference in pressure
                             int DPress = pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() - pixels[x_pos][y_pos].fetch_pressure();
