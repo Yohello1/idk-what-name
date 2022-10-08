@@ -173,25 +173,25 @@ namespace physics
                 // TODO: When this is final, just use less declerations and get right to the point
                 //  There is a faster way to do it, it's just messier
                 cord_2d update_cord[4];
-                update_cord[0].x_pos = x_pos;
-                update_cord[1].x_pos = x_pos;
-                update_cord[2].y_pos = y_pos;
-                update_cord[3].y_pos = y_pos;
+                // update_cord[0].x_pos = x_pos;
+                // update_cord[1].x_pos = x_pos;
+                // update_cord[2].y_pos = y_pos;
+                // update_cord[3].y_pos = y_pos;
 
-                update_cord[0].y_pos = std::max((y_pos - 1), 2);
-                update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
-                update_cord[2].x_pos = std::max((x_pos - 1), 2);
-                update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
+                // update_cord[0].y_pos = std::max((y_pos - 1), 2);
+                // update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
+                // update_cord[2].x_pos = std::max((x_pos - 1), 2);
+                // update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
 
-                // update_cord[0].x_pos = 50;
-                // update_cord[1].x_pos = 50;
-                // update_cord[2].y_pos = 50;
-                // update_cord[3].y_pos = 50;
+                update_cord[0].x_pos = 50;
+                update_cord[1].x_pos = 50;
+                update_cord[2].y_pos = 50;
+                update_cord[3].y_pos = 50;
 
-                // update_cord[0].y_pos = 50;
-                // update_cord[1].y_pos = 50;
-                // update_cord[2].x_pos = 50;
-                // update_cord[3].x_pos = 50;
+                update_cord[0].y_pos = 50;
+                update_cord[1].y_pos = 50;
+                update_cord[2].x_pos = 50;
+                update_cord[3].x_pos = 50;
 
                 // std::cout << '(' << x_pos << ',' << y_pos << ')' << '\n';
 
@@ -203,7 +203,7 @@ namespace physics
 
                         if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())
                         {
-                            pixels[x_pos][y_pos].modify_cross_die_pressure(     &pixels[x_pos][y_pos],      &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
+                            pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
                             // pixels[x_pos][y_pos].modify_cross_die_pressure(&new_version[x_pos][y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
 
                             // new_version[update_cord[i].x_pos][update_cord[i].y_pos].pressure_change(pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() + 1);
@@ -273,7 +273,10 @@ namespace physics
                     }
                     else
                     {
-                        new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+                        if (pixels[x_pos][y_pos].get_empty() == false)
+                        {
+                            new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+                        }
                     }
                 }
                 // std::cout << new_version[x_pos][y_pos].fetch_pressure() << ',';
@@ -293,9 +296,11 @@ namespace physics
         {
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
-                pixels[x_pos][y_pos] = new_version[x_pos][y_pos];
+                pixels[x_pos][y_pos].set_pressure(pixels[x_pos][y_pos].fetch_pressure() +  pixels[x_pos][y_pos].fetch_pressure());
 
                 new_version[x_pos][y_pos].reset_state();
+
+                // std::memcpy(new_version, pixels, sizeof(new_version[0][0]) * LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH);
             }
         }
     }

@@ -123,14 +123,14 @@ public:
     {
         // cell* original = orignal_ptr;
         // (*orignal_ptr).pressure;
-        if (((*orignal_ptr).pressure - change) > 1 && ((*predecessor).pressure + change) < 65534)
+        if (((*orignal_ptr).pressure - change) > 1 && ((*succesor).pressure + change) < 65534)
         {
             if (((*orignal_ptr).pressure - change) == 0)
             {
                 std::cout << "this is not possible" << '\n';
             }
             (*orignal_ptr).pressure -= change;
-            (*succesor).pressure += change + (*predecessor).pressure;
+            (*succesor).pressure += change;
         }
     }
 
@@ -405,6 +405,11 @@ public:
     {
         inert = new_val;
     }
+
+    bool get_empty()
+    {
+        return false;
+    }
 private:
     uint16_t pressure;
     uint16_t density;
@@ -414,6 +419,7 @@ private:
     // Flow is 0 for solid stuff?
     uint8_t flow;
     bool inert = false;
+    bool empty = false;
 
 protected:
 };
