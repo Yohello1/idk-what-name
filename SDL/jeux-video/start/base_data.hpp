@@ -123,12 +123,12 @@ public:
     {
         // cell* original = orignal_ptr;
         // (*orignal_ptr).pressure;
-        if (((*orignal_ptr).pressure - change) > 1 && ((*succesor).pressure + change) < 65534)
+        if (((*orignal_ptr).pressure - change) > 1 && ((*predecessor).pressure + (*succesor).pressure + change) < 65530)
         {
-            if (((*orignal_ptr).pressure - change) == 0)
-            {
-                std::cout << "this is not possible" << '\n';
-            }
+            // if (((*orignal_ptr).pressure - change) == 0)
+            // {
+            //     std::cout << "this is not possible" << '\n';
+            // }
             (*orignal_ptr).pressure -= change;
             (*succesor).pressure += change;
         }
@@ -149,6 +149,16 @@ public:
         if (((*orignal_ptr).pressure - change) > 0)
         {
             (*orignal_ptr).pressure -= change;
+        }
+    }
+
+    void modify_pressure_a(cell *orignal_ptr, int16_t change)
+    {
+        // cell* original = orignal_ptr;
+        // (*orignal_ptr).pressure;
+        if (((*orignal_ptr).pressure + change) < 65535)
+        {
+            (*orignal_ptr).pressure += change;
         }
     }
 
