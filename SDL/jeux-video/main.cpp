@@ -102,8 +102,15 @@ int main()
     ui_elements.push_back(new ui::text(text_position, colour_to_change2, "Ghost", 30, 0));
     std::cout << "Done ui" << '\n';
     std::cout << "Real addy " << &new_version << ' ' << &pixels << '\n';
-    
+
+    box_verts[0].x_pos = 80;
+    box_verts[1].x_pos = 100;
+    box_verts[0].y_pos = 80;
+    box_verts[1].y_pos = 100;
+    physics::draw_box_white_water(box_verts[0],box_verts[1], pixels);
+
     std::thread physics(physics::simulate, pixels, new_version);
+
 
 
     while (!quit_now)
