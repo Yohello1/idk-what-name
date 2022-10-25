@@ -32,7 +32,7 @@ namespace physics
 
         // for (int y_pos = y_chunk * 8; y_pos > (y_chunk * 8 - 8); y_pos--)
         // {
-        //     // Cannot memcpy classes
+        //     // Cannot memcpy classes? This cant be true, look into this after it works
         //     memcpy(new_version[x_chunk * 8][y_pos], pixels[x_chunk * 8][y_pos], sizeof(new_version[0][0])*8);
         // }
 
@@ -166,64 +166,71 @@ namespace physics
 
         float total_val = 0;
 
-        for (int y_pos = LOGICAL_WINDOW_WIDTH - 2; y_pos > -1; y_pos--)
+        for (int y_pos = LOGICAL_WINDOW_WIDTH - 2; y_pos > 0; y_pos--)
         {
-            for (int x_pos = LOGICAL_WINDOW_WIDTH - 2; x_pos > -1; x_pos--)
+            for (int x_pos = LOGICAL_WINDOW_WIDTH - 2; x_pos > 0; x_pos--)
             {
+
                 // TODO: When this is final, just use less declerations and get right to the point
                 //  There is a faster way to do it, it's just messier
                 cord_2d update_cord[4];
+
+                update_cord[0].x_pos = 50;
+                update_cord[1].x_pos = 50;
+                update_cord[2].x_pos = 50;
+                update_cord[3].x_pos = 50;
+
+                update_cord[0].y_pos = 50;
+                update_cord[1].y_pos = 50;
+                update_cord[2].y_pos = 50;
+                update_cord[3].y_pos = 50;
+
                 update_cord[0].x_pos = x_pos;
-                update_cord[1].x_pos = x_pos;
-                update_cord[2].y_pos = y_pos;
-                update_cord[3].y_pos = y_pos;
+                // if (x_pos - 1 > 0)
+                // {
+                //     update_cord[1].x_pos = x_pos - 1;
+                // }
+                // if (x_pos + 1 > 0)
+                // {
+                //     update_cord[2].x_pos = x_pos + 1;
+                // }
+                // update_cord[3].x_pos = x_pos;
 
-                update_cord[0].y_pos = std::max((y_pos - 1), 2);
-                update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
-                update_cord[2].x_pos = std::max((x_pos - 1), 2);
-                update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
+                // if (y_pos + 1 < LOGICAL_WINDOW_WIDTH)
+                // {
+                //     update_cord[0].y_pos = y_pos + 1;
+                // }
+                // update_cord[1].y_pos = y_pos;
+                // update_cord[2].y_pos = y_pos;
+                // if (y_pos - 1 > 0)
+                // {
+                //     update_cord[3].y_pos = y_pos - 1;
+                // }
 
-                // update_cord[0].x_pos = 50;
-                // update_cord[1].x_pos = 50;
-                // update_cord[2].y_pos = 50;
-                // update_cord[3].y_pos = 50;
+                /*
+                Sharon seems like she was into me for a bit? idk, I'll ask her if she wants to go to the mall
+                */
+                /*
+                # 0 #
+                1 X 2
+                # 3 #
+                */
 
-                // update_cord[0].y_pos = 50;
-                // update_cord[1].y_pos = 50;
-                // update_cord[2].x_pos = 50;
-                // update_cord[3].x_pos = 50;
 
-                // std::cout << '(' << x_pos << ',' << y_pos << ')' << '\n';
+                // for (int i = 0; i < 4; i++)
 
-                for (int i = 0; i < 4; i++)
-                {
-
-                    if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].is_inert() != true)
-                    {
-
-                        if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())
-                        {
-                            pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
-                            // pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
-                        }
-                        else
-                        {
-                            // new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
-                        }
-                        total_val += pixels[x_pos][y_pos].fetch_pressure();
-                    }
-                    else
-                    {
-                        if (pixels[x_pos][y_pos].get_empty() == false)
-                        {
-                            new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
-                        }
-                    }
-                }
-                // std::cout << new_version[x_pos][y_pos].fetch_pressure() << ',';
             }
             // std::cout << '\n';
         }
+
+        for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
+        {
+            for (int x_pos = LOGICAL_WINDOW_WIDTH ; x_pos > 0; x_pos--)
+            {
+                total_val += pixels[x_pos][y_pos].fetch_pressure();
+            }
+        }
+
         // std::cout << '\n';
         // std::cout << '\n';
 
@@ -237,7 +244,7 @@ namespace physics
         {
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
-                pixels[x_pos][y_pos].set_pressure(pixels[x_pos][y_pos].fetch_pressure() +  new_version[x_pos][y_pos].fetch_pressure());
+                pixels[x_pos][y_pos].set_pressure(pixels[x_pos][y_pos].fetch_pressure() + new_version[x_pos][y_pos].fetch_pressure());
 
                 new_version[x_pos][y_pos].reset_state();
 

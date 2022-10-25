@@ -119,18 +119,28 @@ public:
      * @param predecessor
      * @param change
      */
-    void modify_cross_die_pressure(cell *orignal_ptr, cell *predecessor, cell *succesor, int16_t change)
+    void modify_cross_die_pressure(cell *origin_pressure, cell *desination_soon, cell *to_be_added, int16_t change)
     {
         // cell* original = orignal_ptr;
         // (*orignal_ptr).pressure;
-        if (((*orignal_ptr).pressure - change) > 1 && ((*predecessor).pressure + (*succesor).pressure + change) < 65530)
+
+        int previous_pressure = (*origin_pressure).fetch_pressure() + (*desination_soon).fetch_pressure() + (*to_be_added).fetch_pressure();
+
+        // if (((*origin_pressure).fetch_pressure() - change) > 1 && ((*predecessor).fetch_pressure() + (*succesor).fetch_pressure() + change) < 500)
+        // {
+        //     (*orignal_ptr).pressure -= change;
+        //     (*succesor).pressure += change;
+        //     if (previous_pressure != (*orignal_ptr).fetch_pressure() + (*predecessor).fetch_pressure() + (*succesor).fetch_pressure())
+        //     {
+        //         std::cout << "this is not possible" << '\n';
+        //     }
+        // }
+    
+        if(origin_pressure->pressure - change > 1 && desination_soon->pressure + to_be_added->pressure + change < 500)
         {
-            // if (((*orignal_ptr).pressure - change) == 0)
-            // {
-            //     std::cout << "this is not possible" << '\n';
-            // }
-            (*orignal_ptr).pressure -= change;
-            (*succesor).pressure += change;
+            origin_pressure->pressure -= 1;
+            //desination_soon->pressure += 1;
+            to_be_added->pressure+=1;
         }
     }
 
