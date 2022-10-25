@@ -185,7 +185,7 @@ namespace physics
                 update_cord[2].y_pos = 50;
                 update_cord[3].y_pos = 50;
 
-                update_cord[0].x_pos = x_pos;
+                // update_cord[0].x_pos = x_pos;
                 // if (x_pos - 1 > 0)
                 // {
                 //     update_cord[1].x_pos = x_pos - 1;
@@ -196,10 +196,10 @@ namespace physics
                 // }
                 // update_cord[3].x_pos = x_pos;
 
-                // if (y_pos + 1 < LOGICAL_WINDOW_WIDTH)
-                // {
-                //     update_cord[0].y_pos = y_pos + 1;
-                // }
+                if (y_pos + 1 < LOGICAL_WINDOW_WIDTH)
+                {
+                    update_cord[0].y_pos = y_pos + 1;
+                }
                 // update_cord[1].y_pos = y_pos;
                 // update_cord[2].y_pos = y_pos;
                 // if (y_pos - 1 > 0)
@@ -216,29 +216,26 @@ namespace physics
                 # 3 #
                 */
 
+                for (int i = 0; i < 4; i++)
+                {
+                    int new_x = update_cord[i].x_pos;
+                    int new_y = update_cord[i].y_pos;
 
-                // for (int i = 0; i < 4; i++)
-
+                    pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[new_x][new_y], &new_version[new_x][new_y], 1);
+                }
             }
-            // std::cout << '\n';
         }
 
         for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
         {
-            for (int x_pos = LOGICAL_WINDOW_WIDTH ; x_pos > 0; x_pos--)
+            for (int x_pos = LOGICAL_WINDOW_WIDTH; x_pos > 0; x_pos--)
             {
-                total_val += pixels[x_pos][y_pos].fetch_pressure();
+                total_val += pixels[x_pos][y_pos].fetch_pressure() + new_version[x_pos][y_pos].fetch_pressure();
             }
         }
 
-        // std::cout << '\n';
-        // std::cout << '\n';
 
         differences.push_back(total_val);
-
-        // pixels.std::swap (new_version);
-        // std::swap(pixels, new_version);
-        // std::memcpy(pixels, new_version, sizeof(new_version[0][0]) * LOGICAL_WINDOW_WIDTH * LOGICAL_WINDOW_WIDTH);
 
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
