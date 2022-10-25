@@ -195,17 +195,16 @@ namespace physics
                 //     update_cord[2].x_pos = x_pos + 1;
                 // }
                 // update_cord[3].x_pos = x_pos;
+                update_cord[0].x_pos = x_pos;
+                update_cord[1].x_pos = x_pos;
+                update_cord[2].y_pos = y_pos;
+                update_cord[3].y_pos = y_pos;
 
-                if (y_pos + 1 < LOGICAL_WINDOW_WIDTH)
-                {
-                    update_cord[0].y_pos = y_pos + 1;
-                }
-                // update_cord[1].y_pos = y_pos;
-                // update_cord[2].y_pos = y_pos;
-                // if (y_pos - 1 > 0)
-                // {
-                //     update_cord[3].y_pos = y_pos - 1;
-                // }
+                update_cord[0].y_pos = std::max((y_pos - 1), 2);
+                update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
+                update_cord[2].x_pos = std::max((x_pos - 1), 2);
+                update_cord[3].x_pos = std::min((x_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
+
 
                 /*
                 Sharon seems like she was into me for a bit? idk, I'll ask her if she wants to go to the mall
@@ -218,10 +217,20 @@ namespace physics
 
                 for (int i = 0; i < 4; i++)
                 {
-                    int new_x = update_cord[i].x_pos;
-                    int new_y = update_cord[i].y_pos;
+                    // int new_x = update_cord[i].x_pos;
+                    // int new_y = update_cord[i].y_pos;
 
-                    pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[new_x][new_y], &new_version[new_x][new_y], 1);
+                    // pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[new_x][new_y], &new_version[new_x][new_y], 1);
+
+                    if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())
+                    {
+                        pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
+                        // pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
+                    }
+                    else
+                    {
+                        // new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+                    }
                 }
             }
         }
@@ -233,7 +242,6 @@ namespace physics
                 total_val += pixels[x_pos][y_pos].fetch_pressure() + new_version[x_pos][y_pos].fetch_pressure();
             }
         }
-
 
         differences.push_back(total_val);
 

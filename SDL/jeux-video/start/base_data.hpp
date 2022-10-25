@@ -124,7 +124,7 @@ public:
         // cell* original = orignal_ptr;
         // (*orignal_ptr).pressure;
 
-        int previous_pressure = (*origin_pressure).fetch_pressure() + (*desination_soon).fetch_pressure() + (*to_be_added).fetch_pressure();
+        // int previous_pressure = (*origin_pressure).fetch_pressure() + (*desination_soon).fetch_pressure() + (*to_be_added).fetch_pressure();
 
         // if (((*origin_pressure).fetch_pressure() - change) > 1 && ((*predecessor).fetch_pressure() + (*succesor).fetch_pressure() + change) < 500)
         // {

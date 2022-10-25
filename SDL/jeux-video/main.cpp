@@ -107,7 +107,6 @@ int main()
     box_verts[1].x_pos = 100;
     box_verts[0].y_pos = 80;
     box_verts[1].y_pos = 100;
-    physics::draw_box_white_water(box_verts[0],box_verts[1], pixels);
 
     std::thread physics(physics::simulate, pixels, new_version);
 
