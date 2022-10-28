@@ -222,17 +222,19 @@ namespace physics
 
                     // pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[new_x][new_y], &new_version[new_x][new_y], 1);
 
-                    if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure())
+                    // AIR
+                    if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure() && !pixels[x_pos][y_pos].is_inert() && !pixels[update_cord[i].x_pos][update_cord[i].y_pos].is_inert())
                     {
-                        pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
-                        // pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], 1);
-                    }
-                    else
-                    {
-                        // new_version[x_pos][y_pos] = pixels[x_pos][y_pos];
+                        int DPress = pixels[x_pos][y_pos].fetch_pressure()-pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure();
+                        float Flow = pixels[x_pos][y_pos].fetch_flow() * DPress;
+                        boost::algorithm::clamp(Flow, pixels[x_pos][y_pos].fetch_pressure()/6.0, -pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure()/6.0);
+                        pixels[x_pos][y_pos].modify_cross_die_pressure(&pixels[x_pos][y_pos], &pixels[update_cord[i].x_pos][update_cord[i].y_pos], &new_version[update_cord[i].x_pos][update_cord[i].y_pos], Flow);
                     }
                 }
+
+                // std::cout << pixels[x_pos][y_pos].fetch_pressure() + new_version[x_pos][y_pos].fetch_pressure() << ",";
             }
+            // std::cout << "\n";
         }
 
         for (int y_pos = LOGICAL_WINDOW_WIDTH; y_pos > 0; y_pos--)
