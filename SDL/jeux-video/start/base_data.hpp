@@ -112,7 +112,7 @@ public:
     }
 
         /**
-     * @brief First val is current cell, second is the old version of the one presure ismoving to, third is the new vresion where the pressure is moving to
+     * @brief First val is current cell, second is the old version of the one presure ismoving to, third is the new vresion where the pressure is moving to NOTE: CHANGE CAP
      *
      * @param orignal_ptr
      * @param succesor
@@ -136,7 +136,7 @@ public:
         //     }
         // }
     
-        if(origin_pressure->pressure - change > 1 && desination_soon->pressure + to_be_added->pressure + change < 500)
+        if(origin_pressure->pressure - change > 0 && desination_soon->pressure + to_be_added->pressure + change < 500)
         {
             origin_pressure->pressure -= 1;
             //desination_soon->pressure += 1;
