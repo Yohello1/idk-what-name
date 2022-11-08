@@ -1,6 +1,12 @@
 // #include "base_data.hpp"
 namespace Render
 {
+    struct {
+        double h;
+        double s;
+        double v;
+    } hsv;
+
     void redraw_render(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
     {
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
@@ -8,7 +14,26 @@ namespace Render
             for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
                 // It'll get optimisied by the compiler anyways
-                pixels[x_pos][y_pos].change_b(std::min(pixels[x_pos][y_pos].fetch_b() + pixels[x_pos][y_pos].fetch_pressure(), 255));
+                // pixels[x_pos][y_pos].change_b(std::min(pixels[x_pos][y_pos].fetch_b() + pixels[x_pos][y_pos].fetch_pressure(), 255));
+
+                double r = pixels[x_pos][y_pos].fetch_b()/255;
+                double g = pixels[x_pos][y_pos].fetch_g()/255;
+                double b = pixels[x_pos][y_pos].fetch_b()/255;
+
+                double Cmax = std::max({r,g,b});
+                double Cmin = std::min({r,g,b});
+
+                double delta = Cmax - Cmin;
+
+                if(delta > 0)
+                {
+                    
+                }
+                else
+                {
+                    hsv.h = 0;
+                }
+
 
                 SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].fetch_r(), pixels[x_pos][y_pos].fetch_g(), pixels[x_pos][y_pos].fetch_b(), pixels[x_pos][y_pos].fetch_a());
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
