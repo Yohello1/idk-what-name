@@ -192,7 +192,7 @@ int main()
             {
                 break;
             }
-            getch();
+            // getch();
         }
         for (int i = 0; i < 900000; i++)
         {

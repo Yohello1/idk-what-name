@@ -110,6 +110,7 @@ namespace Input_Large
                 usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].change_a(255);
                 usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].temperature_change(0);
                 usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].set_pressure(0);
+                usr_input[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio].set_inert(true);
                 changed[mouse_x / actual_2_logic_ratio][mouse_y / actual_2_logic_ratio] = true;
             }
             else if (left_down == true && shift == true)

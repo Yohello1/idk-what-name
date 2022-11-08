@@ -225,6 +225,7 @@ namespace physics
                     // AIR
                     if (pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure() < pixels[x_pos][y_pos].fetch_pressure() && !pixels[x_pos][y_pos].is_inert() && !pixels[update_cord[i].x_pos][update_cord[i].y_pos].is_inert())
                     {
+                        // In theory we will lose pressure, but god knows why the pressure is the same
                         int DPress = pixels[x_pos][y_pos].fetch_pressure()-pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure();
                         float Flow = pixels[x_pos][y_pos].fetch_flow() * DPress;
                         boost::algorithm::clamp(Flow, pixels[x_pos][y_pos].fetch_pressure()/6.0, -pixels[update_cord[i].x_pos][update_cord[i].y_pos].fetch_pressure()/6.0);

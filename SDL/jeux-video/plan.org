@@ -33,21 +33,21 @@
 - [1/3] optimisation
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)
-  - [ ] Rewrite SDL code in uh, opengl (I dont have a choic
+  - [ ] Rewrite SDL code in uh, opengl (I dont have a choice)
+  - [ ] New render method
 - [ ] Import/Export maps
 - [ ] Write a proper input system
-- [3/5] Final version of physics system
+- [7/9] Final version of physics system
   - [X] Correct types
   - [X] Data handling
-<<<<<<< HEAD
   - [X] Basic add and subtract from neighbouxr
-  - [ ] Method to put new_version to pixels
-    - [ ] Add value to new_version
-    - [ ] Add data from new_version + pixels -> pixels, new_versio.reset()
-    - [ ] stuff u can figure it out future me
+  - [X] Method to put new_version to pixels
+    - [X] Add value to new_version
+    - [X] Add data from new_version + pixels -> pixels, new_versio.reset()
+    - [X] stuff u can figure it out future me
   - [X] Basic add and subtract from neighbours
-  - [ ] Find issue with pressure exiting/entering from random points
-  - [ ] Create seperate thread which checks for inconsitenceis
+  - [X] Find issue with pressure exiting/entering from random points
+  - [X] Create seperate thread which checks for inconsitenceis
   - [ ] Port pressure to temp
   - [ ] Write render method
 
