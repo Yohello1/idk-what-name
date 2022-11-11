@@ -19,39 +19,98 @@ namespace Render
 
     struct hsv RGB2HSV(rgb pixel_in)
     {
-        double r = pixel_in.r;
-        double g = pixel_in.g;
-        double b = pixel_in.b;
+        hsv out;
+        double min, max, delta;
 
-        double K = 0.f;
+        min = pixel_in.r < pixel_in.g ? pixel_in.r : pixel_in.g;
+        min = min < pixel_in.b ? min : pixel_in.b;
 
-        if (g < b)
+        max = pixel_in.r > pixel_in.g ? pixel_in.r : pixel_in.g;
+        max = max > pixel_in.b ? max : pixel_in.b;
+
+        out.v = max; // v
+        delta = max - min;
+        if (delta < 0.00001)
         {
-            std::swap(g, b);
-            K = -1.f;
+            out.s = 0;
+            out.h = 0; // undefined, maybe nan?
+            return out;
         }
-
-        if (r < g)
+        if (max > 0.0)
+        {                          // NOTE: if Max is == 0, this divide would cause a crash
+            out.s = (delta / max); // s
+        }
+        else
         {
-            std::swap(r, g);
-            K = -2.f / 6.f - K;
+            // if max is 0, then r = g = b = 0
+            // s = 0, h is undefined
+            out.s = 0.0;
+            out.h = NAN; // its now undefined
+            return out;
         }
+        if (pixel_in.r >= max)                   // > is bogus, just keeps compilor happy
+            out.h = (pixel_in.g - pixel_in.b) / delta; // between yellow & magenta
+        else if (pixel_in.g >= max)
+            out.h = 2.0 + (pixel_in.b - pixel_in.r) / delta; // between cyan & yellow
+        else
+            out.h = 4.0 + (pixel_in.r - pixel_in.g) / delta; // between magenta & cyan
 
-        double chroma = r - std::min(g, b);
-        hsv temp;
+        out.h *= 60.0; // degrees
 
-        temp.h = fabs(K + (b - g / (6.f * chroma + 1e-20f)));
-        temp.s = chroma / (r + 1e-20f);
-        temp.v = r;
+        if (out.h < 0.0)
+            out.h += 360.0;
 
-        return temp;
+        return out;
     }
 
     struct rgb
     HSV2RGB(hsv hsv_in)
     {
-        double max = hsv_in.v * 255;
-        double min = max * (1 - hsv_in.s);
+        // literally copied of some project, Im not doing the meaht to figure it out
+
+        float h = hsv_in.h * 255 * 2.0f;   // 0-360
+        float s = hsv_in.s * 255 / 255.0f; // 0.0-1.0
+        float v = hsv_in.v * 255 / 255.0f; // 0.0-1.0
+
+        float r, g, b; // 0.0-1.0
+
+        int hi = (int)(h / 60.0f) % 6;
+        float f = (h / 60.0f) - hi;
+        float p = v * (1.0f - s);
+        float q = v * (1.0f - s * f);
+        float t = v * (1.0f - s * (1.0f - f));
+
+        switch (hi)
+        {
+        case 0:
+            r = v, g = t, b = p;
+            break;
+        case 1:
+            r = q, g = v, b = p;
+            break;
+        case 2:
+            r = p, g = v, b = t;
+            break;
+        case 3:
+            r = p, g = q, b = v;
+            break;
+        case 4:
+            r = t, g = p, b = v;
+            break;
+        case 5:
+            r = v, g = p, b = q;
+            break;
+        }
+        rgb temp;
+
+        temp.r = (unsigned char)(r * 255); // dst_r : 0-255
+        temp.g = (unsigned char)(g * 255); // dst_r : 0-255
+        temp.b = (unsigned char)(b * 255); // dst_r : 0-255
+
+        // std::cout << "R : " << R << endl;
+        // std::cout << "G : " << G << endl;
+        // std::cout << "B : " << B << endl;
+        return temp;
     }
 
     void
@@ -69,16 +128,17 @@ namespace Render
                 rgb_cell.g = pixels[x_pos][y_pos].fetch_g();
                 rgb_cell.b = pixels[x_pos][y_pos].fetch_b();
 
-
                 hsv data = Render::RGB2HSV(rgb_cell);
 
                 // Fading for when it has a lot of pressure
-                {
-                    double fade = pixels[x_pos][y_pos].fetch_pressure() / 65536;
-                    data.s = (data.s - (data.s * (fade * 100)));
-                }
+                // {
+                //     double fade = pixels[x_pos][y_pos].fetch_pressure() / 65536;
+                //     data.s = (data.s - (data.s * (fade * 100)));
+                // }
 
-                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].fetch_r(), pixels[x_pos][y_pos].fetch_g(), pixels[x_pos][y_pos].fetch_b(), pixels[x_pos][y_pos].fetch_a());
+                rgb temp = Render::HSV2RGB(data);
+
+                SDL_SetRenderDrawColor(renderer, rgb_cell.r, rgb_cell.g, rgb_cell.b, 255);
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
             }
         }
