@@ -1,6 +1,17 @@
 // #include "base_data.hpp"
+/**
+ * @brief IMPORTANT: COLOURS ARE HANDLED VERY DIFFERENTLY IN THIS FILE
+ * 
+ */
 namespace Render
 {
+    /**
+     * @brief NO SANITY CHECK 0-1 VALUES EXPECTED
+     * 
+     * @param double h
+     * @param double s
+     * @param double v
+     */
     struct hsv
     {
         double h;
@@ -10,6 +21,13 @@ namespace Render
 
     // I know I have a struct called colour, but that's for rgba
     // and Im a lazy bastard who doesnt wanna deal with cross-namespace stuff
+    /**
+     * @brief NO SANITY CHECK 0-1 VALUES EXPECTED
+     * 
+     * @param double r
+     * @param double g
+     * @param double b
+     */
     struct rgb
     {
         double r;
@@ -17,6 +35,12 @@ namespace Render
         double b;
     };
 
+/**
+ * @brief NO SANITY CHECK 0-1 VALUES EXPECTED
+ * 
+ * @param pixel_in 
+ * @return struct hsv 
+ */
     struct hsv RGB2HSV(rgb pixel_in)
     {
         hsv out;
@@ -48,7 +72,7 @@ namespace Render
             out.h = NAN; // its now undefined
             return out;
         }
-        if (pixel_in.r >= max)                   // > is bogus, just keeps compilor happy
+        if (pixel_in.r >= max)                         // > is bogus, just keeps compilor happy
             out.h = (pixel_in.g - pixel_in.b) / delta; // between yellow & magenta
         else if (pixel_in.g >= max)
             out.h = 2.0 + (pixel_in.b - pixel_in.r) / delta; // between cyan & yellow
@@ -63,54 +87,74 @@ namespace Render
         return out;
     }
 
+/**
+ * @brief NO SANITY CHECK 0-1 VALUES EXPECTED
+ * 
+ * @param hsv_in 
+ * @return struct hsv 
+ */
     struct rgb
     HSV2RGB(hsv hsv_in)
     {
         // literally copied of some project, Im not doing the meaht to figure it out
 
-        float h = hsv_in.h * 255 * 2.0f;   // 0-360
-        float s = hsv_in.s * 255 / 255.0f; // 0.0-1.0
-        float v = hsv_in.v * 255 / 255.0f; // 0.0-1.0
+        double hh, p, q, t, ff;
+        long i;
+        rgb out;
 
-        float r, g, b; // 0.0-1.0
+        if (hsv_in.s <= 0.0)
+        { // < is bogus, just shuts up warnings
+            out.r = hsv_in.v;
+            out.g = hsv_in.v;
+            out.b = hsv_in.v;
+            return out;
+        }
+        hh = hsv_in.h;
+        if (hh >= 360.0)
+            hh = 0.0;
+        hh /= 60.0;
+        i = (long)hh;
+        ff = hh - i;
+        p = hsv_in.v * (1.0 - hsv_in.s);
+        q = hsv_in.v * (1.0 - (hsv_in.s * ff));
+        t = hsv_in.v * (1.0 - (hsv_in.s * (1.0 - ff)));
 
-        int hi = (int)(h / 60.0f) % 6;
-        float f = (h / 60.0f) - hi;
-        float p = v * (1.0f - s);
-        float q = v * (1.0f - s * f);
-        float t = v * (1.0f - s * (1.0f - f));
-
-        switch (hi)
+        switch (i)
         {
         case 0:
-            r = v, g = t, b = p;
+            out.r = hsv_in.v;
+            out.g = t;
+            out.b = p;
             break;
         case 1:
-            r = q, g = v, b = p;
+            out.r = q;
+            out.g = hsv_in.v;
+            out.b = p;
             break;
         case 2:
-            r = p, g = v, b = t;
+            out.r = p;
+            out.g = hsv_in.v;
+            out.b = t;
             break;
+
         case 3:
-            r = p, g = q, b = v;
+            out.r = p;
+            out.g = q;
+            out.b = hsv_in.v;
             break;
         case 4:
-            r = t, g = p, b = v;
+            out.r = t;
+            out.g = p;
+            out.b = hsv_in.v;
             break;
         case 5:
-            r = v, g = p, b = q;
+        default:
+            out.r = hsv_in.v;
+            out.g = p;
+            out.b = q;
             break;
         }
-        rgb temp;
-
-        temp.r = (unsigned char)(r * 255); // dst_r : 0-255
-        temp.g = (unsigned char)(g * 255); // dst_r : 0-255
-        temp.b = (unsigned char)(b * 255); // dst_r : 0-255
-
-        // std::cout << "R : " << R << endl;
-        // std::cout << "G : " << G << endl;
-        // std::cout << "B : " << B << endl;
-        return temp;
+        return out;
     }
 
     void
@@ -124,21 +168,15 @@ namespace Render
                 // pixels[x_pos][y_pos].change_b(std::min(pixels[x_pos][y_pos].fetch_b() + pixels[x_pos][y_pos].fetch_pressure(), 255));
 
                 rgb rgb_cell;
-                rgb_cell.r = pixels[x_pos][y_pos].fetch_r();
-                rgb_cell.g = pixels[x_pos][y_pos].fetch_g();
-                rgb_cell.b = pixels[x_pos][y_pos].fetch_b();
+                rgb_cell.r = pixels[x_pos][y_pos].fetch_r()/255;
+                rgb_cell.g = pixels[x_pos][y_pos].fetch_g()/255;
+                rgb_cell.b = pixels[x_pos][y_pos].fetch_b()/255;
 
                 hsv data = Render::RGB2HSV(rgb_cell);
 
-                // Fading for when it has a lot of pressure
-                // {
-                //     double fade = pixels[x_pos][y_pos].fetch_pressure() / 65536;
-                //     data.s = (data.s - (data.s * (fade * 100)));
-                // }
-
                 rgb temp = Render::HSV2RGB(data);
 
-                SDL_SetRenderDrawColor(renderer, rgb_cell.r, rgb_cell.g, rgb_cell.b, 255);
+                SDL_SetRenderDrawColor(renderer, temp.r*255, temp.g*255, temp.b*255, 255);
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
             }
         }

@@ -133,8 +133,8 @@ namespace Input_Large
                         // Changes colours, properites etc
                         usr_input[x_pos][y_pos].change_r(0);
                         usr_input[x_pos][y_pos].change_g(0);
-                        usr_input[x_pos][y_pos].change_b(0);
-                        usr_input[x_pos][y_pos].change_a(0);
+                        usr_input[x_pos][y_pos].change_b(255);
+                        usr_input[x_pos][y_pos].change_a(255);
                         usr_input[x_pos][y_pos].set_pressure(100);
                         usr_input[x_pos][y_pos].set_flow(0);
                         usr_input[x_pos][y_pos].set_inert(false);
