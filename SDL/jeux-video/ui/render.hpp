@@ -1,56 +1,38 @@
 // #include "base_data.hpp"
 /**
  * @brief IMPORTANT: COLOURS ARE HANDLED VERY DIFFERENTLY IN THIS FILE
- * 
+ *
  */
 namespace Render
 {
-    /**
-     * @brief NO SANITY CHECK 0-1 VALUES EXPECTED
-     * 
-     * @param double h
-     * @param double s
-     * @param double v
-     */
-    struct hsv
-    {
-        double h;
-        double s;
-        double v;
-    };
 
-    // I know I have a struct called colour, but that's for rgba
-    // and Im a lazy bastard who doesnt wanna deal with cross-namespace stuff
-    /**
-     * @brief NO SANITY CHECK 0-1 VALUES EXPECTED
-     * 
-     * @param double r
-     * @param double g
-     * @param double b
-     */
-    struct rgb
+    typedef struct
     {
-        double r;
-        double g;
-        double b;
-    };
+        double r; // a fraction between 0 and 1
+        double g; // a fraction between 0 and 1
+        double b; // a fraction between 0 and 1
+    } rgb;
 
-/**
- * @brief NO SANITY CHECK 0-1 VALUES EXPECTED
- * 
- * @param pixel_in 
- * @return struct hsv 
- */
-    struct hsv RGB2HSV(rgb pixel_in)
+    typedef struct
+    {
+        double h; // angle in degrees
+        double s; // a fraction between 0 and 1
+        double v; // a fraction between 0 and 1
+    } hsv;
+
+    static hsv rgb2hsv(rgb in);
+    static rgb hsv2rgb(hsv in);
+
+    hsv rgb2hsv(rgb in)
     {
         hsv out;
         double min, max, delta;
 
-        min = pixel_in.r < pixel_in.g ? pixel_in.r : pixel_in.g;
-        min = min < pixel_in.b ? min : pixel_in.b;
+        min = in.r < in.g ? in.r : in.g;
+        min = min < in.b ? min : in.b;
 
-        max = pixel_in.r > pixel_in.g ? pixel_in.r : pixel_in.g;
-        max = max > pixel_in.b ? max : pixel_in.b;
+        max = in.r > in.g ? in.r : in.g;
+        max = max > in.b ? max : in.b;
 
         out.v = max; // v
         delta = max - min;
@@ -72,12 +54,12 @@ namespace Render
             out.h = NAN; // its now undefined
             return out;
         }
-        if (pixel_in.r >= max)                         // > is bogus, just keeps compilor happy
-            out.h = (pixel_in.g - pixel_in.b) / delta; // between yellow & magenta
-        else if (pixel_in.g >= max)
-            out.h = 2.0 + (pixel_in.b - pixel_in.r) / delta; // between cyan & yellow
+        if (in.r >= max)                   // > is bogus, just keeps compilor happy
+            out.h = (in.g - in.b) / delta; // between yellow & magenta
+        else if (in.g >= max)
+            out.h = 2.0 + (in.b - in.r) / delta; // between cyan & yellow
         else
-            out.h = 4.0 + (pixel_in.r - pixel_in.g) / delta; // between magenta & cyan
+            out.h = 4.0 + (in.r - in.g) / delta; // between magenta & cyan
 
         out.h *= 60.0; // degrees
 
@@ -87,69 +69,60 @@ namespace Render
         return out;
     }
 
-/**
- * @brief NO SANITY CHECK 0-1 VALUES EXPECTED
- * 
- * @param hsv_in 
- * @return struct hsv 
- */
-    struct rgb
-    HSV2RGB(hsv hsv_in)
+    rgb hsv2rgb(hsv in)
     {
-        // literally copied of some project, Im not doing the meaht to figure it out
-
         double hh, p, q, t, ff;
         long i;
         rgb out;
 
-        if (hsv_in.s <= 0.0)
+        if (in.s <= 0.0)
         { // < is bogus, just shuts up warnings
-            out.r = hsv_in.v;
-            out.g = hsv_in.v;
-            out.b = hsv_in.v;
+            out.r = in.v;
+            out.g = in.v;
+            out.b = in.v;
             return out;
         }
-        hh = hsv_in.h;
+        hh = in.h;
         if (hh >= 360.0)
             hh = 0.0;
         hh /= 60.0;
         i = (long)hh;
         ff = hh - i;
-        p = hsv_in.v * (1.0 - hsv_in.s);
-        q = hsv_in.v * (1.0 - (hsv_in.s * ff));
-        t = hsv_in.v * (1.0 - (hsv_in.s * (1.0 - ff)));
+        p = in.v * (1.0 - in.s);
+        q = in.v * (1.0 - (in.s * ff));
+        t = in.v * (1.0 - (in.s * (1.0 - ff)));
 
         switch (i)
         {
         case 0:
-            out.r = hsv_in.v;
+            out.r = in.v;
             out.g = t;
             out.b = p;
             break;
         case 1:
             out.r = q;
-            out.g = hsv_in.v;
+            out.g = in.v;
             out.b = p;
             break;
         case 2:
             out.r = p;
-            out.g = hsv_in.v;
+            out.g = in.v;
             out.b = t;
             break;
 
         case 3:
             out.r = p;
             out.g = q;
-            out.b = hsv_in.v;
+            out.b = in.v;
             break;
         case 4:
             out.r = t;
             out.g = p;
-            out.b = hsv_in.v;
+            out.b = in.v;
             break;
         case 5:
         default:
-            out.r = hsv_in.v;
+            out.r = in.v;
             out.g = p;
             out.b = q;
             break;
@@ -157,8 +130,7 @@ namespace Render
         return out;
     }
 
-    void
-    redraw_render(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
+    void redraw_render(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
     {
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
@@ -168,15 +140,24 @@ namespace Render
                 // pixels[x_pos][y_pos].change_b(std::min(pixels[x_pos][y_pos].fetch_b() + pixels[x_pos][y_pos].fetch_pressure(), 255));
 
                 rgb rgb_cell;
-                rgb_cell.r = pixels[x_pos][y_pos].fetch_r()/255;
-                rgb_cell.g = pixels[x_pos][y_pos].fetch_g()/255;
-                rgb_cell.b = pixels[x_pos][y_pos].fetch_b()/255;
+                rgb_cell.r = pixels[x_pos][y_pos].fetch_r() / pow(2,8) ;
+                rgb_cell.g = pixels[x_pos][y_pos].fetch_g() / pow(2,8) ;
+                rgb_cell.b = pixels[x_pos][y_pos].fetch_b() / pow(2,8) ;
 
-                hsv data = Render::RGB2HSV(rgb_cell);
+                hsv data = Render::rgb2hsv(rgb_cell);
 
-                rgb temp = Render::HSV2RGB(data);
+                // Fading 
+                {   
+                    data.s = data.s - (data.s*(pixels[x_pos][y_pos].fetch_pressure()/pow(2,16)));
+                }
 
-                SDL_SetRenderDrawColor(renderer, temp.r*255, temp.g*255, temp.b*255, 255);
+                rgb temp = Render::hsv2rgb(data);
+
+                temp.r *= pow(2,8);
+                temp.g *= pow(2,8);
+                temp.b *= pow(2,8);
+
+                SDL_SetRenderDrawColor(renderer, temp.r , temp.g , temp.b , 255);
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
             }
         }
