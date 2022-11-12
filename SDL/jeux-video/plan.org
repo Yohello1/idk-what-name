@@ -30,6 +30,13 @@
   - [X] entntiy
   - [X] Typies
   - [X] Test
+- [ ] Quality of Programming the engine life
+  - [ ] Switching to type def
+- [ ] Render life
+  - [ ] RGB TO HSV
+  - [ ] HSV TO RGB
+  - [ ] Temp representation
+  - [ ] Pressure representation
 - [1/3] optimisation
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)

@@ -55,9 +55,9 @@ int main()
     std::cout << "Txt pos " << text_position.x_pos << " " << text_position.y_pos << '\n';
 
     colour colour_to_change;
-    colour_to_change.r = 231;
-    colour_to_change.g = 63;
-    colour_to_change.b = 0;
+    colour_to_change.r = 254;
+    colour_to_change.g = 1;
+    colour_to_change.b = 1;
     colour_to_change.a = 255;
 
     colour colour_to_change2;
