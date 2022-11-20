@@ -349,7 +349,8 @@ namespace Physics
 		// Wait for the difference
 		if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 22222)
 		{
-			SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
+			// SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 100000);
+			std::chrono::sleep_until(system_clock::now() + milisecond(end_time - start_time));
 		}
 	}
 }

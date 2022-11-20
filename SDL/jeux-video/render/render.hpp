@@ -134,7 +134,7 @@ namespace Render
 
 
 
-    void redraw_render(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
+    void redraw_render(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], GLFWwindow *w)
     {
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
@@ -162,20 +162,20 @@ namespace Render
                 temp.g *= pow(2,8);
                 temp.b *= pow(2,8);
 
-                SDL_SetRenderDrawColor(renderer, temp.r , temp.g , temp.b , 255);
-                SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+                // SDL_SetRenderDrawColor(renderer, temp.r , temp.g , temp.b , 255);
+                // SDL_RenderDrawPoint(renderer, x_pos, y_pos);
             }
         }
     }
 
-    void draw_point(int x_pos, int y_pos, cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
-    {
-        SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].fetch_r(),
-                               pixels[x_pos][y_pos].fetch_g(),
-                               pixels[x_pos][y_pos].fetch_b(),
-                               pixels[x_pos][y_pos].fetch_a());
-        SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-    }
+    // void draw_point(int x_pos, int y_pos, cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
+    // {
+    //     // SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].fetch_r(),
+    //     //                        pixels[x_pos][y_pos].fetch_g(),
+    //     //                        pixels[x_pos][y_pos].fetch_b(),
+    //     //                        pixels[x_pos][y_pos].fetch_a());
+    //     // SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+    // }
 
     // Only draws to a canvas
     // void draw_box(cord_2d point1, cord_2d point2, rgba_colour colour, position pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
