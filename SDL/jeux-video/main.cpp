@@ -1,18 +1,16 @@
 #include "start/base_data.hpp"
-#include "ui/stb_truetype.h"
+#include "render/stb_truetype.h"
 #include "math/vector_math.hpp"
 // #include "physics/physics.hpp"
 #include "physics/physics2.hpp"
-#include "ui/render.hpp"
+#include "render/render.hpp"
 #include "input/input_large.hpp"
 #include "generation/terain.hpp"
-#include "ui/ui.hpp"
+#include "render/ui.hpp"
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
 // A crap ton of arrays to deal with everything
-
-
 
 // Simulated array everything is being fed
 cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
@@ -35,7 +33,16 @@ const int actual_2_logic_ratio = ACTUAL_WINDOW_WIDTH / LOGICAL_WINDOW_WIDTH;
 int main()
 {
     std::cout << "Starting" << '\n';
-    init::start();
+
+    // Starting stuff
+    srand(current_time);
+    glfwInit();
+    // FIXME: Switch to ACTUAL_WINDOW_WIDTH once this works
+    GLFWwindow *w = glfwCreateWindow(LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH, "Gamen't", NULL, NULL);
+    glfwMakeContextCurrent(w);
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    
+    // init::start();
     std::cout << "Started, allocating memory" << '\n';
 
     array_clean_start(pixels);
@@ -110,8 +117,6 @@ int main()
 
     std::thread physics(physics::simulate, pixels, new_version);
 
-
-
     while (!quit_now)
     {
 
@@ -126,19 +131,20 @@ int main()
         movingBoxes->Update(render);
         // Debug::chunk_update_status(render, Physics::chunk_checker);
 
-        Render::redraw_render(render, renderer);
-        SDL_RenderPresent(renderer);
-
+        Render::redraw_render(render, w);
+        // SDL_RenderPresent(renderer);
     }
     physics.join();
     std::cout << "ENDED" << '\n';
     excecution_finished();
+
+    glfwDestroyWindow(w);
 }
 
 void excecution_finished(void)
 {
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    // SDL_DestroyRenderer(renderer);
+    // SDL_DestroyWindow(window);
+    // SDL_Quit();
 }

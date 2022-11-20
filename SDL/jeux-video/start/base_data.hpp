@@ -23,7 +23,7 @@
 #include <iomanip>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <SDL2/SDL.h>
+// #include <SDL2/SDL.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
@@ -40,9 +40,11 @@ std::atomic<bool> recheck;
 // time
 unsigned int current_time = (unsigned int)time(NULL);
 // pointers to these things
-SDL_Renderer *renderer;
-SDL_Window *window;
-SDL_Event event;
+// SDL_Renderer *renderer;
+// SDL_Window *window;
+// SDL_Event event;
+
+GLFWwindow *w;
 
 // something needs to bedone about this
 // Use density, and type (static or dynamic)
@@ -113,7 +115,7 @@ public:
         }
     }
 
-        /**
+    /**
      * @brief First val is current cell, second is the old version of the one presure ismoving to, third is the new vresion where the pressure is moving to NOTE: CHANGE CAP
      *
      * @param orignal_ptr
@@ -137,16 +139,14 @@ public:
         //         std::cout << "this is not possible" << '\n';
         //     }
         // }
-    
-        if(origin_pressure->pressure - change > 0 && desination_soon->pressure + to_be_added->pressure + change < 500)
+
+        if (origin_pressure->pressure - change > 0 && desination_soon->pressure + to_be_added->pressure + change < 500)
         {
             origin_pressure->pressure -= 1;
-            //desination_soon->pressure += 1;
-            to_be_added->pressure+=1;
+            // desination_soon->pressure += 1;
+            to_be_added->pressure += 1;
         }
     }
-
-
 
     /**
      * @brief changes the value of one cell, just add
@@ -385,8 +385,8 @@ public:
 
     /**
      * @brief It just SETS IT, does not add or subtract
-     * 
-     * @param new_temp 
+     *
+     * @param new_temp
      */
     void modify_temp(float new_temp)
     {
@@ -394,9 +394,9 @@ public:
     }
 
     /**
-     * @brief 
-     * 
-     * @return uint8_t 
+     * @brief
+     *
+     * @return uint8_t
      */
     uint8_t fetch_flow()
     {
@@ -405,8 +405,8 @@ public:
 
     /**
      * @brief Set the flow object, JUST SETS NO ADD NO SUBTRACT
-     * 
-     * @param new_val 
+     *
+     * @param new_val
      */
     void set_flow(uint8_t new_val)
     {
@@ -415,8 +415,8 @@ public:
 
     /**
      * @brief SETS DENSITY
-     * 
-     * @param new_val 
+     *
+     * @param new_val
      */
     void modify_density(uint16_t new_val)
     {
@@ -432,6 +432,7 @@ public:
     {
         return false;
     }
+
 private:
     uint16_t pressure;
     uint16_t density;
@@ -445,7 +446,7 @@ private:
      */
     /**
      * I think I'll just hangout with them, no need to try and like, force myself to be friends with them
-    */
+     */
     uint8_t r, g, b, a;
 
     // Flow is 0 for solid stuff?
@@ -466,18 +467,26 @@ namespace init
 {
     void start()
     {
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-        // Printing the time
-        std::cout << "Time = " << current_time << "\n";
+        // SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+        // // Printing the time
+        // std::cout << "Time = " << current_time << "\n";
         // setting random seed
         srand(current_time);
-        // rise my glorious creation*
+        // // rise my glorious creation*
 
-        SDL_Init(SDL_INIT_VIDEO);
-        SDL_CreateWindowAndRenderer(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, 0, &window, &renderer);
-        SDL_SetWindowTitle(window, "Gamen't");
-        SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
-        SDL_RenderClear(renderer);
+        // SDL_Init(SDL_INIT_VIDEO);
+        // SDL_CreateWindowAndRenderer(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, 0, &window, &renderer);
+        // SDL_SetWindowTitle(window, "Gamen't");
+        // SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
+        // SDL_RenderClear(renderer);
+
+        glfwInit();
+        // FIXME: Switch to ACTUAL_WINDOW_WIDTH once this works
+        GLFWwindow *w = glfwCreateWindow(LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH, "Gamen't", NULL, NULL);
+        glfwMakeContextCurrent(w);
+        gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+
     }
 
 }
