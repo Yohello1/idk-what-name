@@ -116,8 +116,8 @@ int main()
     {
 
         mtx2.lock();
-        quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);
-        Input_Large::mix_new_version_usr_input(changed, usr_input, pixels);
+        // quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);
+        // Input_Large::mix_new_version_usr_input(changed, usr_input, pixels);
         std::memcpy(&render, &pixels, sizeof(pixels));
         mtx2.unlock();
 

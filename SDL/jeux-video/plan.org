@@ -17,9 +17,9 @@
   - [X] Un cancerousingx
 
 - [X] restructure it to not be cancerous
-- [5/6] Do the `#if` things to run debug garbage
+- [6/6] Do the `#if` things to run debug garbage
   - [X] Terrain.hpp
-  - [ ] input.hpp (and input_Large), should merge into one file though
+  - [X] input.hpp (and input_Large), should merge into one file though
   - [X] Vector math
   - [X] Physics .hpp
   - [X] Render.hpp
@@ -33,14 +33,18 @@
 - [ ] Quality of Programming the engine life
   - [ ] Switching to type def
 - [ ] Render life
+  - [ ] Figure out how to run the map -> Material -> Img
   - [ ] RGB TO HSV
   - [ ] HSV TO RGB
   - [ ] Temp representation
   - [ ] Pressure representation
-- [1/3] optimisation
+- [1/4] optimisation
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)
   - [ ] Rewrite SDL code in uh, opengl (I dont have a choice)
+    - [ ] Display colours
+    - [ ] Frag/vert shader
+    - [ ] Compositor
   - [ ] New render method
 - [ ] Import/Export maps
 - [ ] Write a proper input system
@@ -56,7 +60,6 @@
   - [X] Find issue with pressure exiting/entering from random points
   - [X] Create seperate thread which checks for inconsitenceis
   - [ ] Port pressure to temp
-  - [ ] Write render method
 
 * Bugs
 
