@@ -21,6 +21,8 @@
 #include <boost/algorithm/clamp.hpp>
 #include <algorithm>
 #include <iomanip>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <SDL2/SDL.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
@@ -434,6 +436,16 @@ private:
     uint16_t pressure;
     uint16_t density;
     float temperature;
+
+    /**
+     * Rewrite the material stuff
+     * So, now every material/cell will store a hash of the material which is occupied by them
+     * When being rendered, this hash will be used to retrieve data about this one material
+     * Continued in render.hpp?
+     */
+    /**
+     * I think I'll just hangout with them, no need to try and like, force myself to be friends with them
+    */
     uint8_t r, g, b, a;
 
     // Flow is 0 for solid stuff?

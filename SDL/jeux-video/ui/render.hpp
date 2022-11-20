@@ -1,6 +1,7 @@
 // #include "base_data.hpp"
 /**
- * @brief IMPORTANT: COLOURS ARE HANDLED VERY DIFFERENTLY IN THIS FILE
+ * @brief IMPORTANT: COLOURS ARE HANDLED VERY DIFFERENTLY IN THIS FILE 
+ * May god help you if you try and modify the render process
  *
  */
 namespace Render
@@ -130,6 +131,9 @@ namespace Render
         return out;
     }
 
+
+
+
     void redraw_render(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH], SDL_Renderer *renderer)
     {
         for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
@@ -149,6 +153,7 @@ namespace Render
                 // Fading 
                 {   
                     data.s = data.s - (data.s*(pixels[x_pos][y_pos].fetch_pressure()/pow(2,16)));
+                    data.s = 0;
                 }
 
                 rgb temp = Render::hsv2rgb(data);
