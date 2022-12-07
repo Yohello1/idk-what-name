@@ -39,7 +39,7 @@ int main()
 
     // FIXME: Switch to ACTUAL_WINDOW_WIDTH once this works
     glfwInit();
-    GLFWwindow *w = glfwCreateWindow(600, 600, "idk", NULL, NULL);
+    GLFWwindow *w = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, "idk", NULL, NULL);
     glfwMakeContextCurrent(w);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
@@ -50,6 +50,8 @@ int main()
             .5f, -.5f, 0.f};
 
     // VAO, vertex Array Object
+        
+    std::cout << "Started, allocating memory to anything that needs it" << '\n';
     uint32_t v;
     glGenBuffers(1, &v);
     glBindBuffer(GL_ARRAY_BUFFER, v);
@@ -58,7 +60,6 @@ int main()
     glEnableVertexAttribArray(0);
 
     // init::start();
-    std::cout << "Started, allocating memory" << '\n';
 
     array_clean_start(pixels);
     std::cout << "Thingy started now" << '\n';
