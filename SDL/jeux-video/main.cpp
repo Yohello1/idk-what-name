@@ -36,12 +36,27 @@ int main()
 
     // Starting stuff
     srand(current_time);
-    glfwInit();
+
     // FIXME: Switch to ACTUAL_WINDOW_WIDTH once this works
-    GLFWwindow *w = glfwCreateWindow(LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH, "Gamen't", NULL, NULL);
+    glfwInit();
+    GLFWwindow *w = glfwCreateWindow(600, 600, "idk", NULL, NULL);
     glfwMakeContextCurrent(w);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    
+
+    float t[] =
+        {
+            -.5f, -.5f, 0.f,
+            0.f, .5f, 0.f,
+            .5f, -.5f, 0.f};
+
+    // VAO, vertex Array Object
+    uint32_t v;
+    glGenBuffers(1, &v);
+    glBindBuffer(GL_ARRAY_BUFFER, v);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(t) * sizeof(t) / sizeof(t[0]), &t[0], GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
     // init::start();
     std::cout << "Started, allocating memory" << '\n';
 
@@ -99,14 +114,14 @@ int main()
             entity,
             entites::rgba_colour{});
     }
-    movingBoxes->Init();
+    // movingBoxes->Init();
 
-    ui::init_font_all("ui/font/Hack-Regular.ttf");
+    // ui::init_font_all("ui/font/Hack-Regular.ttf");
 
-    ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
-    // It needs to have a space at the start, idk why tbh
-    // OK OK it's cause it's looping through the thing???
-    ui_elements.push_back(new ui::text(text_position, colour_to_change2, "Ghost", 30, 0));
+    // ui_elements.push_back(new ui::boxes(box_verts[0], box_verts[1], colour_to_change));
+    // // It needs to have a space at the start, idk why tbh
+    // // OK OK it's cause it's looping through the thing???
+    // ui_elements.push_back(new ui::text(text_position, colour_to_change2, "Ghost", 30, 0));
     std::cout << "Done ui" << '\n';
     std::cout << "Real addy " << &new_version << ' ' << &pixels << '\n';
 
@@ -117,23 +132,31 @@ int main()
 
     std::thread physics(physics::simulate, pixels, new_version);
 
-    while (!quit_now)
+    // For now
+    // while(!quit_now)
+    while (!glfwWindowShouldClose(w))
     {
 
-        mtx2.lock();
-        // quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);
-        // Input_Large::mix_new_version_usr_input(changed, usr_input, pixels);
-        std::memcpy(&render, &pixels, sizeof(pixels));
-        mtx2.unlock();
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glfwSwapBuffers(w);
+        glfwPollEvents();
 
-        ui_elements[0]->draw(render);
-        ui_elements[1]->draw(render);
-        movingBoxes->Update(render);
-        // Debug::chunk_update_status(render, Physics::chunk_checker);
+        // mtx2.lock();
+        //// quit_now = Input_Large::poll_usr_input(changed, usr_input, &event, quit_now, actual_2_logic_ratio);
+        //// Input_Large::mix_new_version_usr_input(changed, usr_input, pixels);
+        // std::memcpy(&render, &pixels, sizeof(pixels));
+        // mtx2.unlock();
 
-        Render::redraw_render(render, w);
-        // SDL_RenderPresent(renderer);
+        // ui_elements[0]->draw(render);
+        // ui_elements[1]->draw(render);
+        // movingBoxes->Update(render);
+        //// Debug::chunk_update_status(render, Physics::chunk_checker);
+
+        // Render::redraw_render(render, w);
+        //// SDL_RenderPresent(renderer);
     }
+    quit_now= true;
     physics.join();
     std::cout << "ENDED" << '\n';
     excecution_finished();

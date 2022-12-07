@@ -42,6 +42,7 @@
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)
   - [ ] Rewrite SDL code in uh, opengl (I dont have a choice)
+    - [ ] Open a window
     - [ ] Display colours
     - [ ] Frag/vert shader
     - [ ] Compositor
