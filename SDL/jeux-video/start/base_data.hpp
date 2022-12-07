@@ -44,8 +44,6 @@ unsigned int current_time = (unsigned int)time(NULL);
 // SDL_Window *window;
 // SDL_Event event;
 
-GLFWwindow *w;
-
 // something needs to bedone about this
 // Use density, and type (static or dynamic)
 // entity is rlly just fixed_pos with extra steps
@@ -471,7 +469,6 @@ namespace init
         // // Printing the time
         // std::cout << "Time = " << current_time << "\n";
         // setting random seed
-        srand(current_time);
         // // rise my glorious creation*
 
         // SDL_Init(SDL_INIT_VIDEO);
@@ -480,11 +477,7 @@ namespace init
         // SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
         // SDL_RenderClear(renderer);
 
-        glfwInit();
-        // FIXME: Switch to ACTUAL_WINDOW_WIDTH once this works
-        GLFWwindow *w = glfwCreateWindow(LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH, "Gamen't", NULL, NULL);
-        glfwMakeContextCurrent(w);
-        gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
 
 
     }
