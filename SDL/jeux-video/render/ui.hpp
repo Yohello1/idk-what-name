@@ -23,6 +23,7 @@ namespace ui
     {
         // wut
         // I am not smort
+        // TODO: BE SMART
     }
 
     void init_font_all(const char *font_path)
