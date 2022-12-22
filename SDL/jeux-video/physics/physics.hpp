@@ -106,8 +106,10 @@ namespace Physics
 							 */
 							else if (
 								pixels[x_pos][y_pos].state_now == solid &&
-								pixels[x_pos + 1][y_pos + 1].state_now == empty && new_version[x_pos + 1][y_pos + 1].state_now == empty &&
-								y_pos != (LOGICAL_WINDOW_WIDTH - 1) && x_pos != (LOGICAL_WINDOW_WIDTH - 1))
+								pixels[x_pos + 1][y_pos + 1].state_now == empty && 
+								new_version[x_pos + 1][y_pos + 1].state_now == empty &&
+								y_pos != (LOGICAL_WINDOW_WIDTH - 1) && 
+								x_pos != (LOGICAL_WINDOW_WIDTH - 1))
 							{
 								new_version[x_pos + 1][y_pos + 1] = pixels[x_pos][y_pos];
 

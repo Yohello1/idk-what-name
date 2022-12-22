@@ -1,8 +1,8 @@
-#version 420
+#version 420 
 
-uniform vec4 inputColour;
-out vec4 fragColour;
+in vec3 color; 
+out vec4 Color; 
 
-void main() {
-  fragColour = inputColour;
+void main(){ 
+	Color = vec4(0.85f, 0.11f, 0.11f, 1f);
 }
