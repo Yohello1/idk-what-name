@@ -17,6 +17,7 @@
 #include <unordered_map>
 #include <set>
 #include <vector>
+#include <fstream>
 #include <array>
 #include <boost/algorithm/clamp.hpp>
 #include <algorithm>
@@ -28,7 +29,10 @@
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
 #define LOGICAL_WINDOW_WIDTH 128
+#define LOGICAL_WINDOW_HEIGH 1024
+
 #define ACTUAL_WINDOW_WIDTH 1024
+#define ACTUAL_WINDOW_HEIGH 1024
 #define INPUT_DEBUG
 
 typedef std::chrono::high_resolution_clock Clock;
@@ -123,21 +127,6 @@ public:
      */
     void modify_cross_die_pressure(cell *origin_pressure, cell *desination_soon, cell *to_be_added, int16_t change)
     {
-        // cell* original = orignal_ptr;
-        // (*orignal_ptr).pressure;
-
-        // int previous_pressure = (*origin_pressure).fetch_pressure() + (*desination_soon).fetch_pressure() + (*to_be_added).fetch_pressure();
-
-        // if (((*origin_pressure).fetch_pressure() - change) > 1 && ((*predecessor).fetch_pressure() + (*succesor).fetch_pressure() + change) < 500)
-        // {
-        //     (*orignal_ptr).pressure -= change;
-        //     (*succesor).pressure += change;
-        //     if (previous_pressure != (*orignal_ptr).fetch_pressure() + (*predecessor).fetch_pressure() + (*succesor).fetch_pressure())
-        //     {
-        //         std::cout << "this is not possible" << '\n';
-        //     }
-        // }
-
         if (origin_pressure->pressure - change > 0 && desination_soon->pressure + to_be_added->pressure + change < 500)
         {
             origin_pressure->pressure -= 1;

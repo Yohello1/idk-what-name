@@ -29,6 +29,7 @@ namespace ui
     void init_font_all(const char *font_path)
     {
         // Puts it into the file buffer
+        // IT CANNOT POSSIBLY BE THAT BIG
         fread(file_buffer, 1, 1000000, fopen(font_path, "rb"));
         stbtt_InitFont(&font, file_buffer, 0);
     }

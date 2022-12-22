@@ -208,6 +208,7 @@ namespace physics
 
                 /*
                 Sharon seems like she was into me for a bit? idk, I'll ask her if she wants to go to the mall
+                Updates like 3 months later, this was incorrect, I think she was just bored or smth lmao
                 */
                 /*
                 # 0 #
