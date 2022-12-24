@@ -18,6 +18,8 @@
 #include <set>
 #include <vector>
 #include <fstream>
+#include <sstream>
+#include <cerrno>
 #include <array>
 #include <boost/algorithm/clamp.hpp>
 #include <algorithm>
