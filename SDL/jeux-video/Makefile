@@ -153,29 +153,29 @@ glad.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw2.dir/build.make CMakeFiles/draw2.dir/glad.c.s
 .PHONY : glad.c.s
 
-main.o: main.cpp.o
-.PHONY : main.o
+temp.o: temp.cpp.o
+.PHONY : temp.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw2.dir/build.make CMakeFiles/draw2.dir/main.cpp.o
-.PHONY : main.cpp.o
+temp.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw2.dir/build.make CMakeFiles/draw2.dir/temp.cpp.o
+.PHONY : temp.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+temp.i: temp.cpp.i
+.PHONY : temp.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw2.dir/build.make CMakeFiles/draw2.dir/main.cpp.i
-.PHONY : main.cpp.i
+temp.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw2.dir/build.make CMakeFiles/draw2.dir/temp.cpp.i
+.PHONY : temp.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+temp.s: temp.cpp.s
+.PHONY : temp.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw2.dir/build.make CMakeFiles/draw2.dir/main.cpp.s
-.PHONY : main.cpp.s
+temp.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw2.dir/build.make CMakeFiles/draw2.dir/temp.cpp.s
+.PHONY : temp.cpp.s
 
 # Help Target
 help:
@@ -189,9 +189,9 @@ help:
 	@echo "... glad.o"
 	@echo "... glad.i"
 	@echo "... glad.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... temp.o"
+	@echo "... temp.i"
+	@echo "... temp.s"
 .PHONY : help
 
 
