@@ -38,6 +38,16 @@
   - [ ] HSV TO RGB
   - [ ] Temp representation
   - [ ] Pressure representation
+  - [ ] Make vert & Frag shader
+  - [ ] Make UI stuff diff vert shaders?
+  - [ ] Make material class, and port everything over to refernce the material instead
+  - [ ] Send material data to GPU
+  - [ ] Send map of the cells' materials to the GPU
+  - [ ] Render that stuff out
+  - How will rendering work?
+    Well firstly it will send data like scaling, display size, and set that as a 'uniform', as this will be used everywhere
+    Then it will get 2 sets of verts (as of now, may change in the future), one set will be the GUI parts, another will just encapsulate the entire background
+    Then it does that stuff in the
 - [1/4] optimisation
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)
@@ -49,7 +59,7 @@
   - [ ] New render method
 - [ ] Import/Export maps
 - [ ] Write a proper input system
-- [7/9] Final version of physics system
+- [7/8] Final version of physics system
   - [X] Correct types
   - [X] Data handling
   - [X] Basic add and subtract from neighbouxr
