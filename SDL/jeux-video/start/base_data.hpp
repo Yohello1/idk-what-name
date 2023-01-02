@@ -26,16 +26,21 @@
 #include <iomanip>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 // #include <SDL2/SDL.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
 #define LOGICAL_WINDOW_WIDTH 128
-#define LOGICAL_WINDOW_HEIGH 1024
+#define LOGICAL_WINDOW_HEIGH 128
 
 #define ACTUAL_WINDOW_WIDTH 1024
 #define ACTUAL_WINDOW_HEIGH 1024
-#define INPUT_DEBUG
+// #define INPUT_DEBUG
+
+static float ortho_near = .0001f;
+static float ortho_farr = 3000.f;
 
 typedef std::chrono::high_resolution_clock Clock;
 std::atomic<bool> quit_now;
@@ -452,28 +457,12 @@ struct cord_2d
     u_int16_t y_pos;
 };
 
-namespace init
-{
-    void start()
-    {
-        // SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-        // // Printing the time
-        // std::cout << "Time = " << current_time << "\n";
-        // setting random seed
-        // // rise my glorious creation*
 
-        // SDL_Init(SDL_INIT_VIDEO);
-        // SDL_CreateWindowAndRenderer(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_WIDTH, 0, &window, &renderer);
-        // SDL_SetWindowTitle(window, "Gamen't");
-        // SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
-        // SDL_RenderClear(renderer);
+// Do I even bother making this a class? I should just make it an struct
 
 
 
-
-    }
-
-}
+// TODO: Delete this, like this is legitamently useless
 void array_clean_start(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)

@@ -78,27 +78,28 @@ namespace physics
         }
     }
 
-    // I think I should also try and improve my friendship with my irl friend group?
-    // Who am I kidding
-    // We're far from friends
-    // Probably something like, aquentices
-    // I barely talk to them
-    // I've talked to them like 4 times total
-    // What's the point of being w them?
-    // Should I try and find new friends?
-    // I mean... Like I want to have a fun friend group
-    // But I myself am kinda boring, and un-interesting
-    // I hate programming 4 this reason
-    // During Kayla's bday they said 'no talking abt programming, school, or dogs'
-    // And that was basically all I had to talk abt
-    // That's all I knew that they knew...
-    // I don't even know how to fix this, it's not smth I can just do overnight
-    // GOD PROGRAMMING IS SO BAD
-    // How can I be better at holding a convo????
-    // I cant even hold one w hao at this point, what hope do I have to hold it with other people
-    // Dam, Im a horrible person to be a friend with, I cant hold a convo, nor do I really have much to talk abt
-    // Why would anyone be friends with me???? At this point the only thing I can think of is cause they want smth
-
+    /*
+    I think I should also try and improve my friendship with my irl friend group?
+     Who am I kidding
+     We're far from friends
+     Probably something like, aquentices
+     I barely talk to them
+     I've talked to them like 4 times total
+     What's the point of being w them?
+     Should I try and find new friends?
+     I mean... Like I want to have a fun friend group
+     But I myself am kinda boring, and un-interesting
+     I hate programming 4 this reason
+     During Kayla's bday they said 'no talking abt programming, school, or dogs'
+     And that was basically all I had to talk abt
+     That's all I knew that they knew...
+     I don't even know how to fix this, it's not smth I can just do overnight
+     GOD PROGRAMMING IS SO BAD
+     How can I be better at holding a convo????
+     I cant even hold one w hao at this point, what hope do I have to hold it with other people
+     Dam, Im a horrible person to be a friend with, I cant hold a convo, nor do I really have much to talk abt
+     Why would anyone be friends with me???? At this point the only thing I can think of is cause they want smth
+     */
     // So we start with a grid of 256x256
     // Simulating all of it is hard, and takes a long time
     // So we divide it into 8x8 chunks to speed it up

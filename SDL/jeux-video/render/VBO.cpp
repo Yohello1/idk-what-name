@@ -2,7 +2,7 @@
 
 VBO::VBO(GLfloat *vertices, GLsizeiptr size)
 {
-    glGenBuffers(1, ID);
+    glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
     glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
@@ -19,5 +19,5 @@ void VBO::Unbind()
 
 void VBO::Delete()
 {
-    glDeleteBuffers(1, ID);
+    glDeleteBuffers(1, &ID);
 }
