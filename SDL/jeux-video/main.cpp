@@ -89,11 +89,19 @@ int main()
     // Generates Shader object using shaders defualt.vert and default.frag
     Shader shaderProgram("render/shaders/test_vs.glsl", "render/shaders/test_fs.glsl");
 	shaderProgram.Activate();
+    
+    std::cout << "Shaders r not ready1 " << '\n';
     float aspect = (float)ACTUAL_WINDOW_WIDTH/ACTUAL_WINDOW_HEIGH;
     float half_heigh = ACTUAL_WINDOW_HEIGH/2.f; //ortho size
     float half_width = half_heigh * aspect;
+    
+    std::cout << "Shaders r not ready2 " << '\n';
     shaderProgram.setMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr));
+    
+    std::cout << "Shaders r not ready3 " << '\n';
     glm::mat4 view_matrix(1);
+
+    std::cout << "Shaders r not ready4 " << '\n';
     shaderProgram.setMat4("uViewMatrix", view_matrix);
 
     std::cout << "Shaders r not ready " << '\n';
