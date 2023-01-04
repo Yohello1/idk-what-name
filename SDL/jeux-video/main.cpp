@@ -110,7 +110,7 @@ int main()
     uColor_temp = glm::vec3(1.0f, 1.0f, 1.0f);
     shaderProgram.setVec3("uColor_temp", uColor_temp);
 
-    view_matrix = glm::translate(view_matrix, glm::vec3(50, 50, 0));
+    view_matrix = glm::translate(view_matrix, glm::vec3(-128, 0, 0));
     shaderProgram.setMat4("uViewMatrix", view_matrix);
 
     // shaderProgram.setInt("logical_width", LOGICAL_WINDOW_WIDTH);
@@ -138,9 +138,17 @@ int main()
     // array_clean_start(pixels);
     // std::thread physics(physics::simulate, pixels, new_version);
 
+    int temp_move_x = 0;
+
     while (!glfwWindowShouldClose(window))
     {
+
+        auto start_time = Clock::now();
         // glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
+
+        view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x/100, 0, 0));
+        shaderProgram.setMat4("uViewMatrix", view_matrix);
+        temp_move_x++;
 
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         // Clean the back buffer and assign the new color to it
@@ -154,6 +162,13 @@ int main()
         glfwSwapBuffers(window);
         // Take care of all GLFW events
         glfwPollEvents();
+
+        auto end_time = Clock::now();
+		if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
+		{
+			// SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000);
+			std::this_thread::sleep_for(std::chrono::nanoseconds((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count())));
+		}
     }
     quit_now = true;
     // physics.join();
