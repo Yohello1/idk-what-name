@@ -5,8 +5,8 @@ layout (location = 0) in vec2 pos;
 
 // attribute vec4 VPosition;
 
-uniform mat4 uProjectionMatrix;
-uniform mat4 uViewMatrix;
+uniform mat4 uProjectionMatrix; // The ortho stuff, dont touch this
+uniform mat4 uViewMatrix; // This changes the camera's position
 // uniform mat4 umodelMatrix;
 
 void main()
