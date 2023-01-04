@@ -1,6 +1,6 @@
 #version 430
 out vec4 fragColor;
-uniform vec3 uColor;
+uniform vec3 uColor_temp;
 
 void main()
 {
@@ -17,5 +17,5 @@ void main()
     // float b = 1.0;
     // float a = 1.0;
     // outputColor = vec4(r, g, b, a);
-    fragColor = vec4(uColor, 1.0);
+    fragColor = vec4(uColor_temp, 1.0);
 }

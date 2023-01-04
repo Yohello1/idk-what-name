@@ -28,6 +28,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+
 // #include <SDL2/SDL.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
