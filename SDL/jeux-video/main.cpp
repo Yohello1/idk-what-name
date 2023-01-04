@@ -40,7 +40,7 @@ GLfloat vertices[] =
 	// 0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
 
 
-    -1.0f,1.0f,0.0f, // Top left corner
+    -100.0f,1.0f,0.0f, // Top left corner
     1.0f,-1.0f,0.0f, // right bottom corner
     1.0f,1.0f,0.0f, // top right corner
 
@@ -103,6 +103,11 @@ int main()
 
     std::cout << "Shaders r not ready4 " << '\n';
     shaderProgram.setMat4("uViewMatrix", view_matrix);
+
+    glm::vec3 uColor_temp;
+    uColor_temp = glm::vec3(1.0f, 1.0f, 1.0f);
+    shaderProgram.setVec3("uColor_temp", uColor_temp);
+
 
     std::cout << "Shaders r not ready " << '\n';
 
