@@ -87,50 +87,31 @@ int main()
     Shader shaderProgram("render/shaders/test_vs.glsl", "render/shaders/test_fs.glsl");
     shaderProgram.Activate();
 
-    std::cout << "Shaders r not ready1 " << '\n';
     float aspect = (float)ACTUAL_WINDOW_WIDTH / ACTUAL_WINDOW_HEIGH;
     float half_heigh = ACTUAL_WINDOW_HEIGH / 2.f; // ortho size
-    float half_width = half_heigh * aspect;
+    float half_width = ACTUAL_WINDOW_WIDTH / 2.f;
     // half_heigh /= LOGICAL_WINDOW_HEIGH;
 
-    std::cout << "Shaders r not ready2 " << '\n';
-    {
-        half_width = half_width/(ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH);
-        half_heigh = half_heigh/(ACTUAL_WINDOW_HEIGH/LOGICAL_WINDOW_HEIGH);
 
-        shaderProgram.setMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr));
-    }
-    std::cout << "Shaders r not ready3 " << '\n';
+    half_width = half_width / 8;
+    half_heigh = half_heigh / 8;
+
+    glOrtho(0.0f, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, 0.0f, 0.0f, 1.0f);
+    shaderProgram.setMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr));
+
     glm::mat4 view_matrix(1);
-
-    std::cout << "Shaders r not ready4 " << '\n';
     shaderProgram.setMat4("uViewMatrix", view_matrix);
-
     glm::vec3 uColor_temp;
     uColor_temp = glm::vec3(1.0f, 1.0f, 1.0f);
     shaderProgram.setVec3("uColor_temp", uColor_temp);
 
-    view_matrix = glm::translate(view_matrix, glm::vec3(-128, 0, 0));
-    shaderProgram.setMat4("uViewMatrix", view_matrix);
+    std::cout << "Shaders have been preped" << '\n';
 
-    // shaderProgram.setInt("logical_width", LOGICAL_WINDOW_WIDTH);
-    // shaderProgram.setInt("logical_heigh", LOGICAL_WINDOW_HEIGH);
-
-    std::cout << "Shaders r not ready " << '\n';
-
-    // Generates Vertex Array Object and binds it
     VAO VAO1;
     VAO1.Bind();
-
-    // Generates Vertex Buffer Object and links it to vertices
     VBO VBO1(vertices, sizeof(vertices));
-    // Generates Element Buffer Object and links it to indices
-    // EBO EBO1(indices, sizeof(indices));
     EBO EBO1(indices, sizeof(vertices));
-
-    // Links VBO to VAO
     VAO1.LinkVBO(VBO1, 0);
-    // Unbind all to prevent accidentally modifying them
     VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
@@ -138,37 +119,21 @@ int main()
     // array_clean_start(pixels);
     // std::thread physics(physics::simulate, pixels, new_version);
 
-    int temp_move_x = 0;
+    float temp_move_x = 0;
 
     while (!glfwWindowShouldClose(window))
     {
-
-        auto start_time = Clock::now();
-        // glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
-
-        view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x/100, 0, 0));
-        shaderProgram.setMat4("uViewMatrix", view_matrix);
-        temp_move_x++;
-
+        temp_move_x += 0.001;
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-        // Clean the back buffer and assign the new color to it
         glClear(GL_COLOR_BUFFER_BIT);
-        // Tell OpenGL which Shader Program we want to use
         // Bind the VAO so OpenGL knows to use it
         VAO1.Bind();
-        // Draw primitives, number of indices, datatype of indices, index of indices
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
-        // Swap the back buffer with the front buffer
         glfwSwapBuffers(window);
-        // Take care of all GLFW events
-        glfwPollEvents();
+        view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x, 0, 0));
+        shaderProgram.setMat4("uViewMatrix", view_matrix);
 
-        auto end_time = Clock::now();
-		if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 33333333)
-		{
-			// SDL_Delay((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()) / 1000000);
-			std::this_thread::sleep_for(std::chrono::nanoseconds((33333333 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count())));
-		}
+        glfwPollEvents();
     }
     quit_now = true;
     // physics.join();

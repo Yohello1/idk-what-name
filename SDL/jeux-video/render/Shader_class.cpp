@@ -91,7 +91,6 @@ void Shader::setMat3(const char *name, const glm::mat3 &value)
 }
 void Shader::setMat4(const char *name, const glm::mat4 &value)
 {
-	std::cout << name << '\n';
 	loc = getUniformID(name);
 	glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
 }
@@ -132,7 +131,6 @@ void Shader::compileErrors(unsigned int shader, const char *type)
 
 GLint Shader::getUniformID(const char *name)
 {
-	std::cout << "ID: " << ID << "NAME: " << name << '\n';
 	loc = glGetUniformLocation(ID, name);
 	if (loc >= 0)
 	{
@@ -140,7 +138,7 @@ GLint Shader::getUniformID(const char *name)
 	}
 	else
 	{
-		std::cout << "loc too small " << '\n';
+		std::cout << "location too small " << '\n';
 		throw("invalid uniform name");
 	}
 	return loc;

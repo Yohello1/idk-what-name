@@ -31,9 +31,6 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <glm/ext.hpp>
-
-// #include <SDL2/SDL.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #define BLEND_TEXT 0
@@ -462,6 +459,10 @@ struct cord_2d
     u_int16_t y_pos;
 };
 
+class material
+{
+    // In theory I could put smth here, but I don't think i should put anything here yet ngl
+};
 
 // Do I even bother making this a class? I should just make it an struct
 
