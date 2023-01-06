@@ -32,10 +32,8 @@
   - [X] Test
 - [ ] Quality of Programming the engine life
   - [ ] Switching to type def
-- [ ] Render life
+- [-] Render life
   - [ ] Figure out how to run the map -> Material -> Img
-  - [ ] RGB TO HSV
-  - [ ] HSV TO RGB
   - [ ] Temp representation
   - [ ] Pressure representation
   - [ ] Make vert & Frag shader
@@ -48,6 +46,10 @@
     Well firstly it will send data like scaling, display size, and set that as a 'uniform', as this will be used everywhere
     Then it will get 2 sets of verts (as of now, may change in the future), one set will be the GUI parts, another will just encapsulate the entire background
     Then it does that stuff in the
+  - [ ] Oragnise, and refactor it to not be terrible
+  - [X] Draw a sqaure
+  - [X] Orthographic camera
+  - [ ] Organise this part 15
 - [1/4] optimisation
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)
