@@ -455,13 +455,18 @@ protected:
 
 struct cord_2d
 {
-    u_int16_t x_pos;
-    u_int16_t y_pos;
+    uint16_t x_pos;
+    uint16_t y_pos;
 };
 
 class material
 {
     // In theory I could put smth here, but I don't think i should put anything here yet ngl
+    // My dumbass remembered
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
 };
 
 // Do I even bother making this a class? I should just make it an struct
