@@ -64,7 +64,13 @@ unsigned int current_time = (unsigned int)time(NULL);
 struct colour
 {
     uint8_t r, g, b, a;
+
+    void reset()
+    {
+        r = g = b = a = 0;
+    }
 };
+
 class cell
 {
 public:
@@ -75,57 +81,6 @@ public:
         temperature = 0;
     }
 
-    // Function to return whether it can be interacted with or not
-    // I dunno why Im making this a function lmao
-    bool is_inert()
-    {
-        return inert;
-    }
-
-    /**
-     * @brief changes the value of 2 cells, will only happen if possible, subtracts from first, adds to second
-     *
-     * @param orignal_ptr
-     * @param succesor
-     * @param change
-     */
-    void modify_pressure_2(cell *orignal_ptr, cell *succesor, int16_t change)
-    {
-        // cell* original = orignal_ptr;
-        // (*orignal_ptr).pressure;
-        if (((*orignal_ptr).pressure - change) > 1 && ((*succesor).pressure + change) < 65534)
-        {
-            // if (((*orignal_ptr).pressure - change) == 0)
-            // {
-            //     std::cout << "this is not possible" << '\n';
-            // }
-            (*orignal_ptr).pressure -= change;
-            (*succesor).pressure += change;
-        }
-    }
-
-    /**
-     * @brief will subtract from one cell, subtract if possible
-     *
-     * @param orignal_ptr
-     * @param succesor
-     * @param change
-     */
-    void sub_pressure_if_possible(cell *orignal_ptr, cell *succesor, int16_t change)
-    {
-        // cell* original = orignal_ptr;
-        // (*orignal_ptr).pressure;
-        if (((*orignal_ptr).pressure - change) > 1)
-        {
-            // if (((*orignal_ptr).pressure - change) == 0)
-            // {
-            //     std::cout << "this is not possible" << '\n';
-            // }
-            (*orignal_ptr).pressure -= change;
-            // (*succesor).pressure += change;
-        }
-    }
-
     /**
      * @brief First val is current cell, second is the old version of the one presure ismoving to, third is the new vresion where the pressure is moving to NOTE: CHANGE CAP
      *
@@ -133,6 +88,7 @@ public:
      * @param succesor
      * @param predecessor
      * @param change
+     * TODO: Remove the if statement in this function
      */
     void modify_cross_die_pressure(cell *origin_pressure, cell *desination_soon, cell *to_be_added, int16_t change)
     {
@@ -160,38 +116,6 @@ public:
         }
     }
 
-    void modify_pressure_a(cell *orignal_ptr, int16_t change)
-    {
-        // cell* original = orignal_ptr;
-        // (*orignal_ptr).pressure;
-        if (((*orignal_ptr).pressure + change) < 65535)
-        {
-            (*orignal_ptr).pressure += change;
-        }
-    }
-
-    /**
-     * @brief changes the value of 2 cells, will only happen if possible, subtracts from first, adds to second
-     *
-     * @param orignal_ptr
-     * @param succesor
-     * @param change
-     */
-    void modify_density_2(cell *orignal_ptr, cell *succesor, int16_t change)
-    {
-        // cell* original = orignal_ptr;
-        // (*orignal_ptr).pressure;
-        if (((*orignal_ptr).density - change) > 1 && ((*succesor).density + change) < 65534)
-        {
-            if (((*orignal_ptr).density - change) == 0)
-            {
-                std::cout << "this is not possible" << '\n';
-            }
-            (*orignal_ptr).density -= change;
-            (*succesor).density += change;
-        }
-    }
-
     /**
      * @brief changes the value of one cell, just add
      *
@@ -212,18 +136,6 @@ public:
     I wonder if Im driving away my friends, I hope im not
     */
 
-    /**
-     * @brief change it's colour, takes the colour construct as input
-     *
-     * @param input
-     */
-    void change_colour(colour input)
-    {
-        r = input.r;
-        g = input.g;
-        b = input.b;
-        a = input.a;
-    }
     /*
     I wonder if I'll ever find someone I can take my mask off infront of
     I bet it'll never happen
@@ -276,16 +188,6 @@ public:
     }
 
     /**
-     * @brief
-     *
-     * @return int16_t
-     */
-    int16_t fetch_density()
-    {
-        return density;
-    }
-
-    /**
      * @brief Set the pressure object
      *
      * @param new_val
@@ -295,79 +197,16 @@ public:
         pressure = new_val;
     }
 
-    /**
-     * @brief
-     *
-     * @return uint8_t
+    /*
+     * Yk, I've been thinking abt these comments whilst Im yeeting all of these old rgba things
+     * I dont think they'd notice me gon
+     * SO they better not fret when Im gone
+     * Cayse they treate me like Im nothing ngl
+     * They forget and ignore me
+     * Then they claim they just forgot, even when I do ask
+     * Which begs the question, will they fret when my dissapearence starts to affect them?
+     * Oh well, at least there's not a heart theif at large.
      */
-    uint8_t fetch_r()
-    {
-        return r;
-    }
-    /**
-     * @brief
-     *
-     * @return uint8_t
-     */
-    uint8_t fetch_g()
-    {
-        return g;
-    }
-    /**
-     * @brief
-     *
-     * @return uint8_t
-     */
-    uint8_t fetch_b()
-    {
-        return b;
-    }
-    /**
-     * @brief
-     *
-     * @return uint8_t
-     */
-    uint8_t fetch_a()
-    {
-        return a;
-    }
-
-    /**
-     * @brief
-     *
-     * @param new_val
-     */
-    void change_r(uint8_t new_val)
-    {
-        r = new_val;
-    }
-    /**
-     * @brief
-     *
-     * @param new_val
-     */
-    void change_g(uint8_t new_val)
-    {
-        g = new_val;
-    }
-    /**
-     * @brief
-     *
-     * @param new_val
-     */
-    void change_b(uint8_t new_val)
-    {
-        b = new_val;
-    }
-    /**
-     * @brief
-     *
-     * @param new_val
-     */
-    void change_a(uint8_t new_val)
-    {
-        a = new_val;
-    }
 
     /**
      * @brief
@@ -404,9 +243,19 @@ public:
      *
      * @param new_val
      */
-    void set_flow(uint8_t new_val)
+    void modify_flow(uint8_t new_val)
     {
         flow = new_val;
+    }
+
+    /**
+     * @brief
+     *
+     * @return int16_t
+     */
+    int16_t fetch_density()
+    {
+        return density;
     }
 
     /**
@@ -419,20 +268,32 @@ public:
         density = new_val;
     }
 
+    // Function to return whether it can be interacted with or not
+    // I dunno why Im making this a function lmao
+    bool is_inert()
+    {
+        return inert;
+    }
     void set_inert(bool new_val)
     {
         inert = new_val;
     }
 
-    bool get_empty()
-    {
-        return false;
-    }
+    // Im gonna keep this here in a comment for nostaglic purposes
+    // bool get_empty()
+    // {
+    //     return false;
+    // }
 
 private:
-    uint16_t pressure;
-    uint16_t density;
-    float temperature;
+    uint16_t pressure = 0;
+    uint16_t density = 0;
+    float temperature = 0;
+    // Flow is 0 for solid stuff?
+    uint8_t flow = 0;
+    bool inert = false;
+
+
 
     /**
      * Rewrite the material stuff
@@ -443,12 +304,10 @@ private:
     /**
      * I think I'll just hangout with them, no need to try and like, force myself to be friends with them
      */
-    uint8_t r, g, b, a;
-
-    // Flow is 0 for solid stuff?
-    uint8_t flow;
-    bool inert = false;
-    bool empty = false;
+    /**
+     * Future me here, it hurt more to hangout with them
+     * then it did to just be alone
+     */
 
 protected:
 };
@@ -458,20 +317,6 @@ struct cord_2d
     uint16_t x_pos;
     uint16_t y_pos;
 };
-
-class material
-{
-    // In theory I could put smth here, but I don't think i should put anything here yet ngl
-    // My dumbass remembered
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-    uint8_t a;
-};
-
-// Do I even bother making this a class? I should just make it an struct
-
-
 
 // TODO: Delete this, like this is legitamently useless
 void array_clean_start(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
