@@ -37,8 +37,8 @@
 #define LOGICAL_WINDOW_WIDTH 128
 #define LOGICAL_WINDOW_HEIGH 128
 
-#define ACTUAL_WINDOW_WIDTH 1024
-#define ACTUAL_WINDOW_HEIGH 1024
+#define ACTUAL_WINDOW_WIDTH 512
+#define ACTUAL_WINDOW_HEIGH 512
 // #define INPUT_DEBUG
 
 static float ortho_near = .0001f;
@@ -71,9 +71,33 @@ struct colour
     }
 };
 
+struct material_properties
+{
+    // How big will the explosion be, how far it goes
+    // and temp changes
+    uint8_t explosivity = 0;
+    // At what temp/pressure/whatever does it start to become unstable
+    uint8_t volatility = 0;
+    // Flow is 0 for solid stuff?
+
+    // I wonder, if i call this, does it get 
+    // all the global variables
+    void (*update)(cell, int, int);
+    
+    /**
+     * Malina just dm'd me on insta,
+     * I got a feeling somethings up
+     * how badly will I be ridculed this time
+     * actually, Im not even sure at this
+     * point, it's always so confusing
+     * 
+     */
+};
+
 class cell
 {
 public:
+// I wonder if i can throw this into one scope-
     void reset_state()
     {
         pressure = 0;
@@ -206,6 +230,8 @@ public:
      * Then they claim they just forgot, even when I do ask
      * Which begs the question, will they fret when my dissapearence starts to affect them?
      * Oh well, at least there's not a heart theif at large.
+     * 
+     * Well I can now confirm they dont notice me when Im gone
      */
 
     /**
@@ -289,11 +315,10 @@ private:
     uint16_t pressure = 0;
     uint16_t density = 0;
     float temperature = 0;
-    // Flow is 0 for solid stuff?
     uint8_t flow = 0;
     bool inert = false;
-
-
+    struct colour col;
+    struct material_properties chem_props;
 
     /**
      * Rewrite the material stuff

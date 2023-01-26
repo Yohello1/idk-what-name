@@ -201,6 +201,7 @@ namespace physics
                 update_cord[2].y_pos = y_pos;
                 update_cord[3].y_pos = y_pos;
 
+                // TODO: like make this go to the bounds
                 update_cord[0].y_pos = std::max((y_pos - 1), 2);
                 update_cord[1].y_pos = std::min((y_pos + 1), LOGICAL_WINDOW_WIDTH - 5);
                 update_cord[2].x_pos = std::max((x_pos - 1), 2);
