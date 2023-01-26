@@ -90,7 +90,6 @@ struct material_properties
      * how badly will I be ridculed this time
      * actually, Im not even sure at this
      * point, it's always so confusing
-     * 
      */
 };
 
