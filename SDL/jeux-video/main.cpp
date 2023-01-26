@@ -5,6 +5,7 @@
 #include "render/render.hpp"
 #include "generation/terain.hpp"
 #include "render/ui.hpp"
+#include "start/update_funcs.hpp"
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
