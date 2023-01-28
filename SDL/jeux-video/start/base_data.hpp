@@ -61,7 +61,7 @@ unsigned int current_time = (unsigned int)time(NULL);
 // Use density, and type (static or dynamic)
 // entity is rlly just fixed_pos with extra steps
 
-struct colour
+struct colour_t
 {
     uint8_t r, g, b, a;
 
@@ -93,6 +93,8 @@ struct material_properties
      */
 };
 
+
+// omg this is such a confusing function
 class cell
 {
 public:
@@ -304,11 +306,18 @@ public:
         inert = new_val;
     }
 
+    colour_t* fetch_bcol()
+    {
+        return (&col);
+    }
+
     // Im gonna keep this here in a comment for nostaglic purposes
     // bool get_empty()
     // {
     //     return false;
     // }
+
+
 
 private:
     uint16_t pressure = 0;
@@ -316,7 +325,7 @@ private:
     float temperature = 0;
     uint8_t flow = 0;
     bool inert = false;
-    struct colour col;
+    struct colour_t col;
     struct material_properties chem_props;
 
     /**

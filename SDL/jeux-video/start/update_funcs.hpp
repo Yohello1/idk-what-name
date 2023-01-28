@@ -14,6 +14,6 @@ namespace functions
 {
     void sand_update(cell temp, int x_pos, int y_pos)
     {
-
+        
     }
 }
