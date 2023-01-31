@@ -4,7 +4,7 @@ class Moving_Day : public entites::System
 {
 public:
     void Init();
-    void Update(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
+    void Update(cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH]);
 };
 
 void Moving_Day::Init()
@@ -42,7 +42,7 @@ void Moving_Day::Init()
     }
 }
 
-void Moving_Day::Update(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+void Moving_Day::Update(cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
     for (auto const &entity : mEntities)
     {
@@ -55,10 +55,10 @@ void Moving_Day::Update(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
             for (int y_pos = location.point.y_pos - 5; y_pos < location.point.y_pos + 5; y_pos++)
             {
 
-                pixels[x_pos][y_pos].change_r(colour.red  );
-                pixels[x_pos][y_pos].change_g(colour.green);
-                pixels[x_pos][y_pos].change_b(colour.blue );
-                pixels[x_pos][y_pos].change_a(colour.alpha);
+                // pixels[x_pos][y_pos].change_r(colour.red  );
+                // pixels[x_pos][y_pos].change_g(colour.green);
+                // pixels[x_pos][y_pos].change_b(colour.blue );
+                // pixels[x_pos][y_pos].change_a(colour.alpha);
             }
         }
 

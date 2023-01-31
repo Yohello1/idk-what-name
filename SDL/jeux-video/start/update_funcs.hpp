@@ -12,8 +12,5 @@
 // okie dokie lemme write out a quick functon which just does and,
 namespace functions
 {
-    void sand_update(cell temp, int x_pos, int y_pos)
-    {
-        
-    }
+
 }

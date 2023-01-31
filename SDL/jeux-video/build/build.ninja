@@ -52,12 +52,14 @@ build cmake_object_order_depends_target_draw2: phony || CMakeFiles/draw2.dir
 build CMakeFiles/draw2.dir/glad.c.o: C_COMPILER__draw2_Debug /media/yohello/hrm2/code-stuff/generation/SDL/jeux-video/glad.c || cmake_object_order_depends_target_draw2
   DEP_FILE = CMakeFiles/draw2.dir/glad.c.o.d
   FLAGS = -g
+  INCLUDES = -isystem /usr/lib
   OBJECT_DIR = CMakeFiles/draw2.dir
   OBJECT_FILE_DIR = CMakeFiles/draw2.dir
 
 build CMakeFiles/draw2.dir/main.cpp.o: CXX_COMPILER__draw2_Debug /media/yohello/hrm2/code-stuff/generation/SDL/jeux-video/main.cpp || cmake_object_order_depends_target_draw2
   DEP_FILE = CMakeFiles/draw2.dir/main.cpp.o.d
   FLAGS = -g
+  INCLUDES = -isystem /usr/lib
   OBJECT_DIR = CMakeFiles/draw2.dir
   OBJECT_FILE_DIR = CMakeFiles/draw2.dir
 
@@ -122,14 +124,14 @@ build all: phony draw2
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | ../CMakeLists.txt /usr/local/share/cmake-3.22/Modules/CMakeCInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeCXXInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake /usr/local/share/cmake-3.22/Modules/CMakeGenericSystem.cmake /usr/local/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake /usr/local/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU-C.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU-CXX.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU-C.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU-CXX.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux.cmake /usr/local/share/cmake-3.22/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.22.2/CMakeCCompiler.cmake CMakeFiles/3.22.2/CMakeCXXCompiler.cmake CMakeFiles/3.22.2/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt /usr/lib/cmake/glm/glmConfig-version.cmake /usr/lib/cmake/glm/glmConfig.cmake /usr/local/share/cmake-3.22/Modules/CMakeCInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeCXXInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake /usr/local/share/cmake-3.22/Modules/CMakeGenericSystem.cmake /usr/local/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake /usr/local/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU-C.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU-CXX.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU-C.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU-CXX.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux.cmake /usr/local/share/cmake-3.22/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.22.2/CMakeCCompiler.cmake CMakeFiles/3.22.2/CMakeCXXCompiler.cmake CMakeFiles/3.22.2/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build ../CMakeLists.txt /usr/local/share/cmake-3.22/Modules/CMakeCInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeCXXInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake /usr/local/share/cmake-3.22/Modules/CMakeGenericSystem.cmake /usr/local/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake /usr/local/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU-C.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU-CXX.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU-C.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU-CXX.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux.cmake /usr/local/share/cmake-3.22/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.22.2/CMakeCCompiler.cmake CMakeFiles/3.22.2/CMakeCXXCompiler.cmake CMakeFiles/3.22.2/CMakeSystem.cmake: phony
+build ../CMakeLists.txt /usr/lib/cmake/glm/glmConfig-version.cmake /usr/lib/cmake/glm/glmConfig.cmake /usr/local/share/cmake-3.22/Modules/CMakeCInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeCXXInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake /usr/local/share/cmake-3.22/Modules/CMakeGenericSystem.cmake /usr/local/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake /usr/local/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake /usr/local/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU-C.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU-CXX.cmake /usr/local/share/cmake-3.22/Modules/Compiler/GNU.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU-C.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU-CXX.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake /usr/local/share/cmake-3.22/Modules/Platform/Linux.cmake /usr/local/share/cmake-3.22/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.22.2/CMakeCCompiler.cmake CMakeFiles/3.22.2/CMakeCXXCompiler.cmake CMakeFiles/3.22.2/CMakeSystem.cmake: phony
 
 
 #############################################

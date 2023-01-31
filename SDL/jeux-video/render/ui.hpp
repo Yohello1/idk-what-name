@@ -40,7 +40,7 @@ namespace ui
     // java classes > c++ classes
     // BASICALLY, "makes a destructor", and make a virtual draw function
         virtual ~single_ui_element() = default;
-        virtual void draw(cell render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+        virtual void draw(cell_t render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
         {
             std::cout << "Wrong function" << '\n';
         }
@@ -48,7 +48,7 @@ namespace ui
     protected:
         // this is the only inherited thing
         // The colour
-        colour box_colour;
+        colour_t box_colour;
     };
 
     class boxes : public single_ui_element
@@ -62,7 +62,7 @@ namespace ui
 
 
     public:
-        boxes(cord_2d cord_1, cord_2d cord_2, colour colour_new)
+        boxes(cord_2d cord_1, cord_2d cord_2, colour_t colour_new)
         {
             // perm = perm_new;
             // Does some funky stuff to figure out which ones are which
@@ -73,23 +73,23 @@ namespace ui
             box_colour = colour_new;
         }
 
-        void draw(cell render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+        void draw(cell_t render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
         {
             // std::cout << "bagguette" << '\n';
             for (int x_pos = lower_x; x_pos < higher_x; x_pos++)
             {
                 for (int y_pos = lower_y; y_pos < higher_y; y_pos++)
                 {
-                    render[x_pos][y_pos].change_r(box_colour.r);
-                    render[x_pos][y_pos].change_g(box_colour.g);
-                    render[x_pos][y_pos].change_b(box_colour.b);
-                    render[x_pos][y_pos].change_a(box_colour.a);
+                    // render[x_pos][y_pos].change_r(box_colour.r);
+                    // render[x_pos][y_pos].change_g(box_colour.g);
+                    // render[x_pos][y_pos].change_b(box_colour.b);
+                    // render[x_pos][y_pos].change_a(box_colour.a);
                     // std::cout << "Hellow rodl" << '\n';
                 }
             }
         }
 
-        void change_colour(colour colour_new)
+        void change_colour(colour_t colour_new)
         {
             box_colour = colour_new;
         }
@@ -100,7 +100,7 @@ namespace ui
     private:
         int ascent, baseline, ch = 0;
         float scale, xpos = 2;
-        colour txt_color;
+        colour_t txt_color;
 
         std::vector<char> text_2_render;
 
@@ -111,7 +111,7 @@ namespace ui
     public:
         // Put a space at the begining of the string, idk why but if you dont it breaks everything
         // like " hello" instead of "hello"
-        text(cord_2d location_in, colour colour_new, std::string text_to_render_new, int font_size, int min_power_in)
+        text(cord_2d location_in, colour_t colour_new, std::string text_to_render_new, int font_size, int min_power_in)
         {
             // Why on bloody earth does this work
             // Copies the text from the string into a vector/array
@@ -136,7 +136,7 @@ namespace ui
             std::cout << "End text constructor thingy" << '\n';
         }
 
-        void draw(cell render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+        void draw(cell_t render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
         {
 
             while (text_2_render[ch])
@@ -179,10 +179,10 @@ namespace ui
                     if ((int)screen[y_pos][x_pos] >> 5 > min_power)
                     {
 #if BLEND_TEXT == 0
-                        render[x_pos][y_pos].change_r(((render[x_pos][y_pos].fetch_r() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.r / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
-                        render[x_pos][y_pos].change_g(((render[x_pos][y_pos].fetch_g() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.g / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
-                        render[x_pos][y_pos].change_b(((render[x_pos][y_pos].fetch_b() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.b / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
-                        render[x_pos][y_pos].change_a(255);
+                        // render[x_pos][y_pos].change_r(((render[x_pos][y_pos].fetch_r() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.r / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
+                        // render[x_pos][y_pos].change_g(((render[x_pos][y_pos].fetch_g() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.g / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
+                        // render[x_pos][y_pos].change_b(((render[x_pos][y_pos].fetch_b() * (7 - (screen[y_pos][x_pos] >> 5)) + (txt_color.b / 7) * (screen[y_pos][x_pos] >> 5)) / (7 - 0 - (screen[y_pos][x_pos] >> 5) + (screen[y_pos][x_pos] >> 5) / (screen[y_pos][x_pos] >> 5))));
+                        // render[x_pos][y_pos].change_a(255);
 #elif BLEND_TEXT == 1
                         render[x_pos][y_pos].change_r(txt_color.r);
                         render[x_pos][y_pos].change_g(txt_color.g);
@@ -195,7 +195,7 @@ namespace ui
             }
         }
 
-        void change_colour(colour colour_new)
+        void change_colour(colour_t colour_new)
         {
             box_colour = colour_new;
         }

@@ -16,7 +16,7 @@ namespace Terrain
 		//      std::cout << "Hello does this work?" << '\n';
 		//  }
 
-		void generate_terrain(int x_lower, int y_lower, int x_upper, int y_upper, int amt_points, cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+		void generate_terrain(int x_lower, int y_lower, int x_upper, int y_upper, int amt_points, cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 		{
 			std::cout << "This started" << '\n';
 			place_dots(x_lower, y_lower, x_upper, y_upper, amt_points);
@@ -38,11 +38,12 @@ namespace Terrain
 			#endif
 			for (int unsigned i = 1; i < points_old.size(); i++)
 			{
-				pixels[points_old[i].x_pos][points_old[i].y_pos].change_r(255);
-				pixels[points_old[i].x_pos][points_old[i].y_pos].change_g(255);
-				pixels[points_old[i].x_pos][points_old[i].y_pos].change_b(255);
-				pixels[points_old[i].x_pos][points_old[i].y_pos].change_a(255);
-				pixels[points_old[i].x_pos][points_old[i].y_pos].set_inert(true);
+				// TODO: FIX THIS
+				// pixels[points_old[i].x_pos][points_old[i].y_pos].change_r(255);
+				// pixels[points_old[i].x_pos][points_old[i].y_pos].change_g(255);
+				// pixels[points_old[i].x_pos][points_old[i].y_pos].change_b(255);
+				// pixels[points_old[i].x_pos][points_old[i].y_pos].change_a(255);
+				// pixels[points_old[i].x_pos][points_old[i].y_pos].set_inert(true);
 			}
 		}
 

@@ -32,7 +32,8 @@
   - [X] Test
 - [ ] Quality of Programming the engine life
   - [ ] Switching to type def
-- [-] Render life
+- [2/13] Render life
+  - [ ] Colours p2
   - [ ] Figure out how to run the map -> Material -> Img
   - [ ] Temp representation
   - [ ] Pressure representation
@@ -43,9 +44,14 @@
   - [ ] Send map of the cells' materials to the GPU
   - [ ] Render that stuff out
   - How will rendering work?
-    Well firstly it will send data like scaling, display size, and set that as a 'uniform', as this will be used everywhere
-    Then it will get 2 sets of verts (as of now, may change in the future), one set will be the GUI parts, another will just encapsulate the entire background
-    Then it does that stuff in the
+    Well firstly it will send data like, display size, and set that as a 'uniform', as this will be used everywhere
+    Then it will get 3 sets of verts (as of now, may change in the future), one set will be the GUI parts, another will just encapsulate the entire background, and the final will be the effects (like dust, blood, etc etc)
+    Then each layer is assigned an image texture which comes from the cpu
+  - [ ] CPU texture creation
+    - [ ] Create worker/thread/slave which purely takes most recent data and throws it into an array
+    - [ ] Declare the array an image
+    - [ ] Load that image into VRAM every frame update
+    - [ ] Create a method to handle the buffers, loading, deleting, updating
   - [ ] Oragnise, and refactor it to not be terrible
   - [X] Draw a sqaure
   - [X] Orthographic camera
