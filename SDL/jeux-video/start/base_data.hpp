@@ -61,6 +61,13 @@ unsigned int current_time = (unsigned int)time(NULL);
 // Use density, and type (static or dynamic)
 // entity is rlly just fixed_pos with extra steps
 
+// This has to be declared in advanced for some randoms stuff
+class cell_t;
+
+/**
+ * @brief it's colour type
+ * 
+ */
 struct colour_t
 {
     uint8_t r, g, b, a;
@@ -71,7 +78,7 @@ struct colour_t
     }
 };
 
-struct material_properties
+struct material_t
 {
     // How big will the explosion be, how far it goes
     // and temp changes
@@ -82,7 +89,7 @@ struct material_properties
 
     // I wonder, if i call this, does it get 
     // all the global variables
-    void (*update)(cell, int, int);
+    void (*update)(cell_t, int, int);
     
     /**
      * Malina just dm'd me on insta,
@@ -95,7 +102,7 @@ struct material_properties
 
 
 // omg this is such a confusing function
-class cell
+class cell_t
 {
 public:
 // I wonder if i can throw this into one scope-
@@ -107,7 +114,7 @@ public:
     }
 
     /**
-     * @brief First val is current cell, second is the old version of the one presure ismoving to, third is the new vresion where the pressure is moving to NOTE: CHANGE CAP
+     * @brief First val is current cell_t, second is the old version of the one presure ismoving to, third is the new vresion where the pressure is moving to NOTE: CHANGE CAP
      *
      * @param orignal_ptr
      * @param succesor
@@ -115,7 +122,7 @@ public:
      * @param change
      * TODO: Remove the if statement in this function
      */
-    void modify_cross_die_pressure(cell *origin_pressure, cell *desination_soon, cell *to_be_added, int16_t change)
+    void modify_cross_die_pressure(cell_t *origin_pressure, cell_t *desination_soon, cell_t *to_be_added, int16_t change)
     {
         if (origin_pressure->pressure - change > 0 && desination_soon->pressure + to_be_added->pressure + change < 500)
         {
@@ -126,14 +133,14 @@ public:
     }
 
     /**
-     * @brief changes the value of one cell, just add
+     * @brief changes the value of one cell_t, just add
      *
      * @param orignal_ptr
      * @param change
      */
-    void modify_pressure(cell *orignal_ptr, int16_t change)
+    void modify_pressure(cell_t *orignal_ptr, int16_t change)
     {
-        // cell* original = orignal_ptr;
+        // cell_t* original = orignal_ptr;
         // (*orignal_ptr).pressure;
         if (((*orignal_ptr).pressure - change) > 0)
         {
@@ -142,14 +149,14 @@ public:
     }
 
     /**
-     * @brief changes the value of one cell, just add
+     * @brief changes the value of one cell_t, just add
      *
      * @param orignal_ptr
      * @param change
      */
-    void modify_density(cell *orignal_ptr, int16_t change)
+    void modify_density(cell_t *orignal_ptr, int16_t change)
     {
-        // cell* original = orignal_ptr;
+        // cell_t* original = orignal_ptr;
         // (*orignal_ptr).pressure;
         if (((*orignal_ptr).density - change) > 0)
         {
@@ -306,9 +313,14 @@ public:
         inert = new_val;
     }
 
-    colour_t* fetch_bcol()
+    colour_t* fetch_col()
     {
         return (&col);
+    }
+
+    void set_col(colour_t temp)
+    {
+        col = temp;
     }
 
     // Im gonna keep this here in a comment for nostaglic purposes
@@ -317,8 +329,6 @@ public:
     //     return false;
     // }
 
-
-
 private:
     uint16_t pressure = 0;
     uint16_t density = 0;
@@ -326,7 +336,7 @@ private:
     uint8_t flow = 0;
     bool inert = false;
     struct colour_t col;
-    struct material_properties chem_props;
+    struct material_t chem_props;
 
     /**
      * Rewrite the material stuff
@@ -352,21 +362,21 @@ struct cord_2d
 };
 
 // TODO: Delete this, like this is legitamently useless
-void array_clean_start(cell pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+void array_clean_start(cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
 {
     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
         for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
         {
-            pixels[x_pos][y_pos].change_a(0);
-            pixels[x_pos][y_pos].change_g(0);
-            pixels[x_pos][y_pos].change_b(0);
-            pixels[x_pos][y_pos].change_r(0);
-            pixels[x_pos][y_pos].modify_density(0);
-            pixels[x_pos][y_pos].set_pressure(0);
-            pixels[x_pos][y_pos].modify_temp(0);
-            pixels[x_pos][y_pos].set_flow(0);
-            pixels[x_pos][y_pos].set_inert(false);
+            // pixels[x_pos][y_pos].change_a(0);
+            // pixels[x_pos][y_pos].change_g(0);
+            // pixels[x_pos][y_pos].change_b(0);
+            // pixels[x_pos][y_pos].change_r(0);
+            // pixels[x_pos][y_pos].modify_density(0);
+            // pixels[x_pos][y_pos].set_pressure(0);
+            // pixels[x_pos][y_pos].modify_temp(0);
+            // pixels[x_pos][y_pos].set_flow(0);
+            // pixels[x_pos][y_pos].set_inert(false);
         }
     }
 }
