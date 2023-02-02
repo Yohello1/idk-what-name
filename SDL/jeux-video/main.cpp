@@ -9,6 +9,7 @@
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
+#include "render/texture.hpp"
 
 // Simulated array everything is being fed
 cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
@@ -29,6 +30,7 @@ std::mutex mtx2;
 entites::Coordinator Conductor;
 
 // Vertices coordinates
+/*
 GLfloat vertices[] =
     {
         // -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
@@ -45,6 +47,24 @@ GLfloat vertices[] =
         1.0f, -1.0f, 0.0f,  // right bottom corner
         1.0f, 1.0f, 0.0f,   // top right corner
         -1.0f, -1.0f, 0.0f, // bottom left
+
+};*/
+GLfloat vertices[] =
+    {
+        // -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
+        // 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
+        // 0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
+        // -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
+        // 0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
+        // 0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
+
+        // X is x,
+        // Y is Y
+        // Z is the layer
+        -1.0f*(LOGICAL_WINDOW_WIDTH/4),  1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,  // Top left corner
+         1.0f*(LOGICAL_WINDOW_WIDTH/4), -1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,  // right bottom corner
+         1.0f*(LOGICAL_WINDOW_WIDTH/4),  1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,   // top right corner
+        -1.0f*(LOGICAL_WINDOW_WIDTH/4), -1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f, // bottom left
 
 };
 
@@ -85,6 +105,13 @@ int main()
     glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+    glEnable(GL_TEXTURE_2D); 
+
+
+    {
+        GLuint temp = Textures::raw_texture_load("debug/rand.jph", 128,128);
+        glBindTexture(GL_TEXTURE_2D, temp);
+    }
 
     // Generates Shader object using shaders defualt.vert and default.frag
     Shader shaderProgram("render/shaders/test_vs.glsl", "render/shaders/test_fs.glsl");

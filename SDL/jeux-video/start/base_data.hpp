@@ -25,6 +25,9 @@
 #include <algorithm>
 #include <iomanip>
 #include <glad/glad.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+// #include <GL/glu_mangle.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
