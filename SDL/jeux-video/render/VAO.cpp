@@ -7,8 +7,9 @@ VAO::VAO()
 
 void VAO::LinkVBO(VBO& VBO, GLuint layout)
 {
+	std::cout << "LAYOUT OF VAO LINKING: " << layout << '\n';
 	VBO.Bind();
-	glVertexAttribPointer(layout, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(layout, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
 	glEnableVertexAttribArray(layout);
 	VBO.Unbind();
 }

@@ -1,4 +1,20 @@
 #version 430
+out vec4 FragColor;
+
+in vec3 ourColor;
+in vec2 TexCoord;
+/*
+uniform sampler2D ourTexture;
+
+void main()
+{
+        float r = gl_FragCoord.x / 1024.0;
+    float g = gl_FragCoord.y / 1024.0;
+    float b = uColor_temp.x;
+    float a = uColor_temp.y;
+    FragColor = texture(ourTexture, TexCoord);
+}*/
+
 out vec4 fragColor;
 uniform vec3 uColor_temp;
 uniform int logical_width;
@@ -10,11 +26,14 @@ void main()
     // we use gl_FragCoord.x position to control the red color value.
     // we use gl_FragCoord.y position to control the green color value.
     // please note that all r, g, b, a values are between 0 and 1.
+    // if I hadnt hit the bottom the amount of times I did, I dont think I would be the person i would be today
 
     float r = gl_FragCoord.x / 1024.0;
     float g = gl_FragCoord.y / 1024.0;
     float b = uColor_temp.x;
     float a = uColor_temp.y;
-    fragColor = vec4(r, g, b, a);
+    fragColor = vec4(r, g, b, a)* ;
+        // FragColor = texture(ourTexture, TexCoord);
+
     // fragColor = vec4(uColor_temp, 1.0);
 }

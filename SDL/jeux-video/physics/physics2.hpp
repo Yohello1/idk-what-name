@@ -231,6 +231,8 @@ namespace physics
                     }
                 }
 
+                // The 4.5 point solid system
+
                 // std::cout << pixels[x_pos][y_pos].fetch_pressure() + new_version[x_pos][y_pos].fetch_pressure() << ",";
             }
             // std::cout << "\n";
