@@ -138,8 +138,10 @@ GLint Shader::getUniformID(const char *name)
 	}
 	else
 	{
+		/*
+		it this is ever written out it's because it's trying to declare a variable which doesnt exist in the shaders*/
 		std::cout << "location too small " << '\n';
+		std::cout << loc << '\n';
 		throw("invalid uniform name");
 	}
-	return loc;
 }

@@ -16,7 +16,7 @@ cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 // cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 // Array responsble for the UI
 // This stuff's apparently never defined LOL
-//struct colour user_interface[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+// struct colour user_interface[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 // USR input and changes, TODO SWITCH TO EQAUTION
 cell_t usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
 bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
@@ -61,10 +61,24 @@ GLfloat vertices[] =
         // X is x,
         // Y is Y
         // Z is the layer
-        -1.0f*(LOGICAL_WINDOW_WIDTH/4),  1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,  // Top left corner
-         1.0f*(LOGICAL_WINDOW_WIDTH/4), -1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,  // right bottom corner
-         1.0f*(LOGICAL_WINDOW_WIDTH/4),  1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,   // top right corner
-        -1.0f*(LOGICAL_WINDOW_WIDTH/4), -1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f, // bottom left
+        /*-1.0f*(LOGICAL_WINDOW_WIDTH/4),  1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,  // Top left corner
+         1.0f  *(LOGICAL_WINDOW_WIDTH/4), -1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,  // right bottom corner
+         1.0f  *(LOGICAL_WINDOW_WIDTH/4),  1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,   // top right corner
+        -1.0f  *(LOGICAL_WINDOW_WIDTH/4), -1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f, // bottom left
+    */
+   // texture cords are apparently the vert cords
+        // positions          // colors           // texture coords
+
+        /**
+         50.0f, 50.0f, 0.0f, 100.0f, 000.0f, 000.0f, 1000.0f, 100.0f,   // top right
+         50.0f,-0.5f, 0.0f,  000.0f, 100.0f, 000.0f, 1000.0f, 000.0f,  // bottom right
+        -50.0f,-0.5f, 0.0f,  000.0f, 000.0f, 100.0f, 0000.0f, 000.0f, // bottom left
+        -50.0f, 0.5f, 0.0f,  100.0f, 100.0f, 000.0f, 0000.0f, 100.0f   // top left
+*/
+0.0f,0.0f,0.0f, 0.0f,0.0f,0.0f, 0.0f,0.0f,
+0.0f,-50.0f,0.0f, 0.0f,0.0f,0.0f, 0.0f,0.0f,
+-50.0f,0.0f,0.0f, 0.0f,0.0f,0.0f, 0.0f,0.0f,
+-50.0f,-50.0f,0.0f, 0.0f,0.0f,0.0f, 0.0f,0.0f
 
 };
 
@@ -74,8 +88,10 @@ GLuint indices[] =
         // 0, 3, 5, // Lower left triangle
         // 3, 2, 4, // Upper
         // 5, 4, 1 // Lower right triangle
-        0, 1, 2,
-        0, 3, 1
+        /*0, 1, 2,
+        0, 3, 1*/
+        0,3,2,
+        0,1,3
 };
 
 int main()
@@ -93,6 +109,8 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    std::cout << "WINDOW CREATED" << '\n';
+
     GLFWwindow *window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "idk", NULL, NULL);
     if (window == NULL)
     {
@@ -105,35 +123,47 @@ int main()
     glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glEnable(GL_TEXTURE_2D); 
+    glEnable(GL_TEXTURE_2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    std::cout << "GL STUFF DECLARED" << '\n';
 
-    {
-        GLuint temp = Textures::raw_texture_load("debug/rand.jph", 128,128);
-        glBindTexture(GL_TEXTURE_2D, temp);
-    }
+    GLuint texture = Textures::raw_texture_load("debug/rand.raw", 128, 128);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    std::cout << "TEXTURE CREATED" << '\n';
 
     // Generates Shader object using shaders defualt.vert and default.frag
     Shader shaderProgram("render/shaders/test_vs.glsl", "render/shaders/test_fs.glsl");
     shaderProgram.Activate();
 
+    std::cout << "SHADERS DECLARED" << '\n';
+
     float aspect = (float)ACTUAL_WINDOW_WIDTH / ACTUAL_WINDOW_HEIGH;
     float half_heigh = ACTUAL_WINDOW_HEIGH / 2.f; // ortho size
     float half_width = ACTUAL_WINDOW_WIDTH / 2.f;
     // half_heigh /= LOGICAL_WINDOW_HEIGH;
+    half_width = half_width / (ACTUAL_WINDOW_HEIGH/LOGICAL_WINDOW_HEIGH);
+    half_heigh = half_heigh / (ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH);
 
-
-    half_width = half_width / 8;
-    half_heigh = half_heigh / 8;
+    std::cout << "HALVES CALCULATED" << '\n';
 
     glOrtho(0.0f, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, 0.0f, 0.0f, 1.0f);
     shaderProgram.setMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr));
 
+    std::cout << "PROJECTION MATRICIES DONE" << '\n';
+
     glm::mat4 view_matrix(1);
     shaderProgram.setMat4("uViewMatrix", view_matrix);
     glm::vec3 uColor_temp;
+    std::cout << "VIEW MATRICIES DONE" << '\n';
     uColor_temp = glm::vec3(1.0f, 1.0f, 1.0f);
-    shaderProgram.setVec3("uColor_temp", uColor_temp);
+    // shaderProgram.setVec3("uColor_temp", uColor_temp);
 
     std::cout << "Shaders have been preped" << '\n';
 
@@ -146,6 +176,7 @@ int main()
     VBO1.Unbind();
     EBO1.Unbind();
 
+    std::cout << "EVERYTHING PREPPED" << '\n';
     // array_clean_start(pixels);
     // std::thread physics(physics::simulate, pixels, new_version);
 
@@ -156,12 +187,15 @@ int main()
         temp_move_x += 0.001;
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
         // Bind the VAO so OpenGL knows to use it
         VAO1.Bind();
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);
         view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x, 0, 0));
         shaderProgram.setMat4("uViewMatrix", view_matrix);
+
+        glEnable(GL_TEXTURE_2D);
 
         glfwPollEvents();
     }
@@ -186,16 +220,15 @@ void excecution_finished(void)
     // SDL_Quit();
 }
 
-
 /**
  * @brief Literally just meant to throw random data whether it be colour or properties into the array
- * 
+ *
  */
 void make_temp_arrays()
 {
-    for(int i = 0; i < LOGICAL_WINDOW_HEIGH; i++)
+    for (int i = 0; i < LOGICAL_WINDOW_HEIGH; i++)
     {
-        for(int j = 0; j < LOGICAL_WINDOW_WIDTH; j++)
+        for (int j = 0; j < LOGICAL_WINDOW_WIDTH; j++)
         {
             colour_t temp;
 
@@ -207,7 +240,7 @@ void make_temp_arrays()
             temp.g = (rand() % 255);
             temp.b = (rand() % 255);
             temp.a = (rand() % 255);
-            
+
             pixels[i][j].set_col(temp);
         }
     }

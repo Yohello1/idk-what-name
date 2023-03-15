@@ -56,6 +56,11 @@
   - [X] Draw a sqaure
   - [X] Orthographic camera
   - [ ] Organise this part 15
+  - [ ] Load texture raw files
+  - [ ] Load them to GPU
+  - [ ] BIND them
+  - [ ] Setup the frag shader
+  - [ ] Setup the like 20 matricies
 - [1/4] optimisation
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)
@@ -85,8 +90,10 @@
 * Future Problem
 - [ ] documentation
 - Parallize this
+- [ ]  Chemical engine lmaoooooo
 * Resources
 
 * Notes
-- Colour thing is gonna be complex (just turn them into vectors then ge the avg) https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixing-that-works-like-mixing-real-colors
+- Colour thing is gonna be complex (just turn them into vectors then ge the avg) https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixing-that-works-like-mixing-real-colors)
+  - Probs just gonna yeet this
 -
