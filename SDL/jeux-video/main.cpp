@@ -105,11 +105,9 @@ int main()
     // https://youtu.be/45MIykWJ-C4
     glfwInit();
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    std::cout << "WINDOW CREATED" << '\n';
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
     GLFWwindow *window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "idk", NULL, NULL);
     if (window == NULL)
@@ -119,22 +117,19 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
+
+    std::cout << "WINDOW CREATED" << '\n';
+
     gladLoadGL();
     glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
-    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glEnable(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glMatrixMode(GL_PROJECTION);
+    std::cout << "MATRIX MODE SET" << '\n';
 
     std::cout << "GL STUFF DECLARED" << '\n';
 
-    GLuint texture = Textures::raw_texture_load("debug/rand.raw", 128, 128);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    // GLuint texture = Textures::raw_texture_load("debug/rand.raw", 128, 128);
+    //glBindTexture(GL_TEXTURE_2D, texture);
 
     std::cout << "TEXTURE CREATED" << '\n';
 
@@ -153,7 +148,7 @@ int main()
 
     std::cout << "HALVES CALCULATED" << '\n';
 
-    glOrtho(0.0f, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, 0.0f, 0.0f, 1.0f);
+    glOrthof(0.0f, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, 0.0f, 0.0f, 1.0f);
     shaderProgram.setMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr));
 
     std::cout << "PROJECTION MATRICIES DONE" << '\n';

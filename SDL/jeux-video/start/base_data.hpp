@@ -24,7 +24,7 @@
 #include <boost/algorithm/clamp.hpp>
 #include <algorithm>
 #include <iomanip>
-#include <glad/glad.h>
+#include "../include/glad/glad.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 // #include <GL/glu_mangle.h>
@@ -40,8 +40,8 @@
 #define LOGICAL_WINDOW_WIDTH 128
 #define LOGICAL_WINDOW_HEIGH 128
 
-#define ACTUAL_WINDOW_WIDTH 1024
-#define ACTUAL_WINDOW_HEIGH 1024
+#define ACTUAL_WINDOW_WIDTH 512
+#define ACTUAL_WINDOW_HEIGH 512
 // #define INPUT_DEBUG
 
 static float ortho_near = .0001f;
