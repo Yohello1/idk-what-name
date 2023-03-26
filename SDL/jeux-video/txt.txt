@@ -1,0 +1,762 @@
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:210 (find_path):
+  find_path called with the following settings:
+
+    VAR: OPENGL_INCLUDE_DIR
+    NAMES: "GL/gl.h"
+    Documentation: Path to a file.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_path considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/include/GL/gl.h
+    /opt/intel/oneapi/tbb/2021.6.0/GL/gl.h
+    /home/yohello/.mozbuild/git-cinnabar/GL/gl.h
+    /usr/local/bin~/GL/gl.h
+    /usr/local/cuda-11.7/bin/GL/gl.h
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/GL/gl.h
+    /opt/intel/oneapi/ospray/2.9.0/bin/GL/gl.h
+    /opt/intel/oneapi/openvkl/1.2.0/bin/GL/gl.h
+    /opt/intel/oneapi/oidn/1.4.3/bin/GL/gl.h
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/GL/gl.h
+    /opt/intel/oneapi/mpi/2021.6.0/bin/GL/gl.h
+    /opt/intel/oneapi/ispc/1.17.0/bin/GL/gl.h
+    /opt/intel/oneapi/embree/3.13.3/bin/GL/gl.h
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/GL/gl.h
+    /home/yohello/kde/src/kdesrc-build/GL/gl.h
+    /home/yohello/.local/bin/GL/gl.h
+    /home/yohello/.cargo/bin/GL/gl.h
+    /home/yohello/bin/GL/gl.h
+    /usr/local/bin/GL/gl.h
+    /usr/bin/GL/gl.h
+    /bin/GL/gl.h
+    /usr/local/games/GL/gl.h
+    /usr/games/GL/gl.h
+    /snap/bin/GL/gl.h
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/GL/gl.h
+    /usr/share/doc/NVIDIA_GLX-1.0/include/GL/gl.h
+    /usr/openwin/share/include/GL/gl.h
+    /opt/graphics/OpenGL/include/GL/gl.h
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+Running with debug output on for the `find` commands.
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:216 (find_path):
+  find_path called with the following settings:
+
+    VAR: OPENGL_GLX_INCLUDE_DIR
+    NAMES: "GL/glx.h"
+    Documentation: Path to a file.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_path considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/include/GL/glx.h
+    /opt/intel/oneapi/tbb/2021.6.0/GL/glx.h
+    /home/yohello/.mozbuild/git-cinnabar/GL/glx.h
+    /usr/local/bin~/GL/glx.h
+    /usr/local/cuda-11.7/bin/GL/glx.h
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/GL/glx.h
+    /opt/intel/oneapi/ospray/2.9.0/bin/GL/glx.h
+    /opt/intel/oneapi/openvkl/1.2.0/bin/GL/glx.h
+    /opt/intel/oneapi/oidn/1.4.3/bin/GL/glx.h
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/GL/glx.h
+    /opt/intel/oneapi/mpi/2021.6.0/bin/GL/glx.h
+    /opt/intel/oneapi/ispc/1.17.0/bin/GL/glx.h
+    /opt/intel/oneapi/embree/3.13.3/bin/GL/glx.h
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/GL/glx.h
+    /home/yohello/kde/src/kdesrc-build/GL/glx.h
+    /home/yohello/.local/bin/GL/glx.h
+    /home/yohello/.cargo/bin/GL/glx.h
+    /home/yohello/bin/GL/glx.h
+    /usr/local/bin/GL/glx.h
+    /usr/bin/GL/glx.h
+    /bin/GL/glx.h
+    /usr/local/games/GL/glx.h
+    /usr/games/GL/glx.h
+    /snap/bin/GL/glx.h
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/GL/glx.h
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:217 (find_path):
+  find_path called with the following settings:
+
+    VAR: OPENGL_EGL_INCLUDE_DIR
+    NAMES: "EGL/egl.h"
+    Documentation: Path to a file.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_path considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/include/EGL/egl.h
+    /opt/intel/oneapi/tbb/2021.6.0/EGL/egl.h
+    /home/yohello/.mozbuild/git-cinnabar/EGL/egl.h
+    /usr/local/bin~/EGL/egl.h
+    /usr/local/cuda-11.7/bin/EGL/egl.h
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/EGL/egl.h
+    /opt/intel/oneapi/ospray/2.9.0/bin/EGL/egl.h
+    /opt/intel/oneapi/openvkl/1.2.0/bin/EGL/egl.h
+    /opt/intel/oneapi/oidn/1.4.3/bin/EGL/egl.h
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/EGL/egl.h
+    /opt/intel/oneapi/mpi/2021.6.0/bin/EGL/egl.h
+    /opt/intel/oneapi/ispc/1.17.0/bin/EGL/egl.h
+    /opt/intel/oneapi/embree/3.13.3/bin/EGL/egl.h
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/EGL/egl.h
+    /home/yohello/kde/src/kdesrc-build/EGL/egl.h
+    /home/yohello/.local/bin/EGL/egl.h
+    /home/yohello/.cargo/bin/EGL/egl.h
+    /home/yohello/bin/EGL/egl.h
+    /usr/local/bin/EGL/egl.h
+    /usr/bin/EGL/egl.h
+    /bin/EGL/egl.h
+    /usr/local/games/EGL/egl.h
+    /usr/games/EGL/egl.h
+    /snap/bin/EGL/egl.h
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/EGL/egl.h
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:218 (find_path):
+  find_path called with the following settings:
+
+    VAR: OPENGL_xmesa_INCLUDE_DIR
+    NAMES: "GL/xmesa.h"
+    Documentation: Path to a file.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_path considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/include/GL/xmesa.h
+    /opt/intel/oneapi/tbb/2021.6.0/GL/xmesa.h
+    /home/yohello/.mozbuild/git-cinnabar/GL/xmesa.h
+    /usr/local/bin~/GL/xmesa.h
+    /usr/local/cuda-11.7/bin/GL/xmesa.h
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/GL/xmesa.h
+    /opt/intel/oneapi/ospray/2.9.0/bin/GL/xmesa.h
+    /opt/intel/oneapi/openvkl/1.2.0/bin/GL/xmesa.h
+    /opt/intel/oneapi/oidn/1.4.3/bin/GL/xmesa.h
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/GL/xmesa.h
+    /opt/intel/oneapi/mpi/2021.6.0/bin/GL/xmesa.h
+    /opt/intel/oneapi/ispc/1.17.0/bin/GL/xmesa.h
+    /opt/intel/oneapi/embree/3.13.3/bin/GL/xmesa.h
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/GL/xmesa.h
+    /home/yohello/kde/src/kdesrc-build/GL/xmesa.h
+    /home/yohello/.local/bin/GL/xmesa.h
+    /home/yohello/.cargo/bin/GL/xmesa.h
+    /home/yohello/bin/GL/xmesa.h
+    /usr/local/bin/GL/xmesa.h
+    /usr/bin/GL/xmesa.h
+    /bin/GL/xmesa.h
+    /usr/local/games/GL/xmesa.h
+    /usr/games/GL/xmesa.h
+    /snap/bin/GL/xmesa.h
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/GL/xmesa.h
+    /usr/share/doc/NVIDIA_GLX-1.0/include/GL/xmesa.h
+    /usr/openwin/share/include/GL/xmesa.h
+    /opt/graphics/OpenGL/include/GL/xmesa.h
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:232 (find_library):
+  find_library called with the following settings:
+
+    VAR: OPENGL_opengl_LIBRARY
+    NAMES: "OpenGL"
+    Documentation: Path to a library.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_library considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)OpenGL(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)OpenGL(\.so|\.a)
+    /usr/local/bin~/(lib)OpenGL(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)OpenGL(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)OpenGL(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)OpenGL(\.so|\.a)
+    /home/yohello/.local/bin/(lib)OpenGL(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)OpenGL(\.so|\.a)
+    /home/yohello/bin/(lib)OpenGL(\.so|\.a)
+    /usr/local/bin/(lib)OpenGL(\.so|\.a)
+    /usr/bin/(lib)OpenGL(\.so|\.a)
+    /bin/(lib)OpenGL(\.so|\.a)
+    /usr/local/games/(lib)OpenGL(\.so|\.a)
+    /usr/games/(lib)OpenGL(\.so|\.a)
+    /snap/bin/(lib)OpenGL(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)OpenGL(\.so|\.a)
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:237 (find_library):
+  find_library called with the following settings:
+
+    VAR: OPENGL_glx_LIBRARY
+    NAMES: "GLX"
+    Documentation: Path to a library.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_library considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/lib/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)GLX(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/libglvnd/(lib)GLX(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)GLX(\.so|\.a)
+    /usr/local/bin~/libglvnd/(lib)GLX(\.so|\.a)
+    /usr/local/bin~/(lib)GLX(\.so|\.a)
+    /usr/local/cuda-11.7/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)GLX(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/libglvnd/(lib)GLX(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)GLX(\.so|\.a)
+    /home/yohello/.local/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /home/yohello/.local/bin/(lib)GLX(\.so|\.a)
+    /home/yohello/.cargo/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)GLX(\.so|\.a)
+    /home/yohello/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /home/yohello/bin/(lib)GLX(\.so|\.a)
+    /usr/local/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /usr/local/bin/(lib)GLX(\.so|\.a)
+    /usr/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /usr/bin/(lib)GLX(\.so|\.a)
+    /bin/libglvnd/(lib)GLX(\.so|\.a)
+    /bin/(lib)GLX(\.so|\.a)
+    /usr/local/games/libglvnd/(lib)GLX(\.so|\.a)
+    /usr/local/games/(lib)GLX(\.so|\.a)
+    /usr/games/libglvnd/(lib)GLX(\.so|\.a)
+    /usr/games/(lib)GLX(\.so|\.a)
+    /snap/bin/libglvnd/(lib)GLX(\.so|\.a)
+    /snap/bin/(lib)GLX(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/libglvnd/(lib)GLX(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)GLX(\.so|\.a)
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:243 (find_library):
+  find_library called with the following settings:
+
+    VAR: OPENGL_egl_LIBRARY
+    NAMES: "EGL"
+    Documentation: Path to a library.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_library considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/lib/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)EGL(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/libglvnd/(lib)EGL(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)EGL(\.so|\.a)
+    /usr/local/bin~/libglvnd/(lib)EGL(\.so|\.a)
+    /usr/local/bin~/(lib)EGL(\.so|\.a)
+    /usr/local/cuda-11.7/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)EGL(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/libglvnd/(lib)EGL(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)EGL(\.so|\.a)
+    /home/yohello/.local/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /home/yohello/.local/bin/(lib)EGL(\.so|\.a)
+    /home/yohello/.cargo/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)EGL(\.so|\.a)
+    /home/yohello/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /home/yohello/bin/(lib)EGL(\.so|\.a)
+    /usr/local/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /usr/local/bin/(lib)EGL(\.so|\.a)
+    /usr/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /usr/bin/(lib)EGL(\.so|\.a)
+    /bin/libglvnd/(lib)EGL(\.so|\.a)
+    /bin/(lib)EGL(\.so|\.a)
+    /usr/local/games/libglvnd/(lib)EGL(\.so|\.a)
+    /usr/local/games/(lib)EGL(\.so|\.a)
+    /usr/games/libglvnd/(lib)EGL(\.so|\.a)
+    /usr/games/(lib)EGL(\.so|\.a)
+    /snap/bin/libglvnd/(lib)EGL(\.so|\.a)
+    /snap/bin/(lib)EGL(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/libglvnd/(lib)EGL(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)EGL(\.so|\.a)
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:249 (find_library):
+  find_library called with the following settings:
+
+    VAR: OPENGL_glu_LIBRARY
+    NAMES: "GLU"
+           "MesaGLU"
+    Documentation: Path to a library.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_library considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)GLU(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)GLU(\.so|\.a)
+    /usr/local/bin~/(lib)GLU(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)GLU(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)GLU(\.so|\.a)
+    /home/yohello/.local/bin/(lib)GLU(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)GLU(\.so|\.a)
+    /home/yohello/bin/(lib)GLU(\.so|\.a)
+    /usr/local/bin/(lib)GLU(\.so|\.a)
+    /usr/bin/(lib)GLU(\.so|\.a)
+    /bin/(lib)GLU(\.so|\.a)
+    /usr/local/games/(lib)GLU(\.so|\.a)
+    /usr/games/(lib)GLU(\.so|\.a)
+    /snap/bin/(lib)GLU(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)GLU(\.so|\.a)
+    /opt/graphics/OpenGL/lib/(lib)GLU(\.so|\.a)
+    /usr/openwin/lib/(lib)GLU(\.so|\.a)
+    /usr/shlib/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)MesaGLU(\.so|\.a)
+    /usr/local/bin~/(lib)MesaGLU(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/.local/bin/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/bin/(lib)MesaGLU(\.so|\.a)
+    /usr/local/bin/(lib)MesaGLU(\.so|\.a)
+    /usr/bin/(lib)MesaGLU(\.so|\.a)
+    /bin/(lib)MesaGLU(\.so|\.a)
+    /usr/local/games/(lib)MesaGLU(\.so|\.a)
+    /usr/games/(lib)MesaGLU(\.so|\.a)
+    /snap/bin/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)MesaGLU(\.so|\.a)
+    /opt/graphics/OpenGL/lib/(lib)MesaGLU(\.so|\.a)
+    /usr/openwin/lib/(lib)MesaGLU(\.so|\.a)
+    /usr/shlib/(lib)MesaGLU(\.so|\.a)
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:302 (find_library):
+  find_library called with the following settings:
+
+    VAR: OPENGL_gl_LIBRARY
+    NAMES: "GL"
+           "MesaGL"
+    Documentation: Path to a library.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_library considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/lib/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)GL(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/libglvnd/(lib)GL(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)GL(\.so|\.a)
+    /usr/local/bin~/libglvnd/(lib)GL(\.so|\.a)
+    /usr/local/bin~/(lib)GL(\.so|\.a)
+    /usr/local/cuda-11.7/bin/libglvnd/(lib)GL(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/libglvnd/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)GL(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/libglvnd/(lib)GL(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)GL(\.so|\.a)
+    /home/yohello/.local/bin/libglvnd/(lib)GL(\.so|\.a)
+    /home/yohello/.local/bin/(lib)GL(\.so|\.a)
+    /home/yohello/.cargo/bin/libglvnd/(lib)GL(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)GL(\.so|\.a)
+    /home/yohello/bin/libglvnd/(lib)GL(\.so|\.a)
+    /home/yohello/bin/(lib)GL(\.so|\.a)
+    /usr/local/bin/libglvnd/(lib)GL(\.so|\.a)
+    /usr/local/bin/(lib)GL(\.so|\.a)
+    /usr/bin/libglvnd/(lib)GL(\.so|\.a)
+    /usr/bin/(lib)GL(\.so|\.a)
+    /bin/libglvnd/(lib)GL(\.so|\.a)
+    /bin/(lib)GL(\.so|\.a)
+    /usr/local/games/libglvnd/(lib)GL(\.so|\.a)
+    /usr/local/games/(lib)GL(\.so|\.a)
+    /usr/games/libglvnd/(lib)GL(\.so|\.a)
+    /usr/games/(lib)GL(\.so|\.a)
+    /snap/bin/libglvnd/(lib)GL(\.so|\.a)
+    /snap/bin/(lib)GL(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/libglvnd/(lib)GL(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)GL(\.so|\.a)
+    /opt/graphics/OpenGL/lib/libglvnd/(lib)GL(\.so|\.a)
+    /opt/graphics/OpenGL/lib/(lib)GL(\.so|\.a)
+    /usr/openwin/lib/libglvnd/(lib)GL(\.so|\.a)
+    /usr/openwin/lib/(lib)GL(\.so|\.a)
+    /usr/shlib/libglvnd/(lib)GL(\.so|\.a)
+    /usr/shlib/(lib)GL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/lib/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)MesaGL(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/libglvnd/(lib)MesaGL(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)MesaGL(\.so|\.a)
+    /usr/local/bin~/libglvnd/(lib)MesaGL(\.so|\.a)
+    /usr/local/bin~/(lib)MesaGL(\.so|\.a)
+    /usr/local/cuda-11.7/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)MesaGL(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/libglvnd/(lib)MesaGL(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)MesaGL(\.so|\.a)
+    /home/yohello/.local/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /home/yohello/.local/bin/(lib)MesaGL(\.so|\.a)
+    /home/yohello/.cargo/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)MesaGL(\.so|\.a)
+    /home/yohello/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /home/yohello/bin/(lib)MesaGL(\.so|\.a)
+    /usr/local/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /usr/local/bin/(lib)MesaGL(\.so|\.a)
+    /usr/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /usr/bin/(lib)MesaGL(\.so|\.a)
+    /bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /bin/(lib)MesaGL(\.so|\.a)
+    /usr/local/games/libglvnd/(lib)MesaGL(\.so|\.a)
+    /usr/local/games/(lib)MesaGL(\.so|\.a)
+    /usr/games/libglvnd/(lib)MesaGL(\.so|\.a)
+    /usr/games/(lib)MesaGL(\.so|\.a)
+    /snap/bin/libglvnd/(lib)MesaGL(\.so|\.a)
+    /snap/bin/(lib)MesaGL(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/libglvnd/(lib)MesaGL(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)MesaGL(\.so|\.a)
+    /opt/graphics/OpenGL/lib/libglvnd/(lib)MesaGL(\.so|\.a)
+    /opt/graphics/OpenGL/lib/(lib)MesaGL(\.so|\.a)
+    /usr/openwin/lib/libglvnd/(lib)MesaGL(\.so|\.a)
+    /usr/openwin/lib/(lib)MesaGL(\.so|\.a)
+    /usr/shlib/libglvnd/(lib)MesaGL(\.so|\.a)
+    /usr/shlib/(lib)MesaGL(\.so|\.a)
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:389 (find_library):
+  find_library called with the following settings:
+
+    VAR: OPENGL_glu_LIBRARY
+    NAMES: "GLU"
+           "MesaGLU"
+    Documentation: Path to a library.
+    Framework
+      Only Search Frameworks: 0
+      Search Frameworks Last: 0
+      Search Frameworks First: 0
+    AppBundle
+      Only Search AppBundle: 0
+      Search AppBundle Last: 0
+      Search AppBundle First: 0
+    CMAKE_FIND_USE_CMAKE_PATH: 1
+    CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: 1
+    CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: 1
+
+  find_library considered the following locations:
+
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)GLU(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)GLU(\.so|\.a)
+    /usr/local/bin~/(lib)GLU(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)GLU(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)GLU(\.so|\.a)
+    /home/yohello/.local/bin/(lib)GLU(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)GLU(\.so|\.a)
+    /home/yohello/bin/(lib)GLU(\.so|\.a)
+    /usr/local/bin/(lib)GLU(\.so|\.a)
+    /usr/bin/(lib)GLU(\.so|\.a)
+    /bin/(lib)GLU(\.so|\.a)
+    /usr/local/games/(lib)GLU(\.so|\.a)
+    /usr/games/(lib)GLU(\.so|\.a)
+    /snap/bin/(lib)GLU(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)GLU(\.so|\.a)
+    /media/yohello/hrm2/code-stuff/generation/SDL/jeux-video/OPENGL_gl_LIBRARY-NOTFOUND/(lib)GLU(\.so|\.a)
+    /opt/graphics/OpenGL/lib/(lib)GLU(\.so|\.a)
+    /usr/openwin/lib/(lib)GLU(\.so|\.a)
+    /usr/shlib/(lib)GLU(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/lib/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/tbb/2021.6.0/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/.mozbuild/git-cinnabar/(lib)MesaGLU(\.so|\.a)
+    /usr/local/bin~/(lib)MesaGLU(\.so|\.a)
+    /usr/local/cuda-11.7/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/ospray_studio/0.10.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/ospray/2.9.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/openvkl/1.2.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/oidn/1.4.3/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/libfabric/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/mpi/2021.6.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/ispc/1.17.0/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/embree/3.13.3/bin/(lib)MesaGLU(\.so|\.a)
+    /opt/intel/oneapi/embree-3.13.3/3.13.3/bin/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/kde/src/kdesrc-build/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/.local/bin/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/.cargo/bin/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/bin/(lib)MesaGLU(\.so|\.a)
+    /usr/local/bin/(lib)MesaGLU(\.so|\.a)
+    /usr/bin/(lib)MesaGLU(\.so|\.a)
+    /bin/(lib)MesaGLU(\.so|\.a)
+    /usr/local/games/(lib)MesaGLU(\.so|\.a)
+    /usr/games/(lib)MesaGLU(\.so|\.a)
+    /snap/bin/(lib)MesaGLU(\.so|\.a)
+    /home/yohello/.local/share/JetBrains/Toolbox/scripts/(lib)MesaGLU(\.so|\.a)
+    /media/yohello/hrm2/code-stuff/generation/SDL/jeux-video/OPENGL_gl_LIBRARY-NOTFOUND/(lib)MesaGLU(\.so|\.a)
+    /opt/graphics/OpenGL/lib/(lib)MesaGLU(\.so|\.a)
+    /usr/openwin/lib/(lib)MesaGLU(\.so|\.a)
+    /usr/shlib/(lib)MesaGLU(\.so|\.a)
+
+  The item was not found.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Error at /usr/local/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
+  Could NOT find OpenGL (missing: OPENGL_opengl_LIBRARY OPENGL_glx_LIBRARY
+  OPENGL_INCLUDE_DIR)
+Call Stack (most recent call first):
+  /usr/local/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:594 (_FPHSA_FAILURE_MESSAGE)
+  /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake:443 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Debug Log at CMakeLists.txt:8 (find_package):
+  find_package considered the following paths for OpenGL.cmake
+
+  The file was found at
+
+    /usr/local/share/cmake-3.22/Modules/FindOpenGL.cmake
+
+  
+
+
+
+-- Configuring incomplete, errors occurred!
