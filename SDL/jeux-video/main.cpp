@@ -121,8 +121,12 @@ int main()
     std::cout << "WINDOW CREATED" << '\n';
 
     gladLoadGL();
+        std::cout << "SETTING MATRIX MODE1" << '\n';
+
     glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
     glLoadIdentity();
+
+    std::cout << "SETTING MATRIX MODE" << '\n';
     glMatrixMode(GL_PROJECTION);
     std::cout << "MATRIX MODE SET" << '\n';
 
