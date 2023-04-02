@@ -1,5 +1,6 @@
 #include "start/base_data.hpp"
-#include "render/stb_truetype.h"
+#include "include/stb/stb_truetype.h"
+#include "include/stb/stb_image.h"
 #include "math/vector_math.hpp"
 // #include "physics/physics2.hpp"
 #include "render/render.hpp"
@@ -28,6 +29,8 @@ std::vector<ui::single_ui_element *> ui_elements;
 unsigned int currenttime = (unsigned int)time(NULL);
 std::mutex mtx2;
 entites::Coordinator Conductor;
+
+// texture data, move to class soon
 
 // Vertices coordinates
 /*
@@ -75,10 +78,11 @@ GLfloat vertices[] =
         -50.0f,-0.5f, 0.0f,  000.0f, 000.0f, 100.0f, 0000.0f, 000.0f, // bottom left
         -50.0f, 0.5f, 0.0f,  100.0f, 100.0f, 000.0f, 0000.0f, 100.0f   // top left
 */
-0.0f,0.0f,0.0f, 0.0f,0.0f,0.0f, 0.0f,0.0f,
-0.0f,-50.0f,0.0f, 0.0f,0.0f,0.0f, 0.0f,0.0f,
--50.0f,0.0f,0.0f, 0.0f,0.0f,0.0f, 0.0f,0.0f,
--50.0f,-50.0f,0.0f, 0.0f,0.0f,0.0f, 0.0f,0.0f
+    // Coords                   Colours ig?           Texture coords
+    0.0f,  0.0f,  0.0f,         0.0f,0.0f,0.0f,       0.0f,   0.0f,
+    0.0f, -50.0f, 0.0f,         0.0f,0.0f,0.0f,       0.0f, -100000.0f,
+   -50.0f, 0.0f,  0.0f,         0.0f,0.0f,0.0f,      -1.0f,  0.0f,
+   -50.0f,-50.0f, 0.0f,         0.0f,0.0f,0.0f,      -10000.0f,-10000.0f
 
 };
 
@@ -117,18 +121,42 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
-
+    gladLoadGL();
+    glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
     std::cout << "WINDOW CREATED" << '\n';
 
-    gladLoadGL();
-        std::cout << "SETTING MATRIX MODE1" << '\n';
 
-    glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
-    glLoadIdentity();
+    // Generates Shader object using shaders defualt.vert and default.frag
+    Shader shaderProgram("render/shaders/test_vs.glsl", "render/shaders/test_fs.glsl");
+    std::cout << "SHADERS CREATED" << '\n';
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
 
-    std::cout << "SETTING MATRIX MODE" << '\n';
-    glMatrixMode(GL_PROJECTION);
-    std::cout << "MATRIX MODE SET" << '\n';
+    int widthImg, heightImg, numColch;
+    unsigned char* texutre_data = stbi_load("render/test.png",&widthImg,&heightImg, &numColch, 0);
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // if there's an error here, I probs specified the wrong data type 
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, heightImg, numColch, 0, GL_RGBA, GL_UNSIGNED_BYTE, texutre_data);
+    // glGenerateMipmap(GL_TEXTURE_2D);
+
+    stbi_image_free(texutre_data);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
+    shaderProgram.Activate();
+    glUniform1i(tex0Uni, 0);
+
 
     std::cout << "GL STUFF DECLARED" << '\n';
 
@@ -136,12 +164,6 @@ int main()
     //glBindTexture(GL_TEXTURE_2D, texture);
 
     std::cout << "TEXTURE CREATED" << '\n';
-
-    // Generates Shader object using shaders defualt.vert and default.frag
-    Shader shaderProgram("render/shaders/test_vs.glsl", "render/shaders/test_fs.glsl");
-    shaderProgram.Activate();
-
-    std::cout << "SHADERS DECLARED" << '\n';
 
     float aspect = (float)ACTUAL_WINDOW_WIDTH / ACTUAL_WINDOW_HEIGH;
     float half_heigh = ACTUAL_WINDOW_HEIGH / 2.f; // ortho size
@@ -152,7 +174,7 @@ int main()
 
     std::cout << "HALVES CALCULATED" << '\n';
 
-    glOrthof(0.0f, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, 0.0f, 0.0f, 1.0f);
+    // glOrthof(0.0f, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, 0.0f, 0.0f, 1.0f);
     shaderProgram.setMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr));
 
     std::cout << "PROJECTION MATRICIES DONE" << '\n';
@@ -186,6 +208,8 @@ int main()
         temp_move_x += 0.001;
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        shaderProgram.Activate();
+        glBindTexture(GL_TEXTURE_2D, texture);
 
         // Bind the VAO so OpenGL knows to use it
         VAO1.Bind();
@@ -194,7 +218,7 @@ int main()
         view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x, 0, 0));
         shaderProgram.setMat4("uViewMatrix", view_matrix);
 
-        glEnable(GL_TEXTURE_2D);
+        // 
 
         glfwPollEvents();
     }
@@ -202,6 +226,7 @@ int main()
     // physics.join();
     std::cout << "ENDED" << '\n';
     excecution_finished();
+    glDeleteTextures(1, &texture);
 
     VAO1.Delete();
     VBO1.Delete();

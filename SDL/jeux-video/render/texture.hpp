@@ -6,9 +6,9 @@ namespace Textures
     {
         private:
             unsigned int m_RendererID;
-            std::string m_FilePath;
-            unsigned char* m_LocalBuffer;
-            int m_Width, m_Height, m_BPP;
+            std::string m_FilePath; // File path
+            unsigned char* m_LocalBuffer; // Buffer of the image
+            int m_Width, m_Height, m_BPP; // width, heigh, and bits per pixel
         public:
             Texture(const std::string& path);
             ~Texture();
