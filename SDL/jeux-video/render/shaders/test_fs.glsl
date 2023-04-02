@@ -1,20 +1,22 @@
 #version 430
+
 out vec4 FragColor;
 
 in vec3 ourColor;
-in vec2 TexCoord;
-/*
-uniform sampler2D ourTexture;
+in vec2 texCoord;
+
+uniform sampler2D tex0;
 
 void main()
 {
-        float r = gl_FragCoord.x / 1024.0;
+    float r = gl_FragCoord.x / 1024.0;
     float g = gl_FragCoord.y / 1024.0;
-    float b = uColor_temp.x;
-    float a = uColor_temp.y;
-    FragColor = texture(ourTexture, TexCoord);
-}*/
+    float b = 1.0;
+    float a = 1.0;
+    FragColor = texture(tex0, texCoord);
+}
 
+/*
 out vec4 fragColor;
 uniform vec3 uColor_temp;
 uniform int logical_width;
@@ -32,8 +34,9 @@ void main()
     float g = gl_FragCoord.y / 1024.0;
     float b = uColor_temp.x;
     float a = uColor_temp.y;
-    fragColor = vec4(r, g, b, a)* ;
+    fragColor = vec4(r, g, b, a);
         // FragColor = texture(ourTexture, TexCoord);
 
     // fragColor = vec4(uColor_temp, 1.0);
 }
+*/
