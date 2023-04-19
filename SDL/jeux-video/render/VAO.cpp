@@ -9,9 +9,11 @@ void VAO::LinkVBO(VBO& VBO, GLuint layout)
 {
 	std::cout << "LAYOUT OF VAO LINKING: " << layout << '\n';
 	VBO.Bind();
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	// Remember to future self, that it is getting data fed directly from that array
+	// So the stride is the stride of the ENTIRE thing
+	// (index, size, type, normalized(always false), stride, pointer)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
 	glEnableVertexAttribArray(layout);
 	VBO.Unbind();

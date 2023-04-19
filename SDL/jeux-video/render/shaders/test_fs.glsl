@@ -13,7 +13,8 @@ void main()
     float g = gl_FragCoord.y / 1024.0;
     float b = 1.0;
     float a = 1.0;
-    FragColor = texture(tex0, texCoord);
+    vec2 temp = vec2(45,45);
+    FragColor = texture(tex0, temp);
 }
 
 /*

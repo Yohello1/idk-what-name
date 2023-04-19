@@ -78,11 +78,11 @@ GLfloat vertices[] =
         -50.0f,-0.5f, 0.0f,  000.0f, 000.0f, 100.0f, 0000.0f, 000.0f, // bottom left
         -50.0f, 0.5f, 0.0f,  100.0f, 100.0f, 000.0f, 0000.0f, 100.0f   // top left
 */
-    // Coords                   Colours ig?           Texture coords
-    0.0f,  0.0f,  0.0f,         0.0f,0.0f,0.0f,       0.0f,   0.0f,
-    0.0f, -50.0f, 0.0f,         0.0f,0.0f,0.0f,       0.0f, -100000.0f,
-   -50.0f, 0.0f,  0.0f,         0.0f,0.0f,0.0f,      -1.0f,  0.0f,
-   -50.0f,-50.0f, 0.0f,         0.0f,0.0f,0.0f,      -10000.0f,-10000.0f
+    // Coords                  Texture coords
+    64.0f,  64.0f,  0.0f,        100.0f, 1.0f,
+    64.0f, -64.0f, 0.0f,         1.0f, 0.0f,
+   -64.0f,  64.0f,  0.0f,        0.0f, 1.0f,
+   -64.0f, -64.0f, 0.0f,         0.0f, 0.0f
 
 };
 
@@ -137,7 +137,6 @@ int main()
 
     GLuint texture;
     glGenTextures(1, &texture);
-    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -147,12 +146,13 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // if there's an error here, I probs specified the wrong data type 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, heightImg, numColch, 0, GL_RGBA, GL_UNSIGNED_BYTE, texutre_data);
-    // glGenerateMipmap(GL_TEXTURE_2D);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGBA, GL_UNSIGNED_BYTE, texutre_data);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(texutre_data);
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    glActiveTexture(GL_TEXTURE0);
     GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
     shaderProgram.Activate();
     glUniform1i(tex0Uni, 0);
@@ -181,9 +181,9 @@ int main()
 
     glm::mat4 view_matrix(1);
     shaderProgram.setMat4("uViewMatrix", view_matrix);
-    glm::vec3 uColor_temp;
-    std::cout << "VIEW MATRICIES DONE" << '\n';
-    uColor_temp = glm::vec3(1.0f, 1.0f, 1.0f);
+    // glm::vec3 uColor_temp;
+    // std::cout << "VIEW MATRICIES DONE" << '\n';
+    // uColor_temp = glm::vec3(1.0f, 1.0f, 1.0f);
     // shaderProgram.setVec3("uColor_temp", uColor_temp);
 
     std::cout << "Shaders have been preped" << '\n';
@@ -215,8 +215,8 @@ int main()
         VAO1.Bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);
-        view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x, 0, 0));
-        shaderProgram.setMat4("uViewMatrix", view_matrix);
+        // view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x, 0, 0));
+        // shaderProgram.setMat4("uViewMatrix", view_matrix);
 
         // 
 

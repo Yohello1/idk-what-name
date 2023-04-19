@@ -11,8 +11,6 @@ public:
 	// Constructor that build the Shader Program from 2 different shaders
 	Shader(const char *vertexFile, const char *fragmentFile);
 
-	//TODO: Write out all the SetMat3-4, SetInt, SetUint, SetFloat, SetVec2, SetVec3, SetVec4
-
 	// Activates the Shader Program
 	void Activate();
 	// Deletes the Shader Program
