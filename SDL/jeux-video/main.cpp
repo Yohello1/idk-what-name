@@ -126,11 +126,15 @@ int main()
     std::cout << "WINDOW CREATED" << '\n';
 
 
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     // Generates Shader object using shaders defualt.vert and default.frag
     Shader shaderProgram("render/shaders/test_vs.glsl", "render/shaders/test_fs.glsl");
     std::cout << "SHADERS CREATED" << '\n';
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
+
+
 
     int widthImg, heightImg, numColch;
     unsigned char* texutre_data = stbi_load("render/test.png",&widthImg,&heightImg, &numColch, 0);
@@ -149,8 +153,8 @@ int main()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGBA, GL_UNSIGNED_BYTE, texutre_data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    stbi_image_free(texutre_data);
     glBindTexture(GL_TEXTURE_2D, 0);
+    stbi_image_free(texutre_data);
 
     glActiveTexture(GL_TEXTURE0);
     GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
@@ -181,6 +185,7 @@ int main()
 
     glm::mat4 view_matrix(1);
     shaderProgram.setMat4("uViewMatrix", view_matrix);
+    
     // glm::vec3 uColor_temp;
     // std::cout << "VIEW MATRICIES DONE" << '\n';
     // uColor_temp = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -205,15 +210,31 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        temp_move_x += 0.001;
+        // temp_move_x += 0.001;
+        // glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+        // glClear(GL_COLOR_BUFFER_BIT);
+        // shaderProgram.Activate();
+        // glBindTexture(GL_TEXTURE_2D, texture);
+
+        // // Bind the VAO so OpenGL knows to use it
+        // VAO1.Bind();
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glfwSwapBuffers(window);
+
+
+
+
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         shaderProgram.Activate();
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
+        // shaderProgram->setUniform("tex", 0); //set to 0 because the texture is bound to GL_TEXTURE0
 
-        // Bind the VAO so OpenGL knows to use it
         VAO1.Bind();
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        shaderProgram.Stop();
         glfwSwapBuffers(window);
         // view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x, 0, 0));
         // shaderProgram.setMat4("uViewMatrix", view_matrix);

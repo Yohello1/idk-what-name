@@ -13,6 +13,8 @@ public:
 
 	// Activates the Shader Program
 	void Activate();
+	// Stops the program?
+	void Stop();
 	// Deletes the Shader Program
 	void Delete();
 
