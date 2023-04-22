@@ -13,7 +13,7 @@ void VAO::LinkVBO(VBO& VBO, GLuint layout)
 	// So the stride is the stride of the ENTIRE thing
 	// (index, size, type, normalized(always false), stride, pointer)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, 5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
 
 	glEnableVertexAttribArray(layout);
 	VBO.Unbind();
