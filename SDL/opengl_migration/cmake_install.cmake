@@ -1,4 +1,4 @@
-# Install script for directory: /media/yohello/hrm2/code-stuff/generation/SDL/opengl_migration
+# Install script for directory: /home/yohello/Downloads/idk-what-name-main/SDL/opengl_migration
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/media/yohello/hrm2/code-stuff/generation/SDL/opengl_migration/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/yohello/Downloads/idk-what-name-main/SDL/opengl_migration/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
