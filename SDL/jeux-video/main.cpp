@@ -30,78 +30,10 @@ unsigned int currenttime = (unsigned int)time(NULL);
 std::mutex mtx2;
 entites::Coordinator Conductor;
 
-// texture data, move to class soon
-
-// Vertices coordinates
-/*
-GLfloat vertices[] =
-    {
-        // -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
-        // 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
-        // 0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
-        // -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
-        // 0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
-        // 0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
-
-        // X is x,
-        // Y is Y
-        // Z is the layer
-        -1.0f, 1.0f, 0.0f,  // Top left corner
-        1.0f, -1.0f, 0.0f,  // right bottom corner
-        1.0f, 1.0f, 0.0f,   // top right corner
-        -1.0f, -1.0f, 0.0f, // bottom left
-
-};*/
-GLfloat vertices[] =
-    {
-        // -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
-        // 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
-        // 0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
-        // -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
-        // 0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
-        // 0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
-
-        // X is x,
-        // Y is Y
-        // Z is the layer
-        /*-1.0f*(LOGICAL_WINDOW_WIDTH/4),  1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,  // Top left corner
-         1.0f  *(LOGICAL_WINDOW_WIDTH/4), -1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,  // right bottom corner
-         1.0f  *(LOGICAL_WINDOW_WIDTH/4),  1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f,   // top right corner
-        -1.0f  *(LOGICAL_WINDOW_WIDTH/4), -1.0f*(LOGICAL_WINDOW_HEIGH/4), 0.0f, // bottom left
-    */
-   // texture cords are apparently the vert cords
-        // positions          // colors           // texture coords
-
-        /**
-         50.0f, 50.0f, 0.0f, 100.0f, 000.0f, 000.0f, 1000.0f, 100.0f,   // top right
-         50.0f,-0.5f, 0.0f,  000.0f, 100.0f, 000.0f, 1000.0f, 000.0f,  // bottom right
-        -50.0f,-0.5f, 0.0f,  000.0f, 000.0f, 100.0f, 0000.0f, 000.0f, // bottom left
-        -50.0f, 0.5f, 0.0f,  100.0f, 100.0f, 000.0f, 0000.0f, 100.0f   // top left
-*/
-    // Coords                  Texture coords
-    64.0f,  64.0f,  0.0f,        100.0f, 1.0f,
-    64.0f, -64.0f, 0.0f,         1.0f, 0.0f,
-   -64.0f,  64.0f,  0.0f,        0.0f, 1.0f,
-   -64.0f, -64.0f, 0.0f,         0.0f, 0.0f
-
-};
-
-// Indices for vertices order
-GLuint indices[] =
-    {
-        // 0, 3, 5, // Lower left triangle
-        // 3, 2, 4, // Upper
-        // 5, 4, 1 // Lower right triangle
-        /*0, 1, 2,
-        0, 3, 1*/
-        0,3,2,
-        0,1,3
-};
-
 int main()
 {
-    std::cout << "Starting" << '\n';
 
+<<<<<<< HEAD
     // Starting stuff
     srand(current_time);
 
@@ -255,6 +187,8 @@ int main()
     shaderProgram.Delete();
     glfwDestroyWindow(window);
     glfwTerminate();
+=======
+>>>>>>> d72d054 (To rebuild after the storm)
 }
 
 void excecution_finished(void)
