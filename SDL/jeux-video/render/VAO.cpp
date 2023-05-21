@@ -30,7 +30,7 @@ public:
           glEnableVertexAttribArray(program->getUniformID("uvCoords"));
           glVertexAttribPointer(program->getUniformID("uvCoords"), 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), 3*sizeof(GLfloat));
 
-      }
+      } 
     */
 
     // It tells the gpu that this VAO is in use
