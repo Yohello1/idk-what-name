@@ -7,10 +7,14 @@ class VAO
   public:
 
   // The ID of the object
-  Gluint ID;
+  GLuint ID;
+
+  // Constructor
+  VAO();
 
   // This is self explainatory
-  void LinkVBO(VBO& VBO, Gluint layout);
+  // This is a *special* tool which will help us later ;)
+  // void LinkVBO(VBO& VBO, GLuint layout);
 
   // It tells the gpu that this VAO is in use
   void Bind();
@@ -20,7 +24,7 @@ class VAO
 
   // if you need me to explain this, please off urself
   void Delete(); // I feel like there should be a ~ here
-}
+};
 
 
 #endif // VAO_H_

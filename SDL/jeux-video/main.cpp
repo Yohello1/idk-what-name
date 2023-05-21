@@ -1,3 +1,6 @@
+#include "start/base_data.hpp"
+#include "include/stb/stb_image.h"
+#include "include/stb/stb_truetype.h"
 #include "render/render.hpp"
 #include "generation/terain.hpp"
 #include "render/ui.hpp"
@@ -29,4 +32,4 @@ int main()
     std::cout << "Hello World" << std::endl;
 
 
-// }
+}
