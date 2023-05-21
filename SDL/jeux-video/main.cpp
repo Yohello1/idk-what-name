@@ -1,3 +1,6 @@
+#include "start/base_data.hpp"
+#include "include/stb/stb_image.h"
+#include "include/stb/stb_truetype.h"
 #include "render/render.hpp"
 #include "generation/terain.hpp"
 #include "render/ui.hpp"
@@ -5,188 +8,153 @@
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
+// #include "render/VBO.cpp" // tbf we can just yeet these
+// #include "render/EBO.cpp"
+// #include "render/FBO.cpp"
+// #include "render/VAO.cpp"
+#include "render/texture.cpp"
+#include "render/shader.cpp"
+#include "render/FrameBufferTex.cpp"
+#include "render/FBshader.cpp"
+#include "render/Compute.cpp"
+#include "render/MVPMatrix.hpp"
 
-// Simulated array everything is being fed
-cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-// cell new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-// Array responsble for the UI
-// This stuff's apparently never defined LOL
-// struct colour user_interface[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-// USR input and changes, TODO SWITCH TO EQAUTION
-cell_t usr_input[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-bool changed[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-cell_t render[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-void excecution_finished();
-void draw_box(cord_2d start, cord_2d end);
+std::atomic<bool> kys; // politely :3
 
+// ECS stuff, dont remove them, the system will kill itself
 std::vector<ui::single_ui_element *> ui_elements;
 unsigned int currenttime = (unsigned int)time(NULL);
 std::mutex mtx2;
 entites::Coordinator Conductor;
 
+
+GLfloat vertices[] =
+{
+	-64.0f, -64.0f , 0.0f, 0.0f, 0.0f,
+	-64.0f,  64.0f , 0.0f, 0.0f, 1.0f,
+	 64.0f,  64.0f , 0.0f, 1.0f, 1.0f,
+	 64.0f, -64.0f , 0.0f, 1.0f, 0.0f,
+};
+
+GLuint indices[] =
+{
+	0, 2, 1,
+	0, 3, 2
+};
+
+
 int main()
 {
-    std::cout << "Hello World" << std::endl;
+	// Honestly I have no idea whwre else to put this stuff
+	srand(current_time);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    // Starting stuff
-    srand(current_time);
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    // AAAAAa
-    // https://youtu.be/45MIykWJ-C4
-    glfwInit();
+	GLFWwindow* window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "Gament2", NULL, NULL);
+	if (!window)
+	{
+		std::cout << "Failed to create the GLFW window\n";
+		glfwTerminate();
+	}
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(true);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-
-    GLFWwindow *window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "idk", NULL, NULL);
-    if (window == NULL)
-    {
-        std::cout << "Could not create window (GLFW)" << '\n';
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-    gladLoadGL();
-    glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
-    std::cout << "WINDOW CREATED" << '\n';
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize OpenGL context" << std::endl;
+	}
+	glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
 
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	GLuint VAO, VBO, EBO;
+	{
+		glCreateVertexArrays(1, &VAO);
+		glCreateBuffers(1, &VBO);
+		glCreateBuffers(1, &EBO);
 
-    // Generates Shader object using shaders defualt.vert and default.frag
-    Shader shaderProgram("render/shaders/test_vs.glsl", "render/shaders/test_fs.glsl");
-    std::cout << "SHADERS CREATED" << '\n';
+		glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
 
+		glEnableVertexArrayAttrib(VAO, 0);
+		glVertexArrayAttribBinding(VAO, 0, 0);
+		glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
 
+		glEnableVertexArrayAttrib(VAO, 1);
+		glVertexArrayAttribBinding(VAO, 1, 0);
+		glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
 
-    int widthImg, heightImg, numColch;
-    unsigned char* texutre_data = stbi_load("render/test.png",&widthImg,&heightImg, &numColch, 0);
+		glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
+		glVertexArrayElementBuffer(VAO, EBO);
+	}
 
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    // if there's an error here, I probs specified the wrong data type 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGBA, GL_UNSIGNED_BYTE, texutre_data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    stbi_image_free(texutre_data);
-
-    glActiveTexture(GL_TEXTURE0);
-    GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
-    shaderProgram.Activate();
-    glUniform1i(tex0Uni, 0);
-
-
-    std::cout << "GL STUFF DECLARED" << '\n';
-
-    // GLuint texture = Textures::raw_texture_load("debug/rand.raw", 128, 128);
-    //glBindTexture(GL_TEXTURE_2D, texture);
-
-    std::cout << "TEXTURE CREATED" << '\n';
-
-    float aspect = (float)ACTUAL_WINDOW_WIDTH / ACTUAL_WINDOW_HEIGH;
-    float half_heigh = ACTUAL_WINDOW_HEIGH / 2.f; // ortho size
-    float half_width = ACTUAL_WINDOW_WIDTH / 2.f;
-    // half_heigh /= LOGICAL_WINDOW_HEIGH;
-    half_width = half_width / (ACTUAL_WINDOW_HEIGH/LOGICAL_WINDOW_HEIGH);
-    half_heigh = half_heigh / (ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH);
-
-    std::cout << "HALVES CALCULATED" << '\n';
-
-    // glOrthof(0.0f, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, 0.0f, 0.0f, 1.0f);
-    shaderProgram.setMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr));
-
-    std::cout << "PROJECTION MATRICIES DONE" << '\n';
-
-    glm::mat4 view_matrix(1);
-    shaderProgram.setMat4("uViewMatrix", view_matrix);
-    
-    // glm::vec3 uColor_temp;
-    // std::cout << "VIEW MATRICIES DONE" << '\n';
-    // uColor_temp = glm::vec3(1.0f, 1.0f, 1.0f);
-    // shaderProgram.setVec3("uColor_temp", uColor_temp);
-
-    std::cout << "Shaders have been preped" << '\n';
-
-    VAO VAO1;
-    VAO1.Bind();
-    VBO VBO1(vertices, sizeof(vertices));
-    EBO EBO1(indices, sizeof(vertices));
-    VAO1.LinkVBO(VBO1, 0);
-    VAO1.Unbind();
-    VBO1.Unbind();
-    EBO1.Unbind();
-
-    std::cout << "EVERYTHING PREPPED" << '\n';
-    // array_clean_start(pixels);
-    // std::thread physics(physics::simulate, pixels, new_version);
-
-    float temp_move_x = 0;
-
-    while (!glfwWindowShouldClose(window))
-    {
-        // temp_move_x += 0.001;
-        // glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-        // glClear(GL_COLOR_BUFFER_BIT);
-        // shaderProgram.Activate();
-        // glBindTexture(GL_TEXTURE_2D, texture);
-
-        // // Bind the VAO so OpenGL knows to use it
-        // VAO1.Bind();
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        // glfwSwapBuffers(window);
+	std::cout << "vert and frag shaders being made" << std::endl;
+	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
+	std::cout << "vert and frag shaders have been made" << std::endl;
+	glUseProgram(inMyMind.shaderProgram);
 
 
 
+	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_HEIGH),1024,1024,1000);
+	inMyMind.setMat4("uProjectionMatrix", favoriteConvosInTheAM.ProjectionMatrix);
+	inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
+	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
 
-        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        shaderProgram.Activate();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        // shaderProgram->setUniform("tex", 0); //set to 0 because the texture is bound to GL_TEXTURE0
+	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
+	Shaders::computeImageOut halfwayThroughNovember(1024,1024,0);
+	Shaders::computeImageIn heyworld(1024,1024,1);
 
-        VAO1.Bind();
-        glBindVertexArray(0);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        shaderProgram.Stop();
-        glfwSwapBuffers(window);
-        // view_matrix = glm::translate(view_matrix, glm::vec3(temp_move_x, 0, 0));
-        // shaderProgram.setMat4("uViewMatrix", view_matrix);
+	dejaVu.printMaxComputeSize();
+	int work_grp_inv;
+	glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &work_grp_inv);
+	std::cout << "Max invocations count per work group: " << work_grp_inv << "\n";
 
-        // 
+	//fake image maker :)
+	float* fakeImg = new float[4194304];
+	functions::fakeRandomImage(fakeImg);
+	std::cout << "IMG MADE2" << '\n';
 
-        glfwPollEvents();
-    }
-    quit_now = true;
-    // physics.join();
-    std::cout << "ENDED" << '\n';
-    excecution_finished();
-    glDeleteTextures(1, &texture);
+	while (!glfwWindowShouldClose(window))
+	{
+		auto start_time = Clock::now();
 
-    VAO1.Delete();
-    VBO1.Delete();
-    EBO1.Delete();
-    shaderProgram.Delete();
-    glfwDestroyWindow(window);
-    glfwTerminate();
-=======
->>>>>>> d72d054 (To rebuild after the storm)
+		// Rotate the plane???
+		{
+			float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
+			// std::cout << ang_y << '\n';
+
+			glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
+			glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
+			glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		   	favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
+			inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
+		}
+
+		// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
+		dejaVu.useProgram();
+		glDispatchCompute(1024, 1024, 1);
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
+		heyworld.copyDataFloat(fakeImg);
+		// inMyMind.setMat4("uViewMatrix", viewMatrix);
+		glUseProgram(inMyMind.shaderProgram);
+		glBindTextureUnit(0, halfwayThroughNovember.getID());
+		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
+
+		auto end_time = Clock::now();
+		//std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
 }
-=======
->>>>>>> b319c7e (Blinding flashes)
-
-// }
