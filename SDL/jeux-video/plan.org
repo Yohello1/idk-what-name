@@ -32,7 +32,7 @@
   - [X] Test
 - [ ] Quality of Programming the engine life
   - [ ] Switching to type def
-- [1/21] Render life
+- [0/24] Render life
   - [ ] Colours p2
   - [ ] Figure out how to run the map -> Material -> Img
   - [ ] Temp representation
@@ -54,7 +54,8 @@
     - [ ] Create a method to handle the buffers, loading, deleting, updating
   - [ ] Oragnise, and refactor it to not be terrible
   - [ ] Draw a sqaure
-  - [X] Create EBO, VBO, and VAO
+  - [ ] Create EBO, VBO, and VAO
+  - [ ] Create FBO
   - [ ] Create windw
   - [ ] Create plane
   - [ ] Map image onto plane
