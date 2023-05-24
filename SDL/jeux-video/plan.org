@@ -32,7 +32,7 @@
   - [X] Test
 - [ ] Quality of Programming the engine life
   - [ ] Switching to type def
-- [2/13] Render life
+- [2/20] Render life
   - [ ] Colours p2
   - [ ] Figure out how to run the map -> Material -> Img
   - [ ] Temp representation
@@ -55,13 +55,13 @@
   - [ ] Oragnise, and refactor it to not be terrible
   - [X] Draw a sqaure
   - [X] Orthographic camera
-  - [ ] Organise this part 15
+  - [ ] Organise this *part 15*
   - [ ] Load texture raw files
   - [ ] Load them to GPU
   - [ ] BIND them
   - [ ] Setup the frag shader
   - [ ] Setup the like 20 matricies
-- [1/4] optimisation
+- [1/3] optimisation
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)
   - [ ] Rewrite SDL code in uh, opengl (I dont have a choice)
@@ -69,10 +69,9 @@
     - [ ] Display colours
     - [ ] Frag/vert shader
     - [ ] Compositor
-  - [ ] New render method
 - [ ] Import/Export maps
 - [ ] Write a proper input system
-- [7/8] Final version of physics system
+- [7/10] Final version of physics system
   - [X] Correct types
   - [X] Data handling
   - [X] Basic add and subtract from neighbouxr
@@ -84,6 +83,11 @@
   - [X] Find issue with pressure exiting/entering from random points
   - [X] Create seperate thread which checks for inconsitenceis
   - [ ] Port pressure to temp
+  - [ ] Solids
+    - [ ] Implement the data types needed
+    - [ ] Use the data types
+    - [ ] Figure out how to display it
+  - [ ] Make a better version of the cross die thingy
 
 * Bugs
 
