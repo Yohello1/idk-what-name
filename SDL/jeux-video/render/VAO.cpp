@@ -1,3 +1,5 @@
+#include "VAO.hpp"
+
 class VAO
 {
 private:
@@ -8,43 +10,32 @@ public:
     // Constructor
     VAO()
     {
-        glGenVertexArrays(1, &ID);
+        glCreateVertexArrays(1, &ID);
     }
 
-    // TODO: automate the below process, cause my dumbass is gonna be lazy af
+    // Btw it's assumed that the index-buffer-binding
+    // which is associated to the generic
+    // vertex attribute
+    // is 0, cause ion have the sanity
+    void enableArrayIndex(GLuint* vaoIn, GLuint index)
+        {
+            glEnableVertexArrayAttrib(vaoIn, index);
+            glVertexArrayAttribBinding(vaoInt, 0, 0);
+        }
 
-    // This is self explainatory
-    // This is a *special* tool which will help us later ;)
-    // BTW you have to get the layout and send it in
-    // Hopefully future you set this up by now
-    void LinkVBO(VBO &VBO, shader_program program *)
-    {
-        std::cout << "LAYOUT OF VAO IS BEING LINKED: " << layout << '\n';
-        VBO.Bind();
+    // The offset is the number of floats to make it there
+    // NOT THE ACTUAL SIZE
+    // As in the offset is multiplied by the size of the a GLfloat
+    // So like, offset*sizeof(GLfloat);
+    void setArrayFormat(GLuint* vaoIn, GLuint index, GLuint size, GLuint offset)
+        {
+            glVertexArrayAttribFormat(vaoIn, index, size, GL_FLOAT, GL_FALSE, offset(sizeof(GLfloat)));
+        }
 
-        // Connect the position to the vert attrib
-        glEnableVertexAttribArray(program->getUniformID("vertCoords"));
-        glVertexAttribPointer(program->getUniformID("vertCoords"), 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), NULL);
+    // You have to compute the stride urself here btw, cause ion have the sanity
+    void linkVBO(GLuint* vaoIn, GLuint index, GLuint* vboIn, GLuint offset, GLsizei stride)
+        {
+            glVertexArrayVertexBuffer(vaoIn, index, vboIn, offset, stride);
+        }
 
-        glEnableVertexAttribArray(program->getUniformID("uvCoords"));
-        glVertexAttribPointer(program->getUniformID("uvCoords"), 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 3 * sizeof(GLfloat));
-    }
-
-    // It tells the gpu that this VAO is in use
-    void Bind()
-    {
-        glBindVertexArray(ID);
-    }
-
-    // It tells the gpu that this one is not being used
-    void UnBind();
-    {
-        glBindVertexArray(ID);
-    }
-
-    // if you need me to explain this, please off urself
-    void Delete(); // I feel like there should be a ~ here
-    {
-        glDeleteVertexArrays(1, &ID);
-    }
 };
