@@ -12,18 +12,8 @@ class VAO
   // Constructor
   VAO();
 
-  // This is self explainatory
-  // This is a *special* tool which will help us later ;)
-  // void LinkVBO(VBO& VBO, GLuint layout);
-
-  // It tells the gpu that this VAO is in use
-  void Bind();
-
-  // It tells the gpu that this one is not being used
-  void UnBind();
-
-  // if you need me to explain this, please off urself
-  void Delete(); // I feel like there should be a ~ here
+  void enableArrayIndex(GLuint* vaoIn, GLuint index);
+  void setArrayFormat(GLuint* vaoIn, GLuint size, GLuint offset);
 };
 
 

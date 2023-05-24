@@ -5,14 +5,9 @@ class EBO
 {
     public:
     GLuint ID;
-    EBO(GLuint* indices, GLsizeiprt size);
+      EBO(GLuint* indices, GLsizeiprt size);
 
-    void Bind();
-    void Unbind();
-    void Delete(); // once again i think there should be a `~` here
-
-
-    private:
+      void LinkEBOtoVAO(GLuint* vaoToLink, GLuint* eboToLink);
 };
 
 

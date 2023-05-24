@@ -32,7 +32,7 @@
   - [X] Test
 - [ ] Quality of Programming the engine life
   - [ ] Switching to type def
-- [2/20] Render life
+- [1/21] Render life
   - [ ] Colours p2
   - [ ] Figure out how to run the map -> Material -> Img
   - [ ] Temp representation
@@ -53,8 +53,12 @@
     - [ ] Load that image into VRAM every frame update
     - [ ] Create a method to handle the buffers, loading, deleting, updating
   - [ ] Oragnise, and refactor it to not be terrible
-  - [X] Draw a sqaure
-  - [X] Orthographic camera
+  - [ ] Draw a sqaure
+  - [X] Create EBO, VBO, and VAO
+  - [ ] Create windw
+  - [ ] Create plane
+  - [ ] Map image onto plane
+  - [ ] Orthographic camera
   - [ ] Organise this *part 15*
   - [ ] Load texture raw files
   - [ ] Load them to GPU

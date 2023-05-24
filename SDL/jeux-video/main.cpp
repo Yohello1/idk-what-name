@@ -8,6 +8,9 @@
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
+#include "render/VAO.cpp"
+#include "render/VBO.cpp"
+#include "render/EBO.cpp"
 
 // Simulated array everything is being fed
 cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];

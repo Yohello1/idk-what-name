@@ -1,3 +1,5 @@
+#include "VBO.hpp"
+
 class VBO
 {
     private:
@@ -5,24 +7,10 @@ class VBO
 
     VBO(GLfloat *vertices, GLsizeiptr size)
     {
-        glGenBuffers(1, &ID);
-        glBindBuffer(GL_ARRAY_BUFFER, ID);
-        glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+        glCreateBuffers(1, &VBO);
+        glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
     }
 
-    void Bind()
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, ID);
-    }
-
-    void UnBind()
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
-    void Delete() //there should be a `~` here :sob:
-    {
-        glDeleteBuffers(1, &ID);
-    }
 
 };
