@@ -38,4 +38,8 @@ public:
             glVertexArrayVertexBuffer(vaoIn, index, vboIn, offset, stride);
         }
 
+    void linkEBO(GLuint* vaoIn, GLuint* eboIn)
+        {
+            glVertexArrayElementBuffer(VAO, EBO);
+        }
 };
