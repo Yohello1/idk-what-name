@@ -1,22 +1,21 @@
-#include "EBO.hpp"
-
-class
+class EBO
 {
 private:
 public:
     GLuint ID;
 
-    EBO(GLuint *indices, GLsizeiprt size)
+    // Incdices are expected to be GLuints
+    EBO(GLuint *indices)
     {
         // My dumbass forgot that 4.6 is DSA :P, so gotta remove most of the
         // binds and what not
         // Also btw we dont rlly need any other
         // functions so eh
         glCreateBuffers(1, &ID);
-        glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
+        glNamedBufferData(ID, sizeof(indices), indices, GL_STATIC_DRAW);
     }
 
-    void LinkEBOtoVAO(GLuint *vaoToLink, GLuint *eboToLink)
+    void LinkEBOtoVAO(GLuint& vaoToLink, GLuint& eboToLink)
     {
         glVertexArrayElementBuffer(vaoToLink, eboToLink);
     }

@@ -1,14 +1,13 @@
-#include "VBO.hpp"
-
 class VBO
 {
     private:
     public:
+    GLuint ID;
 
-    VBO(GLfloat *vertices, GLsizeiptr size)
+    VBO(GLfloat *vertices)
     {
-        glCreateBuffers(1, &VBO);
-        glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glCreateBuffers(1, &ID);
+        glNamedBufferData(ID, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     }
 
