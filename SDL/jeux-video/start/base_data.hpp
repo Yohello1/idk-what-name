@@ -367,22 +367,19 @@ struct cord_2d
     uint16_t y_pos;
 };
 
-// TODO: Delete this, like this is legitamently useless
-void array_clean_start(cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+std::string getFileContents(const char *filename)
 {
-    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+    std::ifstream in(filename, std::ios::binary);
+    if(in)
     {
-        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-        {
-            // pixels[x_pos][y_pos].change_a(0);
-            // pixels[x_pos][y_pos].change_g(0);
-            // pixels[x_pos][y_pos].change_b(0);
-            // pixels[x_pos][y_pos].change_r(0);
-            // pixels[x_pos][y_pos].modify_density(0);
-            // pixels[x_pos][y_pos].set_pressure(0);
-            // pixels[x_pos][y_pos].modify_temp(0);
-            // pixels[x_pos][y_pos].set_flow(0);
-            // pixels[x_pos][y_pos].set_inert(false);
-        }
+        std::string contents;
+        in.seekg(0, std:;ios::end);
+        contents.resize(in.tellg());
+        in.seekg(0, std::ios::beg);
+        in.read(&contents[0], contents.size());
+        in.close();
+        return (contents);
     }
+
+    throw(errno);
 }
