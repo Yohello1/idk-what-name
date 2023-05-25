@@ -46,7 +46,6 @@ int main()
     std::cout << "Creating window \n";
 
     glfwInit();
-
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -66,6 +65,7 @@ int main()
 
     // put the write the code related to
     // loading the shaders here
+    // Shaders r weird
 
     while(!kys)
     {
