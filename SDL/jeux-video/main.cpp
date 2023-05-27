@@ -8,13 +8,16 @@
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
-#include "render/VAO.cpp"
 #include "render/VBO.cpp"
 #include "render/EBO.cpp"
-
+#include "render/FBO.cpp"
+#include "render/VAO.cpp"
+#include "render/texture.cpp"
+#include "render/shader.cpp"
+#include "render/FrameBufferTex.cpp"
+#include "render/FBshader.cpp"
 
 std::atomic<bool> kys; // politely :3
-unsigned int sartedTime = (unsigned int)time(NULL);
 
 // ECS stuff, dont remove them, the system will kill itself
 std::vector<ui::single_ui_element *> ui_elements;
@@ -67,8 +70,58 @@ int main()
     // loading the shaders here
     // Shaders r weird
 
+    Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
+
+    std::cout << "Shaders created (in theory)" << '\n';
+    std::cout << "Arrays and whatnot being made\n";
+    VAO vao;
+    VBO vbo(vertices);
+    EBO ebo(indices);
+
+    vao.enableArrayIndex(vao, 0);
+    vao.setArrayFormat(vao, 0, 3, 0);
+
+    vao.enableArrayIndex(vao, 1);
+    vao.setArrayFormat(vao, 1, 2, 3);
+
+    vao.linkVBO(vao, 0, vbo, 0, 5*sizeof(GLfloat));
+    vao.linkEBO(vao, ebo);
+
+    std::cout << "Arrays and whatnot have been made\n";
+
+    Texture map("render/test.png");
+
+    std::cout << "Texture created" << '\n';
+
+    FBO fbo;
+    FrameBufferTex FrameBufferTex(fbo);
+    fbo.fboWorking();
+    FBShader fbshader("render/shaders/FBvert.glsl", "render/shaders/FBfrag.glsl");
+
+    std::cout << "Framebuffer created \n";
+
     while(!kys)
     {
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo.ID);
+        GLfloat backgroundColor[] = {255.0f/255.0f, 135.0f/255.0, 71.0f/255.0f,1.0f};
+        glClearNamedFramebufferfv(fbo.ID, GL_COLOR, 0, backgroundColor);
+
+        glUseProgram(inMyMind.shaderProgram);
+        glBindTextureUnit(0, map.texture);
+        glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "tex"), 0);
+        glBindVertexArray(vao.ID);
+        glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(indices[0]), GL_UNSIGNED_INT, 0);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        glUseProgram(fbshader.FBShaderProgram);
+        glBindTextureUnit(0, FrameBufferTex.ID);
+        glUniform1i(glGetUniformLocation(fbshader.FBShaderProgram, "screen"), 0);
+        glBindVertexArray(vao.ID);
+        glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(indices[0]), GL_UNSIGNED_INT, 0);
+
+
+
         glfwSwapBuffers(window);
         glfwPollEvents();
         if(glfwWindowShouldClose(window))
