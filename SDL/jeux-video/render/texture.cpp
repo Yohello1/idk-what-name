@@ -1,7 +1,7 @@
 class Texture {
 public:
     int ImgWidth, ImgHeigh, numColCh;
-    GLuint texture;
+    GLuint texture1;
 
     Texture(const char* filePath)
     {
@@ -9,30 +9,30 @@ public:
         unsigned char* rawData = stbi_load(filePath, &ImgWidth, &ImgHeigh, &numColCh, 0);
 
         // why is it plural
-        glCreateTextures(GL_TEXTURE_2D, 1, &texture);
+        glCreateTextures(GL_TEXTURE_2D, 1, &texture1);
 
         // idc what other ppl say,
         // im gonna use these settings whether they
         // like it or not
-        glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTextureParameteri(texture1, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTextureParameteri(texture1, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTextureParameteri(texture1, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTextureParameteri(texture1, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
         // TIME FOR 4D TEXTURES
         // one level btw
         // ALL THE THINGS SHE SAID
         // RUNNING THROUGH MY HEAD
         // THIS IS NOT ENOUGH
-        glTextureStorage2D(texture, 1, GL_RGBA8, ImgWidth, ImgHeigh);
+        glTextureStorage2D(texture1, 1, GL_RGBA8, ImgWidth, ImgHeigh);
         // in theory i should be
         // providing a method to
         // specifiy the offsets
         // but eh
-        glTextureSubImage2D(texture,0,0,0, ImgWidth, ImgHeigh, GL_RGBA, GL_UNSIGNED_BYTE, rawData);
+        glTextureSubImage2D(texture1,0,0,0, ImgWidth, ImgHeigh, GL_RGBA, GL_UNSIGNED_BYTE, rawData);
         // In theory, this will fuck over the display method
         // but eh
-        glGenerateTextureMipmap(texture);
+        glGenerateTextureMipmap(texture1);
 
         stbi_image_free(rawData);
     }
