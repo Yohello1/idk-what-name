@@ -134,7 +134,7 @@ int main()
 
 	int widthImg, heightImg, numColCh;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* bytes = stbi_load("render/test.png", &widthImg, &heightImg, &numColCh, 0);
+	unsigned char* bytes = stbi_load("hamster2.png", &widthImg, &heightImg, &numColCh, 0);
 
 	GLuint tex;
 	glCreateTextures(GL_TEXTURE_2D, 1, &tex);
@@ -145,7 +145,7 @@ int main()
 	glTextureParameteri(tex, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	glTextureStorage2D(tex, 1, GL_RGBA8, widthImg, heightImg);
-	glTextureSubImage2D(tex, 0, 0, 0, widthImg, heightImg, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+	glTextureSubImage2D(tex, 0, 0, 0, widthImg, heightImg, GL_BGRA, GL_UNSIGNED_BYTE, bytes);
 	glGenerateTextureMipmap(tex);
 
 	stbi_image_free(bytes);
@@ -200,6 +200,7 @@ int main()
 		glUseProgram(framebufferShaderProgram);
 		glBindTextureUnit(0, framebufferTex);
 		glUniform1i(glGetUniformLocation(framebufferShaderProgram, "screen"), 0);
+        std::cout << glGetUniformLocation(framebufferShaderProgram, "screen") << '\n';
 		glBindVertexArray(VAO); // NO framebuffer VAO because I simply double the size of the rectangle to cover the whole screen
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
