@@ -6,8 +6,11 @@ class Shader
     // btw it is expecting the file paths for the glsl shaders
     Shader(const char *vertFile, const char* fragFile)
     {
+        std::cout << "hello weridos\n";
         const char* vertCode = getFileContents(vertFile);
         const char* fragCode = getFileContents(fragFile);
+
+        std::cout << "i got the files :3\n";
 
         GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
         // Why is this a GLint instead of GLuint

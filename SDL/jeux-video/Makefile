@@ -102,6 +102,7 @@ all: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /media/yohello/hrm2/code-stuff/generation/SDL/jeux-video/CMakeFiles /media/yohello/hrm2/code-stuff/generation/SDL/jeux-video//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
 	$(CMAKE_COMMAND) -E cmake_progress_start /media/yohello/hrm2/code-stuff/generation/SDL/jeux-video/CMakeFiles 0
+	./draw2
 .PHONY : all
 
 # The main clean target
@@ -129,7 +130,7 @@ depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
+#============================================================================
 # Target rules for targets named draw2
 
 # Build rule for target.

@@ -1,21 +1,39 @@
-#include<iostream>
+#include "start/base_data.hpp"
+#include "include/stb/stb_image.h"
+#include "include/stb/stb_truetype.h"
+#include "render/render.hpp"
+#include "generation/terain.hpp"
+#include "render/ui.hpp"
+#include "start/update_funcs.hpp"
+#include "physics/entity.hpp"
+#include "physics/entity_types.hpp"
+#include "debug/debug.hpp"
+#include "render/VBO.cpp"
+#include "render/EBO.cpp"
+#include "render/FBO.cpp"
+#include "render/VAO.cpp"
+#include "render/texture.cpp"
+#include "render/shader.cpp"
+#include "render/FrameBufferTex.cpp"
+#include "render/FBshader.cpp"
 
-#define STB_IMAGE_IMPLEMENTATION
+// const unsigned int SCREEN_WIDTH = 720;
+// const unsigned int SCREEN_HEIGHT = 720;
 
-#include"include/stb/stb_image.h"
-#include"include/glad/glad.h"
-#include <GLFW/glfw3.h>
+// const unsigned short OPENGL_MAJOR_VERSION = 4;
+// const unsigned short OPENGL_MINOR_VERSION = 6;
+
+// bool vSync = true;
 
 
 
-const unsigned int SCREEN_WIDTH = 720;
-const unsigned int SCREEN_HEIGHT = 720;
+std::atomic<bool> kys; // politely :3
 
-const unsigned short OPENGL_MAJOR_VERSION = 4;
-const unsigned short OPENGL_MINOR_VERSION = 6;
-
-bool vSync = true;
-
+// ECS stuff, dont remove them, the system will kill itself
+std::vector<ui::single_ui_element *> ui_elements;
+unsigned int currenttime = (unsigned int)time(NULL);
+std::mutex mtx2;
+entites::Coordinator Conductor;
 
 
 GLfloat vertices[] =
@@ -67,7 +85,7 @@ uniform sampler2D screen;
 in vec2 UVs;
 void main()
 {
-	FragColor = vec4(1.0) - texture(screen, UVs);
+	FragColor = texture(screen, UVs);
 })";
 
 
@@ -75,42 +93,47 @@ int main()
 {
 	glfwInit();
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR_VERSION);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR_VERSION);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Context", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "OpenGL Context", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "Failed to create the GLFW window\n";
 		glfwTerminate();
 	}
 	glfwMakeContextCurrent(window);
-	glfwSwapInterval(vSync);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize OpenGL context" << std::endl;
 	}
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
+	glEnable(GL_BLEND);
 
+	std::cout << "Viewport created\n";
 
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
+	// GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	// glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	// glCompileShader(vertexShader);
+	// GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	// glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	// glCompileShader(fragmentShader);
 
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
+	// GLuint shaderProgram = glCreateProgram();
+	// glAttachShader(shaderProgram, vertexShader);
+	// glAttachShader(shaderProgram, fragmentShader);
+	// glLinkProgram(shaderProgram);
 
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	// glDeleteShader(vertexShader);
+	// glDeleteShader(fragmentShader);
 
+	std::cout << getFileContents("render/shaders/vert.glsl");
+
+	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
+
+	std::cout << "Shader created\n";
 
 	GLuint VAO, VBO, EBO;
 	glCreateVertexArrays(1, &VAO);
@@ -131,13 +154,21 @@ int main()
 	glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
 	glVertexArrayElementBuffer(VAO, EBO);
 
+	std::cout << "Getting image \n";
 
 	int widthImg, heightImg, numColCh;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* bytes = stbi_load("hamster2.png", &widthImg, &heightImg, &numColCh, 0);
+	unsigned char* bytes = stbi_load("hamster.png", &widthImg, &heightImg, &numColCh, 0);
+
+	std::cout << "got image \n";
 
 	GLuint tex;
+
+	std::cout << "Made tex var\n";
+
 	glCreateTextures(GL_TEXTURE_2D, 1, &tex);
+
+	std::cout << "Created texture";
 
 	glTextureParameteri(tex, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTextureParameteri(tex, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -150,6 +181,7 @@ int main()
 
 	stbi_image_free(bytes);
 
+	std::cout << "Loaded image\n";
 
 	GLuint FBO;
 	glCreateFramebuffers(1, &FBO);
@@ -160,7 +192,7 @@ int main()
 	glTextureParameteri(framebufferTex, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTextureStorage2D(framebufferTex, 1, GL_RGB8, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glTextureStorage2D(framebufferTex, 1, GL_RGB8, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
 	glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, framebufferTex, 0);
 
 	auto fboStatus = glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER);
@@ -181,17 +213,15 @@ int main()
 
 	glDeleteShader(framebufferVertexShader);
 	glDeleteShader(framebufferFragmentShader);
-	
-
 	while (!glfwWindowShouldClose(window))
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 		GLfloat backgroundColor[] = { 19.0f / 255.0f, 34.0f / 255.0f, 44.0f / 255.0f, 1.0f };
 		glClearNamedFramebufferfv(FBO, GL_COLOR, 0, backgroundColor);
 
-		glUseProgram(shaderProgram);
+		glUseProgram(inMyMind.shaderProgram);
 		glBindTextureUnit(0, tex);
-		glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "tex"), 0);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
