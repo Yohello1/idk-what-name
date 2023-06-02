@@ -7,8 +7,12 @@ public:
         GLuint FBvertShader;
         GLuint FBfragShader;
 
-        const char* FBvertCode = getFileContents(FBvertFile);
-        const char* FBfragCode = getFileContents(FBfragFile);
+        std::string FBvertCodeS = getFileContents(FBvertFile);
+        std::string FBfragCodeS = getFileContents(FBfragFile);
+
+        const char* FBvertCode = FBvertCodeS.c_str();
+        const char* FBfragCode = FBfragCodeS.c_str();
+
 
         FBvertShader = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(FBvertShader, 1, &FBvertCode, NULL);
