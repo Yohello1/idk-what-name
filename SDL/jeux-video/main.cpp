@@ -94,123 +94,87 @@ int main()
 
 	std::cout << "Viewport created\n";
 
-	// GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	// glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	// glCompileShader(vertexShader);
-	// GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	// glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	// glCompileShader(fragmentShader);
-
-	// GLuint shaderProgram = glCreateProgram();
-	// glAttachShader(shaderProgram, vertexShader);
-	// glAttachShader(shaderProgram, fragmentShader);
-	// glLinkProgram(shaderProgram);
-
-	// glDeleteShader(vertexShader);
-	// glDeleteShader(fragmentShader);
-
-	std::cout << getFileContents("render/shaders/vert.glsl");
-
 	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
 
 	std::cout << "Shader created\n";
 
-	GLuint VAO, VBO, EBO;
-	glCreateVertexArrays(1, &VAO);
+
+	// For some reason, setting it up with the classes kills it
+	VAO vao;
+	GLuint EBO, VBO;
 	glCreateBuffers(1, &VBO);
 	glCreateBuffers(1, &EBO);
-
 	glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glEnableVertexArrayAttrib(VAO, 0);
-	glVertexArrayAttribBinding(VAO, 0, 0);
-	glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
-
-	glEnableVertexArrayAttrib(VAO, 1);
-	glVertexArrayAttribBinding(VAO, 1, 0);
-	glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
-
-	glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
-	glVertexArrayElementBuffer(VAO, EBO);
+	vao.enableArrayIndex(vao, 0);
+	vao.setArrayFormat(vao, 0, 3, 0);
+	vao.enableArrayIndex(vao, 1);
+	vao.setArrayFormat(vao, 1, 2, 3);
+	glVertexArrayVertexBuffer(vao.ID, 0, VBO, 0, 5 * sizeof(GLfloat));
+	glVertexArrayElementBuffer(vao.ID, EBO);
 
 	std::cout << "Getting image \n";
 
-	int widthImg, heightImg, numColCh;
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* bytes = stbi_load("hamster.png", &widthImg, &heightImg, &numColCh, 0);
-
-	std::cout << "got image \n";
-
-	GLuint tex;
-
-	std::cout << "Made tex var\n";
-
-	glCreateTextures(GL_TEXTURE_2D, 1, &tex);
-
-	std::cout << "Created texture";
-
-	glTextureParameteri(tex, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTextureParameteri(tex, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTextureParameteri(tex, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(tex, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTextureStorage2D(tex, 1, GL_RGBA8, widthImg, heightImg);
-	glTextureSubImage2D(tex, 0, 0, 0, widthImg, heightImg, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
-	glGenerateTextureMipmap(tex);
-
-	stbi_image_free(bytes);
+	Texture map("render/test.png");
 
 	std::cout << "Loaded image\n";
 
-	GLuint FBO;
-	glCreateFramebuffers(1, &FBO);
+	FBO fbo;
+	FrameBufferTex FrameBufferTex(fbo);
+	fbo.fboWorking();
+	FBShader fbshader("render/shaders/FBvert.glsl", "render/shaders/FBfrag.glsl");
 
-	GLuint framebufferTex;
-	glCreateTextures(GL_TEXTURE_2D, 1, &framebufferTex);
-	glTextureParameteri(framebufferTex, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTextureParameteri(framebufferTex, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTextureStorage2D(framebufferTex, 1, GL_RGB8, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
-	glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, framebufferTex, 0);
 
-	auto fboStatus = glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER);
-	if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "Framebuffer error: " << fboStatus << "\n";
+	// GLuint FBO;
+	// glCreateFramebuffers(1, &FBO);
 
-	GLuint framebufferVertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(framebufferVertexShader, 1, &framebufferVertexShaderSource, NULL);
-	glCompileShader(framebufferVertexShader);
-	GLuint framebufferFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(framebufferFragmentShader, 1, &framebufferFragmentShaderSource, NULL);
-	glCompileShader(framebufferFragmentShader);
+	// GLuint framebufferTex;
+	// glCreateTextures(GL_TEXTURE_2D, 1, &framebufferTex);
+	// glTextureParameteri(framebufferTex, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	// glTextureParameteri(framebufferTex, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	// glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	// glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	// glTextureStorage2D(framebufferTex, 1, GL_RGB8, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
+	// glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, framebufferTex, 0);
 
-	GLuint framebufferShaderProgram = glCreateProgram();
-	glAttachShader(framebufferShaderProgram, framebufferVertexShader);
-	glAttachShader(framebufferShaderProgram, framebufferFragmentShader);
-	glLinkProgram(framebufferShaderProgram);
+	// auto fboStatus = glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER);
+	// if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
+	// 	std::cout << "Framebuffer error: " << fboStatus << "\n";
 
-	glDeleteShader(framebufferVertexShader);
-	glDeleteShader(framebufferFragmentShader);
+	// GLuint framebufferVertexShader = glCreateShader(GL_VERTEX_SHADER);
+	// glShaderSource(framebufferVertexShader, 1, &framebufferVertexShaderSource, NULL);
+	// glCompileShader(framebufferVertexShader);
+	// GLuint framebufferFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	// glShaderSource(framebufferFragmentShader, 1, &framebufferFragmentShaderSource, NULL);
+	// glCompileShader(framebufferFragmentShader);
+
+	// GLuint framebufferShaderProgram = glCreateProgram();
+	// glAttachShader(framebufferShaderProgram, framebufferVertexShader);
+	// glAttachShader(framebufferShaderProgram, framebufferFragmentShader);
+	// glLinkProgram(framebufferShaderProgram);
+
+	// glDeleteShader(framebufferVertexShader);
+	// glDeleteShader(framebufferFragmentShader);
+
+
 	while (!glfwWindowShouldClose(window))
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo.ID);
 		GLfloat backgroundColor[] = { 19.0f / 255.0f, 34.0f / 255.0f, 44.0f / 255.0f, 1.0f };
-		glClearNamedFramebufferfv(FBO, GL_COLOR, 0, backgroundColor);
+		glClearNamedFramebufferfv(fbo.ID, GL_COLOR, 0, backgroundColor);
 
 		glUseProgram(inMyMind.shaderProgram);
-		glBindTextureUnit(0, tex);
+		glBindTextureUnit(0, map.texture1);
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "tex"), 0);
-		glBindVertexArray(VAO);
+		glBindVertexArray(vao.ID);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		glUseProgram(framebufferShaderProgram);
-		glBindTextureUnit(0, framebufferTex);
-		glUniform1i(glGetUniformLocation(framebufferShaderProgram, "screen"), 0);
-		glBindVertexArray(VAO); // NO framebuffer VAO because I simply double the size of the rectangle to cover the whole screen
+		glUseProgram(fbshader.ID);
+		glBindTextureUnit(0, FrameBufferTex.ID);
+		glUniform1i(glGetUniformLocation(fbshader.ID, "screen"), 0);
+		glBindVertexArray(vao.ID); // NO framebuffer VAO because I simply double the size of the rectangle to cover the whole screen
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
