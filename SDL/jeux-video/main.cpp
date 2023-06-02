@@ -50,26 +50,6 @@ GLuint indices[] =
 	0, 3, 2
 };
 
-
-const char* vertexShaderSource = R"(#version 460 core
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec2 uvs;
-out vec2 UVs;
-void main()
-{
-	gl_Position = vec4(pos.x, pos.y, pos.z, 1.000);
-	UVs = uvs;
-})";
-const char* fragmentShaderSource = R"(#version 460 core
-out vec4 FragColor;
-uniform sampler2D tex;
-in vec2 UVs;
-void main()
-{
-	FragColor = vec4(0.965, 0.318, 0.000, 1.000);
-	FragColor = texture(tex, UVs);
-})";
-
 const char* framebufferVertexShaderSource = R"(#version 460 core
 layout (location = 0) in vec3 pos;
 layout (location = 1) in vec2 uvs;
@@ -176,7 +156,7 @@ int main()
 	glTextureParameteri(tex, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	glTextureStorage2D(tex, 1, GL_RGBA8, widthImg, heightImg);
-	glTextureSubImage2D(tex, 0, 0, 0, widthImg, heightImg, GL_BGRA, GL_UNSIGNED_BYTE, bytes);
+	glTextureSubImage2D(tex, 0, 0, 0, widthImg, heightImg, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
 	glGenerateTextureMipmap(tex);
 
 	stbi_image_free(bytes);
@@ -230,7 +210,6 @@ int main()
 		glUseProgram(framebufferShaderProgram);
 		glBindTextureUnit(0, framebufferTex);
 		glUniform1i(glGetUniformLocation(framebufferShaderProgram, "screen"), 0);
-        std::cout << glGetUniformLocation(framebufferShaderProgram, "screen") << '\n';
 		glBindVertexArray(VAO); // NO framebuffer VAO because I simply double the size of the rectangle to cover the whole screen
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 

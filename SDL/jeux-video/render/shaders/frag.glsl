@@ -7,5 +7,5 @@ in vec2 UVs;
 void main()
 {
 	FragColor = vec4(1.0f);
-	FragColor = vec4(1.0) - texture(tex, UVs);
+	FragColor = texture(tex, UVs);
 }

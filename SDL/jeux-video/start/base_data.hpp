@@ -367,7 +367,7 @@ struct cord_2d
     uint16_t y_pos;
 };
 
-const char* getFileContents(const char *filename)
+std::string getFileContents(const char *filename)
 {
     std::ifstream in(filename, std::ios::binary);
     if(in)
@@ -378,9 +378,7 @@ const char* getFileContents(const char *filename)
         in.seekg(0, std::ios::beg);
         in.read(&contents[0], contents.size());
         in.close();
-        // workaround, meh
-        const char* data1 = contents.c_str();
-        return (data1);
+        return (contents);
     }
 
     throw(errno);
