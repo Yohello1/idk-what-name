@@ -32,12 +32,12 @@
   - [X] Test
 - [ ] Quality of Programming the engine life
   - [ ] Switching to type def
-- [1/25] Render life
+- [7/25] Render life
   - [ ] Colours p2
   - [ ] Figure out how to run the map -> Material -> Img
   - [ ] Temp representation
   - [ ] Pressure representation
-  - [ ] Make vert & Frag shader
+  - [X] Make vert & Frag shader
   - [ ] Make UI stuff diff vert shaders?
   - [ ] Make material class, and port everything over to refernce the material instead
   - [ ] Send material data to GPU
@@ -53,12 +53,12 @@
     - [ ] Load that image into VRAM every frame update
     - [ ] Create a method to handle the buffers, loading, deleting, updating
   - [ ] Oragnise, and refactor it to not be terrible
-  - [ ] Draw a sqaure
+  - [X] Draw a sqaure
   - [X] Create EBO, VBO, and VAO
-  - [ ] Create FBO // Honestly tho, this isnt needed
-  - [ ] Create windw
-  - [ ] Create plane
-  - [ ] Map image onto plane
+  - [X] Create FBO // Honestly tho, this isnt needed
+  - [X] Create windw
+  - [X] Create plane
+  - [X] Map image onto plane
   - [ ] Orthographic camera
   - [ ] Organise this *part 15*
   - [ ] Load texture raw files

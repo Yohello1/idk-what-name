@@ -17,16 +17,6 @@
 #include "render/FrameBufferTex.cpp"
 #include "render/FBshader.cpp"
 
-// const unsigned int SCREEN_WIDTH = 720;
-// const unsigned int SCREEN_HEIGHT = 720;
-
-// const unsigned short OPENGL_MAJOR_VERSION = 4;
-// const unsigned short OPENGL_MINOR_VERSION = 6;
-
-// bool vSync = true;
-
-
-
 std::atomic<bool> kys; // politely :3
 
 // ECS stuff, dont remove them, the system will kill itself
@@ -44,33 +34,17 @@ GLfloat vertices[] =
 	 0.5f, -0.5f , 0.0f, 1.0f, 0.0f,
 };
 
+// {{{
 GLuint indices[] =
 {
 	0, 2, 1,
 	0, 3, 2
 };
 
-const char* framebufferVertexShaderSource = R"(#version 460 core
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec2 uvs;
-out vec2 UVs;
-void main()
-{
-	gl_Position = vec4(2.0 * pos.x, 2.0 * pos.y, 2.0 * pos.z, 1.000);
-	UVs = uvs;
-})";
-const char* framebufferFragmentShaderSource = R"(#version 460 core
-out vec4 FragColor;
-uniform sampler2D screen;
-in vec2 UVs;
-void main()
-{
-	FragColor = texture(screen, UVs);
-})";
-
-
+// }}}
 int main()
 {
+	
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -115,46 +89,97 @@ int main()
 
 	std::cout << "Getting image \n";
 
-	Texture map("render/test.png");
+	// Texture map("hamster2.png");
 
 	std::cout << "Loaded image\n";
-
-	FBO fbo;
-	FrameBufferTex FrameBufferTex(fbo);
-	fbo.fboWorking();
-	FBShader fbshader("render/shaders/FBvert.glsl", "render/shaders/FBfrag.glsl");
 
 
 	// GLuint FBO;
 	// glCreateFramebuffers(1, &FBO);
+	FBO fbo;
+	FrameBufferTex FrameBufferTex(fbo);
+	GLuint FBshaderProgram;
 
-	// GLuint framebufferTex;
-	// glCreateTextures(GL_TEXTURE_2D, 1, &framebufferTex);
-	// glTextureParameteri(framebufferTex, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	// glTextureParameteri(framebufferTex, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	// glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	// glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	// glTextureStorage2D(framebufferTex, 1, GL_RGB8, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
-	// glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, framebufferTex, 0);
+	// TEMP
+	// I should throw all of this into one big class files lmfao
+	// The issue with scaling is def within these files but idk what the differences/issues are
+	// Note: The issue is with the vert file
+	// std::string FBvertSourceS = getFileContents("render/shaders/FBvert.glsl");
+	// it's a scope, learn what it is
+	{
+		std::string FBfragSourceS = getFileContents("render/shaders/FBfrag.glsl");
+		// std::string FBvertSourceS = getFileContents("render/shaders/FBvert.glsl");
 
-	// auto fboStatus = glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER);
-	// if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
-	// 	std::cout << "Framebuffer error: " << fboStatus << "\n";
+		const char* FBfragSource = FBfragSourceS.c_str();
+		// const char* FBvertSource = FBvertSourceS.c_str();
 
-	// GLuint framebufferVertexShader = glCreateShader(GL_VERTEX_SHADER);
-	// glShaderSource(framebufferVertexShader, 1, &framebufferVertexShaderSource, NULL);
-	// glCompileShader(framebufferVertexShader);
-	// GLuint framebufferFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	// glShaderSource(framebufferFragmentShader, 1, &framebufferFragmentShaderSource, NULL);
-	// glCompileShader(framebufferFragmentShader);
+		GLuint FBVertShader = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(FBVertShader, 1, &FBvertSource, NULL);
+		// glShaderSource(framebufferVertexShader, 1, &framebufferVertexShaderSource, NULL);
+		glCompileShader(FBVertShader);
+		GLuint FBFragShader = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource( FBFragShader, 1, &FBfragSource, NULL);
+		glCompileShader( FBFragShader);
 
-	// GLuint framebufferShaderProgram = glCreateProgram();
-	// glAttachShader(framebufferShaderProgram, framebufferVertexShader);
-	// glAttachShader(framebufferShaderProgram, framebufferFragmentShader);
-	// glLinkProgram(framebufferShaderProgram);
+		FBshaderProgram = glCreateProgram();
+		glAttachShader(FBshaderProgram, FBVertShader);
+		glAttachShader(FBshaderProgram,  FBFragShader);
+		glLinkProgram(FBshaderProgram);
 
-	// glDeleteShader(framebufferVertexShader);
-	// glDeleteShader(framebufferFragmentShader);
+		glDeleteShader(FBVertShader);
+		glDeleteShader(FBFragShader);
+
+		auto fboStatus = glCheckNamedFramebufferStatus(fbo.ID, GL_FRAMEBUFFER);
+		if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
+			std::cout << "Framebuffer error: " << fboStatus << "\n";
+	}
+
+
+	// compute shader
+	GLuint ComputeShader;
+	{
+		const char* ComputeShaderSource = R"(\n
+		\#version 460 core\n
+
+		layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in\n
+		layout(rgba32f, binding = 0) uniform image2D imgOutput;\n
+
+		void main()\n
+		{\n
+			vec4 value = vec4(0.0,0.0,0.0,1.0);\n
+			ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);\n
+
+			value.x = float(texelCoord.x)/(gl_NumWorkGroups.x);\n
+			value.x = float(texelCoord.y)/(gl_NumWorkGroups.y);\n
+		}\n)";
+
+		std::cout << ComputeShaderSource << '\n';
+
+		GLuint ComputeShaderPart = glCreateShader(GL_COMPUTE_SHADER);
+		glShaderSource( ComputeShaderPart, 1, &ComputeShaderSource, NULL);
+		glCompileShader( ComputeShaderPart);
+		Shaders::compileErrors(ComputeShaderPart, "COMPUTE");
+
+		ComputeShader = glCreateProgram();
+		glAttachShader(ComputeShader, ComputeShaderPart);
+		glLinkProgram(ComputeShader);
+		Shaders::compileErrors(ComputeShaderPart, "PROGRAM");
+	}
+
+	GLuint compInput; // rlly it's just an image
+	const unsigned int textureWidthComp = 512, textureHeighComp = 512; // temp
+	{
+		glCreateTextures(GL_TEXTURE_2D, 1, &compInput);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		glBindTexture(GL_TEXTURE_2D, compInput);
+		glTextureStorage2D(compInput, 1, GL_RGBA32F, textureWidthComp, textureHeighComp);
+		glTextureSubImage2D(compInput, 0, 0, 0, textureWidthComp, textureHeighComp, GL_RGBA, GL_FLOAT, NULL);
+		glBindImageTexture(0, compInput, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+	}
 
 
 	while (!glfwWindowShouldClose(window))
@@ -164,19 +189,25 @@ int main()
 		glClearNamedFramebufferfv(fbo.ID, GL_COLOR, 0, backgroundColor);
 
 		glUseProgram(inMyMind.shaderProgram);
-		glBindTextureUnit(0, map.texture1);
+		glBindTextureUnit(0, compInput);
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "tex"), 0);
 		glBindVertexArray(vao.ID);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		glUseProgram(fbshader.ID);
-		glBindTextureUnit(0, FrameBufferTex.ID);
-		glUniform1i(glGetUniformLocation(fbshader.ID, "screen"), 0);
+		glUseProgram(FBshaderProgram);
+		glBindTextureUnit(0, FrameBufferTex.ID); // I geuinely thought this would attempt to create the objsect
+		glUniform1i(glGetUniformLocation(FBshaderProgram, "screen"), 0);
 		glBindVertexArray(vao.ID); // NO framebuffer VAO because I simply double the size of the rectangle to cover the whole screen
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
+		glUseProgram(ComputeShader);
+		// rlly it should be hooked to some constant for the map size but
+		// i cannot be bothered
+		glDispatchCompute((unsigned int) textureWidthComp, (unsigned int)textureHeighComp, 1);
+		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -184,4 +215,4 @@ int main()
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
-}
+ }
