@@ -34,3 +34,60 @@ class Shader
 private:
 
 };
+
+namespace Shaders
+{
+
+    void compileErrors(unsigned int shader, const char* type)
+    {
+        // Stores status of compilation
+        GLint hasCompiled;
+        // Character array to store error message in
+        char infoLog[1024];
+        // I should really fix this logic sooner or later
+        if (type != "PROGRAM")
+        {
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
+            if (hasCompiled == GL_FALSE)
+            {
+                glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+                std::cout << "SHADER_COMPILATION_ERROR for:" << type << "\n" << infoLog << std::endl;
+            }
+        }
+        else if (type != "COMPUTE")
+        {
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
+            if (hasCompiled == GL_FALSE)
+            {
+                glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+                std::cout << "SHADER_COMPILATION_ERROR for:" << type << "\n" << infoLog << std::endl;
+            }
+
+        }
+        else
+        {
+            glGetProgramiv(shader, GL_LINK_STATUS, &hasCompiled);
+            if (hasCompiled == GL_FALSE)
+            {
+                glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+                std::cout << "SHADER_LINKING_ERROR for:" << type << "\n" << infoLog << std::endl;
+            }
+        }
+
+	/* pfffffft who needs to check for errors
+        Like who needs fake friends?
+        It hurts to cut them off, but it needs to be done
+        Lest they hurt you more
+        */
+    }
+
+    // ok to be clear, this has never been tested :P
+    GLint getUniformID(const char* name, GLuint ID) {
+        GLuint loc = glGetUniformLocation(ID, name);
+        if (loc >= 0)
+            return loc;
+        else
+            throw("invalid uniform name");
+        return loc;
+    }
+}
