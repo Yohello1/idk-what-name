@@ -1,29 +1,37 @@
-#include<iostream>
+#include "start/base_data.hpp"
+#include "include/stb/stb_image.h"
+#include "include/stb/stb_truetype.h"
+#include "render/render.hpp"
+#include "generation/terain.hpp"
+#include "render/ui.hpp"
+#include "start/update_funcs.hpp"
+#include "physics/entity.hpp"
+#include "physics/entity_types.hpp"
+#include "debug/debug.hpp"
+#include "render/VBO.cpp"
+#include "render/EBO.cpp"
+#include "render/FBO.cpp"
+#include "render/VAO.cpp"
+#include "render/texture.cpp"
+#include "render/shader.cpp"
+#include "render/FrameBufferTex.cpp"
+#include "render/FBshader.cpp"
 
-#define STB_IMAGE_IMPLEMENTATION
+std::atomic<bool> kys; // politely :3
 
-#include"include/stb/stb_image.h"
-#include"include/glad/glad.h"
-#include <GLFW/glfw3.h>
-
-
-
-const unsigned int SCREEN_WIDTH = 720;
-const unsigned int SCREEN_HEIGHT = 720;
-
-const unsigned short OPENGL_MAJOR_VERSION = 4;
-const unsigned short OPENGL_MINOR_VERSION = 6;
-
-bool vSync = true;
-
+// ECS stuff, dont remove them, the system will kill itself
+std::vector<ui::single_ui_element *> ui_elements;
+unsigned int currenttime = (unsigned int)time(NULL);
+std::mutex mtx2;
+entites::Coordinator Conductor;
 
 
 GLfloat vertices[] =
 {
-	-0.5f, -0.5f , 0.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f , 0.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f , 0.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f , 0.0f, 1.0f, 0.0f,
+	-1.0f, -1.0f , 0.0f, 0.0f, 0.0f,
+	-1.0f,  1.0f , 0.0f, 0.0f, 1.0f,
+	 1.0f,  1.0f , 0.0f, 1.0f, 1.0f,
+	 1.0f, -1.0f , 0.0f, 1.0f, 0.0f,
 };
 
 GLuint indices[] =
@@ -33,41 +41,66 @@ GLuint indices[] =
 };
 
 
-const char* vertexShaderSource = R"(#version 460 core
+const char* screenVertexShaderSource = R"(#version 460 core
 layout (location = 0) in vec3 pos;
 layout (location = 1) in vec2 uvs;
 out vec2 UVs;
 void main()
 {
-	gl_Position = vec4(pos.x, pos.y, pos.z, 1.000);
+	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
 	UVs = uvs;
 })";
-const char* fragmentShaderSource = R"(#version 460 core
-out vec4 FragColor;
-uniform sampler2D tex;
-in vec2 UVs;
-void main()
-{
-	FragColor = vec4(0.965, 0.318, 0.000, 1.000);
-	FragColor = texture(tex, UVs);
-})";
-
-const char* framebufferVertexShaderSource = R"(#version 460 core
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec2 uvs;
-out vec2 UVs;
-void main()
-{
-	gl_Position = vec4(2.0 * pos.x, 2.0 * pos.y, 2.0 * pos.z, 1.000);
-	UVs = uvs;
-})";
-const char* framebufferFragmentShaderSource = R"(#version 460 core
+const char* screenFragmentShaderSource = R"(#version 460 core
 out vec4 FragColor;
 uniform sampler2D screen;
 in vec2 UVs;
 void main()
 {
-	FragColor = vec4(1.0) - texture(screen, UVs);
+	FragColor = texture(screen, UVs);
+})";
+const char* screenComputeShaderSource = R"(#version 460 core
+layout(local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
+layout(rgba32f, binding = 0) uniform image2D screen;
+void main()
+{
+
+    vec4 pixel = vec4(0.075, 0.133, 0.173, 1.0);
+	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
+
+	ivec2 dims = imageSize(screen);
+	float x = -(float(pixel_coords.x * 2 - dims.x) / dims.x); // transforms to [-1.0, 1.0]
+	float y = -(float(pixel_coords.y * 2 - dims.y) / dims.y); // transforms to [-1.0, 1.0]
+
+	float fov = 90.0;
+	vec3 cam_o = vec3(0.0, 0.0, -tan(fov / 2.0));
+	vec3 ray_o = vec3(x, y, 0.0);
+	vec3 ray_d = normalize(ray_o - cam_o);
+
+	vec3 sphere_c = vec3(0.0, 0.0, -5.0);
+	float sphere_r = 1.0;
+
+	vec3 o_c = ray_o - sphere_c;
+	float b = dot(ray_d, o_c);
+	float c = dot(o_c, o_c) - sphere_r * sphere_r;
+	float intersectionState = b * b - c;
+	vec3 intersection = ray_o + ray_d * (-b + sqrt(b * b - c));
+
+	if (intersectionState >= 0.0)
+	{
+		pixel = vec4((normalize(intersection - sphere_c) + 1.0) / 2.0, 1.0);
+	}
+
+    // vec4 pixel = vec4(0.0, 1.0, 0.0, 1.0);
+    // ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
+
+    // pixel.x = float(texelCoord.x)/(gl_NumWorkGroups.x);
+    // pixel.y = float(texelCoord.y)/(gl_NumWorkGroups.y);
+
+    // imageStore(imgOutput, texelCoord, value);
+    pixel = vec4(0.5,0.5,0.5,1.0);
+    pixel.x = float((pixel_coords.x)/(1024));
+
+	imageStore(screen, pixel_coords, pixel);
 })";
 
 
@@ -75,41 +108,25 @@ int main()
 {
 	glfwInit();
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR_VERSION);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR_VERSION);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Context", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1024, 1024, "Gament2", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "Failed to create the GLFW window\n";
 		glfwTerminate();
 	}
 	glfwMakeContextCurrent(window);
-	glfwSwapInterval(vSync);
+	glfwSwapInterval(true);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize OpenGL context" << std::endl;
 	}
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	glViewport(0, 0, 1024, 1024);
 
 
 	GLuint VAO, VBO, EBO;
@@ -132,75 +149,76 @@ int main()
 	glVertexArrayElementBuffer(VAO, EBO);
 
 
-	int widthImg, heightImg, numColCh;
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* bytes = stbi_load("render/test.png", &widthImg, &heightImg, &numColCh, 0);
+	GLuint screenTex;
+	glCreateTextures(GL_TEXTURE_2D, 1, &screenTex);
+	glTextureParameteri(screenTex, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTextureParameteri(screenTex, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTextureParameteri(screenTex, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTextureParameteri(screenTex, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTextureStorage2D(screenTex, 1, GL_RGBA32F, 1024, 1024);
+	glBindImageTexture(0, screenTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
-	GLuint tex;
-	glCreateTextures(GL_TEXTURE_2D, 1, &tex);
+	GLuint screenVertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(screenVertexShader, 1, &screenVertexShaderSource, NULL);
+	glCompileShader(screenVertexShader);
+	GLuint screenFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(screenFragmentShader, 1, &screenFragmentShaderSource, NULL);
+	glCompileShader(screenFragmentShader);
 
-	glTextureParameteri(tex, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTextureParameteri(tex, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTextureParameteri(tex, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(tex, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	GLuint screenShaderProgram = glCreateProgram();
+	glAttachShader(screenShaderProgram, screenVertexShader);
+	glAttachShader(screenShaderProgram, screenFragmentShader);
+	glLinkProgram(screenShaderProgram);
 
-	glTextureStorage2D(tex, 1, GL_RGBA8, widthImg, heightImg);
-	glTextureSubImage2D(tex, 0, 0, 0, widthImg, heightImg, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
-	glGenerateTextureMipmap(tex);
-
-	stbi_image_free(bytes);
+	glDeleteShader(screenVertexShader);
+	glDeleteShader(screenFragmentShader);
 
 
-	GLuint FBO;
-	glCreateFramebuffers(1, &FBO);
+	GLuint computeShader = glCreateShader(GL_COMPUTE_SHADER);
+	glShaderSource(computeShader, 1, &screenComputeShaderSource, NULL);
+	glCompileShader(computeShader);
 
-	GLuint framebufferTex;
-	glCreateTextures(GL_TEXTURE_2D, 1, &framebufferTex);
-	glTextureParameteri(framebufferTex, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTextureParameteri(framebufferTex, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTextureParameteri(framebufferTex, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTextureStorage2D(framebufferTex, 1, GL_RGB8, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, framebufferTex, 0);
+	Shaders::compileErrors(computeShader, "COMPUTE");
 
-	auto fboStatus = glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER);
-	if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "Framebuffer error: " << fboStatus << "\n";
+	GLuint computeProgram = glCreateProgram();
+	glAttachShader(computeProgram, computeShader);
+	glLinkProgram(computeProgram);
 
-	GLuint framebufferVertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(framebufferVertexShader, 1, &framebufferVertexShaderSource, NULL);
-	glCompileShader(framebufferVertexShader);
-	GLuint framebufferFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(framebufferFragmentShader, 1, &framebufferFragmentShaderSource, NULL);
-	glCompileShader(framebufferFragmentShader);
+	Shaders::compileErrors(computeProgram, "PROGRAM");
 
-	GLuint framebufferShaderProgram = glCreateProgram();
-	glAttachShader(framebufferShaderProgram, framebufferVertexShader);
-	glAttachShader(framebufferShaderProgram, framebufferFragmentShader);
-	glLinkProgram(framebufferShaderProgram);
+	int work_grp_cnt[3];
+	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &work_grp_cnt[0]);
+	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &work_grp_cnt[1]);
+	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &work_grp_cnt[2]);
+	std::cout << "Max work groups per compute shader" <<
+		" x:" << work_grp_cnt[0] <<
+		" y:" << work_grp_cnt[1] <<
+		" z:" << work_grp_cnt[2] << "\n";
 
-	glDeleteShader(framebufferVertexShader);
-	glDeleteShader(framebufferFragmentShader);
-	
+	int work_grp_size[3];
+	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &work_grp_size[0]);
+	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &work_grp_size[1]);
+	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &work_grp_size[2]);
+	std::cout << "Max work group sizes" <<
+		" x:" << work_grp_size[0] <<
+		" y:" << work_grp_size[1] <<
+		" z:" << work_grp_size[2] << "\n";
+
+	int work_grp_inv;
+	glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &work_grp_inv);
+	std::cout << "Max invocations count per work group: " << work_grp_inv << "\n";
+
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-		GLfloat backgroundColor[] = { 19.0f / 255.0f, 34.0f / 255.0f, 44.0f / 255.0f, 1.0f };
-		glClearNamedFramebufferfv(FBO, GL_COLOR, 0, backgroundColor);
+		glUseProgram(computeProgram);
+		glDispatchCompute(128, 256, 1);
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-		glUseProgram(shaderProgram);
-		glBindTextureUnit(0, tex);
-		glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+		glUseProgram(screenShaderProgram);
+		glBindTextureUnit(0, screenTex);
+		glUniform1i(glGetUniformLocation(screenShaderProgram, "screen"), 0);
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		glUseProgram(framebufferShaderProgram);
-		glBindTextureUnit(0, framebufferTex);
-		glUniform1i(glGetUniformLocation(framebufferShaderProgram, "screen"), 0);
-		glBindVertexArray(VAO); // NO framebuffer VAO because I simply double the size of the rectangle to cover the whole screen
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);

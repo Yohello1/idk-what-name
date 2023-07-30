@@ -1,14 +1,18 @@
 class FBShader {
 public:
     // FB stands for frame buffer
-    GLuint FBShaderProgram;
+    GLuint ID;
     FBShader(const char* FBvertFile, const char* FBfragFile)
     {
         GLuint FBvertShader;
         GLuint FBfragShader;
 
-        const char* FBvertCode = getFileContents(FBvertFile);
-        const char* FBfragCode = getFileContents(FBfragFile);
+        std::string FBvertCodeS = getFileContents(FBvertFile);
+        std::string FBfragCodeS = getFileContents(FBfragFile);
+
+        const char* FBvertCode = FBvertCodeS.c_str();
+        const char* FBfragCode = FBfragCodeS.c_str();
+
 
         FBvertShader = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(FBvertShader, 1, &FBvertCode, NULL);
@@ -18,9 +22,9 @@ public:
         glShaderSource(FBfragShader, 1, &FBfragCode, NULL);
         glCompileShader(FBfragShader);
 
-        FBShaderProgram = glCreateProgram();
-        glAttachShader(FBShaderProgram, FBvertShader);
-        glAttachShader(FBShaderProgram, FBfragShader);
+        ID = glCreateProgram();
+        glAttachShader(ID, FBvertShader);
+        glAttachShader(ID, FBfragShader);
 
         glDeleteShader(FBvertShader);
         glDeleteShader(FBfragShader);

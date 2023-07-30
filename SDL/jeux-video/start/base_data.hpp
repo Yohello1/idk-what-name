@@ -58,10 +58,17 @@ std::atomic<bool> recheck;
 
 // time
 unsigned int current_time = (unsigned int)time(NULL);
-// pointers to these things
-// SDL_Renderer *renderer;
-// SDL_Window *window;
-// SDL_Event event;
+
+// I cannot be bothered to debug the getFileContents bugs, so here it is :)
+const char* FBvertSource = R"(#version 460 core
+layout (location = 0) in vec3 pos;
+layout (location = 1) in vec2 uvs;
+out vec2 UVs;
+void main()
+{
+	gl_Position = vec4(2.0 * pos.x, 2.0 * pos.y, 2.0 * pos.z, 1.000);
+	UVs = uvs;
+})";
 
 // something needs to bedone about this
 // Use density, and type (static or dynamic)
@@ -92,6 +99,11 @@ struct material_t
     // At what temp/pressure/whatever does it start to become unstable
     uint8_t volatility = 0;
     // Flow is 0 for solid stuff?
+    uint8_t flow = 0;
+
+    // Stickiness
+    uint8_t stickiness = 0;
+
 
     // I wonder, if i call this, does it get 
     // all the global variables
@@ -338,6 +350,7 @@ public:
 private:
     uint16_t pressure = 0;
     uint16_t density = 0;
+    uint8_t stickiness = 0;
     float temperature = 0;
     uint8_t flow = 0;
     bool inert = false;
@@ -367,7 +380,7 @@ struct cord_2d
     uint16_t y_pos;
 };
 
-const char* getFileContents(const char *filename)
+std::string getFileContents(const char *filename)
 {
     std::ifstream in(filename, std::ios::binary);
     if(in)
@@ -378,9 +391,7 @@ const char* getFileContents(const char *filename)
         in.seekg(0, std::ios::beg);
         in.read(&contents[0], contents.size());
         in.close();
-        // workaround, meh
-        const char* data1 = contents.c_str();
-        return (data1);
+        return (contents);
     }
 
     throw(errno);
