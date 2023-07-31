@@ -16,6 +16,7 @@
 #include "render/shader.cpp"
 #include "render/FrameBufferTex.cpp"
 #include "render/FBshader.cpp"
+#include "render/Compute.cpp"
 
 std::atomic<bool> kys; // politely :3
 
@@ -40,7 +41,7 @@ GLuint indices[] =
 	0, 3, 2
 };
 
-
+// Throw these into files... again
 const char* screenVertexShaderSource = R"(#version 460 core
 layout (location = 0) in vec3 pos;
 layout (location = 1) in vec2 uvs;
@@ -100,24 +101,30 @@ int main()
 
 
 	GLuint VAO, VBO, EBO;
-	glCreateVertexArrays(1, &VAO);
-	glCreateBuffers(1, &VBO);
-	glCreateBuffers(1, &EBO);
+	{
+		glCreateVertexArrays(1, &VAO);
+		glCreateBuffers(1, &VBO);
+		glCreateBuffers(1, &EBO);
 
-	glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
+		glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glEnableVertexArrayAttrib(VAO, 0);
-	glVertexArrayAttribBinding(VAO, 0, 0);
-	glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
+		glEnableVertexArrayAttrib(VAO, 0);
+		glVertexArrayAttribBinding(VAO, 0, 0);
+		glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
 
-	glEnableVertexArrayAttrib(VAO, 1);
-	glVertexArrayAttribBinding(VAO, 1, 0);
-	glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
+		glEnableVertexArrayAttrib(VAO, 1);
+		glVertexArrayAttribBinding(VAO, 1, 0);
+		glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
 
-	glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
-	glVertexArrayElementBuffer(VAO, EBO);
+		glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
+		glVertexArrayElementBuffer(VAO, EBO);
+	}
 
+
+	std::cout << "vert and frag shaders being made" << std::endl;
+	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
+	std::cout << "vert and frag shaders have been made" << std::endl;
 
 	GLuint screenTex;
 	glCreateTextures(GL_TEXTURE_2D, 1, &screenTex);
@@ -128,33 +135,18 @@ int main()
 	glTextureStorage2D(screenTex, 1, GL_RGBA32F, 1024, 1024);
 	glBindImageTexture(0, screenTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
-	GLuint screenVertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(screenVertexShader, 1, &screenVertexShaderSource, NULL);
-	glCompileShader(screenVertexShader);
-	GLuint screenFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(screenFragmentShader, 1, &screenFragmentShaderSource, NULL);
-	glCompileShader(screenFragmentShader);
+	// GLuint computeShader = glCreateShader(GL_COMPUTE_SHADER);
+	// glShaderSource(computeShader, 1, &screenComputeShaderSource, NULL);
+	// glCompileShader(computeShader);
 
-	GLuint screenShaderProgram = glCreateProgram();
-	glAttachShader(screenShaderProgram, screenVertexShader);
-	glAttachShader(screenShaderProgram, screenFragmentShader);
-	glLinkProgram(screenShaderProgram);
+	// Shaders::compileErrors(computeShader, "COMPUTE");
 
-	glDeleteShader(screenVertexShader);
-	glDeleteShader(screenFragmentShader);
+	// GLuint computeProgram = glCreateProgram();
+	// glAttachShader(computeProgram, computeShader);
+	// glLinkProgram(computeProgram);
 
-
-	GLuint computeShader = glCreateShader(GL_COMPUTE_SHADER);
-	glShaderSource(computeShader, 1, &screenComputeShaderSource, NULL);
-	glCompileShader(computeShader);
-
-	Shaders::compileErrors(computeShader, "COMPUTE");
-
-	GLuint computeProgram = glCreateProgram();
-	glAttachShader(computeProgram, computeShader);
-	glLinkProgram(computeProgram);
-
-	Shaders::compileErrors(computeProgram, "PROGRAM");
+	// Shaders::compileErrors(computeProgram, "PROGRAM");
+	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
 
 	int work_grp_cnt[3];
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &work_grp_cnt[0]);
@@ -181,13 +173,13 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glUseProgram(computeProgram);
+		dejaVu.useProgram();
 		glDispatchCompute(1024, 1024, 1);
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-		glUseProgram(screenShaderProgram);
+		glUseProgram(inMyMind.shaderProgram);
 		glBindTextureUnit(0, screenTex);
-		glUniform1i(glGetUniformLocation(screenShaderProgram, "screen"), 0);
+		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
