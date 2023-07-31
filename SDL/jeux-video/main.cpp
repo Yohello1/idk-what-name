@@ -41,39 +41,6 @@ GLuint indices[] =
 	0, 3, 2
 };
 
-// Throw these into files... again
-const char* screenVertexShaderSource = R"(#version 460 core
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec2 uvs;
-out vec2 UVs;
-void main()
-{
-	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
-	UVs = uvs;
-})";
-const char* screenFragmentShaderSource = R"(#version 460 core
-out vec4 FragColor;
-uniform sampler2D screen;
-in vec2 UVs;
-void main()
-{
-	FragColor = texture(screen, UVs);
-})";
-const char* screenComputeShaderSource = R"(#version 460 core
-layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
-layout(rgba32f, binding = 0) uniform image2D screen;
-void main()
-{
-
-    vec4 pixel = vec4(0.0, 0.0, 0.0, 1.0);
-	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
-
-    pixel.x = float(pixel_coords.x)/(gl_NumWorkGroups.x);
-    pixel.y = float(pixel_coords.y)/(gl_NumWorkGroups.y);
-
-	imageStore(screen, pixel_coords, pixel);
-})";
-
 
 int main()
 {
@@ -126,45 +93,28 @@ int main()
 	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
 	std::cout << "vert and frag shaders have been made" << std::endl;
 
-	GLuint screenTex;
-	glCreateTextures(GL_TEXTURE_2D, 1, &screenTex);
-	glTextureParameteri(screenTex, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTextureParameteri(screenTex, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTextureParameteri(screenTex, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTextureParameteri(screenTex, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTextureStorage2D(screenTex, 1, GL_RGBA32F, 1024, 1024);
-	glBindImageTexture(0, screenTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
-
-	// GLuint computeShader = glCreateShader(GL_COMPUTE_SHADER);
-	// glShaderSource(computeShader, 1, &screenComputeShaderSource, NULL);
-	// glCompileShader(computeShader);
-
-	// Shaders::compileErrors(computeShader, "COMPUTE");
-
-	// GLuint computeProgram = glCreateProgram();
-	// glAttachShader(computeProgram, computeShader);
-	// glLinkProgram(computeProgram);
-
-	// Shaders::compileErrors(computeProgram, "PROGRAM");
 	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
+	Shaders::computeImage halfwayThroughNovember(1024,1024);
 
-	int work_grp_cnt[3];
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &work_grp_cnt[0]);
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &work_grp_cnt[1]);
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &work_grp_cnt[2]);
-	std::cout << "Max work groups per compute shader" <<
-		" x:" << work_grp_cnt[0] <<
-		" y:" << work_grp_cnt[1] <<
-		" z:" << work_grp_cnt[2] << "\n";
+	// int work_grp_cnt[3];
+	// glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &work_grp_cnt[0]);
+	// glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &work_grp_cnt[1]);
+	// glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &work_grp_cnt[2]);
+	// std::cout << "Max work groups per compute shader" <<
+	// 	" x:" << work_grp_cnt[0] <<
+	// 	" y:" << work_grp_cnt[1] <<
+	// 	" z:" << work_grp_cnt[2] << "\n";
 
-	int work_grp_size[3];
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &work_grp_size[0]);
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &work_grp_size[1]);
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &work_grp_size[2]);
-	std::cout << "Max work group sizes" <<
-		" x:" << work_grp_size[0] <<
-		" y:" << work_grp_size[1] <<
-		" z:" << work_grp_size[2] << "\n";
+	// int work_grp_size[3];
+	// glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &work_grp_size[0]);
+	// glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &work_grp_size[1]);
+	// glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &work_grp_size[2]);
+	// std::cout << "Max work group sizes" <<
+	// 	" x:" << work_grp_size[0] <<
+	// 	" y:" << work_grp_size[1] <<
+	// 	" z:" << work_grp_size[2] << "\n";
+	dejaVu.printMaxComputeSize();
+
 
 	int work_grp_inv;
 	glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &work_grp_inv);
@@ -178,7 +128,7 @@ int main()
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 		glUseProgram(inMyMind.shaderProgram);
-		glBindTextureUnit(0, screenTex);
+		glBindTextureUnit(0, halfwayThroughNovember.getID());
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
