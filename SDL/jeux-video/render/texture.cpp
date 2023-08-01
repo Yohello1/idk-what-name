@@ -3,6 +3,8 @@ public:
     int ImgWidth, ImgHeigh, numColCh;
     GLuint texture1;
 
+    //FIXME: uhhh setup the units
+
     Texture(const char* filePath)
     {
         stbi_set_flip_vertically_on_load(true);

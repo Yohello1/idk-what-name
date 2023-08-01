@@ -55,18 +55,22 @@ namespace Shaders
     private:
     };
 
-    class computeImage
+    class computeImageOut
     {
     public:
         GLuint ID;
-        /**
+        uint8_t unit; // unit refering to which of the 32 texture slots it occupies
+                      // Like 0: in slot 1/32
+                      // 1: 2/32
+                      // etc etc
+      /**
           btw, 2d texture,
           min & mag filters: gl_nearest
           wrap s & t: clamp_to_edge
           rgba32F
           not normalised
           write only */
-        computeImage(uint16_t x, uint16_t y)
+        computeImageOut(uint16_t x, uint16_t y, uint8_t unit)
         {
             glCreateTextures(GL_TEXTURE_2D, 1, &ID);
             glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -74,7 +78,7 @@ namespace Shaders
             glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTextureStorage2D(ID, 1, GL_RGBA32F, x, y);
-            glBindImageTexture(0, ID, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+            glBindImageTexture(unit, ID, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
         }
 
@@ -82,6 +86,55 @@ namespace Shaders
         {
             return ID;
         }
+    private:
+    };
+
+
+    // compute shader input
+    class computeImageIn
+    {
+    public:
+        GLuint ID;
+        GLuint unit; // unit refering to which of the 32 texture slots it occupies
+                      // Like 0: in slot 1/32
+                      // 1: 2/32
+                      // etc etc
+        uint16_t width, height;
+      /**
+          btw, 2d texture,
+          min & mag filters: gl_nearest
+          wrap s & t: clamp_to_edge
+          rgba32F
+          not normalised
+          write only */
+        computeImageIn(uint16_t x, uint16_t y, GLuint unit)
+        {
+            width = x;
+            height = y;
+            glCreateTextures(GL_TEXTURE_2D, 1, &ID);
+            glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTextureStorage2D(ID, 1, GL_RGBA32F, x, y);
+            glBindImageTexture(unit , ID, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+
+        }
+
+        GLuint getID()
+        {
+            return ID;
+        }
+
+        /**
+          Float data */
+        void copyDataFloat(float* rawData)
+        {
+            glTextureSubImage2D(ID, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, rawData);
+        }
+
+        void editData()
+        {}
     private:
     };
 }
