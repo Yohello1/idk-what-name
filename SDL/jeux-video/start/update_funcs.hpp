@@ -19,7 +19,8 @@ namespace functions
     // 1024 x 1024
     void fakeRandomImage(float *randImgOut)
     {
-        for(int i = 0; i < 1020; i++)
+        /*
+        for(int i = 0; i < 1024; i++)
         {
             for(int j = 0; j < 1024; j++)
             {
@@ -30,10 +31,15 @@ namespace functions
                 // randImgOut = glm::vec4(1.0);
                 for(int k = 0; k < 4; k++)
                 {
-                    // std::cout << "val: " << i*1024+j*4+k << '\n';
+                    std::cout << "val: " << i*1024+j*4+k << '\n';
                     randImgOut[i*1024+j*4+k] = (float)(dist(mt)/255);
                 }
             }
+        }
+        */
+        for(int i = 0; i < 4194304; i++)
+        {
+            randImgOut[i] = (float)(dist(mt)/255);
         }
     }
 }
