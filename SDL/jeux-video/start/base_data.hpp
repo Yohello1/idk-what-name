@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
-#include <SDL2/SDL.h>
 #include <ctime>
 #include <iostream>
 #include <random>
@@ -51,32 +50,18 @@ static float ortho_near = .0001f;
 static float ortho_farr = 3000.f;
 
 typedef std::chrono::high_resolution_clock Clock;
-std::atomic<bool> quit_now;
+
 
 // TODO: change the input system to properly check this stuff
 std::atomic<bool> recheck;
 
 // time
 unsigned int current_time = (unsigned int)time(NULL);
-
-// I cannot be bothered to debug the getFileContents bugs, so here it is :)
-const char* FBvertSource = R"(#version 460 core
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec2 uvs;
-out vec2 UVs;
-void main()
-{
-	gl_Position = vec4(2.0 * pos.x, 2.0 * pos.y, 2.0 * pos.z, 1.000);
-	UVs = uvs;
-})";
-
 // something needs to bedone about this
 // Use density, and type (static or dynamic)
 // entity is rlly just fixed_pos with extra steps
 
 // This has to be declared in advanced for some randoms stuff
-class cell_t;
-
 /**
  * @brief it's colour type
  * 
@@ -107,7 +92,7 @@ struct material_t
 
     // I wonder, if i call this, does it get 
     // all the global variables
-    void (*update)(cell_t, int, int);
+    // void (*update)(cell_t, int, int);
     
     /**
      * Malina just dm'd me on insta,
