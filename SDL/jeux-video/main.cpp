@@ -93,22 +93,27 @@ int main()
 	std::cout << "vert and frag shaders being made" << std::endl;
 	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
 	std::cout << "vert and frag shaders have been made" << std::endl;
+	glUseProgram(inMyMind.shaderProgram);
 
 	// projection && view matrices
+	// Sketchy math
 	float aspect = (float) ACTUAL_WINDOW_WIDTH/ ACTUAL_WINDOW_HEIGH;
 	float half_heigh = ACTUAL_WINDOW_HEIGH / 2.f; // ok go search it up, I aint explaning it here
 	float half_width = ACTUAL_WINDOW_WIDTH / 2.f;
     half_width = half_width / (ACTUAL_WINDOW_HEIGH/LOGICAL_WINDOW_HEIGH);
     half_heigh = half_heigh / (ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH);
-	// glm::mat4 ProjectionMatrix = glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr);
-	glm::mat4 viewMatrix(1);
+	glm::mat4 ProjectionMatrix = glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr);
+	inMyMind.setMat4("uProjectionMatrix", ProjectionMatrix);
 
+	glm::mat4 ViewMatrix(1);
+	inMyMind.setMat4("uViewMatrix", ViewMatrix);
 
-	// inMyMind.setMat4("uProjectionMatrix", ProjectionMatrix);
-	inMyMind.setMat4("uViewMatrix", viewMatrix);
+	glm::mat4 ModelMatrix(1.0f);
+	ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.0f, 0.0f, -2.0f));
+	inMyMind.setMat4("uModelMatrix", ModelMatrix);
+
 	// Shaders::compileErrors(inMyMind.shaderProgram, "PROGRAM");
-	std::cout << "View Matrix location: " << inMyMind.getUniformID("uViewMatrix") << '\n';
-
+	// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
 
 	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
 	Shaders::computeImageOut halfwayThroughNovember(1024,1024,0);
@@ -128,12 +133,26 @@ int main()
 	{
 		auto start_time = Clock::now();
 
+		// Rotate the plane???
+		{
+			float ang_x = 0.0, ang_y = 0.0, ang_z = 1.0;
+			std::cout << ang_y << '\n';
+
+			glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
+			glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
+			glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		   	ModelMatrix = transformX * transformY * transformZ * ModelMatrix;
+			inMyMind.setMat4("uModelMatrix", ModelMatrix);
+		}
+
+		// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
 		dejaVu.useProgram();
 		glDispatchCompute(1024, 1024, 1);
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 		heyworld.copyDataFloat(fakeImg);
-		inMyMind.setMat4("uViewMatrix", viewMatrix);
+		// inMyMind.setMat4("uViewMatrix", viewMatrix);
 		glUseProgram(inMyMind.shaderProgram);
 		glBindTextureUnit(0, halfwayThroughNovember.getID());
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);

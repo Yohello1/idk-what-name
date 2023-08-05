@@ -46,8 +46,8 @@
 #define ACTUAL_WINDOW_HEIGH 1024
 // #define INPUT_DEBUG
 
-static float ortho_near = .0001f;
-static float ortho_farr = 3000.f;
+static float ortho_near = -1000.0f;
+static float ortho_farr =  3000.f;
 
 typedef std::chrono::high_resolution_clock Clock;
 
