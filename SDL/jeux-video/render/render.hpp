@@ -1,17 +1,8 @@
-#include "shader_class.h"
-#include "VAO.h"
-#include "VBO.h"
-#include "EBO.h"
+#ifndef RENDER_H_
+#define RENDER_H_
+// I pray no one ever gets an error from this file
+#include "VAO.hpp"
+// #include "VBO.hpp"
+// #include "EBO.hpp"
 
-
-#include "VAO.cpp"
-#include "VBO.cpp"
-#include "EBO.cpp"
-#include "Shader_class.cpp"
-
-namespace rendering
-{
-
-
-
-}
+#endif // RENDER_H_
