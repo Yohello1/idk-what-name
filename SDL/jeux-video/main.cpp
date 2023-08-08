@@ -96,20 +96,11 @@ int main()
 	std::cout << "vert and frag shaders have been made" << std::endl;
 	glUseProgram(inMyMind.shaderProgram);
 
-	// projection && view matrices
-	// Sketchy math
-	// float aspect = (float) ACTUAL_WINDOW_WIDTH/ ACTUAL_WINDOW_HEIGH;
-	// float half_heigh = ACTUAL_WINDOW_HEIGH / 2.f; // ok go search it up, I aint explaning it here
-	// float half_width = ACTUAL_WINDOW_WIDTH / 2.f;
-    // half_width = half_width / (ACTUAL_WINDOW_HEIGH/LOGICAL_WINDOW_HEIGH);
-    // half_heigh = half_heigh / (ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH);
-	// glm::mat4 ProjectionMatrix = glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr);
 
 
 	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_HEIGH),1024,1024,1000);
 	inMyMind.setMat4("uProjectionMatrix", favoriteConvosInTheAM.ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
-	// ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
 	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
 
 	Shaders::computeShader dejaVu("render/shaders/compute.glsl");

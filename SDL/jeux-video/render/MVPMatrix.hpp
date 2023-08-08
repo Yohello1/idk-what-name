@@ -27,6 +27,8 @@ namespace MVPMatrix
             ViewMatrix = glm::mat4(1.0f);
             ModelMatrix = glm::mat4(1.0f);
         }
+
+        // Make a transform func for the ViewMatrix
         private:
     };
 }

@@ -11,8 +11,8 @@ void main()
 	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
     vec4 pixel2 = imageLoad(randomImg, pixel_coords);
 
-    pixel.x = float(pixel_coords.x)/(gl_NumWorkGroups.x) + pixel2.x;
-    pixel.y = float(pixel_coords.y)/(gl_NumWorkGroups.y) + pixel2.y;
+    pixel.x = pixel2.x;
+    pixel.y = pixel2.y;
     pixel.z = pixel2.z;
 
     
