@@ -17,6 +17,7 @@
 #include "render/FrameBufferTex.cpp"
 #include "render/FBshader.cpp"
 #include "render/Compute.cpp"
+#include "render/MVPMatrix.hpp"
 
 std::atomic<bool> kys; // politely :3
 
@@ -97,23 +98,19 @@ int main()
 
 	// projection && view matrices
 	// Sketchy math
-	float aspect = (float) ACTUAL_WINDOW_WIDTH/ ACTUAL_WINDOW_HEIGH;
-	float half_heigh = ACTUAL_WINDOW_HEIGH / 2.f; // ok go search it up, I aint explaning it here
-	float half_width = ACTUAL_WINDOW_WIDTH / 2.f;
-    half_width = half_width / (ACTUAL_WINDOW_HEIGH/LOGICAL_WINDOW_HEIGH);
-    half_heigh = half_heigh / (ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH);
-	glm::mat4 ProjectionMatrix = glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr);
-	inMyMind.setMat4("uProjectionMatrix", ProjectionMatrix);
+	// float aspect = (float) ACTUAL_WINDOW_WIDTH/ ACTUAL_WINDOW_HEIGH;
+	// float half_heigh = ACTUAL_WINDOW_HEIGH / 2.f; // ok go search it up, I aint explaning it here
+	// float half_width = ACTUAL_WINDOW_WIDTH / 2.f;
+    // half_width = half_width / (ACTUAL_WINDOW_HEIGH/LOGICAL_WINDOW_HEIGH);
+    // half_heigh = half_heigh / (ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_WIDTH);
+	// glm::mat4 ProjectionMatrix = glm::ortho(-half_width, half_width, -half_heigh, half_heigh, ortho_near, ortho_farr);
 
-	glm::mat4 ViewMatrix(1);
-	inMyMind.setMat4("uViewMatrix", ViewMatrix);
 
-	glm::mat4 ModelMatrix(1.0f);
-	ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.0f, 0.0f, -2.0f));
-	inMyMind.setMat4("uModelMatrix", ModelMatrix);
-
-	// Shaders::compileErrors(inMyMind.shaderProgram, "PROGRAM");
-	// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
+	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_HEIGH),1024,1024,1000);
+	inMyMind.setMat4("uProjectionMatrix", favoriteConvosInTheAM.ProjectionMatrix);
+	inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
+	// ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
+	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
 
 	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
 	Shaders::computeImageOut halfwayThroughNovember(1024,1024,0);
@@ -135,15 +132,15 @@ int main()
 
 		// Rotate the plane???
 		{
-			float ang_x = 0.0, ang_y = 0.0, ang_z = 1.0;
-			std::cout << ang_y << '\n';
+			float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
+			// std::cout << ang_y << '\n';
 
 			glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
 			glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
 			glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		   	ModelMatrix = transformX * transformY * transformZ * ModelMatrix;
-			inMyMind.setMat4("uModelMatrix", ModelMatrix);
+		   	favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
+			inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
 		}
 
 		// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
