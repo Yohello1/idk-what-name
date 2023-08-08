@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
-#include <SDL2/SDL.h>
 #include <ctime>
 #include <iostream>
 #include <random>
@@ -47,29 +46,22 @@
 #define ACTUAL_WINDOW_HEIGH 1024
 // #define INPUT_DEBUG
 
-static float ortho_near = .0001f;
-static float ortho_farr = 3000.f;
+static float ortho_near = -1000.0f;
+static float ortho_farr =  3000.f;
 
 typedef std::chrono::high_resolution_clock Clock;
-std::atomic<bool> quit_now;
+
 
 // TODO: change the input system to properly check this stuff
 std::atomic<bool> recheck;
 
 // time
 unsigned int current_time = (unsigned int)time(NULL);
-// pointers to these things
-// SDL_Renderer *renderer;
-// SDL_Window *window;
-// SDL_Event event;
-
 // something needs to bedone about this
 // Use density, and type (static or dynamic)
 // entity is rlly just fixed_pos with extra steps
 
 // This has to be declared in advanced for some randoms stuff
-class cell_t;
-
 /**
  * @brief it's colour type
  * 
@@ -92,10 +84,15 @@ struct material_t
     // At what temp/pressure/whatever does it start to become unstable
     uint8_t volatility = 0;
     // Flow is 0 for solid stuff?
+    uint8_t flow = 0;
+
+    // Stickiness
+    uint8_t stickiness = 0;
+
 
     // I wonder, if i call this, does it get 
     // all the global variables
-    void (*update)(cell_t, int, int);
+    // void (*update)(cell_t, int, int);
     
     /**
      * Malina just dm'd me on insta,
@@ -338,6 +335,7 @@ public:
 private:
     uint16_t pressure = 0;
     uint16_t density = 0;
+    uint8_t stickiness = 0;
     float temperature = 0;
     uint8_t flow = 0;
     bool inert = false;
@@ -367,22 +365,19 @@ struct cord_2d
     uint16_t y_pos;
 };
 
-// TODO: Delete this, like this is legitamently useless
-void array_clean_start(cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
+std::string getFileContents(const char *filename)
 {
-    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+    std::ifstream in(filename, std::ios::binary);
+    if(in)
     {
-        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-        {
-            // pixels[x_pos][y_pos].change_a(0);
-            // pixels[x_pos][y_pos].change_g(0);
-            // pixels[x_pos][y_pos].change_b(0);
-            // pixels[x_pos][y_pos].change_r(0);
-            // pixels[x_pos][y_pos].modify_density(0);
-            // pixels[x_pos][y_pos].set_pressure(0);
-            // pixels[x_pos][y_pos].modify_temp(0);
-            // pixels[x_pos][y_pos].set_flow(0);
-            // pixels[x_pos][y_pos].set_inert(false);
-        }
+        std::string contents;
+        in.seekg(0, std::ios::end);
+        contents.resize(in.tellg());
+        in.seekg(0, std::ios::beg);
+        in.read(&contents[0], contents.size());
+        in.close();
+        return (contents);
     }
+
+    throw(errno);
 }
