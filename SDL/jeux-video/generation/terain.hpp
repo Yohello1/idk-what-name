@@ -54,10 +54,6 @@ namespace Terrain
 			amt_points -= 1;
 			int x_spacing = (x_lower - x_upper) / amt_points * -1;
 
-            #ifdef UI_DEBUG
-			std::cout << "x Spacing for Gen Points" << x_spacing << '\n';
-			#endif
-
 			for (int i = 0; i < amt_points + 1; i++)
 			{
 				int y_pos = random_y_pos(y_lower, y_upper);
