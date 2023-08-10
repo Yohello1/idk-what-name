@@ -121,6 +121,7 @@ int main()
 	{
 		auto start_time = Clock::now();
 
+
 		// Rotate the plane???
 		{
 			float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
@@ -135,6 +136,9 @@ int main()
 		}
 
 		// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
+		favoriteConvosInTheAM.rotateView(1.0,0.0,0.0);
+		inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
+
 		dejaVu.useProgram();
 		glDispatchCompute(1024, 1024, 1);
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);

@@ -19,8 +19,8 @@ namespace MVPMatrix
         {
             float half_heigh = height / 2.f; // ok go search it up, I aint explaning it here
             float half_width = width / 2.f;
-            half_width = half_width / aspect;
-            half_heigh = half_heigh / aspect;
+            half_width = half_width / (aspect);
+            half_heigh = half_heigh / (aspect);
             ProjectionMatrix = glm::ortho(-half_width, half_width, -half_heigh, half_heigh, (float)-farCloseDistance, (float)farCloseDistance);
 
 
@@ -29,6 +29,12 @@ namespace MVPMatrix
         }
 
         // Make a transform func for the ViewMatrix
+        void rotateView(float x, float y, float z)
+        {
+            ViewMatrix = glm::rotate(ViewMatrix, glm::radians(x), glm::vec3(1.0f, 0.0f, 0.0f));
+            ViewMatrix = glm::rotate(ViewMatrix, glm::radians(x), glm::vec3(0.0f, 1.0f, 0.0f));
+            ViewMatrix = glm::rotate(ViewMatrix, glm::radians(x), glm::vec3(0.0f, 0.0f, 1.0f));
+        }
         private:
     };
 }
