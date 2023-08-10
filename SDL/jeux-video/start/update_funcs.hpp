@@ -42,4 +42,23 @@ namespace functions
             randImgOut[i] = (float)(dist(mt)/255);
         }
     }
+
+    void whiteSquares(float *randImgOut)
+    {
+        for(int i = 0; i < 1024; i++)
+        {
+            for(int j = 0; j < 1024; j++)
+            {
+                for(int k = 0; k < 4; k++)
+                {
+                    int current = 4096*i + 4*j + k;
+                    if(current > 2097152 && current < 2105344)
+                    {
+                        // randImgOut[current] = 0.5;
+                         randImgOut[current] = (float)(dist(mt)/255);
+                    }
+                }
+            }
+        }
+    }
 }

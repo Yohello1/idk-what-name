@@ -98,7 +98,7 @@ int main()
 
 
 
-	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_HEIGH),1024,1024,1000);
+	MVPMatrix::MVPMatrixes favoriteConvosInTheAM(64,1024,1024,1000);
 	inMyMind.setMat4("uProjectionMatrix", favoriteConvosInTheAM.ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
 	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
@@ -114,7 +114,7 @@ int main()
 
 	//fake image maker :)
 	float* fakeImg = new float[4194304];
-	functions::fakeRandomImage(fakeImg);
+	functions::whiteSquares(fakeImg);
 	std::cout << "IMG MADE2" << '\n';
 
 	while (!glfwWindowShouldClose(window))
@@ -122,21 +122,25 @@ int main()
 		auto start_time = Clock::now();
 
 
-		// Rotate the plane???
-		{
-			float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
-			// std::cout << ang_y << '\n';
+		// // Rotate the plane???
+		// {
+		// 	float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
+		// 	// std::cout << ang_y << '\n';
 
-			glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
-			glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
-			glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
+		// 	glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
+		// 	glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
+		// 	glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		   	favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
-			inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
-		}
+		//    	favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
+		// 	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
+		// }
 
 		// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
-		favoriteConvosInTheAM.rotateView(1.0,0.0,0.0);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		favoriteConvosInTheAM.rotateView(0.0,0.0,0.0);
+		favoriteConvosInTheAM.translateView(1.0,0.0,0.0);
 		inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
 
 		dejaVu.useProgram();
@@ -152,7 +156,12 @@ int main()
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		auto end_time = Clock::now();
-		//std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
+		std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
+		if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 100000000)
+		{
+			std::this_thread::sleep_for(std::chrono::nanoseconds((100000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count())));
+		}
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

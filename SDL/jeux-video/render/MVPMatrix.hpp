@@ -31,10 +31,16 @@ namespace MVPMatrix
         // Make a transform func for the ViewMatrix
         void rotateView(float x, float y, float z)
         {
-            ViewMatrix = glm::rotate(ViewMatrix, glm::radians(x), glm::vec3(1.0f, 0.0f, 0.0f));
-            ViewMatrix = glm::rotate(ViewMatrix, glm::radians(x), glm::vec3(0.0f, 1.0f, 0.0f));
-            ViewMatrix = glm::rotate(ViewMatrix, glm::radians(x), glm::vec3(0.0f, 0.0f, 1.0f));
+            ViewMatrix = glm::rotate(ViewMatrix, glm::degrees(x), glm::vec3(1.0f, 0.0f, 0.0f));
+            ViewMatrix = glm::rotate(ViewMatrix, glm::degrees(y), glm::vec3(0.0f, 1.0f, 0.0f));
+            ViewMatrix = glm::rotate(ViewMatrix, glm::degrees(z), glm::vec3(0.0f, 0.0f, 1.0f));
         }
+
+        void translateView(float x, float y, float z)
+        {
+            ViewMatrix = glm::translate(ViewMatrix, glm::vec3(x, y, z));
+        }
+
         private:
     };
 }
