@@ -8,17 +8,10 @@
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
-<<<<<<< HEAD
-// #include "render/VBO.cpp" // tbf we can just yeet these
-// #include "render/EBO.cpp"
-// #include "render/FBO.cpp"
-// #include "render/VAO.cpp"
-=======
 #include "render/VBO.cpp"
 #include "render/EBO.cpp"
 #include "render/FBO.cpp"
 #include "render/VAO.cpp"
->>>>>>> test
 #include "render/texture.cpp"
 #include "render/shader.cpp"
 #include "render/FrameBufferTex.cpp"
