@@ -41,6 +41,12 @@ namespace MVPMatrix
             ViewMatrix = glm::translate(ViewMatrix, glm::vec3(x, y, z));
         }
 
+        // I have no a single clue how this works lmao
+        void scaleView(float factor)
+        {
+            ViewMatrix = glm::scale(factor, factor, factor);
+        }
+
         private:
     };
 }
