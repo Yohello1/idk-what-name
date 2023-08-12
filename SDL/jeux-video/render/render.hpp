@@ -16,4 +16,6 @@ namespace render
     // We'll also need to leave the alpha channel open
     // to being changed, cause like compositing sanity
 
+    // wait this should all be in compute shaders LMAO
+
 }

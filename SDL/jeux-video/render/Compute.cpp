@@ -16,12 +16,12 @@ namespace Shaders
         GLuint computeTest = glCreateShader(GL_COMPUTE_SHADER);
         glShaderSource (computeTest, 1, &computeShaderCode, NULL);
         glCompileShader(computeTest);
-        Shaders::compileErrors(computeTest, "COMPUTE");
+        shaders::compileErrors(computeTest, "COMPUTE");
 
         ID = glCreateProgram();
         glAttachShader(ID, computeTest);
         glLinkProgram(ID);
-        Shaders::compileErrors(ID, "PROGRAM");
+        shaders::compileErrors(ID, "PROGRAM");
     }
 
     /**
@@ -100,6 +100,7 @@ namespace Shaders
                       // 1: 2/32
                       // etc etc
         uint16_t width, height;
+        float* image;
       /**
           btw, 2d texture,
           min & mag filters: gl_nearest
@@ -111,6 +112,7 @@ namespace Shaders
         {
             width = x;
             height = y;
+            image = new float[x*y*4];
             glCreateTextures(GL_TEXTURE_2D, 1, &ID);
             glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -133,8 +135,22 @@ namespace Shaders
             glTextureSubImage2D(ID, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, rawData);
         }
 
-        void editData()
-        {}
+            // ok now lets do the
+            // thinking
+            // To render we have to copy the data
+            // from several 'textures'/maps to the gpu
+            // and then it just does the math required
+            // to turn that into the final product
+            // So what I need is a function which
+            // just fetches the data from the cell data
+            // type, and from the rgb data type
+            // Also needs to just edit a specific rang ofc
+            //
+            // We'll also need to leave the alpha channel open
+            // to being changed, cause like compositing sanity
+
+            // wait this should all be in compute shaders LMAO
     private:
     };
+
 }

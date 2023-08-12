@@ -34,16 +34,14 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
-
-
 #define STB_TRUETYPE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #define BLEND_TEXT 0
-#define LOGICAL_WINDOW_WIDTH 128
-#define LOGICAL_WINDOW_HEIGH 128
+unsigned int LOGICAL_WINDOW_WIDTH = 128;
+unsigned int LOGICAL_WINDOW_HEIGH = 128;
 
-#define ACTUAL_WINDOW_WIDTH 1024
-#define ACTUAL_WINDOW_HEIGH 1024
+const unsigned int ACTUAL_WINDOW_WIDTH = 1024;
+const unsigned int ACTUAL_WINDOW_HEIGH = 1024;
 // #define INPUT_DEBUG
 
 static float ortho_near = -1000.0f;
@@ -335,11 +333,11 @@ public:
 private:
     uint16_t pressure = 0;
     uint16_t density = 0;
-    uint8_t stickiness = 0;
+    uint8_t stickiness = 0; // image 1
     float temperature = 0;
-    uint8_t flow = 0;
+    uint8_t flow = 0; // image 2
     bool inert = false;
-    struct colour_t col;
+    struct colour_t col; // image 3
     struct material_t chem_props;
 
     /**

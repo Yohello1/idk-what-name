@@ -44,7 +44,7 @@ namespace MVPMatrix
         // I have no a single clue how this works lmao
         void scaleView(float factor)
         {
-            ViewMatrix = glm::scale(factor, factor, factor);
+            // ViewMatrix = glm::scale(factor, factor, factor);
         }
 
         private:
