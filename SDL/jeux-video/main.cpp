@@ -8,16 +8,17 @@
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
-#include "render/VBO.cpp"
-#include "render/EBO.cpp"
-#include "render/FBO.cpp"
-#include "render/VAO.cpp"
+// #include "render/VBO.cpp"
+// #include "render/EBO.cpp"
+// #include "render/FBO.cpp"
+// #include "render/VAO.cpp"
 #include "render/texture.cpp"
 #include "render/shader.cpp"
-#include "render/FrameBufferTex.cpp"
-#include "render/FBshader.cpp"
+// #include "render/FrameBufferTex.cpp"
+// #include "render/FBshader.cpp"
 #include "render/Compute.cpp"
 #include "render/MVPMatrix.hpp"
+#include "start/Game.cpp"
 
 std::atomic<bool> kys; // politely :3
 
@@ -46,29 +47,30 @@ GLuint indices[] =
 int main()
 {
 	// Honestly I have no idea whwre else to put this stuff
-	srand(current_time);
+	// srand(current_time);
 
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	// glfwInit();
+	// glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	// glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	// glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "Gament2", NULL, NULL);
-	if (!window)
-	{
-		std::cout << "Failed to create the GLFW window\n";
-		glfwTerminate();
-	}
-	glfwMakeContextCurrent(window);
-	glfwSwapInterval(true);
+	// GLFWwindow* window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "Gament2", NULL, NULL);
+	// if (!window)
+	// {
+	// 	std::cout << "Failed to create the GLFW window\n";
+	// 	glfwTerminate();
+	// }
+	// glfwMakeContextCurrent(window);
+	// glfwSwapInterval(true);
 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize OpenGL context" << std::endl;
-	}
-	glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
+	// if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	// {
+	// 	std::cout << "Failed to initialize OpenGL context" << std::endl;
+	// }
+	// glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
 
+	game theGame(1024,1024,"Gament");
 
 	GLuint VAO, VBO, EBO;
 	{
@@ -98,7 +100,7 @@ int main()
 
 
 
-	MVPMatrix::MVPMatrixes favoriteConvosInTheAM(64,1024,1024,1000);
+	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_HEIGH),1024,1024,1000);
 	inMyMind.setMat4("uProjectionMatrix", favoriteConvosInTheAM.ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
 	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
@@ -114,33 +116,29 @@ int main()
 
 	//fake image maker :)
 	float* fakeImg = new float[4194304];
-	functions::whiteSquares(fakeImg);
+	functions::fakeRandomImage(fakeImg);
 	std::cout << "IMG MADE2" << '\n';
 
-	while (!glfwWindowShouldClose(window))
+	while (true)
 	{
 		auto start_time = Clock::now();
 
 
-		// // Rotate the plane???
-		// {
-		// 	float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
-		// 	// std::cout << ang_y << '\n';
+		// Rotate the plane???
+		{
+			float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
+			// std::cout << ang_y << '\n';
 
-		// 	glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
-		// 	glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
-		// 	glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
+			glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
+			glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
+			glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		//    	favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
-		// 	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
-		// }
+		   	favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
+			inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
+		}
 
 		// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		favoriteConvosInTheAM.rotateView(0.0,0.0,0.0);
-		favoriteConvosInTheAM.translateView(1.0,0.0,0.0);
+		favoriteConvosInTheAM.rotateView(1.0,0.0,0.0);
 		inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
 
 		dejaVu.useProgram();
@@ -156,18 +154,13 @@ int main()
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		auto end_time = Clock::now();
-		std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
-		if (std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() < 100000000)
-		{
-			std::this_thread::sleep_for(std::chrono::nanoseconds((100000000 - std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count())));
-		}
+		//std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
 
-
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(theGame.window);
 		glfwPollEvents();
 	}
 
 
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(theGame.window);
 	glfwTerminate();
 }
