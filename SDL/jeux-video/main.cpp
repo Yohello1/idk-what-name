@@ -28,6 +28,8 @@ unsigned int currenttime = (unsigned int)time(NULL);
 std::mutex mtx2;
 entites::Coordinator Conductor;
 
+// List of the windows:
+std::vector<GLFWwindow*> windowss;
 
 GLfloat vertices[] =
 {
@@ -49,49 +51,61 @@ int main()
 	// Honestly I have no idea whwre else to put this stuff
 	// srand(current_time);
 
-	// glfwInit();
-	// glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	// glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	// glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	// GLFWwindow* window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "Gament2", NULL, NULL);
-	// if (!window)
-	// {
-	// 	std::cout << "Failed to create the GLFW window\n";
-	// 	glfwTerminate();
-	// }
-	// glfwMakeContextCurrent(window);
-	// glfwSwapInterval(true);
+	std::cout << "Ma cherie" << std::endl;
 
-	// if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	// {
-	// 	std::cout << "Failed to initialize OpenGL context" << std::endl;
-	// }
-	// glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
-
-	game theGame(1024,1024,"Gament");
-
-	GLuint VAO, VBO, EBO;
 	{
-		glCreateVertexArrays(1, &VAO);
-		glCreateBuffers(1, &VBO);
-		glCreateBuffers(1, &EBO);
+		GLFWwindow* windowTemp = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "Gament3", NULL, NULL);
+		windowss.push_back(windowTemp);
+		if (!windowss.at(0))
+		{
+			std::cout << "Failed to create the GLFW window\n";
+			glfwTerminate();
+		}
+		glfwMakeContextCurrent(windowss.at(0));
+		glfwSwapInterval(true);
 
-		glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
-
-		glEnableVertexArrayAttrib(VAO, 0);
-		glVertexArrayAttribBinding(VAO, 0, 0);
-		glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
-
-		glEnableVertexArrayAttrib(VAO, 1);
-		glVertexArrayAttribBinding(VAO, 1, 0);
-		glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
-
-		glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
-		glVertexArrayElementBuffer(VAO, EBO);
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		{
+			std::cout << "Failed to initialize OpenGL context" << std::endl;
+		}
+		glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
 	}
+
+
+
+	game theGame(0, 1024, 1024, 1, "hi");
+
+
+	// game theGame(1024,1024,"Gament");
+	// std::cout << theGame.window << "5" << std::endl;;
+
+
+	// GLuint VAO, VBO, EBO;
+	// {
+	// 	glCreateVertexArrays(1, &VAO);
+	// 	glCreateBuffers(1, &VBO);
+	// 	glCreateBuffers(1, &EBO);
+
+	// 	glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	// 	glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// 	glEnableVertexArrayAttrib(VAO, 0);
+	// 	glVertexArrayAttribBinding(VAO, 0, 0);
+	// 	glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
+
+	// 	glEnableVertexArrayAttrib(VAO, 1);
+	// 	glVertexArrayAttribBinding(VAO, 1, 0);
+	// 	glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
+
+	// 	glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
+	// 	glVertexArrayElementBuffer(VAO, EBO);
+	// }
 
 	std::cout << "vert and frag shaders being made" << std::endl;
 	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
@@ -150,17 +164,20 @@ int main()
 		glUseProgram(inMyMind.shaderProgram);
 		glBindTextureUnit(0, halfwayThroughNovember.getID());
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
-		glBindVertexArray(VAO);
+		glBindVertexArray(theGame.VAO);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		auto end_time = Clock::now();
 		//std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
 
-		glfwSwapBuffers(theGame.window);
+		std::cout << "Ice cream2 " << '\n';
+
+		std::cout << windowss.at(0);
+		glfwSwapBuffers(windowss.at(0));
 		glfwPollEvents();
 	}
 
 
-	glfwDestroyWindow(theGame.window);
+	glfwDestroyWindow(windowss.at(0));
 	glfwTerminate();
 }

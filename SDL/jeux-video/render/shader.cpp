@@ -83,12 +83,12 @@ class Shader
         glAttachShader(shaderProgram, fragShader);
         glLinkProgram(shaderProgram);
 
+        // TODO: put this function into the class
         Shaders::compileErrors(shaderProgram, "PROGRAM");
 
         glDeleteShader(vertShader);
         glDeleteShader(fragShader);
     }
-
     // tell me what u hate me about me
 
     void setInt(const char *name, const GLint &value)
@@ -150,6 +150,11 @@ class Shader
                 std::cout << loc << '\n';
                 throw("invalid uniform name");
             }
+    }
+
+    void useProgram()
+    {
+        glUseProgram(shaderProgram);
     }
 
 private:
