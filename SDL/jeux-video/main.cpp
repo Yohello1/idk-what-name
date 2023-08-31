@@ -124,19 +124,19 @@ int main()
 
 		// Rotate the plane???
 		{
-			float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
-			// std::cout << ang_y << '\n';
+			// float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
+			// // std::cout << ang_y << '\n';
 
-			glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
-			glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
-			glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
+			// glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
+			// glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
+			// glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		   	favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
-			inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
+		   	// favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
+			// inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
 		}
 
 		// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
-		favoriteConvosInTheAM.rotateView(1.0,0.0,0.0);
+		// favoriteConvosInTheAM.rotateView(1.0,0.0,0.0);
 		inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
 
 		dejaVu.useProgram();
