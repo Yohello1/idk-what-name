@@ -79,7 +79,7 @@ int main()
 
 
 
-	game theGame(0, 1024, 1024, 1, "hi");
+	game theGame(0, 1024, 1024, 1, "hi") : inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl") {};
 
 
 	// game theGame(1024,1024,"Gament");

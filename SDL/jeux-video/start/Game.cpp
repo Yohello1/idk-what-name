@@ -13,7 +13,7 @@ class game
         // Verts might, but tbh ion think so, future problem tho
         GLuint indices[6] = {0, 2, 1, 0, 3, 2};
         GLfloat vertices[20] = { -64.0f, -64.0f , 0.0f, 0.0f, 0.0f, -64.0f,  64.0f , 0.0f, 0.0f, 1.0f, 64.0f,  64.0f , 0.0f, 1.0f, 1.0f, 64.0f, -64.0f , 0.0f, 1.0f, 0.0f,}; // omg this line is so long - that's what she said
-        Shader* inMyMind;
+        Shader inMyMind;
 
 
         // x & y are the logical widths
