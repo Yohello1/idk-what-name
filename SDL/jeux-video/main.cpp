@@ -54,7 +54,12 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH, "Gament2", NULL, NULL);
+	unsigned int actual_width = 1024;
+	unsigned int actual_height = 1024;
+	unsigned int logical_width = 128;
+	unsigned int logical_height = 128;
+
+	GLFWwindow* window = glfwCreateWindow(actual_width, actual_height, "Gament2", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "Failed to create the GLFW window\n";
@@ -67,7 +72,7 @@ int main()
 	{
 		std::cout << "Failed to initialize OpenGL context" << std::endl;
 	}
-	glViewport(0, 0, ACTUAL_WINDOW_WIDTH, ACTUAL_WINDOW_HEIGH);
+	glViewport(0, 0, actual_width, actual_height);
 
 
 	GLuint VAO, VBO, EBO;
@@ -96,14 +101,13 @@ int main()
 	std::cout << "vert and frag shaders have been made" << std::endl;
 	glUseProgram(inMyMind.shaderProgram);
 
-
-
 	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_HEIGH),1024,1024,1000);
 	inMyMind.setMat4("uProjectionMatrix", favoriteConvosInTheAM.ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
 	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
 
 	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
+	// this shouldnt change
 	Shaders::computeImageOut halfwayThroughNovember(1024,1024,0);
 	Shaders::computeImageIn heyworld(1024,1024,1);
 
