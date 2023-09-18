@@ -24,7 +24,7 @@ struct cord_2d
 
 struct pixel_data_struct
 {
-    // Maybe I should make this a cords 2d
+    bool inert;
     cord_2d pixel_parent;
     int HCost;
     int GCost;
@@ -67,7 +67,7 @@ int main()
         for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
         {
             pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].r = 0;
-            pixels[x_pos][y_pos].pixel_parent = NULL;
+            // pixels[x_pos][y_pos].pixel_parent = void;
         }
     }
 
@@ -77,17 +77,6 @@ int main()
     std::cout << "Wait for 1 second pls" << '\n';
     SDL_Delay(1000);
 
-    // draw fire
-    for (int x_pos = 120; x_pos < 128; x_pos++)
-    {
-        for (int y_pos = 120; y_pos < 128; y_pos++)
-        {
-            pixels[x_pos][y_pos].r = 255;
-
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-        }
-    }
     // Noise
     for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
@@ -96,6 +85,7 @@ int main()
             if (noise_gen() == 1)
             {
                 pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = 255;
+                pixels[x_pos][y_pos].inert = true;
 
                 SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, 255);
                 SDL_RenderDrawPoint(renderer, x_pos, y_pos);
@@ -105,25 +95,20 @@ int main()
     }
     // redraw_and_render();
     // uh does this make sense?
-    for (int i = 0; i > -1; i++)
+    bool kys = false;
+    while(!kys)
     {
-        std::cout << i << '\n';
+        redraw_and_render();
 
-        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
-        {
-            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
-            {
-               // Write ur code here :3
-            }
-        }
         SDL_Delay(10);
         SDL_RenderPresent(renderer);
         if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
         {
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_Quit();
-            return 0;
+            kys = true;
+            // SDL_DestroyRenderer(renderer);
+            // SDL_DestroyWindow(window);
+            // SDL_Quit();
+            // return 0;
         }
     }
     excecution_finished();
