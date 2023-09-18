@@ -330,12 +330,12 @@ public:
 private:
     uint16_t pressure = 0;
     uint16_t density = 0;
-    uint8_t stickiness = 0;
+    uint16_t stickiness = 0;
+    uint16_t flow = 0;
     float temperature = 0;
-    uint8_t flow = 0;
     bool inert = false;
     struct colour_t col;
-    struct material_t chem_props;
+    // struct material_t chem_props;
 
     /**
      * Rewrite the material stuff

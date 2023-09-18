@@ -60,7 +60,7 @@ int noise_gen();
 
 // ion feel like taking usr input so these are just gonna be pre-defined global variables
 const int noise_density = 90;
-double wind_dir_degrees = -180;
+double wind_dir_degrees = 55;
 
 int main()
 {
