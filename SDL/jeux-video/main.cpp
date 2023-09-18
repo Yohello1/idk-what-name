@@ -110,6 +110,9 @@ int main()
 	// this shouldnt change
 	Shaders::computeImageOut halfwayThroughNovember(1024,1024,0);
 	Shaders::computeImageIn heyworld(1024,1024,1);
+	Shaders::computeImageIn letItGo(1024,1024,2);
+	Shaders::computeImageIn cigaretteDayDreams(1024, 1024, 3);
+//	Shaders::computeImageIn riceNoodles(1024, 1024, 4);
 
 	dejaVu.printMaxComputeSize();
 	int work_grp_inv;
