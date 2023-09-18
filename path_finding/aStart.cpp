@@ -1,154 +1,185 @@
-#include <stdio.h>
-#include <ncurses.h>
-#include <stdlib.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include <time.h>
+#include <cstdlib>
+#include <cstring>
+#include <SDL2/SDL.h>
 #include <ctime>
 #include <iostream>
-#include <bits/stdc++.h>
+#include <random>
+#include <cmath>
+#include <memory>
+#define LOGICAL_WINDOW_WIDTH 256
+#define PI 3.14159265
+//time
+unsigned int current_time = (unsigned int)time(NULL);
+// pointers to these things
+SDL_Renderer *renderer;
+SDL_Window *window;
+SDL_Event event;
 
+// why must I make this
 struct cord_2d
 {
-    int x;
-    int y;
-};
-struct tile
-{
-    // G Cost, dist from start
-    // H is distance from end
-    int GCost, HCost;
-    // 0: Undiscovered
-    // 1: start
-    // 2: end
-    // 3: discovered
-    int type;
-    tile* parent;
-
-    cord_2d whoami;
+    int x_pos;
+    int y_pos;
 };
 
-
-tile waterGunFight[100][100];
-std::vector<tile *> listDiscovered;
-bool discovered = false;
-
-void aStarSearch();
-
-int main(void)
+struct pixel_data_struct
 {
-    time_t t;
-    printf("HELLO WORLLLDDD\n");
-    srand((unsigned) time(&t));
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    // Maybe I should make this a cords 2d
+    cord_2d pixel_parent;
+    int HCost;
+    int GCost;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
+};
+struct pixel_data_struct pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct pixel_data_struct new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+void scr_dump();
+void redraw_and_render();
+void excecution_finished();
+int noise_gen();
+// this script is gonn hurtme
 
-    printf ("lines %d\n", w.ws_row);
-    printf ("columns %d\n", w.ws_col);
-    printf("%s\n", "\x1b[32mtest\033[0ming");
+// ion feel like taking usr input so these are just gonna be pre-defined global variables
+const int noise_density = 90;
+double wind_dir_degrees = 55;
 
-    if((w.ws_row < 100) || (w.ws_col < 100) )
+int main()
+{
+    std::cout << "MY BAGUETTES ARE ON FIRE" << '\n';
+    // telling it how to scale
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+    // Printing the time
+    std::cout << "Time = " << current_time << "\n";
+    // setting random seed
+    srand(current_time);
+    // rise my glorious creation*
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_CreateWindowAndRenderer(1024, 1024, 0, &window, &renderer);
+    SDL_RenderSetLogicalSize(renderer, LOGICAL_WINDOW_WIDTH, LOGICAL_WINDOW_WIDTH);
+    SDL_RenderClear(renderer);
+    // PAINT IT BLACK
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    // Give everything a default value
+    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
     {
-        printf("too small- that's what she said\n");
-        return 0;
-    }
-
-    initscr();
-    start_color();
-    init_pair(1,COLOR_RED, COLOR_RED);
-    init_pair(2,COLOR_GREEN,COLOR_GREEN);
-    init_pair(3,COLOR_WHITE,COLOR_BLACK);
-    refresh();
-
-    for(int y_pos = 0; y_pos < 100; y_pos++)
-    {
-        for(int x_pos = 0; x_pos < 100; x_pos++)
+        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
         {
-            mvprintw(y_pos, x_pos, "#");
-            waterGunFight[y_pos][x_pos].whoami.x = x_pos;
-            waterGunFight[y_pos][x_pos].whoami.y = y_pos;
-            waterGunFight[rand()%100][rand()%100].type = 0;
+            pixels[x_pos][y_pos].a = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = pixels[x_pos][y_pos].r = 0;
+            pixels[x_pos][y_pos].pixel_parent = NULL;
         }
     }
 
-    // rand start & end positions lmao
-    {
-        waterGunFight[rand()%100][rand()%100].type = 1;
-        waterGunFight[rand()%100][rand()%100].type = 2;
-    }
+    //Gonna make points
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
+    std::cout << "Wait for 1 second pls" << '\n';
+    SDL_Delay(1000);
 
-    // Drawing map
-    for(int y_pos = 0; y_pos < 100; y_pos++)
+    // draw fire
+    for (int x_pos = 120; x_pos < 128; x_pos++)
     {
-        for(int x_pos = 0; x_pos < 100; x_pos++)
+        for (int y_pos = 120; y_pos < 128; y_pos++)
         {
-            if(waterGunFight[y_pos][x_pos].type == 1)
-            {
-                attron(COLOR_PAIR(1));
-                mvprintw(y_pos, x_pos, "#");
-                attroff(COLOR_PAIR(1));
-            }
-            else if(waterGunFight[y_pos][x_pos].type == 2)
-            {
-                attron(COLOR_PAIR(2));
-                mvprintw(y_pos, x_pos, "#");
-                attroff(COLOR_PAIR(2));
-            }
+            pixels[x_pos][y_pos].r = 255;
 
-            else
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+        }
+    }
+    // Noise
+    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+    {
+        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+        {
+            if (noise_gen() == 1)
             {
-                attron(COLOR_PAIR(3));
-                mvprintw(y_pos, x_pos, "#");
-                attroff(COLOR_PAIR(3));
+                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = 255;
+
+                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, 255);
+                SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+                SDL_RenderPresent(renderer);
             }
         }
     }
-
-    cord_2d startPoint, endPoint;
-
-    // Find start point
-    for(int y_pos = 0; y_pos < 100; y_pos++)
+    // redraw_and_render();
+    // uh does this make sense?
+    for (int i = 0; i > -1; i++)
     {
-        for(int x_pos = 0; x_pos < 100; x_pos++)
+        std::cout << i << '\n';
+
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
         {
-            if(waterGunFight[y_pos][x_pos].type == 1)
+            for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
             {
-                startPoint.y = y_pos;
-                startPoint.x = x_pos;
-            }
-            else if(waterGunFight[y_pos][x_pos].type == 2)
-            {
-                endPoint.y = y_pos;
-                endPoint.x = x_pos;
+               // Write ur code here :3
             }
         }
+        SDL_Delay(10);
+        SDL_RenderPresent(renderer);
+        if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+        {
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_Quit();
+            return 0;
+        }
     }
-
-    listDiscovered.push_back(&waterGunFight[startPoint.y][startPoint.x]);
-    while(discovered == false)
-    {
-        aStarSearch();
-    }
-
-
-    refresh();
-    endwin();
-    getch();
-
+    excecution_finished();
 }
 
-// I hope I dont fall asleep making this
-void aStarSearch()
+// Debug functions
+void scr_dump()
 {
-    int lowestT = 0; // Lowest total cost, sum of g & H
-    tile* lowestTile;
-
-    for(int i = 0; i < listDiscovered.size(); i++)
+    for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
     {
-        int tempX = listDiscovered.at(i)->whoami.x;
-        int tempY = listDiscovered.at(i)->whoami.y;
-
-        // End point heuristic
+        for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+        {
+            // std::cout << pixels[x_pos][y_pos].state_now;
+        }
+        std::cout << '\n';
     }
+}
+void redraw_and_render()
+{
+    for (int x_pos = 0; x_pos < LOGICAL_WINDOW_WIDTH; x_pos++)
+    {
+        for (int y_pos = 0; y_pos < LOGICAL_WINDOW_WIDTH; y_pos++)
+        {
+            SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, pixels[x_pos][y_pos].a);
+            SDL_RenderDrawPoint(renderer, x_pos, y_pos);
+        }
+    }
+    SDL_RenderPresent(renderer);
+}
+void excecution_finished(void)
+{
+    while (1)
+    {
+        if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+        {
+            break;
+        }
+        SDL_RenderPresent(renderer);
+        // SDL_Delay(50);
+    }
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+} //                                                                                                                                                                                                                                                                                                                                  v
+
+int noise_gen()
+{
+    int num = (rand() % 100);
+
+    if (num > noise_density)
+    {
+        num = 1;
+    }
+    else
+    {
+        num = 0;
+    }
+    return num;
 }

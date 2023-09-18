@@ -9,7 +9,7 @@ CC = g++
 COMPILER_FLAGS = -Wall
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lm -lncurses
+LINKER_FLAGS = -lSDL2 -lSDL2_image -g `sdl2-config --cflags --libs` -lpthread
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = draw2
@@ -18,3 +18,4 @@ OBJ_NAME = draw2
 all : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 	./draw2
+ 
