@@ -6,6 +6,7 @@
 #include <random>
 #include <cmath>
 #include <memory>
+
 #define LOGICAL_WINDOW_WIDTH 256
 #define PI 3.14159265
 //time
@@ -18,28 +19,54 @@ SDL_Event event;
 // why must I make this
 struct cord_2d
 {
-    int x_pos;
-    int y_pos;
+    uint8_t x_pos;
+    uint8_t y_pos;
+};
+
+struct aStarFinding
+{
+    bool inert;
+    cord_2d pixel_parent;
+    uint16_t HCost;
+    uint16_t GCost;
 };
 
 struct pixel_data_struct
 {
-    bool inert;
-    cord_2d pixel_parent;
-    int HCost;
-    int GCost;
+    bool inert = false;
     uint8_t r;
     uint8_t g;
     uint8_t b;
     uint8_t a;
 };
+
+struct boids
+{
+    uint8_t direction;
+    uint8_t velocity;
+    cord_2d position;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
+
+    void pathFind(cord_2d endPoint);
+};
+
 struct pixel_data_struct pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
-struct pixel_data_struct new_version[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+struct boids birds[1024];
+struct aStarFinding shadeOfBlue[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH];
+// another aStarFinding array needs to be made for each thread... but this is single threaded
+
 void scr_dump();
 void redraw_and_render();
 void excecution_finished();
 int noise_gen();
 // this script is gonn hurtme
+// I havent listened to kms - sub urban in a while
+
+
+
 
 // ion feel like taking usr input so these are just gonna be pre-defined global variables
 const int noise_density = 90;
@@ -84,12 +111,7 @@ int main()
         {
             if (noise_gen() == 1)
             {
-                pixels[x_pos][y_pos].r = pixels[x_pos][y_pos].g = pixels[x_pos][y_pos].b = 255;
                 pixels[x_pos][y_pos].inert = true;
-
-                SDL_SetRenderDrawColor(renderer, pixels[x_pos][y_pos].r, pixels[x_pos][y_pos].g, pixels[x_pos][y_pos].b, 255);
-                SDL_RenderDrawPoint(renderer, x_pos, y_pos);
-                SDL_RenderPresent(renderer);
             }
         }
     }
