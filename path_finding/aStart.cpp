@@ -1,6 +1,10 @@
 // https://youtu.be/icZj67PTFhc?si=tiSwjb48qH9QkfMU
+#include <array>
+#include <chrono>
+#include <queue>
 #include <SFML/Graphics.hpp>
 
+#include "randomStuff/DrawMap.cpp"
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
