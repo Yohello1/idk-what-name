@@ -332,7 +332,7 @@ private:
     uint16_t density = 0;
     uint16_t stickiness = 0;
     uint16_t flow = 0;
-    float temperature = 0;
+    uint16_t temperature = 0;
     bool inert = false;
     struct colour_t col;
     // struct material_t chem_props;

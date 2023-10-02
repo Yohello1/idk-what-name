@@ -10,12 +10,12 @@
 #include "debug/debug.hpp"
 #include "render/VBO.cpp"
 #include "render/EBO.cpp"
-#include "render/FBO.cpp"
+// #include "render/FBO.cpp"
 #include "render/VAO.cpp"
 #include "render/texture.cpp"
 #include "render/shader.cpp"
-#include "render/FrameBufferTex.cpp"
-#include "render/FBshader.cpp"
+// #include "render/FrameBufferTex.cpp"
+// #include "render/FBshader.cpp"
 #include "render/Compute.cpp"
 #include "render/MVPMatrix.hpp"
 
@@ -101,7 +101,8 @@ int main()
 	std::cout << "vert and frag shaders have been made" << std::endl;
 	glUseProgram(inMyMind.shaderProgram);
 
-	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((ACTUAL_WINDOW_WIDTH/LOGICAL_WINDOW_HEIGH),1024,1024,1000);
+	// Aspect is well the ratio of actual to logical
+	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((8),1024,1024,1000);
 	inMyMind.setMat4("uProjectionMatrix", favoriteConvosInTheAM.ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
 	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);

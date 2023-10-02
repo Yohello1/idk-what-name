@@ -80,6 +80,7 @@
     - [ ] Compositor
 - [ ] Import/Export maps
 - [ ] Write a proper input system
+- [ ] Make file buffer for text render within its own class
 - [7/10] Final version of physics system
   - [X] Correct types
   - [X] Data handling
