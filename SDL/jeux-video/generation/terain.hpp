@@ -16,8 +16,8 @@ namespace Terrain
 		//      std::cout << "Hello does this work?" << '\n';
 		//  }
 
-		void generate_terrain(int x_lower, int y_lower, int x_upper, int y_upper, int amt_points, cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH])
-		{
+		void generate_terrain(int x_lower, int y_lower, int x_upper, int y_upper, int amt_points)
+		{ /* cell_t pixels[LOGICAL_WINDOW_WIDTH][LOGICAL_WINDOW_WIDTH] */
 			std::cout << "This started" << '\n';
 			place_dots(x_lower, y_lower, x_upper, y_upper, amt_points);
 			points_inbetween(6);
@@ -32,10 +32,7 @@ namespace Terrain
 			// I didnt leave their party cause I was gonna head off
 			// It was cause I hated myself for doing so badly
 
-			#ifdef UI_DEBUG
-			std::cout << "The size of the vector/array is " << points_new.size() << '\n';
-			std::cout << "This ended" << '\n';
-			#endif
+
 			for (int unsigned i = 1; i < points_old.size(); i++)
 			{
 				// TODO: FIX THIS
@@ -62,9 +59,6 @@ namespace Terrain
 				temp.y_pos = y_pos;
 				points_old.push_back(temp);
 
-            	#ifdef UI_DEBUG
-				std::cout << "Point " << i << " Position (" << temp.x_pos << "," << temp.y_pos << ")" << '\n';
-				#endif
 
 			}
 		}
@@ -78,10 +72,6 @@ namespace Terrain
 				int x_mid = (points_old[i - 1].x_pos + points_old[i].x_pos) / 2;
 				int y_mid = (points_old[i - 1].y_pos + points_old[i].y_pos) / 2;
 
-            	#ifdef UI_DEBUG
-				std::cout << "Point " << i << " Position (" << x_mid << "," << y_mid << ")" << '\n';
-				#endif
-
 				points_new.push_back(points_old[i - 1]);
 
 				cord_2d temp;
@@ -91,13 +81,6 @@ namespace Terrain
 
 				points_new.push_back(points_old[i]);
 			}
-
-            #ifdef UI_DEBUG
-			for (int unsigned i = 0; i < points_new.size(); i++)
-			{
-				std::cout << points_new[i].x_pos << ',' << points_new[i].y_pos << "  I: " << i << '\n';
-			}
-			#endif
 
 			std::cout << "Filling in time" << '\n';
 			points_old = points_new;
