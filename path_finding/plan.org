@@ -1,0 +1,8 @@
+#+title: Plan to write the path finding stuff for ee
+#+author: Yohello1
+#+date: <2023-10-01 Sun>
+
+* Write method to render result
+-[/] render method
+    -[X] Make grid
+    -[ ] Make method of chaning grid
