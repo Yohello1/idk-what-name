@@ -15,6 +15,7 @@ std::array<std::array<int, 128>, 128> map;
 
 
 void drawMap();
+void generateMap(int drunkards);
 
 int main()
 {
@@ -53,23 +54,22 @@ int main()
     // placing start & end points
     {
         srand(time(0));
-
+        generateMap(100);
         map[rand() % 128][rand() % 128] = 2;
         map[rand() % 128][rand() % 128] = 3;
+
     }
     
 
     while (window.isOpen())
     {
-        window.clear();
-
-
         sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        window.clear();
 
         drawMap();
 
@@ -134,6 +134,46 @@ void drawMap()
             {
                 wall.setPosition(x_pos*8,y_pos*8);
                 window.draw(wall);
+            }
+
+        }
+    }
+}
+
+// Drunkards refering to how many 'drunk' things will be spawned to create the map
+void generateMap(int drunkards)
+{
+    for(int i = 0; i < drunkards; i++)
+    {
+        // generate the spawn point
+        int x_pos = rand() % 128, y_pos = rand() % 128;
+
+        for(int j = 0; j < 50; j++)
+        {
+            map[x_pos][y_pos] = 5;
+
+            // X 0 X
+            // 3 # 1
+            // X 2 X
+            int randInt = rand() % 4;
+            if(randInt == 0 && y_pos > 0)
+            {
+                y_pos -= 1;
+            }
+
+            if(randInt == 1 && x_pos < 128)
+            {
+                x_pos += 1;
+            }
+
+            if(randInt == 2 && y_pos < 128)
+            {
+                y_pos += 1;
+            }
+
+            if(randInt == 3 && x_pos > 0)
+            {
+                x_pos -= 1;
             }
 
         }
