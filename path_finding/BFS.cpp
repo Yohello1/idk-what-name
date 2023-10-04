@@ -8,7 +8,6 @@
 #include <random>
 #include <bits/stdc++.h>
 #include <unistd.h>
-#include <iomanip>
 
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
@@ -16,11 +15,11 @@ sf::Sprite unvisted, visited, start, end, path, wall;
 
 std::array<std::array<int, 128>, 128> map;
 std::queue<std::pair<int,int>> openNodes;
-// std::map<std::tuple<int, int>> closedNodes;
+std::set<std::pair<int,  int>> closedNodes;
 
 void drawMap();
 void generateMap(int drunkards);
-void pathFindBFS(std::pair<int, int> start, std::pair<int, int> end);
+void pathFindAStar(std::pair<int, int> start, std::pair<int, int> end);
 void openNext();
 bool openSurrondings(std::pair<int,int> point);
 bool temp;
@@ -75,7 +74,7 @@ int main()
 
         //std::cout << "No seg fault yet" << std::endl;
 
-        pathFindBFS(start, end);
+        pathFindAStar(start, end);
 
         // openNodes.push(start);
         // openSurrondings(openNodes.front());
@@ -204,7 +203,7 @@ void generateMap(int drunkards)
     }
 }
 
-void pathFindBFS(std::pair<int, int> start, std::pair<int, int> end)
+void pathFindAStar(std::pair<int, int> start, std::pair<int, int> end)
 {
     std::cout << "Not seg fault" << std::endl;
     openNodes.push(start);
