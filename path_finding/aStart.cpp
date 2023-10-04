@@ -66,13 +66,18 @@ int main()
         std::pair<int,int> end = {(rand() % 128), (rand() % 128)};
 
         std::cout << "stardIn: " << start.first << ' '  << start.second << std::endl;
+        std::cout << "stardIn: " << end.first << ' '  << end.second << std::endl;
 
         map[start.first][start.second] = 2;
         map[end.first][end.second] = 3;
 
+        std::cout << "No seg fault yet" << std::endl;
+
         pathFindAStar(start, end);
+
+        std::cout << "The issue" << std::endl;
     }
-    
+
 
 
     while (window.isOpen())
@@ -87,7 +92,7 @@ int main()
         drawMap();
         window.display();
 
-        sleep(0.005);
+        sleep(0.01);
         openNext();
     }
 
@@ -211,8 +216,15 @@ void pathFindAStar(std::pair<int, int> start, std::pair<int, int> end)
 
 void openNext()
 {
-    openSurrondings(openNodes.front());
-    openNodes.pop();
+    if(openNodes.size() != 0)
+    {
+        openSurrondings(openNodes.front());
+        openNodes.pop();
+    }
+    else
+    {
+        return;
+    }
 }
 
 void openSurrondings(std::pair<int, int> point)
