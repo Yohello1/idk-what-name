@@ -72,10 +72,13 @@ int main()
         map[start.first][start.second] = 2;
         map[end.first][end.second] = 3;
 
-        std::cout << "No seg fault yet" << std::endl;
+        //std::cout << "No seg fault yet" << std::endl;
 
-        pathFindAStar(start, end);
+        // pathFindAStar(start, end);
 
+        openNodes.push(start);
+        openSurrondings(openNodes.front());
+        openNodes.pop();
         std::cout << "The issue" << std::endl;
     }
 
@@ -93,8 +96,8 @@ int main()
         drawMap();
         window.display();
 
-        // sleep(0.01);
-        // openNext();
+        //sleep(0.01);
+        openNext();
     }
 
     return 0;
@@ -202,9 +205,15 @@ void generateMap(int drunkards)
 
 void pathFindAStar(std::pair<int, int> start, std::pair<int, int> end)
 {
+    std::cout << "Not seg fault" << std::endl;
     openNodes.push(start);
 
+    std::cout << "Nei seg fault" << std::endl;
+
+
     openSurrondings(openNodes.front());
+
+    std::cout << "Noodle fault " << std::endl;
     openNodes.pop();
 
     bool success = false;
@@ -288,7 +297,7 @@ bool openSurrondings(std::pair<int, int> point)
         }
     }
 
-    // Above
+    // right
     if( ( x + 1 ) < 128 )
     {
         if(map[x+1][y] == 0)
