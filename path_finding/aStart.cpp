@@ -6,16 +6,22 @@
 #include <iostream>
 #include <cstring>
 #include <random>
+#include <bits/stdc++.h>
+#include <unistd.h>
 
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
 std::array<std::array<int, 128>, 128> map;
-
+std::queue<std::pair<int,int>> openNodes;
+std::set<std::pair<int,  int>> closedNodes;
 
 void drawMap();
 void generateMap(int drunkards);
+void pathFindAStar(std::pair<int, int> start, std::pair<int, int> end);
+void openNext();
+void openSurrondings(std::pair<int,int> point);
 
 int main()
 {
@@ -55,11 +61,19 @@ int main()
     {
         srand(time(0));
         generateMap(100);
-        map[rand() % 128][rand() % 128] = 2;
-        map[rand() % 128][rand() % 128] = 3;
 
+        std::pair<int,int> start = {(rand() % 128), (rand() % 128)};
+        std::pair<int,int> end = {(rand() % 128), (rand() % 128)};
+
+        std::cout << "stardIn: " << start.first << ' '  << start.second << std::endl;
+
+        map[start.first][start.second] = 2;
+        map[end.first][end.second] = 3;
+
+        pathFindAStar(start, end);
     }
     
+
 
     while (window.isOpen())
     {
@@ -70,10 +84,11 @@ int main()
                 window.close();
         }
         window.clear();
-
         drawMap();
-
         window.display();
+
+        sleep(0.005);
+        openNext();
     }
 
     return 0;
@@ -137,8 +152,7 @@ void drawMap()
             }
 
         }
-    }
-}
+    }}
 
 // Drunkards refering to how many 'drunk' things will be spawned to create the map
 void generateMap(int drunkards)
@@ -176,6 +190,73 @@ void generateMap(int drunkards)
                 x_pos -= 1;
             }
 
+        }
+    }
+}
+
+void pathFindAStar(std::pair<int, int> start, std::pair<int, int> end)
+{
+    openNodes.push(start);
+
+    openSurrondings(openNodes.front());
+    openNodes.pop();
+
+    // while(openNodes.size() > 0)
+    // {
+
+
+    // }
+
+}
+
+void openNext()
+{
+    openSurrondings(openNodes.front());
+    openNodes.pop();
+}
+
+void openSurrondings(std::pair<int, int> point)
+{
+    int x = point.first;
+    int y = point.second;
+
+    // Above
+    if( ( y - 1 ) > 0)
+    {
+        if(map[x][y-1] == 0)
+        {
+            map[x][y-1] = 1;
+            openNodes.push({x, (y-1)});
+        }
+    }
+
+    // Below
+    if( ( y + 1 ) < 128)
+    {
+        if(map[x][y+1] == 0)
+        {
+            map[x][y+1] = 1;
+            openNodes.push({x, (y+1)});
+        }
+    }
+
+    // Left
+    if( ( x - 1 ) > 0 )
+    {
+        if(map[x-1][y] == 0)
+        {
+            map[x-1][y] = 1;
+            openNodes.push({(x-1), y});
+        }
+    }
+
+    // Above
+    if( ( x + 1 ) < 128 )
+    {
+        if(map[x+1][y] == 0)
+        {
+            map[x+1][y] = 1;
+            openNodes.push({(x+1), y});
         }
     }
 }
