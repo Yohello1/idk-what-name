@@ -9,18 +9,27 @@
 #include <bits/stdc++.h>
 #include <unistd.h>
 #include <iomanip>
+#include <cmath>
+
+ struct aStarComparator {
+    bool operator()(std::tuple<int, int, int>& t1, std::tuple<int, int, int>& t2) {
+         return std::get<1>(t1) > std::get<1>(t2);
+     }
+ };
+
 
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
 std::array<std::array<int, 128>, 128> map;
-std::queue<std::pair<int,int>> openNodes;
-// std::map<std::tuple<int, int>> closedNodes;
+// fCost, x, y
+std::priority_queue<std::tuple<int,int,int>, std::vector<std::tuple<int, int, int>>, aStarComparator> openNodes; // Nodes to be searched
+std::map<std::string, std::pair<int, int>> closedNodes; // Nodes that have been searched
 
 void drawMap();
 void generateMap(int drunkards);
-void pathFindBFS(std::pair<int, int> start, std::pair<int, int> end);
+// void pathFindBFS(std::tuple<int, int, int> start, std::tuple<int, int, int> end);
 void openNext();
 bool openSurrondings(std::pair<int,int> point);
 bool temp;
@@ -75,7 +84,7 @@ int main()
 
         //std::cout << "No seg fault yet" << std::endl;
 
-        pathFindBFS(start, end);
+        // pathFindBFS(start, end);
 
         // openNodes.push(start);
         // openSurrondings(openNodes.front());
@@ -204,17 +213,11 @@ void generateMap(int drunkards)
     }
 }
 
-void pathFindBFS(std::pair<int, int> start, std::pair<int, int> end)
+/*
+void pathFindBFS(std::tuple<int, int, int> start, std::tuple<int, int, int> end)
 {
-    std::cout << "Not seg fault" << std::endl;
     openNodes.push(start);
-
-    std::cout << "Nei seg fault" << std::endl;
-
-
     openSurrondings(openNodes.front());
-
-    std::cout << "Noodle fault " << std::endl;
     openNodes.pop();
 
     bool success = false;
@@ -230,17 +233,14 @@ void pathFindBFS(std::pair<int, int> start, std::pair<int, int> end)
     }
 
 }
+*/
 
 void openNext()
 {
     if((openNodes.size() != 0) && (temp == false))
     {
 
-        if(openSurrondings(openNodes.front()))
-        {
-            std::cout << "Found node" << std::endl;
-            temp = true;
-        }
+
         openNodes.pop();
     }
     else
@@ -249,10 +249,16 @@ void openNext()
     }
 }
 
-bool openSurrondings(std::pair<int, int> point)
+bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, int> start, std::tuple<int, int, int> end)
 {
-    int x = point.first;
-    int y = point.second;
+    int x = std::get<1>(point);
+    int y = std::get<2>(point);
+
+    int startX = std::get<1>(start);
+    int startY = std::get<2>(start);
+    int endX   = std::get<1>(end);
+    int endY   = std::get<2>(end);
+    // Distance = sqrt(abs(x1-x2) + abs(y1-y2))
 
     // Above
     if( ( y - 1 ) > -1)
@@ -260,7 +266,13 @@ bool openSurrondings(std::pair<int, int> point)
         if(map[x][y-1] == 0)
         {
             map[x][y-1] = 1;
-            openNodes.push({x, (y-1)});
+
+            // HCost : start, GCost : end
+            int HCost = std::sqrt(std::abs(startX - (x)) + std::abs(startY - (y-1)));
+            int GCost = std::sqrt(std::abs(endX - (x))   + std::abs(endY   - (y-1)));
+            int FCost = HCost + GCost;
+
+            openNodes.push({FCost, x, (y-1)});
         }
         else if(map[x][y-1] == 3)
         {
@@ -274,7 +286,13 @@ bool openSurrondings(std::pair<int, int> point)
         if(map[x][y+1] == 0)
         {
             map[x][y+1] = 1;
-            openNodes.push({x, (y+1)});
+
+            // HCost : start, GCost : end
+            int HCost = std::sqrt(std::abs(startX - (x)) + std::abs(startY - (y+1)));
+            int GCost = std::sqrt(std::abs(endX   - (x)) + std::abs(endY   - (y+1)));
+            int FCost = HCost + GCost;
+
+            openNodes.push({FCost, x, (y+1)});
         }
 
         else if(map[x][y+1] == 3)
@@ -289,7 +307,13 @@ bool openSurrondings(std::pair<int, int> point)
         if(map[x-1][y] == 0)
         {
             map[x-1][y] = 1;
-            openNodes.push({(x-1), y});
+
+            // HCost : start, GCost : end
+            int HCost = std::sqrt(std::abs(startX - (x - 1)) + std::abs(startY - (y)));
+            int GCost = std::sqrt(std::abs(endX   - (x - 1)) + std::abs(endY   - (y)));
+            int FCost = HCost + GCost;
+
+            openNodes.push({FCost, (x-1), y});
         }
 
         else if(map[x-1][y] == 3)
@@ -304,7 +328,13 @@ bool openSurrondings(std::pair<int, int> point)
         if(map[x+1][y] == 0)
         {
             map[x+1][y] = 1;
-            openNodes.push({(x+1), y});
+
+            // HCost : start, GCost : end
+            int HCost = std::sqrt(std::abs(startX - (x + 1)) + std::abs(startY - (y)));
+            int GCost = std::sqrt(std::abs(endX   - (x + 1)) + std::abs(endY   - (y)));
+            int FCost = HCost + GCost;
+
+            openNodes.push({FCost, (x+1), y});
         }
 
         else if(map[x+1][y] == 3)
@@ -314,4 +344,19 @@ bool openSurrondings(std::pair<int, int> point)
     }
 
     return false;
+}
+
+
+// I don't rlly need this LMAO
+std::string pad3Digit(int number)
+{
+    std::stringstream ss;
+    ss << std::setw(3) << std::setfill('0') << number;
+    std::string s = ss.str();
+    return s;
+}
+
+std::string merge2Strings(std::string firstString, std::string secondString)
+{
+    return (firstString + secondString);
 }

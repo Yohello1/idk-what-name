@@ -1,5 +1,6 @@
 #OBJS specifies which files to compile as part of the project
 OBJS = aStart.cpp
+OBFILES = aStart.o
 
 #CC specifies which compiler we're using
 CC = g++
@@ -17,6 +18,6 @@ OBJ_NAME = draw2
 #This is the target that compiles our executable
 all : $(OBJS)
 	$(CC) -c $(OBJS)
-	$(CC) aStart.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	$(CC) $(OBFILES) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 	./draw2
  
