@@ -13,7 +13,7 @@
 
  struct aStarComparator {
     bool operator()(std::tuple<int, int, int>& t1, std::tuple<int, int, int>& t2) {
-         return std::get<1>(t1) > std::get<1>(t2);
+         return std::get<0>(t1) > std::get<0>(t2);
      }
  };
 
@@ -25,14 +25,13 @@ sf::Sprite unvisted, visited, start, end, path, wall;
 std::array<std::array<int, 128>, 128> map;
 // fCost, x, y
 std::priority_queue<std::tuple<int,int,int>, std::vector<std::tuple<int, int, int>>, aStarComparator> openNodes; // Nodes to be searched
-std::map<std::string, std::pair<int, int>> closedNodes; // Nodes that have been searched
+std::map<std::pair<int, int>, std::pair<int, int>> closedNodes; // Nodes that have been searched
+bool temp;
 
 void drawMap();
 void generateMap(int drunkards);
-// void pathFindBFS(std::tuple<int, int, int> start, std::tuple<int, int, int> end);
-void openNext();
-bool openSurrondings(std::pair<int,int> point);
-bool temp;
+void openNext(std::pair<int, int> start, std::pair<int, int> end);
+bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, int> start, std::tuple<int, int, int> end);
 
 int main()
 {
@@ -69,12 +68,13 @@ int main()
         memset( &map[0][0], 0, sizeof(map) );
     }
     // placing start & end points
+    std::pair<int, int > start, end;
     {
         srand(time(0));
         generateMap(100);
 
-        std::pair<int,int> start = {(rand() % 128), (rand() % 128)};
-        std::pair<int,int> end = {(rand() % 128), (rand() % 128)};
+        start = {(rand() % 128), (rand() % 128)};
+        end = {(rand() % 128), (rand() % 128)};
 
         std::cout << "stardIn: " << start.first << ' '  << start.second << std::endl;
         std::cout << "stardIn: " << end.first << ' '  << end.second << std::endl;
@@ -86,9 +86,10 @@ int main()
 
         // pathFindBFS(start, end);
 
-        // openNodes.push(start);
-        // openSurrondings(openNodes.front());
-        // openNodes.pop();
+        openNodes.push({0, start.first, start.second});
+        // openSurrondings(openNodes.top());
+        evaluateSurrondings(openNodes.top(), {0, start.first, start.second}, {0, end.first, end.second});
+        openNodes.pop();
         std::cout << "The issue" << std::endl;
     }
 
@@ -106,8 +107,8 @@ int main()
         drawMap();
         window.display();
 
-        //sleep(0.01);
-        // openNext();
+        sleep(0.01);
+        openNext(start, end);
     }
 
     return 0;
@@ -213,34 +214,11 @@ void generateMap(int drunkards)
     }
 }
 
-/*
-void pathFindBFS(std::tuple<int, int, int> start, std::tuple<int, int, int> end)
+void openNext(std::pair<int, int> start, std::pair<int, int> end)
 {
-    openNodes.push(start);
-    openSurrondings(openNodes.front());
-    openNodes.pop();
-
-    bool success = false;
-    while((openNodes.size() > 0) && (success == false))
+    if((openNodes.size() != 0) && (temp != true))
     {
-        success = openSurrondings(openNodes.front());
-        openNodes.pop();
-    }
-
-    if(!success)
-    {
-        std::cout << "Could not find path" << std::endl;
-    }
-
-}
-*/
-
-void openNext()
-{
-    if((openNodes.size() != 0) && (temp == false))
-    {
-
-
+        temp = evaluateSurrondings(openNodes.top(),{0, start.first, start.second}, {0, end.first, end.second} );
         openNodes.pop();
     }
     else
