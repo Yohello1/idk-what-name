@@ -11,8 +11,10 @@
 #include <iomanip>
 #include <cmath>
 
+#define MAP_SIZE 128
+
  struct aStarComparator {
-    bool operator()(std::tuple<int, int, int>& t1, std::tuple<int, int, int>& t2) {
+    bool operator()(std::tuple<double, int, int>& t1, std::tuple<double, int, int>& t2) {
          return std::get<0>(t1) > std::get<0>(t2);
      }
  };
@@ -22,16 +24,17 @@ sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
-std::array<std::array<int, 128>, 128> map;
+std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map;
 // fCost, x, y
-std::priority_queue<std::tuple<int,int,int>, std::vector<std::tuple<int, int, int>>, aStarComparator> openNodes; // Nodes to be searched
-std::map<std::pair<int, int>, std::pair<int, int>> closedNodes; // Nodes that have been searched
+std::priority_queue<std::tuple<double,int,int>, std::vector<std::tuple<double, int, int>>, aStarComparator> openNodes; // Nodes to be searched
+std::priority_queue<std::tuple<double,int,int>, std::vector<std::tuple<double, int, int>>, aStarComparator> tempList; // Nodes to be searched
+std::map<std::pair<int, int>, std::pair<std::pair<int, int>, int>> closedNodes; // Nodes that have been searched
 bool temp;
 
 void drawMap();
 void generateMap(int drunkards);
 void openNext(std::pair<int, int> start, std::pair<int, int> end);
-bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, int> start, std::tuple<int, int, int> end);
+bool evaluateSurrondings(std::tuple<double, int, int> point, std::tuple<double, int, int> start, std::tuple<double, int, int> end);
 
 int main()
 {
@@ -68,13 +71,13 @@ int main()
         memset( &map[0][0], 0, sizeof(map) );
     }
     // placing start & end points
-    std::pair<int, int > start, end;
+    std::pair<int, int> start, end;
     {
         srand(time(0));
         generateMap(100);
 
-        start = {(rand() % 128), (rand() % 128)};
-        end = {(rand() % 128), (rand() % 128)};
+        start = {(rand() % MAP_SIZE), (rand() % MAP_SIZE)};
+        end = {(rand() % MAP_SIZE), (rand() % MAP_SIZE)};
 
         std::cout << "stardIn: " << start.first << ' '  << start.second << std::endl;
         std::cout << "stardIn: " << end.first << ' '  << end.second << std::endl;
@@ -102,13 +105,40 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if(event.type == sf::Event::KeyPressed)
+                if(event.key.code == sf::Keyboard::Enter)
+                {
+
+                }
+
+            if(event.type == sf::Event::KeyPressed)
+                if(event.key.code == sf::Keyboard::Insert)
+                {
+                    while(!openNodes.empty())
+                    {
+                        std::cout << std::get<0>(openNodes.top()) << " " <<  std::get<1>(openNodes.top()) << " " <<  std::get<2>(openNodes.top()) << std::endl;
+                        tempList.push(openNodes.top());
+                        openNodes.pop();
+                    }
+
+                    while(!tempList.empty())
+                    {
+                        openNodes.push(tempList.top());
+                        tempList.pop();
+                    }
+                }
+
         }
         window.clear();
         drawMap();
         window.display();
 
-        sleep(0.01);
-        openNext(start, end);
+                    openNext(start, end);
+                    std::cout << openNodes.size() << std::endl;
+
+
+
+        // sleep(0.5);
     }
 
     return 0;
@@ -116,9 +146,9 @@ int main()
 
 void drawMap()
 {
-    for(int x_pos = 0; x_pos < 128; x_pos++)
+    for(int x_pos = 0; x_pos < MAP_SIZE; x_pos++)
     {
-        for(int y_pos = 0; y_pos < 128; y_pos++)
+        for(int y_pos = 0; y_pos < MAP_SIZE; y_pos++)
         {
 
             // let's say
@@ -164,8 +194,8 @@ void drawMap()
                 window.draw(path);
             }
 
-
-            else if(map[x_pos][y_pos] == 5)
+            // Wall
+            else if(map[x_pos][y_pos] > 4)
             {
                 wall.setPosition(x_pos*8,y_pos*8);
                 window.draw(wall);
@@ -180,7 +210,7 @@ void generateMap(int drunkards)
     for(int i = 0; i < drunkards; i++)
     {
         // generate the spawn point
-        int x_pos = rand() % 128, y_pos = rand() % 128;
+        int x_pos = rand() % MAP_SIZE, y_pos = rand() %  MAP_SIZE;
 
         for(int j = 0; j < 50; j++)
         {
@@ -195,12 +225,12 @@ void generateMap(int drunkards)
                 y_pos -= 1;
             }
 
-            if(randInt == 1 && x_pos < 128)
+            if(randInt == 1 && x_pos <  MAP_SIZE)
             {
                 x_pos += 1;
             }
 
-            if(randInt == 2 && y_pos < 128)
+            if(randInt == 2 && y_pos <  MAP_SIZE)
             {
                 y_pos += 1;
             }
@@ -227,7 +257,7 @@ void openNext(std::pair<int, int> start, std::pair<int, int> end)
     }
 }
 
-bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, int> start, std::tuple<int, int, int> end)
+bool evaluateSurrondings(std::tuple<double, int, int> point, std::tuple<double, int, int> start, std::tuple<double, int, int> end)
 {
     int x = std::get<1>(point);
     int y = std::get<2>(point);
@@ -246,9 +276,9 @@ bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, i
             map[x][y-1] = 1;
 
             // HCost : start, GCost : end
-            int HCost = std::sqrt(std::abs(startX - (x)) + std::abs(startY - (y-1)));
-            int GCost = std::sqrt(std::abs(endX - (x))   + std::abs(endY   - (y-1)));
-            int FCost = HCost + GCost;
+            double HCost = std::sqrt(std::abs(startX - (x)) + std::abs(startY - (y-1)));
+            double GCost = std::sqrt(std::abs(endX - (x))   + std::abs(endY   - (y-1)));
+            double FCost = HCost + GCost;
 
             openNodes.push({FCost, x, (y-1)});
         }
@@ -259,16 +289,16 @@ bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, i
     }
 
     // Below
-    if( ( y + 1 ) < 128)
+    if( ( y + 1 ) < MAP_SIZE)
     {
         if(map[x][y+1] == 0)
         {
             map[x][y+1] = 1;
 
             // HCost : start, GCost : end
-            int HCost = std::sqrt(std::abs(startX - (x)) + std::abs(startY - (y+1)));
-            int GCost = std::sqrt(std::abs(endX   - (x)) + std::abs(endY   - (y+1)));
-            int FCost = HCost + GCost;
+            double HCost = std::sqrt(std::abs(startX - (x)) + std::abs(startY - (y+1)));
+            double GCost = std::sqrt(std::abs(endX   - (x)) + std::abs(endY   - (y+1)));
+            double FCost = HCost + GCost;
 
             openNodes.push({FCost, x, (y+1)});
         }
@@ -287,9 +317,9 @@ bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, i
             map[x-1][y] = 1;
 
             // HCost : start, GCost : end
-            int HCost = std::sqrt(std::abs(startX - (x - 1)) + std::abs(startY - (y)));
-            int GCost = std::sqrt(std::abs(endX   - (x - 1)) + std::abs(endY   - (y)));
-            int FCost = HCost + GCost;
+            double HCost = std::sqrt(std::abs(startX - (x - 1)) + std::abs(startY - (y)));
+            double GCost = std::sqrt(std::abs(endX   - (x - 1)) + std::abs(endY   - (y)));
+            double FCost = HCost + GCost;
 
             openNodes.push({FCost, (x-1), y});
         }
@@ -301,16 +331,16 @@ bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, i
     }
 
     // right
-    if( ( x + 1 ) < 128 )
+    if( ( x + 1 ) < MAP_SIZE )
     {
         if(map[x+1][y] == 0)
         {
             map[x+1][y] = 1;
 
             // HCost : start, GCost : end
-            int HCost = std::sqrt(std::abs(startX - (x + 1)) + std::abs(startY - (y)));
-            int GCost = std::sqrt(std::abs(endX   - (x + 1)) + std::abs(endY   - (y)));
-            int FCost = HCost + GCost;
+            double HCost = std::sqrt(std::abs(startX - (x + 1)) + std::abs(startY - (y)));
+            double GCost = std::sqrt(std::abs(endX   - (x + 1)) + std::abs(endY   - (y)));
+            double FCost = HCost + GCost;
 
             openNodes.push({FCost, (x+1), y});
         }
@@ -321,20 +351,93 @@ bool evaluateSurrondings(std::tuple<int, int, int> point, std::tuple<int, int, i
         }
     }
 
+
+    // Everything below
+    // 0 . 1
+    // . X .
+    // 2 . 3
+    if(((x-1) > -1) && ((y-1) != -1))
+    {
+        if(map[x-1][y-1] == 0)
+        {
+            map[x-1][y-1] = 1;
+
+            // HCost : start, GCost : end
+            double HCost = std::sqrt(std::abs(startX - (x - 1)) + std::abs(startY - (y-1)));
+            double GCost = std::sqrt(std::abs(endX   - (x - 1)) + std::abs(endY   - (y-1)));
+            double FCost = HCost + GCost;
+
+            openNodes.push({FCost, (x-1), (y-1)});
+        }
+
+        else if(map[x-1][y-1] == 3)
+        {
+            return true;
+        }
+    }
+
+    if(((x+1) < MAP_SIZE) && ((y-1) != -1))
+    {
+        if(map[x+1][y-1] == 0)
+        {
+            map[x+1][y-1] = 1;
+
+            // HCost : start, GCost : end
+            double HCost = std::sqrt(std::abs(startX - (x + 1)) + std::abs(startY - (y-1)));
+            double GCost = std::sqrt(std::abs(endX   - (x + 1)) + std::abs(endY   - (y-1)));
+            double FCost = HCost + GCost;
+
+            openNodes.push({FCost, (x+1), (y-1)});
+        }
+
+        else if(map[x+1][y-1] == 3)
+        {
+            return true;
+        }
+    }
+
+
+    if(((x-1) > -1) && ((y+1) != MAP_SIZE))
+    {
+        if(map[x-1][y+1] == 0)
+        {
+            map[x-1][y+1] = 1;
+
+            // HCost : start, GCost : end
+            double HCost = std::sqrt(std::abs(startX - (x - 1)) + std::abs(startY - (y+1)));
+            double GCost = std::sqrt(std::abs(endX   - (x - 1)) + std::abs(endY   - (y+1)));
+            double FCost = HCost + GCost;
+
+            openNodes.push({FCost, (x-1), (y+1)});
+        }
+
+        else if(map[x-1][y+1] == 3)
+        {
+            return true;
+        }
+    }
+
+        if(((x+1) > -1) && ((y+1) != MAP_SIZE))
+    {
+        if(map[x+1][y+1] == 0)
+        {
+            map[x+1][y+1] = 1;
+
+            // HCost : start, GCost : end
+            double HCost = std::sqrt(std::abs(startX - (x + 1)) + std::abs(startY - (y+1)));
+            double GCost = std::sqrt(std::abs(endX   - (x + 1)) + std::abs(endY   - (y+1)));
+            double FCost = HCost + GCost;
+
+            openNodes.push({FCost, (x+1), (y+1)});
+        }
+
+        else if(map[x+1][y+1] == 3)
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
 
-// I don't rlly need this LMAO
-std::string pad3Digit(int number)
-{
-    std::stringstream ss;
-    ss << std::setw(3) << std::setfill('0') << number;
-    std::string s = ss.str();
-    return s;
-}
-
-std::string merge2Strings(std::string firstString, std::string secondString)
-{
-    return (firstString + secondString);
-}
