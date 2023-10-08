@@ -27,10 +27,12 @@ std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map;
 // FCost(total cost), HCost(to start cost), cord
 std::priority_queue<std::tuple<double, double, std::pair<int, int>>, std::vector<std::tuple<double, double, std::pair<int, int>>>, Comparator> nodes;
 std::map<std::pair<int, int>, std::tuple<double, std::pair<int, int>>> parents;
+bool drawn = false;
 
 void drawMap();
 void generateMap(int drunkards);
 bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, std::pair<int, int> end);
+void drawPath(std::pair<int, int> start, std::pair<int, int> end);
 
 int main()
 {
@@ -94,7 +96,6 @@ int main()
     std::cout << "Now theyre in my head" << std::endl;
     bool found = false;
 
-    sleep(3);
 
     while (window.isOpen())
     {
@@ -103,28 +104,29 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-            if(event.type == sf::Event::KeyPressed)
-            {
-                if((event.key.code == sf::Keyboard::Enter) && found == false)
-                {
-                }
-            }
         }
+
+
         if(found == true)
         {
             std::cout << "Found" << std::endl;
+            if(drawn == false)
+            {
+                drawPath(start, end);
+            }
         }
         else
         {
             found = evaluateNeighbours(nodes.top(), end);
             nodes.pop();
-            std::cout << nodes.size() << std::endl;
         }
+
+
         window.clear();
         drawMap();
         window.display();
 
-        // sleep(0.5);
+        sleep(0.05);
     }
 
     return 0;
@@ -258,16 +260,13 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
 
     if((y-1) > -1)
     {
+        double newHCost = HCost + 1;
+
         if(map[x][y-1] == 0)
         {
             map[x][y-1] = 1;
-
-            double newHCost = HCost + 1;
             double GCost = std::sqrt(std::pow(std::abs(endX - x),2) + std::pow(std::abs(endY - (y-1)), 2));
             double FCost = newHCost + GCost;
-
-            std::cout << "Y " << GCost << std::endl;
-
             nodes.push({FCost, newHCost, {x, (y-1)}});
 
             // Map
@@ -275,18 +274,19 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
             // if it equals 0, it does not exist
             if(parents.count({x, (y-1)}) == 0)
             {
-                parents[std::make_pair(x,(y-1))] = {newHCost, {x, (y-1)}};
+                parents[std::make_pair(x,(y-1))] = {newHCost, {x, y}};
             }
             else if(std::get<0>(parents[std::make_pair(x, (y-1))]) > newHCost)
             {
                 // If it does exist, and is lower than etc
-                parents[std::make_pair(x,(y-1))] = {newHCost, {x, (y-1)}};
+                parents[std::make_pair(x,(y-1))] = {newHCost, {x, y}};
             }
 
 
         }
         else if(map[x][y-1] == 3)
         {
+            parents[std::make_pair(x,(y-1))] = {newHCost, {x, y}};
             return true;
         }
     }
@@ -294,14 +294,12 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
     // Below
     if((y+1) < MAP_SIZE)
     {
+        double newHCost = HCost + 1;
         if(map[x][y+1] == 0)
         {
             map[x][y+1] = 1;
-
-            double newHCost = HCost + 1;
             double GCost = std::sqrt(std::pow(std::abs(endX - x),2) + std::pow(std::abs(endY - (y+1)), 2));
             double FCost = newHCost + GCost;
-
             nodes.push({FCost, newHCost, {x, (y+1)}});
 
             // Map
@@ -309,18 +307,19 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
             // if it equals 0, it does not exist
             if(parents.count({x, (y+1)}) == 0)
             {
-                parents[std::make_pair(x,(y+1))] = {newHCost, {x, (y+1)}};
+                parents[std::make_pair(x,(y+1))] = {newHCost, {x, y}};
             }
             else if(std::get<0>(parents[std::make_pair(x, (y+1))]) > newHCost)
             {
                 // If it does exist, and is lower than etc
-                parents[std::make_pair(x,(y+1))] = {newHCost, {x, (y+1)}};
+                parents[std::make_pair(x,(y+1))] = {newHCost, {x, y}};
             }
 
 
         }
         else if(map[x][y+1] == 3)
         {
+            parents[std::make_pair(x,(y+1))] = {newHCost, {x, y}};
             return true;
         }
     }
@@ -328,14 +327,13 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
     // left
     if((x-1) > -1)
     {
+        double newHCost = HCost + 1;
         if(map[x-1][y] == 0)
         {
             map[x-1][y] = 1;
 
-            double newHCost = HCost + 1;
             double GCost = std::sqrt(std::pow(std::abs(endX - (x-1)),2) + std::pow(std::abs(endY - y), 2));
             double FCost = newHCost + GCost;
-
             nodes.push({FCost, newHCost, {(x-1), y}});
 
             // Map
@@ -343,18 +341,17 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
             // if it equals 0, it does not exist
             if(parents.count({(x-1), y}) == 0)
             {
-                parents[std::make_pair((x-1),y)] = {newHCost, {(x-1), y}};
+                parents[std::make_pair((x-1),y)] = {newHCost, {x, y}};
             }
             else if(std::get<0>(parents[std::make_pair((x-1),y )]) > newHCost)
             {
                 // If it does exist, and is lower than etc
-                parents[std::make_pair((x-1), y)] = {newHCost, {(x-1), y}};
+                parents[std::make_pair((x-1), y)] = {newHCost, {x, y}};
             }
-
-
         }
         else if(map[x-1][y] == 3)
         {
+            parents[std::make_pair((x-1), y)] = {newHCost, {x, y}};
             return true;
         }
     }
@@ -362,14 +359,12 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
     // Left
     if((x+1) < MAP_SIZE)
     {
+        double newHCost = HCost + 1;
         if(map[x+1][y] == 0)
         {
             map[x+1][y] = 1;
-
-            double newHCost = HCost + 1;
             double GCost = std::sqrt(std::pow(std::abs(endX - (x+1)),2) + std::pow(std::abs(endY - y), 2));
             double FCost = newHCost + GCost;
-
             nodes.push({FCost, newHCost, {(x+1), y}});
 
             // Map
@@ -377,22 +372,38 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
             // if it equals 0, it does not exist
             if(parents.count({(x+1), y}) == 0)
             {
-                parents[std::make_pair((x+1),y)] = {newHCost, {(x+1), y}};
+                parents[std::make_pair((x+1),y)] = {newHCost, {x, y}};
             }
             else if(std::get<0>(parents[std::make_pair((x+1),y )]) > newHCost)
             {
                 // If it does exist, and is lower than etc
-                parents[std::make_pair((x+1), y)] = {newHCost, {(x+1), y}};
+                parents[std::make_pair((x+1), y)] = {newHCost, {x, y}};
             }
 
 
         }
         else if(map[x+1][y] == 3)
         {
+            parents[std::make_pair((x+1), y)] = {newHCost, {x, y}};
             return true;
         }
     }
 
     return false;
 
+}
+
+void drawPath(std::pair<int, int> start, std::pair<int, int> end)
+{
+    // Until we find the start point, keep going to parents?
+
+    std::pair<int, int> nextPair = end;
+
+    while((nextPair.first != start.first) && (nextPair.second != start.second))
+    {
+        nextPair = std::get<1>(parents[std::make_pair(nextPair.first, nextPair.second)]);
+
+        map[nextPair.first][nextPair.second] = 4;
+
+    }
 }
