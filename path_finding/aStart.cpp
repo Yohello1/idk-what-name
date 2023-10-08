@@ -25,16 +25,9 @@ sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
 std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map;
-// fCost, x, y
-std::priority_queue<std::tuple<double,int,int>, std::vector<std::tuple<double, int, int>>, aStarComparator> openNodes; // Nodes to be searched
-std::priority_queue<std::tuple<double,int,int>, std::vector<std::tuple<double, int, int>>, aStarComparator> tempList; // Nodes to be searched
-std::map<std::pair<int, int>, std::pair<std::pair<int, int>, int>> closedNodes; // Nodes that have been searched
-bool temp;
 
 void drawMap();
 void generateMap(int drunkards);
-void openNext(std::pair<int, int> start, std::pair<int, int> end);
-bool evaluateSurrondings(std::tuple<double, int, int> point, std::tuple<double, int, int> start, std::tuple<double, int, int> end);
 
 int main()
 {
@@ -71,29 +64,11 @@ int main()
         memset( &map[0][0], 0, sizeof(map) );
     }
     // placing start & end points
-    std::pair<int, int> start, end;
+
     {
         srand(time(0));
         generateMap(100);
 
-        start = {(rand() % MAP_SIZE), (rand() % MAP_SIZE)};
-        end = {(rand() % MAP_SIZE), (rand() % MAP_SIZE)};
-
-        std::cout << "stardIn: " << start.first << ' '  << start.second << std::endl;
-        std::cout << "stardIn: " << end.first << ' '  << end.second << std::endl;
-
-        map[start.first][start.second] = 2;
-        map[end.first][end.second] = 3;
-
-        //std::cout << "No seg fault yet" << std::endl;
-
-        // pathFindBFS(start, end);
-
-        openNodes.push({0, start.first, start.second});
-        // openSurrondings(openNodes.top());
-        evaluateSurrondings(openNodes.top(), {0, start.first, start.second}, {0, end.first, end.second});
-        openNodes.pop();
-        std::cout << "The issue" << std::endl;
     }
 
 
@@ -105,38 +80,10 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-            if(event.type == sf::Event::KeyPressed)
-                if(event.key.code == sf::Keyboard::Enter)
-                {
-
-                }
-
-            if(event.type == sf::Event::KeyPressed)
-                if(event.key.code == sf::Keyboard::Insert)
-                {
-                    while(!openNodes.empty())
-                    {
-                        std::cout << std::get<0>(openNodes.top()) << " " <<  std::get<1>(openNodes.top()) << " " <<  std::get<2>(openNodes.top()) << std::endl;
-                        tempList.push(openNodes.top());
-                        openNodes.pop();
-                    }
-
-                    while(!tempList.empty())
-                    {
-                        openNodes.push(tempList.top());
-                        tempList.pop();
-                    }
-                }
-
         }
         window.clear();
         drawMap();
         window.display();
-
-                    openNext(start, end);
-                    std::cout << openNodes.size() << std::endl;
-
-
 
         // sleep(0.5);
     }
@@ -243,201 +190,3 @@ void generateMap(int drunkards)
         }
     }
 }
-
-void openNext(std::pair<int, int> start, std::pair<int, int> end)
-{
-    if((openNodes.size() != 0) && (temp != true))
-    {
-        temp = evaluateSurrondings(openNodes.top(),{0, start.first, start.second}, {0, end.first, end.second} );
-        openNodes.pop();
-    }
-    else
-    {
-        return;
-    }
-}
-
-bool evaluateSurrondings(std::tuple<double, int, int> point, std::tuple<double, int, int> start, std::tuple<double, int, int> end)
-{
-    int x = std::get<1>(point);
-    int y = std::get<2>(point);
-
-    int startX = std::get<1>(start);
-    int startY = std::get<2>(start);
-    int endX   = std::get<1>(end);
-    int endY   = std::get<2>(end);
-    // Distance = sqrt(abs(x1-x2) + abs(y1-y2))
-
-    // Above
-    if( ( y - 1 ) > -1)
-    {
-        if(map[x][y-1] == 0)
-        {
-            map[x][y-1] = 1;
-
-            // HCost : start, GCost : end
-            double HCost = std::sqrt(std::abs(startX - (x)) + std::abs(startY - (y-1)));
-            double GCost = std::sqrt(std::abs(endX - (x))   + std::abs(endY   - (y-1)));
-            double FCost = HCost + GCost;
-
-            openNodes.push({FCost, x, (y-1)});
-        }
-        else if(map[x][y-1] == 3)
-        {
-            return true;
-        }
-    }
-
-    // Below
-    if( ( y + 1 ) < MAP_SIZE)
-    {
-        if(map[x][y+1] == 0)
-        {
-            map[x][y+1] = 1;
-
-            // HCost : start, GCost : end
-            double HCost = std::sqrt(std::abs(startX - (x)) + std::abs(startY - (y+1)));
-            double GCost = std::sqrt(std::abs(endX   - (x)) + std::abs(endY   - (y+1)));
-            double FCost = HCost + GCost;
-
-            openNodes.push({FCost, x, (y+1)});
-        }
-
-        else if(map[x][y+1] == 3)
-        {
-            return true;
-        }
-    }
-
-    // Left
-    if( ( x - 1 ) > -1 )
-    {
-        if(map[x-1][y] == 0)
-        {
-            map[x-1][y] = 1;
-
-            // HCost : start, GCost : end
-            double HCost = std::sqrt(std::abs(startX - (x - 1)) + std::abs(startY - (y)));
-            double GCost = std::sqrt(std::abs(endX   - (x - 1)) + std::abs(endY   - (y)));
-            double FCost = HCost + GCost;
-
-            openNodes.push({FCost, (x-1), y});
-        }
-
-        else if(map[x-1][y] == 3)
-        {
-            return true;
-        }
-    }
-
-    // right
-    if( ( x + 1 ) < MAP_SIZE )
-    {
-        if(map[x+1][y] == 0)
-        {
-            map[x+1][y] = 1;
-
-            // HCost : start, GCost : end
-            double HCost = std::sqrt(std::abs(startX - (x + 1)) + std::abs(startY - (y)));
-            double GCost = std::sqrt(std::abs(endX   - (x + 1)) + std::abs(endY   - (y)));
-            double FCost = HCost + GCost;
-
-            openNodes.push({FCost, (x+1), y});
-        }
-
-        else if(map[x+1][y] == 3)
-        {
-            return true;
-        }
-    }
-
-
-    // Everything below
-    // 0 . 1
-    // . X .
-    // 2 . 3
-    if(((x-1) > -1) && ((y-1) != -1))
-    {
-        if(map[x-1][y-1] == 0)
-        {
-            map[x-1][y-1] = 1;
-
-            // HCost : start, GCost : end
-            double HCost = std::sqrt(std::abs(startX - (x - 1)) + std::abs(startY - (y-1)));
-            double GCost = std::sqrt(std::abs(endX   - (x - 1)) + std::abs(endY   - (y-1)));
-            double FCost = HCost + GCost;
-
-            openNodes.push({FCost, (x-1), (y-1)});
-        }
-
-        else if(map[x-1][y-1] == 3)
-        {
-            return true;
-        }
-    }
-
-    if(((x+1) < MAP_SIZE) && ((y-1) != -1))
-    {
-        if(map[x+1][y-1] == 0)
-        {
-            map[x+1][y-1] = 1;
-
-            // HCost : start, GCost : end
-            double HCost = std::sqrt(std::abs(startX - (x + 1)) + std::abs(startY - (y-1)));
-            double GCost = std::sqrt(std::abs(endX   - (x + 1)) + std::abs(endY   - (y-1)));
-            double FCost = HCost + GCost;
-
-            openNodes.push({FCost, (x+1), (y-1)});
-        }
-
-        else if(map[x+1][y-1] == 3)
-        {
-            return true;
-        }
-    }
-
-
-    if(((x-1) > -1) && ((y+1) != MAP_SIZE))
-    {
-        if(map[x-1][y+1] == 0)
-        {
-            map[x-1][y+1] = 1;
-
-            // HCost : start, GCost : end
-            double HCost = std::sqrt(std::abs(startX - (x - 1)) + std::abs(startY - (y+1)));
-            double GCost = std::sqrt(std::abs(endX   - (x - 1)) + std::abs(endY   - (y+1)));
-            double FCost = HCost + GCost;
-
-            openNodes.push({FCost, (x-1), (y+1)});
-        }
-
-        else if(map[x-1][y+1] == 3)
-        {
-            return true;
-        }
-    }
-
-        if(((x+1) > -1) && ((y+1) != MAP_SIZE))
-    {
-        if(map[x+1][y+1] == 0)
-        {
-            map[x+1][y+1] = 1;
-
-            // HCost : start, GCost : end
-            double HCost = std::sqrt(std::abs(startX - (x + 1)) + std::abs(startY - (y+1)));
-            double GCost = std::sqrt(std::abs(endX   - (x + 1)) + std::abs(endY   - (y+1)));
-            double FCost = HCost + GCost;
-
-            openNodes.push({FCost, (x+1), (y+1)});
-        }
-
-        else if(map[x+1][y+1] == 3)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
