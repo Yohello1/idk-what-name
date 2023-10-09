@@ -69,7 +69,6 @@ int main()
         memset( &map[0][0], 0, sizeof(map) );
     }
 
-    std::cout << "Basic stuff done" << std::endl;
     // placing start & end points
     std::pair<int, int> start, end;
     {
@@ -81,11 +80,6 @@ int main()
         end.first    = (rand() %  MAP_SIZE);
         end.second   = (rand() %  MAP_SIZE);
 
-        // start.first  = 20;
-        // start.second = 60;
-        // end.first    = 20;
-        // end.second   = 20;
-
         map[start.first][start.second] = 2;
         map[end.first]  [end.second]   = 3;
 
@@ -93,26 +87,58 @@ int main()
         evaluateNeighbours({0, (std::sqrt(std::abs(start.first - end.first) + std::abs(start.second - end.second))), {start.first, start.second}}, end);
     }
 
-    std::cout << "Now theyre in my head" << std::endl;
     bool found = false;
 
+
+    int currentPoint = 0;
+    auto startT = std::chrono::high_resolution_clock::now();
 
     while (window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
+             if (event.type == sf::Event::Closed)
+                 window.close();
         }
 
-
-        if(found == true)
+        if(nodes.size() == 0)
         {
-            std::cout << "Found" << std::endl;
-            if(drawn == false)
+            found = true;
+            std::cout << "NOTHING";
+            break;
+        }
+        else if(found == true)
+        {
+            if(currentPoint < 50)
             {
-                drawPath(start, end);
+                start.first  = (rand() %  MAP_SIZE);
+                start.second = (rand() %  MAP_SIZE);
+
+                while(!nodes.empty())
+                {
+                    nodes.pop();
+                }
+                parents.clear();
+
+                // Clearing the map
+                for(int xPos = 0; xPos < MAP_SIZE; xPos++)
+                {
+                    for(int yPos = 0; yPos < MAP_SIZE; yPos++)
+                    {
+                        if(map[xPos][yPos] == 1 || map[xPos][yPos] == 4 || map[xPos][yPos] == 2)
+                        {
+                            map[xPos][yPos] = 0;
+                        }
+                    }
+                }
+
+                parents[std::make_pair(start.first,start.second)] = {0, {start.first, start.second}};
+                evaluateNeighbours({0, (std::sqrt(std::abs(start.first - end.first) + std::abs(start.second - end.second))), {start.first, start.second}}, end);
+                map[start.first][start.second] = 2;
+                std::cout << "Size " << nodes.size();
+
+                found = false;
             }
         }
         else
@@ -128,6 +154,10 @@ int main()
 
         sleep(0.05);
     }
+
+    auto elapsedT = std::chrono::high_resolution_clock::now() - startT;
+    long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedT).count();
+    std::cout << microseconds << std::endl;
 
     return 0;
 }
