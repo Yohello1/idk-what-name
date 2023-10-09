@@ -32,6 +32,7 @@ void drawBoids();
 int avgSpeed(int index, int group);
 std::pair<int, int> avgPoint(int index, int group);
 
+#include "randomStuff/BFSmap.hpp"
 
 int main()
 {
@@ -74,9 +75,11 @@ int main()
     {
         srand(time(0));
         generateMap(100);
-        map[rand() % 128][rand() % 128] = 2;
+        std::pair<int, int> start = {(rand() % 128), (rand() % 128)};
+        map[start.first][start.second] = 2;
         map[rand() % 128][rand() % 128] = 3;
 
+        closeOpenSpaces(start);
         generateBoids();
 
     }

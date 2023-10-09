@@ -1,6 +1,6 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = BFSmap.cpp
-OBFILES = BFSmap.o
+OBJS = boids.cpp
+OBFILES = boids.o
 
 #CC specifies which compiler we're using
 CC = g++
