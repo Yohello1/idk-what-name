@@ -17,13 +17,12 @@ sf::Sprite unvisted, visited, start, end, path, wall;
 
 std::array<std::array<int, 128>, 128> map;
 std::queue<std::pair<int,int>> openNodes;
-std::set<std::pair<int,  int>> closedNodes;
 
 void drawMap();
 void generateMap(int drunkards);
 void closeOpenSpaces(std::pair<int, int> start);
 void openNext();
-bool openSurrondings(std::pair<int,int> point);
+bool BFSopenSurrondings(std::pair<int,int> point);
 bool temp;
 
 int main()
@@ -73,7 +72,7 @@ int main()
 
 
         // openNodes.push(start);
-        // openSurrondings(openNodes.front());
+        // BFSopenSurrondings(openNodes.front());
         // openNodes.pop();
 
         closeOpenSpaces(start);
@@ -202,17 +201,18 @@ void generateMap(int drunkards)
     }
 }
 
+std::queue<std::pair<int,int>> openNodesBFS;
 void closeOpenSpaces(std::pair<int, int> start)
 {
-    openNodes.push(start);
-    openSurrondings(openNodes.front());
-    openNodes.pop();
+    openNodesBFS.push(start);
+    BFSopenSurrondings(openNodesBFS.front());
+    openNodesBFS.pop();
 
     bool success = false;
-    while((openNodes.size() > 0) && (success == false))
+    while((openNodesBFS.size() > 0) && (success == false))
     {
-        success = openSurrondings(openNodes.front());
-        openNodes.pop();
+        success = BFSopenSurrondings(openNodesBFS.front());
+        openNodesBFS.pop();
     }
 
     if(!success)
@@ -231,27 +231,24 @@ void closeOpenSpaces(std::pair<int, int> start)
         }
     }
 
-}
-
-void openNext()
-{
-    if((openNodes.size() != 0) && (temp == false))
+    for(int i = 0; i < MAP_SIZE; i++)
     {
-
-        if(openSurrondings(openNodes.front()))
+        for(int j = 0; j < MAP_SIZE; j++)
         {
-            std::cout << "Found node" << std::endl;
-            temp = true;
+            if(map[i][j] == 1)
+            {
+                map[i][j] = 0;
+            }
         }
-        openNodes.pop();
     }
-    else
+
+    while(!openNodesBFS.empty())
     {
-        return;
+        openNodesBFS.pop();
     }
 }
 
-bool openSurrondings(std::pair<int, int> point)
+bool BFSopenSurrondings(std::pair<int, int> point)
 {
     int x = point.first;
     int y = point.second;
@@ -262,7 +259,7 @@ bool openSurrondings(std::pair<int, int> point)
         if(map[x][y-1] == 0)
         {
             map[x][y-1] = 1;
-            openNodes.push({x, (y-1)});
+            openNodesBFS.push({x, (y-1)});
         }
         else if(map[x][y-1] == 3)
         {
@@ -276,7 +273,7 @@ bool openSurrondings(std::pair<int, int> point)
         if(map[x][y+1] == 0)
         {
             map[x][y+1] = 1;
-            openNodes.push({x, (y+1)});
+            openNodesBFS.push({x, (y+1)});
         }
 
         else if(map[x][y+1] == 3)
@@ -291,7 +288,7 @@ bool openSurrondings(std::pair<int, int> point)
         if(map[x-1][y] == 0)
         {
             map[x-1][y] = 1;
-            openNodes.push({(x-1), y});
+            openNodesBFS.push({(x-1), y});
         }
 
         else if(map[x-1][y] == 3)
@@ -306,7 +303,7 @@ bool openSurrondings(std::pair<int, int> point)
         if(map[x+1][y] == 0)
         {
             map[x+1][y] = 1;
-            openNodes.push({(x+1), y});
+            openNodesBFS.push({(x+1), y});
         }
 
         else if(map[x+1][y] == 3)
