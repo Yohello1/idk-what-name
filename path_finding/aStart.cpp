@@ -73,7 +73,7 @@ int main()
     std::pair<int, int> start, end;
     {
         srand(time(0));
-        generateMap(100);
+        generateMap(200);
 
         start.first  = (rand() %  MAP_SIZE);
         start.second = (rand() %  MAP_SIZE);
@@ -116,7 +116,7 @@ int main()
             window.display();
             sleep(2);
             // 49 boids per one point?
-            if(currentPoint < 250)
+            if(currentPoint < 50)
             {
                 start.first  = (rand() %  MAP_SIZE);
                 start.second = (rand() %  MAP_SIZE);
@@ -158,7 +158,7 @@ int main()
         drawMap();
         window.display();
 
-        sleep(0.05);
+        // sleep(0.05);
     }
 
     auto elapsedT = std::chrono::high_resolution_clock::now() - startT;
@@ -434,12 +434,21 @@ void drawPath(std::pair<int, int> start, std::pair<int, int> end)
     // Until we find the start point, keep going to parents?
 
     std::pair<int, int> nextPair = end;
+    bool donePath = false;
+    int i = 0;
 
-    while((nextPair.first != start.first) && (nextPair.second != start.second))
+    while(!donePath)
     {
         nextPair = std::get<1>(parents[std::make_pair(nextPair.first, nextPair.second)]);
 
         map[nextPair.first][nextPair.second] = 4;
+        i++;
+
+        if((nextPair.first == start.first) && (nextPair.second == start.second))
+        {
+            donePath = true;
+        }
 
     }
+
 }

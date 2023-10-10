@@ -5,32 +5,49 @@
 #include <iostream>
 #include <cstring>
 #include <random>
+#include <cmath>
 
 #define MAP_SIZE 128
+#define BIRD_AMT 500
 
-struct bird
+class bird
 {
+    public:
     std::pair<int, int> cord;
     int rotation = 0;
     int velocity = 0;
+    std::queue<int> birdsToEval;
+
+    void birdsInRange(bird boids[BIRD_AMT], int range)
+    {
+        while(!birdsToEval.empty())
+        {
+            birdsToEval.pop();
+        }
+
+        for(int i = 0; i < BIRD_AMT; i++)
+        {
+            double distance = ((std::pow(std::abs(cord.first - boids[i].cord.first), 2)) +  (std::pow(std::abs(cord.second - boids[i].cord.second), 2)));
+
+            if(distance < range)
+            {
+                birdsToEval.push(i);
+            }
+        }
+    }
 };
-
-
-
 
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
 std::array<std::array<int, 128>, 128> map;
-std::array<std::array<bird, 49>, 5> boids;
+std::array<bird, 500> boids;
 
 void drawMap();
 void generateMap(int drunkards);
 void generateBoids();
 void drawBoids();
-int avgSpeed(int index, int group);
-std::pair<int, int> avgPoint(int index, int group);
 
 #include "randomStuff/BFSmap.hpp"
 
@@ -204,58 +221,28 @@ void generateMap(int drunkards)
     }
 }
 
-// index (current point), group
-std::pair<int, int> avgPoint(int index, int group)
-{
-    // Find the delta position
-    std::pair<int, int> avgPosition;
-    avgPosition.first = avgPosition.second = 0;
-
-
-    for(int i = 0; i < 49; i++)
-    {
-        if(i != index)
-        {
-            avgPosition.first  += boids[group][i].cord.first;
-            avgPosition.second += boids[group][i].cord.second;
-        }
-    }
-
-    avgPosition.first  /= 48;
-    avgPosition.second /= 48;
-
-    return avgPosition;
-}
-
-// index (current point), group
-int avgSpeed(int index, int group)
-{
-    int avgVelocity = 0;
-
-    for(int i = 0; i < 49; i++)
-    {
-        if(i != index)
-        {
-            avgVelocity  += boids[group][i].velocity;
-        }
-    }
-
-    avgVelocity /= 48;
-
-    return avgVelocity;
-}
-
 void generateBoids()
 {
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 500; i++)
     {
-        for(int j = 0; j < 49; j++)
-        {
-            boids[i][j].cord.first = (rand() % 128);
-            boids[i][j].cord.second = (rand() % 128);
 
-            boids[i][j].rotation = (rand() % 360);
-            boids[i][j].velocity = (rand() % 5);
+        bool foundBoids = false;
+        std::pair<int, int> point = {(rand() % 128), (rand() % 128)};
+        while(foundBoids != true)
+        {
+            if(map[point.first][point.second] == 0)
+            {
+                boids[i].cord.first = point.first;
+                boids[i].cord.second = point.second;
+
+                boids[i].rotation = (rand() % 360);
+                boids[i].velocity = (rand() % 5);
+                foundBoids = true;
+            }
+            else
+            {
+                point = {(rand() % 128), (rand() % 128)};
+            }
         }
     }
 }
@@ -263,12 +250,10 @@ void generateBoids()
 // Note, must be drawn AFTER map is drawn :)
 void drawBoids()
 {
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 500; i++)
     {
-        for(int j = 0; j < 49; j++)
-        {
-            path.setPosition(boids[i][j].cord.first*8,boids[i][j].cord.second*8);
-            window.draw(path);
-        }
+
+        path.setPosition(boids[i].cord.first*8,boids[i].cord.second*8);
+        window.draw(path);
     }
 }

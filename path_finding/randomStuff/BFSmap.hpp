@@ -77,7 +77,7 @@ void closeOpenSpaces(std::pair<int, int> start)
     {
         BFSopenSurrondings(openNodesBFS.front());
         openNodesBFS.pop();
-        std::cout << "Size: " << openNodesBFS.size() << std::endl;
+        // std::cout << "Size: " << openNodesBFS.size() << std::endl;
     }
 
 
