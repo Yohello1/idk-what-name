@@ -74,11 +74,11 @@ int main()
 
         //std::cout << "No seg fault yet" << std::endl;
 
-        // pathFindAStar(start, end);
+        pathFindAStar(start, end);
 
-        openNodes.push(start);
-        openSurrondings(openNodes.front());
-        openNodes.pop();
+        // openNodes.push(start);
+        // openSurrondings(openNodes.front());
+        // openNodes.pop();
         std::cout << "The issue" << std::endl;
     }
 
@@ -97,7 +97,7 @@ int main()
         window.display();
 
         //sleep(0.01);
-        openNext();
+        // openNext();
     }
 
     return 0;
