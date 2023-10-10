@@ -73,7 +73,7 @@ int main()
     std::pair<int, int> start, end;
     {
         srand(time(0));
-        generateMap(50);
+        generateMap(100);
 
         start.first  = (rand() %  MAP_SIZE);
         start.second = (rand() %  MAP_SIZE);
@@ -110,6 +110,11 @@ int main()
         }
         else if(found == true)
         {
+
+            drawPath(start, end);
+            drawMap();
+            window.display();
+            sleep(2);
             // 49 boids per one point?
             if(currentPoint < 250)
             {
@@ -387,7 +392,7 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
         }
     }
 
-    // Left
+    // right
     if((x+1) < MAP_SIZE)
     {
         double newHCost = HCost + 1;
