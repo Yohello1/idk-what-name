@@ -110,8 +110,7 @@ int main()
         }
         else if(found == true)
         {
-            // 49 boids per one point?
-            if(currentPoint < 250)
+            if(currentPoint < 50)
             {
                 start.first  = (rand() %  MAP_SIZE);
                 start.second = (rand() %  MAP_SIZE);
