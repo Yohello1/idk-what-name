@@ -7,7 +7,7 @@ CC = g++
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS = -g -Wall 
+COMPILER_FLAGS = -Wall -g
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
@@ -17,7 +17,7 @@ OBJ_NAME = draw2
 
 #This is the target that compiles our executable
 all : $(OBJS)
-	$(CC) -c -g $(OBJS)
+	$(CC) $(COMPILER_FLAGS) -c $(OBJS)
 	$(CC) $(OBFILES) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 #	./draw2
  

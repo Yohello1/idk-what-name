@@ -244,22 +244,22 @@ void generateMap(int drunkards)
             // 3 # 1
             // X 2 X
             int randInt = rand() % 4;
-            if(randInt == 0 && y_pos > 0)
+            if(randInt == 0 && y_pos-1 > 0)
             {
                 y_pos -= 1;
             }
 
-            if(randInt == 1 && x_pos <  MAP_SIZE)
+            if(randInt == 1 && x_pos+1 <  MAP_SIZE)
             {
                 x_pos += 1;
             }
 
-            if(randInt == 2 && y_pos <  MAP_SIZE)
+            if(randInt == 2 && y_pos+1 <  MAP_SIZE)
             {
                 y_pos += 1;
             }
 
-            if(randInt == 3 && x_pos > 0)
+            if(randInt == 3 && x_pos-1 > 0)
             {
                 x_pos -= 1;
             }
