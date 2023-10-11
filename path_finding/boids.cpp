@@ -6,6 +6,7 @@
 #include <cstring>
 #include <random>
 #include <cmath>
+#include <unistd.h>
 
 #define MAP_SIZE 128
 #define BIRD_AMT 500
@@ -36,9 +37,8 @@ class bird
         int yChange = std::round((std::sin(rotation*3.14/180)*velocity));
         int xChange = std::round((std::cos(rotation*3.14/180)*velocity));
 
-        std::cout << "not yet failed" << std::endl;
 
-        if((-1 < (xChange + cord.first))  && ( yChange + cord.second < MAP_SIZE))
+        if((0 < (xChange + cord.first))  && ( xChange + cord.first < (MAP_SIZE-1)))
         {
             if(map[(xChange + cord.first)][cord.second] != 5)
             {
@@ -46,45 +46,32 @@ class bird
             }
         }
 
-        std::cout << "dead" << std::endl;
 
-        if((-1 < (yChange + cord.second))  && ( yChange + cord.second < MAP_SIZE))
+        if((0 < (yChange + cord.second))  && ( yChange + cord.second < (MAP_SIZE-1)))
         {
             if(map[cord.first][cord.second + yChange] != 5)
             {
                 cord.second = yChange + cord.second;
             }
         }
-
-        std::cout << "dead p2" << std::endl;
-
         velocity += acceleration;
-
-        std::cout << "velocity" << std::endl;
         
     }
 
     void birdsInRange(bird boids[], int range)
     {
-        std::cout << "quebec" << std::endl;
         while(!birdsToEval.empty())
         {
             birdsToEval.clear();
         }
 
-        std::cout << "montreal" << std::endl;
-
         for(int i = 0; i < BIRD_AMT; i++)
         {
             double distance = ((std::pow(std::abs(cord.first - boids[i].cord.first), 2)) +  (std::pow(std::abs(cord.second - boids[i].cord.second), 2)));
-            std::cout << "protocol" << std::endl;
             if(distance < range)
             {
-                std::cout << "paris" << std::endl;
                 // std::cout << "Bordy in range uwu" << " " << i << std::endl;
                 birdsToEval.push_back(3);
-
-                std::cout << "wawa" << std::endl;
             }
         }
     }
@@ -158,16 +145,8 @@ int main()
 
         for(int i = 0; i < BIRD_AMT; i++)
         {
-            std::cout << "owo" << std::endl;
-
             boids[i].birdsInRange(boids, 500);
-
-            std::cout << "french" << std::endl;
-
             boids[i].velocity = 3;
-
-            std::cout << "uwu" << std::endl;
-
             boids[i].update();
         }
 
@@ -186,13 +165,14 @@ int main()
 
         for(int i = 0; i < BIRD_AMT; i++)
         {
-            // std::cout << "ran" << i << std::endl;
-            // boids[i].update();
+            std::cout << "ran" << i << std::endl;
+            boids[i].update();
         }
 
         drawMap();
         drawBoids();
         window.display();
+        sleep(0.05);
     }
 
     return 0;
