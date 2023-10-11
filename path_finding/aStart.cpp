@@ -234,7 +234,7 @@ void generateMap(int drunkards)
     for(int i = 0; i < drunkards; i++)
     {
         // generate the spawn point
-        int x_pos = rand() % MAP_SIZE, y_pos = rand() %  MAP_SIZE;
+        int x_pos = rand() % (MAP_SIZE-1), y_pos = rand() %  (MAP_SIZE-1);
 
         for(int j = 0; j < 50; j++)
         {

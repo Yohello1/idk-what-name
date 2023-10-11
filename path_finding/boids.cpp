@@ -10,39 +10,96 @@
 #define MAP_SIZE 128
 #define BIRD_AMT 500
 
+class bird;
+sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
+sf::Texture texture;
+sf::Sprite unvisted, visited, start, end, path, wall;
+
+std::array<std::array<int, 128>, 128> map;
 class bird
 {
     public:
     std::pair<int, int> cord;
     int rotation = 0;
     int velocity = 0;
-    std::queue<int> birdsToEval;
+    int acceleration = 0;
+    std::vector<int> birdsToEval;
 
-    void birdsInRange(bird boids[BIRD_AMT], int range)
+    void update()
     {
+        // ok do da monster math to figure out direction;
+        // y = round((sin(Θ*180/pi)*vel.y))
+        // x = round((cos(Θ*180/pi)*vel.y))
+
+        rotation = rotation % 360;
+
+        int yChange = std::round((std::sin(rotation*3.14/180)*velocity));
+        int xChange = std::round((std::cos(rotation*3.14/180)*velocity));
+
+        std::cout << "not yet failed" << std::endl;
+
+        if((-1 < (xChange + cord.first))  && ( yChange + cord.second < MAP_SIZE))
+        {
+            if(map[(xChange + cord.first)][cord.second] != 5)
+            {
+                cord.first = xChange + cord.first;
+            }
+        }
+
+        std::cout << "dead" << std::endl;
+
+        if((-1 < (yChange + cord.second))  && ( yChange + cord.second < MAP_SIZE))
+        {
+            if(map[cord.first][cord.second + yChange] != 5)
+            {
+                cord.second = yChange + cord.second;
+            }
+        }
+
+        std::cout << "dead p2" << std::endl;
+
+        velocity += acceleration;
+
+        std::cout << "velocity" << std::endl;
+        
+    }
+
+    void birdsInRange(bird boids[], int range)
+    {
+        std::cout << "quebec" << std::endl;
         while(!birdsToEval.empty())
         {
-            birdsToEval.pop();
+            birdsToEval.clear();
         }
+
+        std::cout << "montreal" << std::endl;
 
         for(int i = 0; i < BIRD_AMT; i++)
         {
             double distance = ((std::pow(std::abs(cord.first - boids[i].cord.first), 2)) +  (std::pow(std::abs(cord.second - boids[i].cord.second), 2)));
-
+            std::cout << "protocol" << std::endl;
             if(distance < range)
             {
-                birdsToEval.push(i);
+                std::cout << "paris" << std::endl;
+                // std::cout << "Bordy in range uwu" << " " << i << std::endl;
+                birdsToEval.push_back(3);
+
+                std::cout << "wawa" << std::endl;
             }
+        }
+    }
+
+
+    void cohesionBirds()
+    {
+        for(int i = 0; i < birdsToEval.size(); i++)
+        {
+
         }
     }
 };
 
-sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
-sf::Texture texture;
-sf::Sprite unvisted, visited, start, end, path, wall;
-
-std::array<std::array<int, 128>, 128> map;
-std::array<bird, 500> boids;
+bird boids[500];
 
 void drawMap();
 void generateMap(int drunkards);
@@ -90,7 +147,7 @@ int main()
 
     // placing start & end points
     {
-        srand(time(0));
+        srand(100);
         generateMap(100);
         std::pair<int, int> start = {(rand() % 128), (rand() % 128)};
         map[start.first][start.second] = 2;
@@ -98,6 +155,21 @@ int main()
 
         closeOpenSpaces(start);
         generateBoids();
+
+        for(int i = 0; i < BIRD_AMT; i++)
+        {
+            std::cout << "owo" << std::endl;
+
+            boids[i].birdsInRange(boids, 500);
+
+            std::cout << "french" << std::endl;
+
+            boids[i].velocity = 3;
+
+            std::cout << "uwu" << std::endl;
+
+            boids[i].update();
+        }
 
     }
 
@@ -111,6 +183,12 @@ int main()
                 window.close();
         }
         window.clear();
+
+        for(int i = 0; i < BIRD_AMT; i++)
+        {
+            // std::cout << "ran" << i << std::endl;
+            // boids[i].update();
+        }
 
         drawMap();
         drawBoids();
@@ -187,7 +265,7 @@ void generateMap(int drunkards)
     for(int i = 0; i < drunkards; i++)
     {
         // generate the spawn point
-        int x_pos = rand() % 128, y_pos = rand() % 128;
+        int x_pos = rand() % 127, y_pos = rand() % 127;
 
         for(int j = 0; j < 50; j++)
         {
@@ -197,22 +275,22 @@ void generateMap(int drunkards)
             // 3 # 1
             // X 2 X
             int randInt = rand() % 4;
-            if(randInt == 0 && y_pos > 0)
+            if(randInt == 0 && (y_pos-1) > 0)
             {
                 y_pos -= 1;
             }
 
-            if(randInt == 1 && x_pos < 128)
+            if(randInt == 1 && (x_pos+1) < 128)
             {
                 x_pos += 1;
             }
 
-            if(randInt == 2 && y_pos < 128)
+            if(randInt == 2 && (y_pos+1) < 128)
             {
                 y_pos += 1;
             }
 
-            if(randInt == 3 && x_pos > 0)
+            if(randInt == 3 && (x_pos-1) > 0)
             {
                 x_pos -= 1;
             }
