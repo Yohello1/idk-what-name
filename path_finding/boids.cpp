@@ -10,16 +10,19 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 100
+#define BIRD_AMT 800
+
 
 class bird;
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
-float maxSpeed = 5, minSpeed = 3;
-double centeringFactor = 0.1;
+float maxSpeed = 4, minSpeed = 3;
+double centeringFactor = 0.5;
 double matchingFactor = 1;
+double turnFactor = 5;
+double avoidanceFactor = 0.4;
 
 std::array<std::array<int, 128>, 128> map;
 
@@ -51,8 +54,8 @@ class bird
 
     void cohesionBirds(std::array<bird, BIRD_AMT> boids)
     {
-        int xAvgPos = 0, xDist;
-        int yAvgPos = 0, yDist;
+        float xAvgPos = 0, xDist;
+        float yAvgPos = 0, yDist;
 
         bool calcVal = false;
 
@@ -86,10 +89,10 @@ class bird
     void seperationBirds(std::array<bird, BIRD_AMT> boids)
     {
         // first find birds within X radius
-        birdsInRange(boids, 300);
+        birdsInRange(boids, 100);
 
-        int xAvgPos = 0, xDist;
-        int yAvgPos = 0, yDist;
+        float xAvgPos = 0, xDist = 0;
+        float yAvgPos = 0, yDist = 0;
 
         bool calcVal = false;
 
@@ -115,8 +118,8 @@ class bird
 
         if(calcVal == true)
         {
-            velocity.first  += xDist*0.5*-1;
-            velocity.second += yDist*0.5*-1;
+            velocity.first  += xDist*avoidanceFactor*-1;
+            velocity.second += yDist*avoidanceFactor*-1;
         }
 
         // std::cout << "SIZE: " << birdsToEval.size() <<  std::endl;
@@ -147,10 +150,27 @@ class bird
         }
     }
 
+    void screenEdges()
+    {
+        if(cord.first < 5)
+            velocity.first += turnFactor;
+        if(cord.first > (MAP_SIZE - 5))
+            velocity.first -= turnFactor;
+        if(cord.second < 5)
+            velocity.second += turnFactor;
+        if(cord.second > (MAP_SIZE - 5))
+            velocity.second -= turnFactor;
+    }
+
+    void collisionAvoidance()
+    {
+
+    }
+
     void update(std::array<bird, BIRD_AMT> boids)
     {
-        int yChange = velocity.first;
-        int xChange = velocity.second;
+        float yChange = velocity.first;
+        float xChange = velocity.second;
         if((0 < (xChange + cord.first))  && ( xChange + cord.first < (MAP_SIZE-1)))
         {
             cord.first += velocity.first;
@@ -167,6 +187,8 @@ class bird
 
         cohesionBirds(boids);
         alignBirds(boids);
+        collisionAvoidance();
+        screenEdges();
 
         // NOTE: SEPERATION MUST BE RUN AT THE END!!!
         seperationBirds(boids);
@@ -236,7 +258,7 @@ int main()
 
     // placing start & end points
     {
-        srand(800);
+        srand(time(0));
         generateMap(100);
         std::pair<int, int> start = {(rand() % 128), (rand() % 128)};
         map[start.first][start.second] = 2;
@@ -270,10 +292,10 @@ int main()
             boids[i].update(boids);
         }
 
-        drawMap();
+        // drawMap();
         drawBoids();
         window.display();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000/15));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1000/60));
     }
 
     return 0;
@@ -410,7 +432,7 @@ void generateBoids()
 void drawBoids()
 {
     sf::CircleShape shape(2);
-    shape.setFillColor(sf::Color(255,0,0));
+    shape.setFillColor(sf::Color(13,114,214));
 
     for(int i = 0; i < BIRD_AMT; i++)
     {
