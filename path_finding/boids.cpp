@@ -17,48 +17,17 @@ sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
 std::array<std::array<int, 128>, 128> map;
+
 class bird
 {
     public:
-    std::pair<int, int> cord;
-    int rotation = 0;
-    int velocity = 0;
-    int acceleration = 0;
+    std::pair<float, float> cord;
+    std::pair<float, float> velocity;
     std::vector<int> birdsToEval;
-
-    void update()
-    {
-        // ok do da monster math to figure out direction;
-        // y = round((sin(Θ*180/pi)*vel.y))
-        // x = round((cos(Θ*180/pi)*vel.y))
-
-        rotation = rotation % 360;
-
-        int yChange = std::round((std::sin(rotation*3.14/180)*velocity));
-        int xChange = std::round((std::cos(rotation*3.14/180)*velocity));
+    double centeringFactor = 0.1;
 
 
-        if((0 < (xChange + cord.first))  && ( xChange + cord.first < (MAP_SIZE-1)))
-        {
-            if(map[(xChange + cord.first)][cord.second] != 5)
-            {
-                cord.first = xChange + cord.first;
-            }
-        }
-
-
-        if((0 < (yChange + cord.second))  && ( yChange + cord.second < (MAP_SIZE-1)))
-        {
-            if(map[cord.first][cord.second + yChange] != 5)
-            {
-                cord.second = yChange + cord.second;
-            }
-        }
-        velocity += acceleration;
-        
-    }
-
-    void birdsInRange(bird boids[], int range)
+    void birdsInRange(std::array<bird, 500> boids, int range)
     {
         while(!birdsToEval.empty())
         {
@@ -71,22 +40,81 @@ class bird
             if(distance < range)
             {
                 // std::cout << "Bordy in range uwu" << " " << i << std::endl;
-                birdsToEval.push_back(3);
+                birdsToEval.push_back(i);
             }
         }
     }
 
 
-    void cohesionBirds()
+    void cohesionBirds(std::array<bird, 500> boids)
     {
-        for(int i = 0; i < birdsToEval.size(); i++)
-        {
+        int xAvgPos = 0, xDist;
+        int yAvgPos = 0, yDist;
 
+        bool calcVal = false;
+
+        for(int i = 0; (uint) i < birdsToEval.size(); i++)
+        {
+            xAvgPos += boids[birdsToEval.at(i)].cord.first;
+            yAvgPos += boids[birdsToEval.at(i)].cord.second;
         }
+
+        if(xAvgPos > 0)
+        {
+            xAvgPos = xAvgPos / birdsToEval.size();
+            xDist = xAvgPos - cord.first;
+            calcVal = true;
+        }
+
+        if(yAvgPos > 0)
+        {
+            yAvgPos = yAvgPos / birdsToEval.size();
+            yDist = yAvgPos - cord.second;
+            calcVal = true;
+        }
+
+        if(calcVal == true)
+        {
+            velocity.first  = xDist*centeringFactor;
+            velocity.second = yDist*centeringFactor;
+        }
+
+
+
+
+    }
+
+
+    void update(std::array<bird, 500> boids)
+    {
+        // ok do da monster math to figure out direction;
+        // y = round((sin(Θ*180/pi)*vel.y))
+        // x = round((cos(Θ*180/pi)*vel.y))
+
+
+        int yChange = velocity.first;
+        int xChange = velocity.second;
+
+
+        if((0 < (xChange + cord.first))  && ( xChange + cord.first < (MAP_SIZE-1)))
+        {
+            cord.first += velocity.first;
+        }
+
+
+        if((0 < (yChange + cord.second))  && ( yChange + cord.second < (MAP_SIZE-1)))
+        {
+            cord.second += velocity.second;
+        }
+
+        birdsInRange(boids, 500);
+
+        cohesionBirds(boids);
+
     }
 };
 
-bird boids[500];
+std::array<bird, 500> boids;
 
 void drawMap();
 void generateMap(int drunkards);
@@ -146,8 +174,8 @@ int main()
         for(int i = 0; i < BIRD_AMT; i++)
         {
             boids[i].birdsInRange(boids, 500);
-            boids[i].velocity = 3;
-            boids[i].update();
+            boids[i].velocity = {rand() % 2, rand() % 2};
+            // boids[i].update(boids);
         }
 
     }
@@ -165,14 +193,14 @@ int main()
 
         for(int i = 0; i < BIRD_AMT; i++)
         {
-            std::cout << "ran" << i << std::endl;
-            boids[i].update();
+            // std::cout << "ran " << boids[i].velocity << std::endl;
+            boids[i].update(boids);
         }
 
         drawMap();
         drawBoids();
         window.display();
-        sleep(0.05);
+        sleep(.1);
     }
 
     return 0;
@@ -293,8 +321,8 @@ void generateBoids()
                 boids[i].cord.first = point.first;
                 boids[i].cord.second = point.second;
 
-                boids[i].rotation = (rand() % 360);
-                boids[i].velocity = (rand() % 5);
+                // boids[i].rotation = (rand() % 360);
+                // boids[i].velocity = (rand() % 5);
                 foundBoids = true;
             }
             else
@@ -308,10 +336,13 @@ void generateBoids()
 // Note, must be drawn AFTER map is drawn :)
 void drawBoids()
 {
+    sf::CircleShape shape(2);
+    shape.setFillColor(sf::Color(255,0,0));
+
     for(int i = 0; i < 500; i++)
     {
-
-        path.setPosition(boids[i].cord.first*8,boids[i].cord.second*8);
-        window.draw(path);
+        // std::cout << "Drawing point " << boids[i].cord.first*8 << " " <<  boids[i].cord.second*8 << std::endl;
+        shape.setPosition(boids[i].cord.first*8, boids[i].cord.second*8);
+        window.draw(shape);
     }
 }
