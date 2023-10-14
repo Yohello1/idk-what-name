@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 500
+#define BIRD_AMT 100
 
 class bird;
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
@@ -18,6 +18,8 @@ sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
 float maxSpeed = 5, minSpeed = 3;
+double centeringFactor = 0.1;
+double matchingFactor = 1;
 
 std::array<std::array<int, 128>, 128> map;
 
@@ -27,7 +29,6 @@ class bird
     std::pair<float, float> cord;
     std::pair<float, float> velocity;
     std::vector<int> birdsToEval;
-    double centeringFactor = 0.1;
 
 
     void birdsInRange(std::array<bird, BIRD_AMT> boids, int range)
@@ -123,7 +124,27 @@ class bird
 
     void alignBirds(std::array<bird, BIRD_AMT> boids)
     {
+        // get avg velocity
+        float xVelAvg = 0;
+        float yVelAvg = 0;
 
+        for(int i = 0; (uint) i < birdsToEval.size(); i++)
+        {
+            xVelAvg += boids[birdsToEval.at(i)].velocity.first;
+            yVelAvg += boids[birdsToEval.at(i)].velocity.second;
+        }
+
+        if(birdsToEval.size() > 0)
+        {
+            xVelAvg /= birdsToEval.size();
+            yVelAvg /= birdsToEval.size();
+        }
+
+        if(birdsToEval.size() > 0)
+        {
+            velocity.first += (xVelAvg - velocity.first)*matchingFactor;
+            velocity.second += (yVelAvg - velocity.second)*matchingFactor;
+        }
     }
 
     void update(std::array<bird, BIRD_AMT> boids)
@@ -142,9 +163,10 @@ class bird
         velocity.first = 0;
         velocity.second = 0;
 
-        birdsInRange(boids, 100);
+        birdsInRange(boids, 500);
 
         cohesionBirds(boids);
+        alignBirds(boids);
 
         // NOTE: SEPERATION MUST BE RUN AT THE END!!!
         seperationBirds(boids);
@@ -251,7 +273,7 @@ int main()
         drawMap();
         drawBoids();
         window.display();
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000/30));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000/15));
     }
 
     return 0;
