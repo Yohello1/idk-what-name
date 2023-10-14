@@ -10,12 +10,14 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 1000
+#define BIRD_AMT 500
 
 class bird;
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
+
+float maxSpeed = 5, minSpeed = 3;
 
 std::array<std::array<int, 128>, 128> map;
 
@@ -45,7 +47,6 @@ class bird
             }
         }
     }
-
 
     void cohesionBirds(std::array<bird, BIRD_AMT> boids)
     {
@@ -120,14 +121,13 @@ class bird
         // std::cout << "SIZE: " << birdsToEval.size() <<  std::endl;
     }
 
+    void alignBirds(std::array<bird, BIRD_AMT> boids)
+    {
+
+    }
 
     void update(std::array<bird, BIRD_AMT> boids)
     {
-        // ok do da monster math to figure out direction;
-        // y = round((sin(Θ*180/pi)*vel.y))
-        // x = round((cos(Θ*180/pi)*vel.y))
-
-
         int yChange = velocity.first;
         int xChange = velocity.second;
         if((0 < (xChange + cord.first))  && ( xChange + cord.first < (MAP_SIZE-1)))
@@ -142,12 +142,26 @@ class bird
         velocity.first = 0;
         velocity.second = 0;
 
-        birdsInRange(boids, 500);
+        birdsInRange(boids, 100);
 
         cohesionBirds(boids);
 
         // NOTE: SEPERATION MUST BE RUN AT THE END!!!
         seperationBirds(boids);
+
+        float speed = std::sqrt(std::pow(velocity.first,2) + std::pow(velocity.second,2));
+        if(speed > maxSpeed)
+        {
+            velocity.first  = velocity.first/speed*maxSpeed;
+            velocity.second = velocity.second/speed*maxSpeed;
+        }
+
+        if(speed < maxSpeed)
+        {
+            velocity.first = velocity.first/speed*minSpeed;
+            velocity.second = velocity.second/speed*minSpeed;
+        }
+
 
     }
 };
@@ -200,7 +214,7 @@ int main()
 
     // placing start & end points
     {
-        srand(200);
+        srand(800);
         generateMap(100);
         std::pair<int, int> start = {(rand() % 128), (rand() % 128)};
         map[start.first][start.second] = 2;
