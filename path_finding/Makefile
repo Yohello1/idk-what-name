@@ -19,5 +19,5 @@ OBJ_NAME = draw2
 all : $(OBJS)
 	$(CC) $(COMPILER_FLAGS) -c $(OBJS)
 	$(CC) $(OBFILES) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
-#	./draw2
+	./draw2
  
