@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 800
+#define BIRD_AMT 300
 
 
 class bird;
