@@ -35,3 +35,8 @@ leaderBoid : leaderBoid.cpp
 	$(CC) $(COMPILER_FLAGS) -c leaderBoid.cpp
 	$(CC) leaderBoid.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+leaderMazeAStar : leaderMazeAStar.cpp
+	$(CC) $(COMPILER_FLAGS) -c leaderMazeAStar.cpp
+	$(CC) leaderMazeAStar.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2

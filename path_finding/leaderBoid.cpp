@@ -298,7 +298,7 @@ int main()
             sf::Vector2i position = sf::Mouse::getPosition(window);
             cursor.first = position.x/8;
             cursor.second = position.y/8;
-            std::cout << "POS: { " << cursor.first << " , " << cursor.second << " }" << std::endl;
+            // std::cout << "POS: { " << cursor.first << " , " << cursor.second << " }" << std::endl;
         }
         window.clear();
 
