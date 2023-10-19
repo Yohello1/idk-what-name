@@ -10,16 +10,14 @@
 #include "debug/debug.hpp"
 #include "render/VBO.cpp"
 #include "render/EBO.cpp"
-// #include "render/FBO.cpp"
 #include "render/VAO.cpp"
 #include "render/texture.cpp"
 #include "render/shader.cpp"
-// #include "render/FrameBufferTex.cpp"
-// #include "render/FBshader.cpp"
 #include "render/Compute.cpp"
 #include "render/MVPMatrix.hpp"
 
 std::atomic<bool> kys; // politely :3
+
 
 // ECS stuff, dont remove them, the system will kill itself
 std::vector<ui::single_ui_element *> ui_elements;
