@@ -30,3 +30,8 @@ aStar : aStart.cpp
 	$(CC) $(COMPILER_FLAGS) -c aStart.cpp
 	$(CC) aStart.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+leaderBoid : leaderBoid.cpp
+	$(CC) $(COMPILER_FLAGS) -c leaderBoid.cpp
+	$(CC) leaderBoid.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2
