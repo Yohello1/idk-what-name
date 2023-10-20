@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 300
+#define BIRD_AMT 1000
 
 
 class bird;
@@ -18,7 +18,7 @@ sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
-float maxSpeed = 4, minSpeed = 3;
+float maxSpeed = 10, minSpeed = 2;
 double centeringFactor = 0.5;
 double matchingFactor = 1;
 double turnFactor = 5;
@@ -180,8 +180,8 @@ class bird
             cord.second += velocity.second;
         }
 
-        velocity.first = 0;
-        velocity.second = 0;
+        // velocity.first = 0;
+        // velocity.second = 0;
 
         birdsInRange(boids, 500);
 

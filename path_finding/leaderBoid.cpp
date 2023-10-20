@@ -191,8 +191,8 @@ class bird
             cord.second += velocity.second;
         }
 
-        velocity.first = 0;
-        velocity.second = 0;
+        // velocity.first = 0;
+        // velocity.second = 0;
 
         birdsInRange(boids, 500);
 
