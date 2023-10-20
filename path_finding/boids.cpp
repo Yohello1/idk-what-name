@@ -65,14 +65,14 @@ class bird
             yAvgPos += boids[birdsToEval.at(i)].cord.second;
         }
 
-        if(xAvgPos > 0)
+        if(xAvgPos != 0)
         {
             xAvgPos = xAvgPos / birdsToEval.size();
             xDist = xAvgPos - cord.first;
             calcVal = true;
         }
 
-        if(yAvgPos > 0)
+        if(yAvgPos != 0)
         {
             yAvgPos = yAvgPos / birdsToEval.size();
             yDist = yAvgPos - cord.second;
@@ -102,14 +102,14 @@ class bird
             yAvgPos += boids[birdsToEval.at(i)].cord.second;
         }
 
-        if(xAvgPos > 0)
+        if(xAvgPos != 0)
         {
             xAvgPos = xAvgPos / birdsToEval.size();
             xDist = xAvgPos - cord.first;
             calcVal = true;
         }
 
-        if(yAvgPos > 0)
+        if(yAvgPos != 0)
         {
             yAvgPos = yAvgPos / birdsToEval.size();
             yDist = yAvgPos - cord.second;
@@ -140,14 +140,14 @@ class bird
         if(birdsToEval.size() > 0)
         {
             xVelAvg /= birdsToEval.size();
-            yVelAvg /= birdsToEval.size();
-        }
-
-        if(birdsToEval.size() > 0)
-        {
             velocity.first += (xVelAvg - velocity.first)*matchingFactor;
+            yVelAvg /= birdsToEval.size();
             velocity.second += (yVelAvg - velocity.second)*matchingFactor;
         }
+
+        // if(birdsToEval.size() > 0)
+        // {
+        // }
     }
 
     void screenEdges()
