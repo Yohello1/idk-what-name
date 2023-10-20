@@ -69,23 +69,18 @@ class bird
 
         if(xAvgPos > 0)
         {
-            xAvgPos = xAvgPos / birdsToEval.size();
+            xAvgPos = xAvgPos / birdsToEval.size() - 1;
             xDist = xAvgPos - cord.first;
-            calcVal = true;
+            velocity.first  += xDist*centeringFactor;
         }
 
         if(yAvgPos > 0)
         {
-            yAvgPos = yAvgPos / birdsToEval.size();
-            yDist = yAvgPos - cord.second;
-            calcVal = true;
-        }
-
-        if(calcVal == true)
-        {
-            velocity.first  += xDist*centeringFactor;
+            yAvgPos = yAvgPos / birdsToEval.size() - 1;
+            yDist = yAvgPos - cord.second;;
             velocity.second += yDist*centeringFactor;
         }
+
     }
 
     void seperationBirds(std::array<bird, BIRD_AMT> boids)
@@ -108,23 +103,15 @@ class bird
         {
             xAvgPos = xAvgPos / birdsToEval.size();
             xDist = xAvgPos - cord.first;
-            calcVal = true;
+            velocity.first  += xDist*avoidanceFactor*-1;
         }
 
         if(yAvgPos > 0)
         {
             yAvgPos = yAvgPos / birdsToEval.size();
             yDist = yAvgPos - cord.second;
-            calcVal = true;
-        }
-
-        if(calcVal == true)
-        {
-            velocity.first  += xDist*avoidanceFactor*-1;
             velocity.second += yDist*avoidanceFactor*-1;
         }
-
-        // std::cout << "SIZE: " << birdsToEval.size() <<  std::endl;
     }
 
     void alignBirds(std::array<bird, BIRD_AMT> boids)
@@ -141,15 +128,13 @@ class bird
 
         if(birdsToEval.size() > 0)
         {
-            xVelAvg /= birdsToEval.size();
-            yVelAvg /= birdsToEval.size();
+            xVelAvg = xVelAvg / birdsToEval.size();
+            yVelAvg = yVelAvg / birdsToEval.size();
+            velocity.first += (xVelAvg)*matchingFactor;
+            velocity.second += (yVelAvg)*matchingFactor;
         }
+      
 
-        if(birdsToEval.size() > 0)
-        {
-            velocity.first += (xVelAvg - velocity.first)*matchingFactor;
-            velocity.second += (yVelAvg - velocity.second)*matchingFactor;
-        }
     }
 
     void screenEdges()
@@ -164,14 +149,9 @@ class bird
             velocity.second -= turnFactor;
     }
 
-    void collisionAvoidance()
-    {
-
-    }
-
     void seekLeader(std::pair<int, int> pointD)
     {
-        std::pair<int, int> desiredVelocity = {std::min(pointD.first-cord.first, maxSpeed), std::min(pointD.second-cord.second, maxSpeed)};
+        std::pair<int, int> desiredVelocity = {pointD.first-cord.first, pointD.second-cord.second};
         std::pair<int, int> steering = {desiredVelocity.first - velocity.first, desiredVelocity.second - velocity.second};
         velocity.first += steering.first/steeringFactor;
         velocity.second += steering.second/steeringFactor;
