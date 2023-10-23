@@ -67,7 +67,7 @@ bool BFSopenSurrondings(std::pair<int, int> point)
     return false;
 }
 
-void closeOpenSpaces(std::pair<int, int> start)
+int closeOpenSpaces(std::pair<int, int> start)
 {
     openNodesBFS.push(start);
     BFSopenSurrondings(openNodesBFS.front());
@@ -92,6 +92,8 @@ void closeOpenSpaces(std::pair<int, int> start)
         }
     }
 
+    int openParts = 0;
+
     for(int i = 0; i < MAP_SIZE; i++)
     {
         for(int j = 0; j < MAP_SIZE; j++)
@@ -99,6 +101,7 @@ void closeOpenSpaces(std::pair<int, int> start)
             if(map[i][j] == 1)
             {
                 map[i][j] = 0;
+                openParts +=1;
             }
         }
     }
@@ -107,4 +110,6 @@ void closeOpenSpaces(std::pair<int, int> start)
     {
         openNodesBFS.pop();
     }
+
+    return openParts;
 }
