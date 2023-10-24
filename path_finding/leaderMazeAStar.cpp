@@ -27,7 +27,7 @@ std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map;
 // FCost(total cost), HCost(to start cost), cord
 std::priority_queue<std::tuple<double, double, std::pair<int, int>>, std::vector<std::tuple<double, double, std::pair<int, int>>>, Comparator> nodes;
 std::map<std::pair<int, int>, std::tuple<double, std::pair<int, int>>> parents;
-std::array<std::queue<std::pair<int, int>>, 10> leaders;
+std::array<std::queue<std::pair<int, int>>, 25> leaders;
 bool drawn = false;
 
 #include "randomStuff/BFSmap.hpp"
@@ -36,7 +36,7 @@ void drawMap();
 void generateMap(int drunkards);
 bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, std::pair<int, int> end);
 void drawPath(std::pair<int, int> start, std::pair<int, int> end);
-bool findPath(std::pair<int, int> start, std::pair<int, int> end);
+bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader);
 
 int main()
 {
@@ -74,28 +74,62 @@ int main()
     }
 
     // placing start & end points
-    std::pair<int, int> start, end;
+    std::pair<int, int> start[25], end;
     {
         srand(time(0));
         generateMap(200);
 
-        closeOpenSpaces(start);
+        if(closeOpenSpaces({rand() % MAP_SIZE, rand() % MAP_SIZE}) < 8192)
+        {
+            return 0;
+        }
 
+        // Chose end point
+        while(true)
+        {
+            end.first = (rand() % MAP_SIZE);
+            end.second = (rand() % MAP_SIZE);
+            if(map[end.first][end.second] == 0)
+            {
+                // sex
+                break;
+            }
+        }
 
-        start.first  = (rand() %  MAP_SIZE);
-        start.second = (rand() %  MAP_SIZE);
-        end.first    = (rand() %  MAP_SIZE);
-        end.second   = (rand() %  MAP_SIZE);
+        for(int i = 0; i < 25; i++)
+        {
+            int attempts = 0; // at 100 attempts, return 0, idc
+            while(true)
+            {
+                attempts++;
+                if(attempts == 100)
+                {
+                    return 0;
+                }
 
-        map[start.first][start.second] = 2;
+                start[i].first = (rand() % MAP_SIZE);
+                start[i].second = (rand() % MAP_SIZE);
+
+                if(map[start[i].first][start[i].second] == 0)
+                {
+                    findPath(start[i], end, i);
+                    break;
+                }
+            }
+        }
+
+        // start.first  = (rand() %  MAP_SIZE);
+        // start.second = (rand() %  MAP_SIZE);
+        // end.first    = (rand() %  MAP_SIZE);
+        // end.second   = (rand() %  MAP_SIZE);
+
+        map[start[0].first][start[0].second] = 2;
         map[end.first]  [end.second]   = 3;
 
-        parents[std::make_pair(start.first,start.second)] = {0, {start.first, start.second}};
-        evaluateNeighbours({0, (std::sqrt(std::abs(start.first - end.first) + std::abs(start.second - end.second))), {start.first, start.second}}, end);
+        parents[std::make_pair(start[0].first,start[0].second)] = {0, {start[0].first, start[0].second}};
+        evaluateNeighbours({0, (std::sqrt(std::abs(start[0].first - end.first) + std::abs(start[0].second - end.second))), {start[0].first, start[0].second}}, end);
     }
 
-    int currentPoint = 0;
-    auto startT = std::chrono::high_resolution_clock::now();
 
     while (window.isOpen())
     {
@@ -112,10 +146,6 @@ int main()
 
         // sleep(0.05);
     }
-
-    auto elapsedT = std::chrono::high_resolution_clock::now() - startT;
-    long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedT).count();
-    std::cout << microseconds << std::endl;
 
     return 0;
 }
@@ -406,7 +436,28 @@ void drawPath(std::pair<int, int> start, std::pair<int, int> end)
 
 }
 
-bool findPath(std::pair<int, int> start, std::pair<int, int> end)
+// I literally copy pasted this from Stack overflow LMAO
+template <class T>
+void reverseQueue(std::queue <T> *q){
+    std::stack <T> s;
+    T temp;
+    // First build a stack (LIFO queue) from the (FIFO) queue.
+    while (q->dequeue(temp))
+    {
+        s.push(temp);
+    }
+    // The first item in the queue is now at the bottom of the stack.
+    // The last item is at the top.
+    // The queue is empty.
+
+    // If we enqueue them again they will be reversed.
+    while (s.pop(temp))
+    {
+        q->enqueue(temp);
+    }
+}
+
+bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
 {
     // Dam, programming is hard
     bool found = false;
@@ -420,6 +471,24 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end)
         found = evaluateNeighbours(nodes.top(), end);
         nodes.pop();
     }
+
+
+    // now adding the path to the map!
+    std::pair<int, int> nextPair = end;
+    bool donePath = false;
+    while(!donePath)
+    {
+        nextPair = std::get<1>(parents[std::make_pair(nextPair.first, nextPair.second)]);
+        leaders[leader].push(nextPair);
+
+        if((nextPair.first == start.first) && (nextPair.second == start.second))
+        {
+            donePath = true;
+        }
+
+    }
+
+    reverseQueue(leaders[leader]);
 
     return found;
 }

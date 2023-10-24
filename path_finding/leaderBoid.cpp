@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 300
+#define BIRD_AMT 400
 
 
 class bird;
@@ -21,8 +21,8 @@ sf::Sprite unvisted, visited, start, end, path, wall;
 float maxSpeed = 4, minSpeed = 3;
 double centeringFactor = 0.5;
 double matchingFactor = 1;
-double turnFactor = 1000;
-double steeringFactor = 5;
+double turnFactor = 5;
+double steeringFactor = 11;
 double avoidanceFactor = 0.4;
 
 std::array<std::array<int, 128>, 128> map;
