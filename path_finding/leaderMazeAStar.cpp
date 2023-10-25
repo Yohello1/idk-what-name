@@ -11,7 +11,7 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-#define LEADER_AMT 25 // crashes above 25, no idea why
+#define LEADER_AMT 50 // crashes above 25, no idea why
 
 struct Comparator {
     bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, std::tuple<double, double, std::pair<int, int>>& t2) {
@@ -27,7 +27,7 @@ std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map;
 // FCost(total cost), HCost(to start cost), cord
 std::priority_queue<std::tuple<double, double, std::pair<int, int>>, std::vector<std::tuple<double, double, std::pair<int, int>>>, Comparator> nodes;
 std::map<std::pair<int, int>, std::tuple<double, std::pair<int, int>>> parents;
-std::array<std::queue<std::pair<int, int>>, 25> leaders;
+std::array<std::queue<std::pair<int, int>>, LEADER_AMT> leaders;
 bool drawn = false;
 
 #include "randomStuff/BFSmap.hpp"
@@ -84,7 +84,7 @@ int main()
         drawMap();
         window.display();
 
-        sleep(3);
+        // sleep(3);
 
         if(closeOpenSpaces({rand() % MAP_SIZE, rand() % MAP_SIZE}) < 8192)
         {
@@ -474,6 +474,11 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
         nextPair = std::get<1>(parents[std::make_pair(nextPair.first, nextPair.second)]);
         tempQueue.push(nextPair);
 
+	if((nextPair.first < -1) || (nextPair.first > 128))
+	{
+		std::cout << "fuck" << std::endl;
+	}
+
         if((nextPair.first == start.first) && (nextPair.second == start.second))
         {
             donePath = true;
@@ -484,6 +489,12 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
     parents.clear();
     while(!tempQueue.empty())
     {
+
+        if((tempQueue.front().first < -1) || (tempQueue.front().first > 128))
+        {
+            std::cout << "fuck" << std::endl;
+        }
+
         leaders[leader].push(tempQueue.front());
         tempQueue.pop();
     }
@@ -507,12 +518,20 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
 // Note this will clear the queues
 void drawAllPaths()
 {
-    for(int i = 0; i < leaders.size(); i++)
+    for(int i = 0; i < LEADER_AMT; i++)
     {
-        while(!leaders[i].empty())
+        while(!(leaders[i].size() == 0))
         {
-            map[leaders[i].front().first][leaders[i].front().second] = 4;
+	    int x_pos = leaders[i].front().first;
+	    int y_pos = leaders[i].front().second;
+	    if((x_pos > 128) || (x_pos < -1) || (y_pos > 128) || (y_pos < -1))
+        {
             leaders[i].pop();
+            continue;
+        }
+
+        map[x_pos][y_pos] = 4;
+        leaders[i].pop();
         }
     }
 }
