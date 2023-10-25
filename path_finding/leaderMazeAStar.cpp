@@ -37,6 +37,7 @@ void generateMap(int drunkards);
 bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, std::pair<int, int> end);
 void drawPath(std::pair<int, int> start, std::pair<int, int> end);
 bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader);
+void drawAllPaths();
 
 int main()
 {
@@ -131,13 +132,14 @@ int main()
         // end.first    = (rand() %  MAP_SIZE);
         // end.second   = (rand() %  MAP_SIZE);
 
-        map[start[0].first][start[0].second] = 2;
-        map[end.first]  [end.second]   = 3;
+        // map[start[0].first][start[0].second] = 2;
+        // map[end.first]  [end.second]   = 3;
 
         // parents[std::make_pair(start[0].first,start[0].second)] = {0, {start[0].first, start[0].second}};
         // evaluateNeighbours({0, (std::sqrt(std::abs(start[0].first - end.first) + std::abs(start[0].second - end.second))), {start[0].first, start[0].second}}, end);
     }
 
+    drawAllPaths();
 
     while (window.isOpen())
     {
@@ -147,6 +149,8 @@ int main()
              if (event.type == sf::Event::Closed)
                  window.close();
         }
+
+
 
         window.clear();
         drawMap();
@@ -502,4 +506,17 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
     // you can just add it to a temp queue, and do it later, for now let's just see if its being drawn right
 
     return found;
+}
+
+// Note this will clear the queues
+void drawAllPaths()
+{
+    for(int i = 0; i < leaders.size(); i++)
+    {
+        while(!leaders[i].empty())
+        {
+            map[leaders[i].front().first][leaders[i].front().second] = 4;
+            leaders[i].pop();
+        }
+    }
 }
