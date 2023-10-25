@@ -13,11 +13,20 @@
 #define MAP_SIZE 128
 #define LEADER_AMT 50 // crashes above 25, no idea why
 
+float maxSpeed = 4, minSpeed = 3;
+double centeringFactor = 0.5;
+double matchingFactor = 1;
+double turnFactor = 5;
+double steeringFactor = 11;
+double avoidanceFactor = 0.4;
+
 struct Comparator {
     bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, std::tuple<double, double, std::pair<int, int>>& t2) {
          return std::get<0>(t1) > std::get<0>(t2);
      }
  };
+
+
 
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
