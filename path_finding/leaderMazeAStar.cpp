@@ -79,6 +79,14 @@ int main()
         srand(200);
         generateMap(200);
 
+        std::cout << "hello " << map[35][35] << std::endl;
+
+        window.clear();
+        drawMap();
+        window.display();
+
+        sleep(3);
+
         if(closeOpenSpaces({rand() % MAP_SIZE, rand() % MAP_SIZE}) < 8192)
         {
             return 0;
@@ -107,9 +115,8 @@ int main()
                     return 0;
                 }
 
-                start[i].first = (rand() % MAP_SIZE);
-                start[i].second = (rand() % MAP_SIZE);
-                std::cout << attempts << std::endl;
+                start[i].first = (rand() % 128);
+                start[i].second = (rand() % 128);
 
                 if(map[start[i].first][start[i].second] == 0)
                 {
@@ -478,6 +485,19 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
         leaders[leader].push(tempQueue.front());
         tempQueue.pop();
     }
+
+    for(int i = 0; i < MAP_SIZE; i++)
+    {
+        for(int j = 0; j < MAP_SIZE; j++)
+        {
+            if(map[i][j] == 1)
+            {
+                map[i][j] = 0;
+            }
+        }
+    }
+
+    std::cout << leaders[leader].size() << std::endl;
 
     // you can just add it to a temp queue, and do it later, for now let's just see if its being drawn right
 
