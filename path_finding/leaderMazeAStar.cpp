@@ -76,7 +76,7 @@ int main()
     // placing start & end points
     std::pair<int, int> start[25], end;
     {
-        srand(time(0));
+        srand(200);
         generateMap(200);
 
         if(closeOpenSpaces({rand() % MAP_SIZE, rand() % MAP_SIZE}) < 8192)
@@ -109,6 +109,7 @@ int main()
 
                 start[i].first = (rand() % MAP_SIZE);
                 start[i].second = (rand() % MAP_SIZE);
+                std::cout << attempts << std::endl;
 
                 if(map[start[i].first][start[i].second] == 0)
                 {
@@ -126,8 +127,8 @@ int main()
         map[start[0].first][start[0].second] = 2;
         map[end.first]  [end.second]   = 3;
 
-        parents[std::make_pair(start[0].first,start[0].second)] = {0, {start[0].first, start[0].second}};
-        evaluateNeighbours({0, (std::sqrt(std::abs(start[0].first - end.first) + std::abs(start[0].second - end.second))), {start[0].first, start[0].second}}, end);
+        // parents[std::make_pair(start[0].first,start[0].second)] = {0, {start[0].first, start[0].second}};
+        // evaluateNeighbours({0, (std::sqrt(std::abs(start[0].first - end.first) + std::abs(start[0].second - end.second))), {start[0].first, start[0].second}}, end);
     }
 
 
@@ -436,31 +437,14 @@ void drawPath(std::pair<int, int> start, std::pair<int, int> end)
 
 }
 
-// I literally copy pasted this from Stack overflow LMAO
-template <class T>
-void reverseQueue(std::queue <T> *q){
-    std::stack <T> s;
-    T temp;
-    // First build a stack (LIFO queue) from the (FIFO) queue.
-    while (q->dequeue(temp))
-    {
-        s.push(temp);
-    }
-    // The first item in the queue is now at the bottom of the stack.
-    // The last item is at the top.
-    // The queue is empty.
-
-    // If we enqueue them again they will be reversed.
-    while (s.pop(temp))
-    {
-        q->enqueue(temp);
-    }
-}
-
 bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
 {
     // Dam, programming is hard
     bool found = false;
+    std::queue<std::pair<int, int>> tempQueue;
+
+    parents[std::make_pair(start.first, start.second)] = {0, {start.first, start.second}};
+    evaluateNeighbours({0, (std::sqrt(std::abs(start.first - end.first) + std::abs(start.second - end.second))), {start.first, start.second}}, end);
 
     while(found != true)
     {
@@ -479,7 +463,7 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
     while(!donePath)
     {
         nextPair = std::get<1>(parents[std::make_pair(nextPair.first, nextPair.second)]);
-        leaders[leader].push(nextPair);
+        tempQueue.push(nextPair);
 
         if((nextPair.first == start.first) && (nextPair.second == start.second))
         {
@@ -488,7 +472,14 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
 
     }
 
-    reverseQueue(leaders[leader]);
+    parents.clear();
+    while(!tempQueue.empty())
+    {
+        leaders[leader].push(tempQueue.front());
+        tempQueue.pop();
+    }
+
+    // you can just add it to a temp queue, and do it later, for now let's just see if its being drawn right
 
     return found;
 }
