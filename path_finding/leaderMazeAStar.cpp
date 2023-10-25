@@ -11,7 +11,7 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-#define LEADER_AMT 10
+#define LEADER_AMT 25 // crashes above 25, no idea why
 
 struct Comparator {
     bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, std::tuple<double, double, std::pair<int, int>>& t2) {
@@ -75,12 +75,10 @@ int main()
     }
 
     // placing start & end points
-    std::pair<int, int> start[25], end;
+    std::pair<int, int> start[LEADER_AMT], end;
     {
-        srand(200);
+        srand(300);
         generateMap(200);
-
-        std::cout << "hello " << map[35][35] << std::endl;
 
         window.clear();
         drawMap();
@@ -105,7 +103,7 @@ int main()
             }
         }
 
-        for(int i = 0; i < 25; i++)
+        for(int i = 0; i < LEADER_AMT; i++)
         {
             int attempts = 0; // at 100 attempts, return 0, idc
             while(true)
@@ -500,8 +498,6 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
             }
         }
     }
-
-    std::cout << leaders[leader].size() << std::endl;
 
     // you can just add it to a temp queue, and do it later, for now let's just see if its being drawn right
 
