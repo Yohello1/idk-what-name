@@ -11,7 +11,7 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-#define LEADER_AMT 50 // crashes above 25, no idea why
+#define LEADER_AMT 25 // crashes above 25, no idea why
 
 float maxSpeed = 4, minSpeed = 3;
 double centeringFactor = 0.5;
@@ -26,8 +26,6 @@ struct Comparator {
      }
  };
 
-
-
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
@@ -40,6 +38,7 @@ std::array<std::queue<std::pair<int, int>>, LEADER_AMT> leaders;
 bool drawn = false;
 
 #include "randomStuff/BFSmap.hpp"
+#include "randomStuff/boidsClass.hpp"
 
 void drawMap();
 void generateMap(int drunkards);
@@ -86,6 +85,7 @@ int main()
     // placing start & end points
     std::pair<int, int> start[LEADER_AMT], end;
     {
+        // NOTE: set this to time(0) when running it, just 200 for debugging purposes
         srand(300);
         generateMap(200);
 
@@ -107,7 +107,7 @@ int main()
             end.second = (rand() % MAP_SIZE);
             if(map[end.first][end.second] == 0)
             {
-                // sex
+                // sex, the sequel, where instead of just 2 sexes, we have 20
                 break;
             }
         }
@@ -483,10 +483,10 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
         nextPair = std::get<1>(parents[std::make_pair(nextPair.first, nextPair.second)]);
         tempQueue.push(nextPair);
 
-	if((nextPair.first < -1) || (nextPair.first > 128))
-	{
-		std::cout << "fuck" << std::endl;
-	}
+        if((nextPair.first < -1) || (nextPair.first > 128))
+        {
+            std::cout << "fuck" << std::endl;
+        }
 
         if((nextPair.first == start.first) && (nextPair.second == start.second))
         {
@@ -496,6 +496,7 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
     }
 
     parents.clear();
+
     while(!tempQueue.empty())
     {
 
