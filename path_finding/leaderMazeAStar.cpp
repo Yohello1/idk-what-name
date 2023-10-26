@@ -12,8 +12,9 @@
 
 #define MAP_SIZE 128
 #define LEADER_AMT 25 // crashes above 25, no idea why
+#define BIRD_AMT 49
 
-float maxSpeed = 4, minSpeed = 3;
+float maxSpeed = 4, minSpeed = 0.05;
 double centeringFactor = 0.5;
 double matchingFactor = 1;
 double turnFactor = 5;
@@ -39,6 +40,8 @@ bool drawn = false;
 
 #include "randomStuff/BFSmap.hpp"
 #include "randomStuff/boidsClass.hpp"
+
+std::array<std::array<bird, BIRD_AMT>, LEADER_AMT> boids;
 
 void drawMap();
 void generateMap(int drunkards);
@@ -133,20 +136,9 @@ int main()
                 }
             }
         }
-
-        // start.first  = (rand() %  MAP_SIZE);
-        // start.second = (rand() %  MAP_SIZE);
-        // end.first    = (rand() %  MAP_SIZE);
-        // end.second   = (rand() %  MAP_SIZE);
-
-        // map[start[0].first][start[0].second] = 2;
-        // map[end.first]  [end.second]   = 3;
-
-        // parents[std::make_pair(start[0].first,start[0].second)] = {0, {start[0].first, start[0].second}};
-        // evaluateNeighbours({0, (std::sqrt(std::abs(start[0].first - end.first) + std::abs(start[0].second - end.second))), {start[0].first, start[0].second}}, end);
     }
 
-    drawAllPaths();
+    // drawAllPaths();
 
     while (window.isOpen())
     {
@@ -157,13 +149,10 @@ int main()
                  window.close();
         }
 
-
-
         window.clear();
         drawMap();
         window.display();
 
-        // sleep(0.05);
     }
 
     return 0;

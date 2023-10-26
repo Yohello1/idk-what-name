@@ -1,4 +1,3 @@
-
 class bird
 {
     public:
@@ -30,7 +29,6 @@ class bird
         float xAvgPos = 0, xDist;
         float yAvgPos = 0, yDist;
 
-        bool calcVal = false;
 
         for(int i = 0; (uint) i < birdsToEval.size(); i++)
         {
@@ -61,8 +59,6 @@ class bird
 
         float xAvgPos = 0, xDist = 0;
         float yAvgPos = 0, yDist = 0;
-
-        bool calcVal = false;
 
         for(int i = 0; (uint) i < birdsToEval.size(); i++)
         {
@@ -122,14 +118,14 @@ class bird
 
     void seekLeader(std::pair<int, int> pointD)
     {
-        std::pair<int, int> desiredVelocity = {pointD.first-cord.first, pointD.second-cord.second};
-        std::pair<int, int> steering = {desiredVelocity.first - velocity.first, desiredVelocity.second - velocity.second};
-        velocity.first += steering.first/steeringFactor;
-        velocity.second += steering.second/steeringFactor;
+        std::pair<double, double> desiredVelocity = {((pointD.first-cord.first)/2)*steeringFactor, ((pointD.second-cord.second)/2*steeringFactor)};
+        // std::cout << desiredVelocity.first << ' ' << desiredVelocity.second << std::endl;
+        velocity.first  += desiredVelocity.first;
+        velocity.second += desiredVelocity.second;
 
     }
 
-    void update(std::array<bird, BIRD_AMT> boids)
+    void update(std::array<bird, BIRD_AMT> boids, std::pair< int, int > leaderPos)
     {
         float yChange = velocity.first;
         float xChange = velocity.second;
@@ -149,7 +145,7 @@ class bird
 
         // cohesionBirds(boids);
         // alignBirds(boids);
-        seekLeader(cursor);
+        seekLeader(leaderPos);
         //collisionAvoidance();
         screenEdges();
 
