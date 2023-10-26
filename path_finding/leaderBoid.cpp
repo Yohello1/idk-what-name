@@ -10,18 +10,18 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 100
+#define BIRD_AMT 1000
 
 class bird;
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 sf::Texture texture;
 sf::Sprite unvisted, visited, start, end, path, wall;
 
-float maxSpeed = 4, minSpeed = 3;
+float maxSpeed = 4, minSpeed = 0.005;
 double centeringFactor = 0.5;
+        double steeringFactor = 1;
 double matchingFactor = 1;
 double turnFactor = 5;
-double steeringFactor = 11;
 double avoidanceFactor = 0.4;
 
 std::array<std::array<int, 128>, 128> map;
@@ -58,7 +58,6 @@ class bird
         float xAvgPos = 0, xDist;
         float yAvgPos = 0, yDist;
 
-        bool calcVal = false;
 
         for(int i = 0; (uint) i < birdsToEval.size(); i++)
         {
@@ -89,8 +88,6 @@ class bird
 
         float xAvgPos = 0, xDist = 0;
         float yAvgPos = 0, yDist = 0;
-
-        bool calcVal = false;
 
         for(int i = 0; (uint) i < birdsToEval.size(); i++)
         {
@@ -132,7 +129,7 @@ class bird
             velocity.first += (xVelAvg)*matchingFactor;
             velocity.second += (yVelAvg)*matchingFactor;
         }
-      
+
 
     }
 
@@ -150,10 +147,10 @@ class bird
 
     void seekLeader(std::pair<int, int> pointD)
     {
-        std::pair<int, int> desiredVelocity = {pointD.first-cord.first, pointD.second-cord.second};
-        std::pair<int, int> steering = {desiredVelocity.first - velocity.first, desiredVelocity.second - velocity.second};
-        velocity.first += steering.first/steeringFactor;
-        velocity.second += steering.second/steeringFactor;
+        std::pair<double, double> desiredVelocity = {((pointD.first-cord.first)/2)*steeringFactor, ((pointD.second-cord.second)/2*steeringFactor)};
+        // std::cout << desiredVelocity.first << ' ' << desiredVelocity.second << std::endl;
+        velocity.first  += desiredVelocity.first;
+        velocity.second += desiredVelocity.second;
 
     }
 
@@ -173,7 +170,7 @@ class bird
         // velocity.first = 0;
         // velocity.second = 0;
 
-        birdsInRange(boids, 500);
+        // birdsInRange(boids, 500);
 
         // cohesionBirds(boids);
         // alignBirds(boids);
@@ -182,7 +179,7 @@ class bird
         screenEdges();
 
         // NOTE: SEPERATION MUST BE RUN AT THE END!!!
-        seperationBirds(boids);
+        // seperationBirds(boids);
 
         float speed = std::sqrt(std::pow(velocity.first,2) + std::pow(velocity.second,2));
         if(speed > maxSpeed)
@@ -262,7 +259,6 @@ int main()
         {
             boids[i].birdsInRange(boids, BIRD_AMT);
             boids[i].velocity = {rand() % 2, rand() % 2};
-            // boids[i].update(boids);
         }
 
     }
@@ -277,20 +273,18 @@ int main()
             sf::Vector2i position = sf::Mouse::getPosition(window);
             cursor.first = position.x/8;
             cursor.second = position.y/8;
-            // std::cout << "POS: { " << cursor.first << " , " << cursor.second << " }" << std::endl;
         }
         window.clear();
 
         for(int i = 0; i < BIRD_AMT; i++)
         {
-            // std::cout << "ran " << boids[i].velocity << std::endl;
             boids[i].update(boids);
         }
 
         // drawMap();
         drawBoids();
         window.display();
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000/60));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1000/15));
     }
 
     return 0;
