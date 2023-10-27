@@ -11,7 +11,7 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-#define LEADER_AMT 10 // crashes above 25, no idea why
+#define LEADER_AMT 5000 // crashes above 25, no idea why
 
 struct Comparator {
     bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, std::tuple<double, double, std::pair<int, int>>& t2) {
@@ -77,6 +77,7 @@ int main()
     // placing start & end points
     std::pair<int, int> start[LEADER_AMT], end;
     unsigned long long int totalTime;
+
     {
         // NOTE: set this to time(0) when running it, just 200 for debugging purposes
         srand(300);
