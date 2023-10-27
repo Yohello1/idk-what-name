@@ -40,3 +40,8 @@ leaderMazeAStar : leaderMazeAStar.cpp
 	$(CC) $(COMPILER_FLAGS) -c leaderMazeAStar.cpp
 	$(CC) leaderMazeAStar.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+leaderPathFinding : leaderPathFinding.cpp
+	$(CC) $(COMPILER_FLAGS) -c leaderPathFinding.cpp
+	$(CC) leaderPathFinding.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2

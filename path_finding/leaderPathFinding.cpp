@@ -12,18 +12,17 @@
 
 #define MAP_SIZE 128
 #define LEADER_AMT 25 // crashes above 25, no idea why
-#define BIRD_AMT 49
+#define BIRD_AMT 200
 
 float maxSpeed = 4, minSpeed = 0.05;
 double centeringFactor = 0.5;
-double matchingFactor = 1;
+double matchingFactor = 3;
 double turnFactor = 5;
-double steeringFactor = 11;
+double steeringFactor = 5;
 double avoidanceFactor = 0.4;
 
 struct Comparator {
-    bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, 
-std::tuple<double, double, std::pair<int, int>>& t2) {
+    bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, std::tuple<double, double, std::pair<int, int>>& t2) {
          return std::get<0>(t1) > std::get<0>(t2);
      }
  };
@@ -34,8 +33,7 @@ sf::Sprite unvisted, visited, start, end, path, wall;
 
 std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map;
 // FCost(total cost), HCost(to start cost), cord
-std::priority_queue<std::tuple<double, double, std::pair<int, int>>, 
-std::vector<std::tuple<double, double, std::pair<int, int>>>, Comparator> nodes;
+std::priority_queue<std::tuple<double, double, std::pair<int, int>>, std::vector<std::tuple<double, double, std::pair<int, int>>>, Comparator> nodes;
 std::map<std::pair<int, int>, std::tuple<double, std::pair<int, int>>> parents;
 std::array<std::queue<std::pair<int, int>>, LEADER_AMT> leaders;
 bool drawn = false;
@@ -47,19 +45,18 @@ std::array<std::array<bird, BIRD_AMT>, LEADER_AMT> boids;
 
 void drawMap();
 void generateMap(int drunkards);
-bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, 
-std::pair<int, int> end);
+bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, std::pair<int, int> end);
 void drawPath(std::pair<int, int> start, std::pair<int, int> end);
 bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader);
 void drawAllPaths();
+void drawBoids();
 
 int main()
 {
 
     // Load texture
     {
-        if(!texture.loadFromFile("randomStuff/tileSprite.png")) { std::cout << 
-"file did not infact load" << std::endl; }
+        if(!texture.loadFromFile("randomStuff/tileSprite.png")) { std::cout << "file did not infact load" << std::endl; }
         texture.setSmooth(true);
     }
     // Setting sprites
@@ -92,21 +89,17 @@ int main()
     // placing start & end points
     std::pair<int, int> start[LEADER_AMT], end;
     {
-        // NOTE: set this to time(0) when running it, just 200 for debugging 
-purposes
-        srand(300);
+        // NOTE: set this to time(0) when running it, just 200 for debugging purposes
+        srand(time(0));
         generateMap(200);
 
         window.clear();
         drawMap();
         window.display();
 
-        // sleep(3);
-
+        // If not enough of the map is accessable, quit
         if(closeOpenSpaces({rand() % MAP_SIZE, rand() % MAP_SIZE}) < 8192)
-        {
             return 0;
-        }
 
         // Chose end point
         while(true)
@@ -120,6 +113,7 @@ purposes
             }
         }
 
+        // Placing the leaders
         for(int i = 0; i < LEADER_AMT; i++)
         {
             int attempts = 0; // at 100 attempts, return 0, idc
@@ -141,12 +135,28 @@ purposes
                 }
             }
         }
+
+        // placing boids NOTE: MAKE THIS LESS RANDOM
+        for(int i = 0; i < LEADER_AMT; i++)
+        {
+            for(int j = 0; j < BIRD_AMT; j++)
+            {
+                // std::cout << "Drawing point " << boids[i].cord.first*8 << " " <<  boids[i].cord.second*8 << std::endl;
+                boids[i][j].cord.first = (rand() % 128);
+                boids[i][j].cord.second = (rand() % 128);
+            }
+        }
     }
 
-    // drawAllPaths();
+    // drawAllPaths(); // need I explain this? btw this like clears the queues
+
+    int attemptsToHome = 0;
+
 
     while (window.isOpen())
     {
+
+        attemptsToHome++; // remove when placement fixed
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -154,8 +164,28 @@ purposes
                  window.close();
         }
 
+        // Run boids
+        for(int i = 0; i < LEADER_AMT; i++)
+        {
+            for(int j = 0; j < BIRD_AMT; j++)
+            {
+                boids[i][j].update(boids[i], leaders[i].front());
+            }
+
+            if(attemptsToHome < 25) // if not enough time to home, skip next part
+                continue;
+            if(leaders[i].size() > 1)
+                leaders[i].pop();
+
+        }
+
+        // std::cout << end.first << ' ' << end.second << std::endl;
+
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1000/4));
+
         window.clear();
         drawMap();
+        drawBoids();
         window.display();
 
     }
@@ -224,8 +254,7 @@ void drawMap()
     }
 }
 
-// Drunkards refering to how many 'drunk' things will be spawned to create the 
-map
+// Drunkards refering to how many 'drunk' things will be spawned to create the map
 void generateMap(int drunkards)
 {
     for(int i = 0; i < drunkards; i++)
@@ -265,8 +294,23 @@ void generateMap(int drunkards)
     }
 }
 
-bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, 
-std::pair<int, int> end)
+void drawBoids()
+{
+    sf::CircleShape shape(2);
+    shape.setFillColor(sf::Color(240,152,29));
+
+    for(int i = 0; i < LEADER_AMT; i++)
+    {
+        for(int j = 0; j < BIRD_AMT; j++)
+        {
+            // std::cout << "Drawing point " << boids[i].cord.first*8 << " " <<  boids[i].cord.second*8 << std::endl;
+            shape.setPosition(boids[i][j].cord.first*8, boids[i][j].cord.second*8);
+            window.draw(shape);
+        }
+    }
+}
+
+bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, std::pair<int, int> end)
 {
     // Fetch the current neighbours
     // Their HCost (cost from start) is current node +1
@@ -299,8 +343,7 @@ std::pair<int, int> end)
         if(map[x][y-1] == 0)
         {
             map[x][y-1] = 1;
-            double GCost = std::sqrt(std::pow(std::abs(endX - x),2) + 
-std::pow(std::abs(endY - (y-1)), 2));
+            double GCost = std::sqrt(std::pow(std::abs(endX - x),2) + std::pow(std::abs(endY - (y-1)), 2));
             double FCost = newHCost + GCost;
             nodes.push({FCost, newHCost, {x, (y-1)}});
 
@@ -333,8 +376,7 @@ std::pow(std::abs(endY - (y-1)), 2));
         if(map[x][y+1] == 0)
         {
             map[x][y+1] = 1;
-            double GCost = std::sqrt(std::pow(std::abs(endX - x),2) + 
-std::pow(std::abs(endY - (y+1)), 2));
+            double GCost = std::sqrt(std::pow(std::abs(endX - x),2) + std::pow(std::abs(endY - (y+1)), 2));
             double FCost = newHCost + GCost;
             nodes.push({FCost, newHCost, {x, (y+1)}});
 
@@ -368,8 +410,7 @@ std::pow(std::abs(endY - (y+1)), 2));
         {
             map[x-1][y] = 1;
 
-            double GCost = std::sqrt(std::pow(std::abs(endX - (x-1)),2) + 
-std::pow(std::abs(endY - y), 2));
+            double GCost = std::sqrt(std::pow(std::abs(endX - (x-1)),2) + std::pow(std::abs(endY - y), 2));
             double FCost = newHCost + GCost;
             nodes.push({FCost, newHCost, {(x-1), y}});
 
@@ -400,8 +441,7 @@ std::pow(std::abs(endY - y), 2));
         if(map[x+1][y] == 0)
         {
             map[x+1][y] = 1;
-            double GCost = std::sqrt(std::pow(std::abs(endX - (x+1)),2) + 
-std::pow(std::abs(endY - y), 2));
+            double GCost = std::sqrt(std::pow(std::abs(endX - (x+1)),2) + std::pow(std::abs(endY - y), 2));
             double FCost = newHCost + GCost;
             nodes.push({FCost, newHCost, {(x+1), y}});
 
@@ -441,8 +481,7 @@ void drawPath(std::pair<int, int> start, std::pair<int, int> end)
 
     while(!donePath)
     {
-        nextPair = std::get<1>(parents[std::make_pair(nextPair.first, 
-nextPair.second)]);
+        nextPair = std::get<1>(parents[std::make_pair(nextPair.first, nextPair.second)]);
 
         map[nextPair.first][nextPair.second] = 4;
         i++;
@@ -462,10 +501,8 @@ bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader)
     bool found = false;
     std::queue<std::pair<int, int>> tempQueue;
 
-    parents[std::make_pair(start.first, start.second)] = {0, {start.first, 
-start.second}};
-    evaluateNeighbours({0, (std::sqrt(std::abs(start.first - end.first) + 
-std::abs(start.second - end.second))), {start.first, start.second}}, end);
+    parents[std::make_pair(start.first, start.second)] = {0, {start.first, start.second}};
+    evaluateNeighbours({0, (std::sqrt(std::abs(start.first - end.first) + std::abs(start.second - end.second))), {start.first, start.second}}, end);
 
     while(found != true)
     {
@@ -483,13 +520,12 @@ std::abs(start.second - end.second))), {start.first, start.second}}, end);
     bool donePath = false;
     while(!donePath)
     {
-        nextPair = std::get<1>(parents[std::make_pair(nextPair.first, 
-nextPair.second)]);
+        nextPair = std::get<1>(parents[std::make_pair(nextPair.first, nextPair.second)]);
         tempQueue.push(nextPair);
 
         if((nextPair.first < -1) || (nextPair.first > 128))
         {
-            std::cout << "fuck" << std::endl;
+            std::cout << "BROKEN" << std::endl;
         }
 
         if((nextPair.first == start.first) && (nextPair.second == start.second))
@@ -500,17 +536,17 @@ nextPair.second)]);
     }
 
     parents.clear();
+    std::vector<std::pair<int, int>> reverseArrayStuff;
 
     while(!tempQueue.empty())
     {
-
-        if((tempQueue.front().first < -1) || (tempQueue.front().first > 128))
-        {
-            std::cout << "fuck" << std::endl;
-        }
-
-        leaders[leader].push(tempQueue.front());
+        reverseArrayStuff.push_back(tempQueue.front());
         tempQueue.pop();
+    }
+
+    for(int i = reverseArrayStuff.size()-1; i > 1; i--)
+    {
+        leaders[leader].push(reverseArrayStuff.at(i));
     }
 
     for(int i = 0; i < MAP_SIZE; i++)
@@ -524,8 +560,7 @@ nextPair.second)]);
         }
     }
 
-    // you can just add it to a temp queue, and do it later, for now let's just 
-see if its being drawn right
+    // you can just add it to a temp queue, and do it later, for now let's just see if its being drawn right
 
     return found;
 }

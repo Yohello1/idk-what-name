@@ -11,8 +11,7 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-#define LEADER_AMT 25 // crashes above 25, no idea why
-#define BIRD_AMT 49
+#define LEADER_AMT 500 // crashes above 25, no idea why
 
 float maxSpeed = 4, minSpeed = 0.05;
 double centeringFactor = 0.5;
@@ -39,9 +38,6 @@ std::array<std::queue<std::pair<int, int>>, LEADER_AMT> leaders;
 bool drawn = false;
 
 #include "randomStuff/BFSmap.hpp"
-#include "randomStuff/boidsClass.hpp"
-
-std::array<std::array<bird, BIRD_AMT>, LEADER_AMT> boids;
 
 void drawMap();
 void generateMap(int drunkards);
@@ -138,7 +134,7 @@ int main()
         }
     }
 
-    // drawAllPaths();
+    drawAllPaths();
 
     while (window.isOpen())
     {
