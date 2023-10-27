@@ -11,7 +11,7 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-#define LEADER_AMT 5000 // crashes above 25, no idea why
+#define LEADER_AMT 2500 // crashes above 25, no idea why
 
 struct Comparator {
     bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, std::tuple<double, double, std::pair<int, int>>& t2) {
@@ -139,22 +139,22 @@ int main()
 
     }
 
-    drawAllPaths();
+    // drawAllPaths();
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-             if (event.type == sf::Event::Closed)
-                 window.close();
-        }
+    // while (window.isOpen())
+    // {
+    //     sf::Event event;
+    //     while (window.pollEvent(event))
+    //     {
+    //          if (event.type == sf::Event::Closed)
+    //              window.close();
+    //     }
 
-        window.clear();
-        drawMap();
-        window.display();
+    //     window.clear();
+    //     drawMap();
+    //     window.display();
 
-    }
+    // }
 
     return 0;
 }
