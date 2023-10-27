@@ -11,14 +11,7 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-#define LEADER_AMT 500 // crashes above 25, no idea why
-
-float maxSpeed = 4, minSpeed = 0.05;
-double centeringFactor = 0.5;
-double matchingFactor = 1;
-double turnFactor = 5;
-double steeringFactor = 11;
-double avoidanceFactor = 0.4;
+#define LEADER_AMT 10 // crashes above 25, no idea why
 
 struct Comparator {
     bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, std::tuple<double, double, std::pair<int, int>>& t2) {
@@ -83,6 +76,7 @@ int main()
 
     // placing start & end points
     std::pair<int, int> start[LEADER_AMT], end;
+    unsigned long long int totalTime;
     {
         // NOTE: set this to time(0) when running it, just 200 for debugging purposes
         srand(300);
@@ -111,6 +105,7 @@ int main()
             }
         }
 
+
         for(int i = 0; i < LEADER_AMT; i++)
         {
             int attempts = 0; // at 100 attempts, return 0, idc
@@ -127,11 +122,20 @@ int main()
 
                 if(map[start[i].first][start[i].second] == 0)
                 {
-                    findPath(start[i], end, i);
+                    // findPath(start[i], end, i);
                     break;
                 }
             }
+
+            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            findPath(start[i], end, i);
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            totalTime +=  std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
         }
+
+        std::cout << "TIME: " << totalTime << std::endl;
+
+
     }
 
     drawAllPaths();
