@@ -143,8 +143,10 @@ class bird
         }
         else
         {
-            velocity.first *= -1;
-            velocity.second *= -1;
+            velocity.first = 0.05;
+            velocity.second = 0.05;
+            cord.first = leaderPos.first;
+            cord.second = leaderPos.second;
         }
         // velocity.first = 0;
         // velocity.second = 0;
@@ -173,6 +175,8 @@ class bird
             velocity.second = velocity.second/speed*minSpeed;
         }
 
+        cord.first = leaderPos.first;
+        cord.second = leaderPos.second;
 
     }
 };
