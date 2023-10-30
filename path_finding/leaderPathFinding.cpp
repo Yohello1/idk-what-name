@@ -11,10 +11,10 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-#define LEADER_AMT 25 // crashes above 25, no idea why
-#define BIRD_AMT 100
+#define LEADER_AMT 2000 // crashes above 25, no idea why
+#define BIRD_AMT 5
 
-float maxSpeed = 3, minSpeed = 1;
+float maxSpeed = 1, minSpeed = 0.5;
 double centeringFactor = 0.5;
 double matchingFactor = 3;
 double turnFactor = 5;
@@ -50,6 +50,7 @@ void drawPath(std::pair<int, int> start, std::pair<int, int> end);
 bool findPath(std::pair<int, int> start, std::pair<int, int> end, int leader);
 void drawAllPaths();
 void drawBoids();
+int totalPointsInRange(std::pair<int, int> point, int radius);
 
 int main()
 {
@@ -88,9 +89,12 @@ int main()
 
     // placing start & end points
     std::pair<int, int> start[LEADER_AMT], end;
+    unsigned long long int timeTaken = 0;
     {
         // NOTE: set this to time(0) when running it, just 200 for debugging purposes
-        srand(time(0));
+        uint time2 = time(0);
+        // std::cout << time2 << std::endl;
+        srand(time2);
         generateMap(200);
 
         window.clear();
@@ -125,17 +129,22 @@ int main()
                     return 0;
                 }
 
-                start[i].first = 10 + (rand() % 117);
-                start[i].second = 10 + (rand() % 117);
+                start[i].first = 10 + (rand() % 116);
+                start[i].second = 10 + (rand() % 116);
 
                 if(map[start[i].first][start[i].second] == 0)
                 {
                     findPath(start[i], end, i);
+                    if(leaders[i].size() == 0)
+                    {
+                        leaders[i].push(end);
+                    }
                     break;
                 }
             }
         }
 
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         // placing boids NOTE: MAKE THIS LESS RANDOM
         for(int i = 0; i < LEADER_AMT; i++)
         {
@@ -144,6 +153,7 @@ int main()
                 while(true)
                 // std::cout << "Drawing point " << boids[i].cord.first*8 << " " <<  boids[i].cord.second*8 << std::endl;
                 {
+                    // std::cout << start[9].first << std::endl;
                     boids[i][j].cord.first = rand() % 10 + leaders[i].front().first;
                     boids[i][j].cord.second = rand() % 10 + leaders[i].front().second;
                     if(map[boids[i][j].cord.first][boids[i][j].cord.second] != 5)
@@ -153,27 +163,19 @@ int main()
                 }
             }
         }
-
-        std::cout << "hi" << std::endl;
-
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        timeTaken +=  std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+        // std::cout << "hello world" << std::endl;
+        drawBoids();
     }
 
     // drawAllPaths(); // need I explain this? btw this like clears the queues
 
-    int attemptsToHome = 0;
 
-
-    while (window.isOpen())
+    while (true)
     {
-
-        attemptsToHome++; // remove when placement fixed
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-             if (event.type == sf::Event::Closed)
-                 window.close();
-        }
-
+        // Timing itx
+        std::chrono::steady_clock::time_point beginT = std::chrono::steady_clock::now();
         // Run boids
         for(int i = 0; i < LEADER_AMT; i++)
         {
@@ -181,31 +183,31 @@ int main()
             {
                 boids[i][j].update(boids[i], leaders[i].front());
             }
-
-            //if(attemptsToHome < 25) // if not enough time to home, skip next part
-             //   continue;
-            if((leaders[i].size() > 1) && (attemptsToHome % 3 == 0))
+            if((leaders[i].size() > 1))
                 leaders[i].pop();
             else if(leaders[i].size() == 1)
             {
                 leaders[i].pop();
                 leaders[i].push(end);
             }
-
-            // std::cout << leaders[i].front().first << ' ' << leaders[i].front().second << ' ' << i << std::endl;
         }
+        std::chrono::steady_clock::time_point endT = std::chrono::steady_clock::now();
+        timeTaken += std::chrono::duration_cast<std::chrono::microseconds>(endT - beginT).count();
 
-        // std::cout << end.first << ' ' << end.second << std::endl;
-
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000/4));
-
-        window.clear();
-        drawMap();
-        drawBoids();
-        window.display();
+        double birdTotal = LEADER_AMT*BIRD_AMT;
+        double temp = (totalPointsInRange(end, 10)/(birdTotal));
+        if(temp == 1)
+        {
+            break; // when all reach point
+        }
+        // window.clear();
+        // drawMap();
+        // drawBoids();
+        // window.display();
 
     }
 
+    std::cout << timeTaken << std::endl;
     return 0;
 }
 
@@ -319,7 +321,6 @@ void drawBoids()
     {
         for(int j = 0; j < BIRD_AMT; j++)
         {
-            // std::cout << "Drawing point " << boids[i].cord.first*8 << " " <<  boids[i].cord.second*8 << std::endl;
             shape.setPosition(boids[i][j].cord.first*8, boids[i][j].cord.second*8);
             window.draw(shape);
         }
@@ -600,4 +601,25 @@ void drawAllPaths()
         leaders[i].pop();
         }
     }
+}
+
+int totalPointsInRange(std::pair<int, int> point, int radius)
+{
+    int total = 0;
+    for(int i = 0; i < LEADER_AMT; i++)
+    {
+        for(int j = 0; j < BIRD_AMT; j++)
+        {
+            if((boids[i][j].cord.first < (point.first + radius)) && (boids[i][j].cord.first > (point.first - radius)))
+            {
+                if((boids[i][j].cord.second < (point.second + radius)) && (boids[i][j].cord.second > (point.second - radius)))
+                {
+                    total++;
+                }
+            }
+        }
+    }
+
+    return total;
+
 }

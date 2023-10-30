@@ -12,10 +12,14 @@
 
 
 #define MAP_SIZE 128
+<<<<<<< HEAD
+#define LEADER_AMT 10000 // crashes above 25, no idea why
+=======
 
 // #ifndef LEADER_AMT
 // #define LEADER_AMT 1000 // crashes above 25, no idea why
 // #endif
+>>>>>>> origin/Path-finding
 
 struct Comparator {
     bool operator()(std::tuple<double, double, std::pair<int, int>>& t1, std::tuple<double, double, std::pair<int, int>>& t2) {
@@ -90,8 +94,6 @@ int main()
         window.clear();
         drawMap();
         window.display();
-
-        // sleep(3);
 
         if(closeOpenSpaces({rand() % MAP_SIZE, rand() % MAP_SIZE}) < 8192)
         {
