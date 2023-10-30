@@ -1,7 +1,7 @@
 class bird
 {
     public:
-    std::pair<float, float> cord;
+    std::pair<double, double> cord;
     std::pair<float, float> velocity;
     std::vector<int> birdsToEval;
 
@@ -127,17 +127,25 @@ class bird
 
     void update(std::array<bird, BIRD_AMT> boids, std::pair< int, int > leaderPos)
     {
-        float yChange = velocity.first;
-        float xChange = velocity.second;
-        if((0 < (xChange + cord.first))  && ( xChange + cord.first < (MAP_SIZE-1)))
+        double yChange = velocity.first;
+        double xChange = velocity.second;
+        if((map[xChange+cord.first][yChange+cord.second] != 5))
         {
-            cord.first += velocity.first;
-        }
-        if((0 < (yChange + cord.second))  && ( yChange + cord.second < (MAP_SIZE-1)))
-        {
-            cord.second += velocity.second;
-        }
+            if((0 < (xChange + cord.first))  && ( xChange + cord.first < (MAP_SIZE-1)))
+            {
+                cord.first += velocity.first;
+            }
 
+            if((0 < (yChange + cord.second))  && ( yChange + cord.second < (MAP_SIZE-1)))
+            {
+                cord.second += velocity.second;
+            }
+        }
+        else
+        {
+            velocity.first *= -1;
+            velocity.second *= -1;
+        }
         // velocity.first = 0;
         // velocity.second = 0;
 

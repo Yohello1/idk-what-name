@@ -14,11 +14,11 @@
 #define LEADER_AMT 25 // crashes above 25, no idea why
 #define BIRD_AMT 100
 
-float maxSpeed = 4, minSpeed = 0.05;
+float maxSpeed = 3, minSpeed = 1;
 double centeringFactor = 0.5;
 double matchingFactor = 3;
 double turnFactor = 5;
-double steeringFactor = 5;
+double steeringFactor = 1;
 double avoidanceFactor = 0.4;
 
 struct Comparator {
@@ -125,8 +125,8 @@ int main()
                     return 0;
                 }
 
-                start[i].first = (rand() % 128);
-                start[i].second = (rand() % 128);
+                start[i].first = 10 + (rand() % 117);
+                start[i].second = 10 + (rand() % 117);
 
                 if(map[start[i].first][start[i].second] == 0)
                 {
@@ -141,11 +141,21 @@ int main()
         {
             for(int j = 0; j < BIRD_AMT; j++)
             {
+                while(true)
                 // std::cout << "Drawing point " << boids[i].cord.first*8 << " " <<  boids[i].cord.second*8 << std::endl;
-                boids[i][j].cord.first = (rand() % 128);
-                boids[i][j].cord.second = (rand() % 128);
+                {
+                    boids[i][j].cord.first = rand() % 10 + leaders[i].front().first;
+                    boids[i][j].cord.second = rand() % 10 + leaders[i].front().second;
+                    if(map[boids[i][j].cord.first][boids[i][j].cord.second] != 5)
+                    {
+                        break;
+                    }
+                }
             }
         }
+
+        std::cout << "hi" << std::endl;
+
     }
 
     // drawAllPaths(); // need I explain this? btw this like clears the queues
@@ -172,11 +182,17 @@ int main()
                 boids[i][j].update(boids[i], leaders[i].front());
             }
 
-            if(attemptsToHome < 25) // if not enough time to home, skip next part
-                continue;
-            if(leaders[i].size() > 1)
+            //if(attemptsToHome < 25) // if not enough time to home, skip next part
+             //   continue;
+            if((leaders[i].size() > 1) && (attemptsToHome % 3 == 0))
                 leaders[i].pop();
+            else if(leaders[i].size() == 1)
+            {
+                leaders[i].pop();
+                leaders[i].push(end);
+            }
 
+            // std::cout << leaders[i].front().first << ' ' << leaders[i].front().second << ' ' << i << std::endl;
         }
 
         // std::cout << end.first << ' ' << end.second << std::endl;
@@ -326,7 +342,7 @@ bool evaluateNeighbours(std::tuple<double, double, std::pair<int, int>> point, s
     double HCost = std::get<1>(point);
     int x, y;
     {
-        std::pair temp = std::get<2>(point);
+        std::pair<int, int> temp = std::get<2>(point);
 
         x = temp.first;
         y = temp.second;
