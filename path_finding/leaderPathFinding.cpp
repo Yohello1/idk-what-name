@@ -12,7 +12,7 @@
 
 #define MAP_SIZE 128
 #define LEADER_AMT 25 // crashes above 25, no idea why
-#define BIRD_AMT 400
+#define BIRD_AMT 100
 
 float maxSpeed = 4, minSpeed = 0.05;
 double centeringFactor = 0.5;
