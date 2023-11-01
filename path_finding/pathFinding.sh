@@ -7,4 +7,5 @@ do
 	printf $i >> data/leaderPath.txt;
 	printf %s ", " >> data/leaderPath.txt;
 	./draw2 >> data/leaderPath.txt;
+	echo $i;
 done
