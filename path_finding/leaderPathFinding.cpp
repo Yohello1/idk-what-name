@@ -11,7 +11,7 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-// #define LEADER_AMT 50 // crashes above 25, no idea why
+// #define LEADER_AMT 5 // crashes above 25, no idea why
 #define BIRD_AMT 2
 
 float maxSpeed = 1, minSpeed = 0.5;
@@ -134,7 +134,13 @@ int main()
 
                 if(map[start[i].first][start[i].second] == 0)
                 {
+                    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
                     findPath(start[i], end, i);
+
+                    std::chrono::steady_clock::time_point end2 = std::chrono::steady_clock::now();
+                    timeTaken +=  std::chrono::duration_cast<std::chrono::microseconds>(end2 - begin).count();
+
                     if(leaders[i].size() == 0)
                     {
                         leaders[i].push(end);
@@ -144,7 +150,7 @@ int main()
             }
         }
 
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
         // placing boids NOTE: MAKE THIS LESS RANDOM
         for(int i = 0; i < LEADER_AMT; i++)
         {
@@ -163,10 +169,9 @@ int main()
                 }
             }
         }
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        timeTaken +=  std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+        // std::cout << "tiddies " << timeTaken << std::endl;
         // std::cout << "hello world" << std::endl;
-        drawBoids();
+        //  drawBoids();
     }
 
     // drawAllPaths(); // need I explain this? btw this like clears the queues
@@ -193,6 +198,7 @@ int main()
         }
         std::chrono::steady_clock::time_point endT = std::chrono::steady_clock::now();
         timeTaken += std::chrono::duration_cast<std::chrono::microseconds>(endT - beginT).count();
+        // std::cout << "tiddies3 " << timeTaken << std::endl;
 
         double birdTotal = LEADER_AMT*BIRD_AMT;
         double temp = (totalPointsInRange(end, 10)/(birdTotal));

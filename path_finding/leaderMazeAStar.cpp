@@ -14,7 +14,7 @@
 #define MAP_SIZE 128
 
 // #ifndef LEADER_AMT
-// #define LEADER_AMT 1000 // crashes above 25, no idea why
+// #define LEADER_AMT 10 // crashes above 25, no idea why
 // #endif
 
 struct Comparator {
