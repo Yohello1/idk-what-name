@@ -141,22 +141,22 @@ int main()
 
     }
 
-    // drawAllPaths();
+    drawAllPaths();
 
-    // while (window.isOpen())
-    // {
-    //     sf::Event event;
-    //     while (window.pollEvent(event))
-    //     {
-    //          if (event.type == sf::Event::Closed)
-    //              window.close();
-    //     }
+ while (window.isOpen())
+     {
+         sf::Event event;
+         while (window.pollEvent(event))
+         {
+             if (event.type == sf::Event::Closed)
+                  window.close();
+         }
 
-    //     window.clear();
-    //     drawMap();
-    //     window.display();
+         window.clear();
+         drawMap();
+         window.display();
 
-    // }
+     }
 
     return 0;
 }
