@@ -1,6 +1,6 @@
 #!/bin/bash
 echo 'hai'
-for i in {6000..10000..3}
+for i in {8586..9300..3}
 do
         g++ -Wall -DLEADER_AMT=$i -g -c 2leaderMazeAStar.cpp
         g++ 2leaderMazeAStar.o -Wall -g -lsfml-graphics -lsfml-window -lsfml-system -o draw4
