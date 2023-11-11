@@ -15,6 +15,7 @@
 #include "render/shader.cpp"
 #include "render/Compute.cpp"
 #include "render/MVPMatrix.hpp"
+#include "Game.cpp"
 
 std::atomic<bool> kys; // politely :3
 
