@@ -101,10 +101,12 @@ int main()
 	glUseProgram(inMyMind.shaderProgram);
 
 	// Aspect is well the ratio of actual to logical
-	MVPMatrix::MVPMatrixes favoriteConvosInTheAM((8),1024,1024,1000);
-	inMyMind.setMat4("uProjectionMatrix", favoriteConvosInTheAM.ProjectionMatrix);
-	inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
-	inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
+
+	Game::Game scene1("hello world", 1024, 1024, 1, 8, 1024, 1024, 1000);
+
+	inMyMind.setMat4("uProjectionMatrix", scene1.transforms->ProjectionMatrix);
+	inMyMind.setMat4("uViewMatrix",  scene1.transforms->ViewMatrix);
+	inMyMind.setMat4("uModelMatrix",  scene1.transforms->ModelMatrix);
 
 	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
 	// this shouldnt change
@@ -122,36 +124,25 @@ int main()
 	//fake image maker :)
 	float* fakeImg = new float[4194304];
 	functions::fakeRandomImage(fakeImg);
+	scene1.updateImageBulk(0, fakeImg);
 	std::cout << "IMG MADE2" << '\n';
 
 	while (!glfwWindowShouldClose(window))
 	{
 		auto start_time = Clock::now();
 
-
-		// Rotate the plane???
-		{
-			// float ang_x = 0.0, ang_y = 0.0, ang_z = 0.0;
-			// // std::cout << ang_y << '\n';
-
-			// glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(ang_x), glm::vec3(1.0f, 0.0f, 0.0f));
-			// glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(ang_y), glm::vec3(0.0f, 1.0f, 0.0f));
-			// glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(ang_z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-		   	// favoriteConvosInTheAM.ModelMatrix = transformX * transformY * transformZ * favoriteConvosInTheAM.ModelMatrix;
-			// inMyMind.setMat4("uModelMatrix", favoriteConvosInTheAM.ModelMatrix);
-		}
-
-		// std::cout << "View Matrix location: " << inMyMind.getUniformID("uProjectionMatrix") << '\n';
-		// favoriteConvosInTheAM.rotateView(1.0,0.0,0.0);
-		inMyMind.setMat4("uViewMatrix", favoriteConvosInTheAM.ViewMatrix);
+		inMyMind.setMat4("uViewMatrix", scene1.transforms->ViewMatrix);
 
 		dejaVu.useProgram();
 		glDispatchCompute(1024, 1024, 1);
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
+		// there is def a better way to do this
+
+		std::copy(scene1.layers, scene1.layers + 1024*1024*1*4, fakeImg);
 		heyworld.copyDataFloat(fakeImg);
-		// inMyMind.setMat4("uViewMatrix", viewMatrix);
+
+
 		glUseProgram(inMyMind.shaderProgram);
 		glBindTextureUnit(0, halfwayThroughNovember.getID());
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
@@ -159,7 +150,7 @@ int main()
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		auto end_time = Clock::now();
-		//std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
+		std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

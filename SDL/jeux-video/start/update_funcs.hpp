@@ -36,10 +36,35 @@ namespace functions
                 }
             }
         }
-        */
+
         for(int i = 0; i < 4194304; i++)
         {
             randImgOut[i] = (float)(dist(mt)/255);
         }
+        */
+
+        /*
+        */
+        for(int i = 0; i < 1024; i++)
+        {
+            for(int j = 0; j < 1024; j++)
+            {
+                for(int k = 0; k < 4; k++)
+                {
+
+                    if(100 < i && i < 150)
+                        if(300 < j && j < 724)
+                            randImgOut[i*1024*4+j*4+k] = 120;
+                    if(874 < i && i < 924)
+                        if(300 < j && j < 724)
+                            randImgOut[i*1024*4+j*4+k] = 120;
+                    if(149 < i && i < 875)
+                        if(462 < j && j < 562)
+                            randImgOut[i*1024*4+j*4+k] = 120;
+
+                }
+            }
+        }
+
     }
 }

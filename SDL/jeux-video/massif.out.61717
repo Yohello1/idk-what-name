@@ -1,0 +1,1110 @@
+desc: (none)
+cmd: ./draw2
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=21209789
+mem_heap_B=781372
+mem_heap_extra_B=14572
+mem_stacks_B=0
+heap_tree=detailed
+n10: 781372 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 454647 0x4F9F53C: parsestringfile (imLcPrs.c:736)
+  n1: 454647 0x4FA2225: UnknownInlinedFun (imLcIm.c:610)
+   n1: 454647 0x4FA2225: _XimLocalOpenIM (imLcIm.c:700)
+    n1: 454647 0x4F9B0E0: _XimOpenIM (imInt.c:229)
+     n1: 454647 0x49116AD: UnknownInlinedFun (x11_init.c:1142)
+      n1: 454647 0x49116AD: glfwInit (init.c:324)
+       n0: 454647 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 93312 0x4F9FE04: UnknownInlinedFun (imLcPrs.c:674)
+  n1: 93312 0x4F9FE04: parsestringfile (imLcPrs.c:739)
+   n1: 93312 0x4FA2225: UnknownInlinedFun (imLcIm.c:610)
+    n1: 93312 0x4FA2225: _XimLocalOpenIM (imLcIm.c:700)
+     n1: 93312 0x4F9B0E0: _XimOpenIM (imInt.c:229)
+      n1: 93312 0x49116AD: UnknownInlinedFun (x11_init.c:1142)
+       n1: 93312 0x49116AD: glfwInit (init.c:324)
+        n0: 93312 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 85515 in 142 places, all below massif's threshold (1.00%)
+ n1: 73728 0x4A6B71D: pool (eh_alloc.cc:235)
+  n1: 73728 0x4A6B71D: UnknownInlinedFun (eh_alloc.cc:373)
+   n1: 73728 0x4A6B71D: _GLOBAL__sub_I_eh_alloc.cc (eh_alloc.cc:456)
+    n1: 73728 0x4005186: call_init (dl-init.c:74)
+     n1: 73728 0x4005186: call_init (dl-init.c:26)
+      n1: 73728 0x400527C: _dl_init (dl-init.c:121)
+       n0: 73728 0x401BACF: ??? (in /usr/lib64/ld-linux-x86-64.so.2)
+ n1: 21152 0x517AA06: xcb_connect_to_fd (xcb_conn.c:345)
+  n1: 21152 0x517B651: xcb_connect_to_display_with_auth_info (xcb_util.c:532)
+   n1: 21152 0x4F70699: _XConnectXCB (xcb_disp.c:78)
+    n1: 21152 0x4F613CD: XOpenDisplay (OpenDis.c:129)
+     n1: 21152 0x4910127: UnknownInlinedFun (x11_init.c:1105)
+      n1: 21152 0x4910127: glfwInit (init.c:324)
+       n0: 21152 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 16384 0x4F616FD: XOpenDisplay (OpenDis.c:241)
+  n1: 16384 0x4910127: UnknownInlinedFun (x11_init.c:1105)
+   n1: 16384 0x4910127: glfwInit (init.c:324)
+    n0: 16384 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 10368 0x4F9FB10: UnknownInlinedFun (imLcPrs.c:632)
+  n1: 10368 0x4F9FB10: parsestringfile (imLcPrs.c:739)
+   n1: 10368 0x4FA2225: UnknownInlinedFun (imLcIm.c:610)
+    n1: 10368 0x4FA2225: _XimLocalOpenIM (imLcIm.c:700)
+     n1: 10368 0x4F9B0E0: _XimOpenIM (imInt.c:229)
+      n1: 10368 0x49116AD: UnknownInlinedFun (x11_init.c:1142)
+       n1: 10368 0x49116AD: glfwInit (init.c:324)
+        n0: 10368 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 9914 0x400B86D: UnknownInlinedFun (rtld-malloc.h:44)
+  n1: 9914 0x400B86D: _dl_new_object (dl-object.c:92)
+   n1: 9914 0x4006FDE: _dl_map_object_from_fd (dl-load.c:1053)
+    n1: 9914 0x4008A98: _dl_map_object (dl-load.c:2246)
+     n0: 9914 in 2 places, all below massif's threshold (1.00%)
+ n1: 8176 0x4F63355: UnknownInlinedFun (Quarks.c:124)
+  n1: 8176 0x4F63355: _Xpermalloc (Quarks.c:171)
+   n1: 8176 0x4F64B19: UnknownInlinedFun (Quarks.c:201)
+    n1: 8176 0x4F64B19: _XrmInternalStringToQuark (Quarks.c:284)
+     n1: 8176 0x4F78293: XrmInitialize (Xrm.c:333)
+      n1: 8176 0x4910120: UnknownInlinedFun (x11_init.c:1103)
+       n1: 8176 0x4910120: glfwInit (init.c:324)
+        n0: 8176 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 8176 0x4F64CC2: UnknownInlinedFun (Quarks.c:124)
+  n1: 8176 0x4F64CC2: _XrmInternalStringToQuark (Quarks.c:318)
+   n1: 8176 0x4F8A4EB: _XlcGetLocaleDataBase (lcDB.c:1222)
+    n1: 8176 0x4F8B90A: load_generic (lcGeneric.c:820)
+     n1: 8176 0x4F8D31A: initialize.lto_priv.0 (lcGeneric.c:1020)
+      n1: 8176 0x4F89F0D: _XlcCreateLC (lcPubWrap.c:89)
+       n1: 8176 0x4FAC0E9: _XlcUtf8Loader (lcUTF8Load.c:47)
+        n1: 8176 0x4F8E3F0: _XOpenLC (lcWrap.c:292)
+         n1: 8176 0x4F8EE36: _XrmInitParseInfo (lcWrap.c:340)
+          n1: 8176 0x4F7837F: NewDatabase (Xrm.c:503)
+           n1: 8176 0x4F78802: XrmGetStringDatabase (Xrm.c:1559)
+            n1: 8176 0x4910182: UnknownInlinedFun (x11_init.c:932)
+             n1: 8176 0x4910182: UnknownInlinedFun (x11_init.c:1127)
+              n1: 8176 0x4910182: glfwInit (init.c:324)
+               n0: 8176 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+#-----------
+snapshot=2
+#-----------
+time=50886104
+mem_heap_B=1052236
+mem_heap_extra_B=14588
+mem_stacks_B=0
+heap_tree=detailed
+n9: 1052236 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 454647 0x4F9F53C: parsestringfile (imLcPrs.c:736)
+  n1: 454647 0x4FA2225: UnknownInlinedFun (imLcIm.c:610)
+   n1: 454647 0x4FA2225: _XimLocalOpenIM (imLcIm.c:700)
+    n1: 454647 0x4F9B0E0: _XimOpenIM (imInt.c:229)
+     n1: 454647 0x49116AD: UnknownInlinedFun (x11_init.c:1142)
+      n1: 454647 0x49116AD: glfwInit (init.c:324)
+       n0: 454647 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 314928 0x4F9FE04: UnknownInlinedFun (imLcPrs.c:674)
+  n1: 314928 0x4F9FE04: parsestringfile (imLcPrs.c:739)
+   n1: 314928 0x4FA2225: UnknownInlinedFun (imLcIm.c:610)
+    n1: 314928 0x4FA2225: _XimLocalOpenIM (imLcIm.c:700)
+     n1: 314928 0x4F9B0E0: _XimOpenIM (imInt.c:229)
+      n1: 314928 0x49116AD: UnknownInlinedFun (x11_init.c:1142)
+       n1: 314928 0x49116AD: glfwInit (init.c:324)
+        n0: 314928 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 101413 in 143 places, all below massif's threshold (1.00%)
+ n1: 73728 0x4A6B71D: pool (eh_alloc.cc:235)
+  n1: 73728 0x4A6B71D: UnknownInlinedFun (eh_alloc.cc:373)
+   n1: 73728 0x4A6B71D: _GLOBAL__sub_I_eh_alloc.cc (eh_alloc.cc:456)
+    n1: 73728 0x4005186: call_init (dl-init.c:74)
+     n1: 73728 0x4005186: call_init (dl-init.c:26)
+      n1: 73728 0x400527C: _dl_init (dl-init.c:121)
+       n0: 73728 0x401BACF: ??? (in /usr/lib64/ld-linux-x86-64.so.2)
+ n1: 34992 0x4F9FB10: UnknownInlinedFun (imLcPrs.c:632)
+  n1: 34992 0x4F9FB10: parsestringfile (imLcPrs.c:739)
+   n1: 34992 0x4FA2225: UnknownInlinedFun (imLcIm.c:610)
+    n1: 34992 0x4FA2225: _XimLocalOpenIM (imLcIm.c:700)
+     n1: 34992 0x4F9B0E0: _XimOpenIM (imInt.c:229)
+      n1: 34992 0x49116AD: UnknownInlinedFun (x11_init.c:1142)
+       n1: 34992 0x49116AD: glfwInit (init.c:324)
+        n0: 34992 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 21152 0x517AA06: xcb_connect_to_fd (xcb_conn.c:345)
+  n1: 21152 0x517B651: xcb_connect_to_display_with_auth_info (xcb_util.c:532)
+   n1: 21152 0x4F70699: _XConnectXCB (xcb_disp.c:78)
+    n1: 21152 0x4F613CD: XOpenDisplay (OpenDis.c:129)
+     n1: 21152 0x4910127: UnknownInlinedFun (x11_init.c:1105)
+      n1: 21152 0x4910127: glfwInit (init.c:324)
+       n0: 21152 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 17496 0x4F9F969: UnknownInlinedFun (imLcPrs.c:579)
+  n1: 17496 0x4F9F969: parsestringfile (imLcPrs.c:739)
+   n1: 17496 0x4FA2225: UnknownInlinedFun (imLcIm.c:610)
+    n1: 17496 0x4FA2225: _XimLocalOpenIM (imLcIm.c:700)
+     n1: 17496 0x4F9B0E0: _XimOpenIM (imInt.c:229)
+      n1: 17496 0x49116AD: UnknownInlinedFun (x11_init.c:1142)
+       n1: 17496 0x49116AD: glfwInit (init.c:324)
+        n0: 17496 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 17496 0x4F9FC2D: UnknownInlinedFun (imLcPrs.c:648)
+  n1: 17496 0x4F9FC2D: parsestringfile (imLcPrs.c:739)
+   n1: 17496 0x4FA2225: UnknownInlinedFun (imLcIm.c:610)
+    n1: 17496 0x4FA2225: _XimLocalOpenIM (imLcIm.c:700)
+     n1: 17496 0x4F9B0E0: _XimOpenIM (imInt.c:229)
+      n1: 17496 0x49116AD: UnknownInlinedFun (x11_init.c:1142)
+       n1: 17496 0x49116AD: glfwInit (init.c:324)
+        n0: 17496 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 16384 0x4F616FD: XOpenDisplay (OpenDis.c:241)
+  n1: 16384 0x4910127: UnknownInlinedFun (x11_init.c:1105)
+   n1: 16384 0x4910127: glfwInit (init.c:324)
+    n0: 16384 0x44A07B: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+#-----------
+snapshot=3
+#-----------
+time=93985068
+mem_heap_B=1694281
+mem_heap_extra_B=57039
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=124375845
+mem_heap_B=1834212
+mem_heap_extra_B=58692
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=160355963
+mem_heap_B=90561759
+mem_heap_extra_B=104577
+mem_stacks_B=0
+heap_tree=peak
+n4: 90561759 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n3: 19199324 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n2: 16777485 0x1426BBCA: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 16777239 0x14665F14: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 16777239 0x14667347: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 16777239 0x1434D93C: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+      n1: 16777239 0x1435889C: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+       n1: 16777239 0x143647EC: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+        n1: 16777239 0x1436F1F9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+         n1: 16777239 0x44B26D: Shaders::computeImageOut::computeImageOut(unsigned short, unsigned short, unsigned char) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+          n0: 16777239 0x44A449: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+   n0: 246 in 1 place, below massif's threshold (1.00%)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 783439 in 194 places, all below massif's threshold (1.00%)
+ n1: 2644974 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2644974 in 113 places, all below massif's threshold (1.00%)
+ n0: 1608597 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=6
+#-----------
+time=2186436148
+mem_heap_B=90573916
+mem_heap_extra_B=104900
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=2208542480
+mem_heap_B=90657708
+mem_heap_extra_B=109244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=2233067587
+mem_heap_B=90659276
+mem_heap_extra_B=109364
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=2266510528
+mem_heap_B=90658860
+mem_heap_extra_B=109348
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=2293215679
+mem_heap_B=90658860
+mem_heap_extra_B=109348
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90658860 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2664850 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2664850 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449173 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810773 in 209 places, all below massif's threshold (1.00%)
+ n0: 1658757 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=11
+#-----------
+time=2322173949
+mem_heap_B=90659068
+mem_heap_extra_B=109356
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=2343827241
+mem_heap_B=90658260
+mem_heap_extra_B=109388
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=2379612697
+mem_heap_B=90659484
+mem_heap_extra_B=109372
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=2405990974
+mem_heap_B=90659276
+mem_heap_extra_B=109364
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=2445690551
+mem_heap_B=90659068
+mem_heap_extra_B=109356
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=2472091786
+mem_heap_B=90657748
+mem_heap_extra_B=109340
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=2502821010
+mem_heap_B=90659180
+mem_heap_extra_B=109332
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=2535525935
+mem_heap_B=90657748
+mem_heap_extra_B=109340
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=2571837230
+mem_heap_B=90657956
+mem_heap_extra_B=109348
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90657956 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2664018 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2664018 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449173 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810773 in 209 places, all below massif's threshold (1.00%)
+ n0: 1658685 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=20
+#-----------
+time=2608092236
+mem_heap_B=90657748
+mem_heap_extra_B=109340
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=2644442295
+mem_heap_B=90657748
+mem_heap_extra_B=109340
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90657748 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2663810 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2663810 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449173 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810773 in 209 places, all below massif's threshold (1.00%)
+ n0: 1658685 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=22
+#-----------
+time=2680853837
+mem_heap_B=90657956
+mem_heap_extra_B=109348
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=2702858638
+mem_heap_B=90657716
+mem_heap_extra_B=109292
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=2731538155
+mem_heap_B=90657508
+mem_heap_extra_B=109284
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=2759448607
+mem_heap_B=90656492
+mem_heap_extra_B=109308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=2787454382
+mem_heap_B=90657508
+mem_heap_extra_B=109284
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90657508 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2663634 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2663634 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449133 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810733 in 209 places, all below massif's threshold (1.00%)
+ n0: 1658661 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=27
+#-----------
+time=2823435603
+mem_heap_B=90656492
+mem_heap_extra_B=109308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=2860022540
+mem_heap_B=90656700
+mem_heap_extra_B=109316
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90656700 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2662802 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2662802 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449133 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810733 in 209 places, all below massif's threshold (1.00%)
+ n0: 1658685 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=29
+#-----------
+time=2905484271
+mem_heap_B=90656492
+mem_heap_extra_B=109308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=2939877677
+mem_heap_B=90657716
+mem_heap_extra_B=109292
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=2986165068
+mem_heap_B=90657300
+mem_heap_extra_B=109276
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=3010076294
+mem_heap_B=90656700
+mem_heap_extra_B=109316
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=3032825947
+mem_heap_B=90656492
+mem_heap_extra_B=109308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=3056597678
+mem_heap_B=90657716
+mem_heap_extra_B=109292
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=3080131162
+mem_heap_B=90657924
+mem_heap_extra_B=109300
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90657924 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2664050 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2664050 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449133 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810733 in 209 places, all below massif's threshold (1.00%)
+ n0: 1658661 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=36
+#-----------
+time=3116397737
+mem_heap_B=90657716
+mem_heap_extra_B=109292
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=3140556304
+mem_heap_B=90657092
+mem_heap_extra_B=109268
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=3176827456
+mem_heap_B=90657716
+mem_heap_extra_B=109292
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=3200319402
+mem_heap_B=90657716
+mem_heap_extra_B=109292
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90657716 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2663842 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2663842 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449133 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810733 in 209 places, all below massif's threshold (1.00%)
+ n0: 1658661 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=40
+#-----------
+time=3224119678
+mem_heap_B=90656492
+mem_heap_extra_B=109308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=3246800791
+mem_heap_B=90656492
+mem_heap_extra_B=109308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=3270753357
+mem_heap_B=90657924
+mem_heap_extra_B=109300
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=3306112385
+mem_heap_B=90657508
+mem_heap_extra_B=109284
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=3329281728
+mem_heap_B=90657508
+mem_heap_extra_B=109284
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=3352578190
+mem_heap_B=90657924
+mem_heap_extra_B=109300
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=3387604131
+mem_heap_B=90657348
+mem_heap_extra_B=109284
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=3410743384
+mem_heap_B=90657348
+mem_heap_extra_B=109284
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=3445059464
+mem_heap_B=90657764
+mem_heap_extra_B=109300
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=3468305951
+mem_heap_B=90657140
+mem_heap_extra_B=109276
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=3490373923
+mem_heap_B=90657972
+mem_heap_extra_B=109308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=3511847791
+mem_heap_B=90656540
+mem_heap_extra_B=109300
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=3533377301
+mem_heap_B=90657348
+mem_heap_extra_B=109284
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=3555446119
+mem_heap_B=90657556
+mem_heap_extra_B=109292
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=3577544731
+mem_heap_B=90656932
+mem_heap_extra_B=109268
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=3599605009
+mem_heap_B=90657972
+mem_heap_extra_B=109308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=3621042050
+mem_heap_B=90656540
+mem_heap_extra_B=109300
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90656540 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2662594 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2662594 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449133 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810733 in 209 places, all below massif's threshold (1.00%)
+ n0: 1658733 in 391 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=57
+#-----------
+time=3642473763
+mem_heap_B=90657348
+mem_heap_extra_B=109284
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=3664523186
+mem_heap_B=90665700
+mem_heap_extra_B=109788
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=3685802747
+mem_heap_B=90666532
+mem_heap_extra_B=109820
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=3707249118
+mem_heap_B=90666116
+mem_heap_extra_B=109804
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=3728813093
+mem_heap_B=90665908
+mem_heap_extra_B=109796
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=3751058093
+mem_heap_B=90665908
+mem_heap_extra_B=109796
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=3772610904
+mem_heap_B=90665516
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=3793954543
+mem_heap_B=90666116
+mem_heap_extra_B=109804
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=3815272785
+mem_heap_B=90665908
+mem_heap_extra_B=109796
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=3836555831
+mem_heap_B=90666300
+mem_heap_extra_B=109820
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90666300 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2662818 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2662818 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449173 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810773 in 210 places, all below massif's threshold (1.00%)
+ n0: 1668229 in 397 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=67
+#-----------
+time=3858568129
+mem_heap_B=90666508
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=3879942697
+mem_heap_B=90666508
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=3901978305
+mem_heap_B=90666924
+mem_heap_extra_B=109844
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=3923748423
+mem_heap_B=90665492
+mem_heap_extra_B=109836
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=3946023925
+mem_heap_B=90666300
+mem_heap_extra_B=109820
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=3968137974
+mem_heap_B=90666508
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=3990203743
+mem_heap_B=90666092
+mem_heap_extra_B=109812
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=74
+#-----------
+time=4012309505
+mem_heap_B=90665884
+mem_heap_extra_B=109804
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=4034386193
+mem_heap_B=90666716
+mem_heap_extra_B=109836
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=4055739052
+mem_heap_B=90665492
+mem_heap_extra_B=109836
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90665492 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2661986 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2661986 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449173 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810773 in 210 places, all below massif's threshold (1.00%)
+ n0: 1668253 in 397 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=77
+#-----------
+time=4077289573
+mem_heap_B=90666508
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=78
+#-----------
+time=4099271152
+mem_heap_B=90666092
+mem_heap_extra_B=109812
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=4121361052
+mem_heap_B=90665884
+mem_heap_extra_B=109804
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=80
+#-----------
+time=4143338095
+mem_heap_B=90666716
+mem_heap_extra_B=109836
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=81
+#-----------
+time=4164765847
+mem_heap_B=90665492
+mem_heap_extra_B=109836
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=82
+#-----------
+time=4186294631
+mem_heap_B=90666508
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=83
+#-----------
+time=4208274367
+mem_heap_B=90666716
+mem_heap_extra_B=109836
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=84
+#-----------
+time=4230303122
+mem_heap_B=90666508
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=85
+#-----------
+time=4252302380
+mem_heap_B=90666716
+mem_heap_extra_B=109836
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=86
+#-----------
+time=4273821735
+mem_heap_B=90666092
+mem_heap_extra_B=109812
+mem_stacks_B=0
+heap_tree=detailed
+n5: 90666092 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67108864 0x44B74F: Game::Game::Game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned int, unsigned int, unsigned char, int, int, int, int) (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 67108864 0x44A383: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n0: 16777216 0x44A503: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+ n1: 2662610 0x145A119D: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n0: 2662610 in 117 places, all below massif's threshold (1.00%)
+ n2: 2449173 0x145A0EE1: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+  n1: 1638400 0x141F78BF: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+   n1: 1638400 0x146160E9: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+    n1: 1638400 0x145AF854: ??? (in /usr/lib64/libnvidia-glcore.so.535.129.03)
+     n1: 1638400 0x12C63F5F: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+      n1: 1638400 0x12C8F88D: ??? (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+       n1: 1638400 0x12C84545: glXCreateContextAttribsARB (in /usr/lib64/libGLX_nvidia.so.535.129.03)
+        n1: 1638400 0x4F12B42: glXCreateContextAttribsARB (libglx.c:301)
+         n1: 1638400 0x490E218: UnknownInlinedFun (glx_context.c:581)
+          n1: 1638400 0x490E218: UnknownInlinedFun (x11_window.c:2003)
+           n1: 1638400 0x490E218: glfwCreateWindow (window.c:218)
+            n0: 1638400 0x44A0F0: main (in /home/yohello/code/generation/SDL/jeux-video/draw2)
+  n0: 810773 in 210 places, all below massif's threshold (1.00%)
+ n0: 1668229 in 397 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=87
+#-----------
+time=4295838407
+mem_heap_B=90666508
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=88
+#-----------
+time=4317844936
+mem_heap_B=90666092
+mem_heap_extra_B=109812
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=89
+#-----------
+time=4339875857
+mem_heap_B=90666508
+mem_heap_extra_B=109828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=90
+#-----------
+time=4361919573
+mem_heap_B=90666716
+mem_heap_extra_B=109836
+mem_stacks_B=0
+heap_tree=empty
