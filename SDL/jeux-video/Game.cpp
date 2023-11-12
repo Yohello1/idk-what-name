@@ -58,12 +58,6 @@ namespace Game
 
         }
 
-        // TODO:
-        // write image update functions,                    - Done
-        // functions to change individual elements/parts,   - Done
-        // function to fetch/update matrices,               - Done
-        // function to get scene name                       - Done
-
         void rotateView(float x, float y, float z)
         {
             transforms->rotateView(x,y,z);
