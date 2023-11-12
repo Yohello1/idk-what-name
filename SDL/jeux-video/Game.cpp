@@ -21,7 +21,7 @@ namespace Game
         public:
         // Yes these are public for simplicites sake
         float* layers;
-        MVPMatrix::MVPMatrixes* transformMatricies;
+        MVPMatrix::MVPMatrixes* transforms;
 
         Game(std::string sceneName, unsigned int map_x, unsigned int map_y, uint8_t layersAmt, int aspect, int width, int height, int farCloseDistance) // wtf else do I put LMAO
         {
@@ -31,7 +31,7 @@ namespace Game
 
             layers = new float[map_x*map_y*4*layersAmt];
 
-            tansformMatricies = MVPMatrix::MVPMatrixes(aspect, width, height, farCloseDistance);
+            transforms = new MVPMatrix::MVPMatrixes(aspect, width, height, farCloseDistance);
         }
 
         // layerNum is the layer number
@@ -51,7 +51,7 @@ namespace Game
             return temp;
         }
 
-        bool updateImageBulk(int layerNum, float* data)
+        void updateImageBulk(int layerNum, float* data)
         {
             // here memcpy
             std::copy(data, data + mapX*mapY*4, layers + mapX*mapY*4*layerNum);
@@ -61,8 +61,18 @@ namespace Game
         // TODO:
         // write image update functions,                    - Done
         // functions to change individual elements/parts,   - Done
-        // function to fetch/update matrices,
+        // function to fetch/update matrices,               - Done
         // function to get scene name                       - Done
+
+        void rotateView(float x, float y, float z)
+        {
+            transforms->rotateView(x,y,z);
+        }
+
+        void translateView(float x, float y, float z)
+        {
+            transforms->translateView(x,y,z);
+        }
 
 
         // I cannot be bothered to get this working
