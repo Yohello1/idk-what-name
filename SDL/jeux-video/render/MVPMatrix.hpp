@@ -35,6 +35,12 @@ namespace MVPMatrix
             ViewMatrix = glm::rotate(ViewMatrix, glm::radians(x), glm::vec3(0.0f, 1.0f, 0.0f));
             ViewMatrix = glm::rotate(ViewMatrix, glm::radians(x), glm::vec3(0.0f, 0.0f, 1.0f));
         }
+
+        void translateView(float x, float y, float z)
+        {
+            ViewMatrix = glm::translate(ViewMatrix, glm::vec3(x,y,z));
+        }
+
         private:
     };
 }
