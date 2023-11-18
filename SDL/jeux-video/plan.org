@@ -32,7 +32,7 @@
   - [X] Test
 - [ ] Quality of Programming the engine life
   - [ ] Switching to type def
-- [11/25] Render life
+- [11/26] Render life
   - [X] Colours p2
   - [ ] Make a class to contain each world
   - [ ] Figure out how to run the map -> Material -> Img
@@ -73,10 +73,10 @@
 - [1/3] optimisation
   - [X] Chunk simulation
   - [ ] Multi threading (Physics)
-  - [ ] Rewrite SDL code in uh, opengl (I dont have a choice)
-    - [ ] Open a window
-    - [ ] Display colours
-    - [ ] Frag/vert shader
+  - [-] Rewrite SDL code in uh, opengl (I dont have a choice)
+    - [X] Open a window
+    - [X] Display colours
+    - [X] Frag/vert shader
     - [ ] Compositor
 - [ ] Import/Export maps
 - [ ] Write a proper input system
