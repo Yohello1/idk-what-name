@@ -28,13 +28,13 @@ namespace functions
 
                     if(100 < i && i < 150)
                         if(300 < j && j < 724)
-                            randImgOut[i*1024*4+j*4+k] = shade;
+                            randImgOut[i*1024*4+j*4+k] = (rand() % 128)/64;
                     if(874 < i && i < 924)
                         if(300 < j && j < 724)
-                            randImgOut[i*1024*4+j*4+k] = shade;
+                            randImgOut[i*1024*4+j*4+k] = (rand() % 128)/64;
                     if(149 < i && i < 875)
                         if(462 < j && j < 562)
-                            randImgOut[i*1024*4+j*4+k] = shade;
+                            randImgOut[i*1024*4+j*4+k] = (rand() % 128)/64;
 
                 }
             }

@@ -100,7 +100,8 @@ int main()
 	std::cout << "vert and frag shaders have been made" << std::endl;
 	inMyMind.useProgram();
 
-	// Aspect is well the ratio of actual to logical
+	// Aspect, is well, the ratio of actual to logical
+	float* fakeImg = new float[4194304];
 
 	Game::Game scene1("hi", 1024, 1024, 1, 8, 1024, 1024, 1000);
 
@@ -112,8 +113,17 @@ int main()
 	// this shouldnt change
 	Shaders::computeImageOut halfwayThroughNovember(1024,1024,0);
 	Shaders::computeImageIn heyworld(1024,1024,1);
-	Shaders::computeImageIn letItGo(1024,1024,2);
-	Shaders::computeImageIn cigaretteDayDreams(1024, 1024, 3);
+	Shaders::computeImageIn letItGo(1024,1024,2);              // Not used
+	Shaders::computeImageIn cigaretteDayDreams(1024, 1024, 3); // Not used
+
+	functions::fakeRandomImage(fakeImg, 0);
+	heyworld.copyDataFloat(fakeImg);
+	functions::fakeRandomImage(fakeImg, 0);
+	letItGo.copyDataFloat(fakeImg);
+	functions::fakeRandomImage(fakeImg, 0);
+	cigaretteDayDreams.copyDataFloat(fakeImg);
+
+
 
 	dejaVu.printMaxComputeSize();
 	int work_grp_inv;
@@ -121,7 +131,6 @@ int main()
 	std::cout << "Max invocations count per work group: " << work_grp_inv << "\n";
 
 	//fake image maker :)
-	float* fakeImg = new float[4194304];
 	functions::fakeRandomImage(fakeImg, 0);
 	scene1.updateImageBulk(0, fakeImg);
 	std::cout << "IMG MADE2" << '\n';
@@ -152,7 +161,7 @@ int main()
 		std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
 
 		float tempTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000;
-		tempTime /= 3;
+		tempTime /= 25;
 
 		functions::fakeRandomImage(fakeImg, tempTime);
 
