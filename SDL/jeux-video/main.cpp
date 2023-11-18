@@ -139,7 +139,7 @@ int main()
 
 		// there is def a better way to do this
 
-		std::copy(scene1.layers, scene1.layers + 1024*1024*1*4, fakeImg);
+		std::copy(scene1.layers.at(0), scene1.layers.at(0) + 1024*1024*4, fakeImg);
 		heyworld.copyDataFloat(fakeImg);
 
 
