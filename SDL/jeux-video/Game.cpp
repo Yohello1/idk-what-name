@@ -20,7 +20,7 @@ namespace Game
 
         public:
         // Yes these are public for simplicites sake
-        float* layers;
+        std::vector<float *> layers;
         MVPMatrix::MVPMatrixes* transforms;
 
         Game(std::string sceneName, unsigned int map_x, unsigned int map_y, uint8_t layersAmt, int aspect, int width, int height, int farCloseDistance) // wtf else do I put LMAO
@@ -29,7 +29,10 @@ namespace Game
             mapX = map_x;
             mapY = map_y;
 
-            layers = new float[map_x*map_y*4*layersAmt];
+            for(uint8_t i = 0; i < layersAmt; i++)
+            {
+                layers.push_back(new float[map_x*map_y*4*layersAmt]);
+            }
 
             transforms = new MVPMatrix::MVPMatrixes(aspect, width, height, farCloseDistance);
         }
@@ -40,7 +43,8 @@ namespace Game
         // value is the value it will be updated to
         void updateValue(int layerNum, int offset, float value)
         {
-            layers[offset+layerNum*mapX*mapY*4] = value;
+            // layers[offset+layerNum*mapX*mapY*4] = value;
+
         }
 
         // No validity check, part is the like individual offset(?)
@@ -54,7 +58,7 @@ namespace Game
         void updateImageBulk(int layerNum, float* data)
         {
             // here memcpy
-            std::copy(data, data + mapX*mapY*4, layers + mapX*mapY*4*layerNum);
+            std::copy(data, data + mapX*mapY*4, layers.at(layerNum));
 
         }
 
