@@ -55,8 +55,8 @@ int main()
 
 	unsigned int actual_width = 1024;
 	unsigned int actual_height = 1024;
-	unsigned int logical_width = 128;
-	unsigned int logical_height = 128;
+	unsigned int logical_width = 256;
+	unsigned int logical_height = 256;
 
 	GLFWwindow* window = glfwCreateWindow(actual_width, actual_height, "Gament2", NULL, NULL);
 	if (!window)
@@ -98,11 +98,11 @@ int main()
 	std::cout << "vert and frag shaders being made" << std::endl;
 	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
 	std::cout << "vert and frag shaders have been made" << std::endl;
-	glUseProgram(inMyMind.shaderProgram);
+	inMyMind.useProgram();
 
 	// Aspect is well the ratio of actual to logical
 
-	Game::Game scene1("hello world", 1024, 1024, 1, 8, 1024, 1024, 1000);
+	Game::Game scene1("hi", 1024, 1024, 1, 8, 1024, 1024, 1000);
 
 	inMyMind.setMat4("uProjectionMatrix", scene1.transforms->ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix",  scene1.transforms->ViewMatrix);
@@ -114,7 +114,6 @@ int main()
 	Shaders::computeImageIn heyworld(1024,1024,1);
 	Shaders::computeImageIn letItGo(1024,1024,2);
 	Shaders::computeImageIn cigaretteDayDreams(1024, 1024, 3);
-//	Shaders::computeImageIn riceNoodles(1024, 1024, 4);
 
 	dejaVu.printMaxComputeSize();
 	int work_grp_inv;
@@ -123,9 +122,11 @@ int main()
 
 	//fake image maker :)
 	float* fakeImg = new float[4194304];
-	functions::fakeRandomImage(fakeImg);
+	functions::fakeRandomImage(fakeImg, 0);
 	scene1.updateImageBulk(0, fakeImg);
 	std::cout << "IMG MADE2" << '\n';
+
+	scene1.changeTitle(window);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -137,13 +138,11 @@ int main()
 		glDispatchCompute(1024, 1024, 1);
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-		// there is def a better way to do this
+		scene1.updateImageBulk(0, fakeImg);
+		std::copy(fakeImg, fakeImg + 1024*1024*4, scene1.layers.at(0));
+		heyworld.copyDataFloat(scene1.layers.at(0));
 
-		std::copy(scene1.layers.at(0), scene1.layers.at(0) + 1024*1024*4, fakeImg);
-		heyworld.copyDataFloat(fakeImg);
-
-
-		glUseProgram(inMyMind.shaderProgram);
+		inMyMind.useProgram();
 		glBindTextureUnit(0, halfwayThroughNovember.getID());
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
 		glBindVertexArray(VAO);
@@ -152,10 +151,16 @@ int main()
 		auto end_time = Clock::now();
 		std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
 
+		float tempTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000;
+		tempTime /= 3;
+
+		functions::fakeRandomImage(fakeImg, tempTime);
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
+	std::cout << "HEllo world " << std::endl;
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

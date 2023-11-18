@@ -152,6 +152,12 @@ class Shader
             }
     }
 
+
+    void useProgram()
+    {
+        glUseProgram(shaderProgram);
+    }
+
 private:
 
 };

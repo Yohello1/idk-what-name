@@ -81,6 +81,11 @@ namespace Game
             return name;
         }
 
+        void changeTitle(GLFWwindow* window)
+        {
+            glfwSetWindowTitle(window, name.c_str());
+        }
+
         private:
         std::string name;
         unsigned int mapX;
