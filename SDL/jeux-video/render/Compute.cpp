@@ -133,14 +133,22 @@ namespace Shaders
             glTextureSubImage2D(ID, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, rawData);
         }
 
-        void editData()
-        {}
+        // ok now lets do the
+        // thinking
+        // To render we have to copy the data
+        // from several 'textures'/maps to the gpu
+        // and then it just does the math required
+        // to turn that into the final product
+        // So what I need is a function which
+        // just fetches the data from the cell data
+        // type, and from the rgb data type
+        // Also needs to just edit a specific rang ofc
+        //
+        // We'll also need to leave the alpha channel open
+        // to being changed, cause like compositing sanity
+
+        // wait this should all be in compute shaders LMAO
+
     private:
     };
-
-    // PDT refers to Pressure, Density, Temperature
-    void cellToComputeImages(computeImageIn color, computeImageIn PDT)
-    {
-
-    }
 }
