@@ -1,13 +1,12 @@
-#include "start/base_data.hpp"
 #include "include/stb/stb_image.h"
 #include "include/stb/stb_truetype.h"
-#include "render/render.hpp"
+#include "start/base_data.hpp"
 #include "generation/terain.hpp"
-#include "render/ui.hpp"
 #include "start/update_funcs.hpp"
 #include "physics/entity.hpp"
 #include "physics/entity_types.hpp"
 #include "debug/debug.hpp"
+#include "render/render.hpp"
 #include "render/VBO.cpp"
 #include "render/EBO.cpp"
 #include "render/VAO.cpp"
@@ -19,9 +18,7 @@
 
 std::atomic<bool> kys; // politely :3
 
-
 // ECS stuff, dont remove them, the system will kill itself
-std::vector<ui::single_ui_element *> ui_elements;
 unsigned int currenttime = (unsigned int)time(NULL);
 std::mutex mtx2;
 entites::Coordinator Conductor;
