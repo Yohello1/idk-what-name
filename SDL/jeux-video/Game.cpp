@@ -86,6 +86,15 @@ namespace Game
             glfwSetWindowTitle(window, name.c_str());
         }
 
+        ~ Game()
+        {
+            // tiddy muncher 5000
+            for(int i = layers.size(); i > 0; i--)
+            {
+                free(layers.at(i));
+            }
+        }
+
         private:
         std::string name;
         unsigned int mapX;
