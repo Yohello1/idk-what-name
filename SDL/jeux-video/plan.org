@@ -98,7 +98,14 @@
     - [ ] Use the data types
     - [ ] Figure out how to display it
   - [ ] Make a better version of the cross die thingy
-
+  - [ ] Change class members to like _name, to make it more clear
+  - [ ] Create logging function
+  - [ ] Start using unique_ptr instead of raw pointers
+  - [ ] arena memory thingy
+  - [ ] vectors can have smth pre-allocated btw
+  - [ ] redo the rgb thingy
+  - [ ] use const pointers for reference thingy
+  - [ ] String view usage instead
 * Bugs
 
 * Future Problem
