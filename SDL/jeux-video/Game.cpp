@@ -20,7 +20,7 @@ namespace Game
 
         public:
         // Yes these are public for simplicites sake
-        std::vector<float *> layers;
+        std::vector<std::unique_ptr<float*>> layers;
         MVPMatrix::MVPMatrixes* transforms;
 
         Game(std::string sceneName, unsigned int map_x, unsigned int map_y, uint8_t layersAmt, int aspect, int width, int height, int farCloseDistance) // wtf else do I put LMAO
