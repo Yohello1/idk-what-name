@@ -77,9 +77,11 @@ int main()
 	{
 		std::cout << "Failed to initialize OpenGL context" << std::endl;
 	}
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glViewport(0, 0, actual_width, actual_height);
 
-	glEnable(GL_BLEND);
 
 	GLuint VAO, VBO, EBO;
 	{
