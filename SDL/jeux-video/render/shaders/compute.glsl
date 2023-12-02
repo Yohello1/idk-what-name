@@ -19,7 +19,7 @@ void main()
     pixel.x = pixel3.x;
     pixel.y = pixel4.y;
     pixel.z = pixel5.z;
-    pixel.a = 1.0;
+    pixel.a = 0.5;
 
     imageStore(screen, pixel_coords, pixel);
 }
