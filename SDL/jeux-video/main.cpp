@@ -148,6 +148,8 @@ int main()
 	{
 		auto start_time = Clock::now();
 
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		inMyMind.setMat4("uViewMatrix", scene1._transforms->ViewMatrix);
 		scene1._transforms->rotateView(0.5,0.5,0.5);
 

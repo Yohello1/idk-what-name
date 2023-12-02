@@ -19,7 +19,8 @@ void main()
     pixel.x = pixel3.x;
     pixel.y = pixel4.y;
     pixel.z = pixel5.z;
-    pixel.a = 0.5;
+    pixel.a = length(vec3(pixel.x, pixel.y, pixel.z));
+    // pixel.a = pixel3.x;
 
     imageStore(screen, pixel_coords, pixel);
 }
