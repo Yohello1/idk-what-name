@@ -14,7 +14,9 @@
 #include "render/shader.cpp"
 #include "render/Compute.cpp"
 #include "render/MVPMatrix.hpp"
+// #include "render/render.hpp"
 #include "Game.cpp"
+
 
 std::atomic<bool> kys; // politely :3
 
@@ -30,12 +32,19 @@ GLfloat vertices[] =
 	-64.0f,  64.0f , 0.0f, 0.0f, 1.0f,
 	 64.0f,  64.0f , 0.0f, 1.0f, 1.0f,
 	 64.0f, -64.0f , 0.0f, 1.0f, 0.0f,
+
+	-64.0f, -64.0f , 5.0f, 0.0f, 0.0f,
+	-64.0f,  64.0f , 5.0f, 0.0f, 1.0f,
+	 64.0f,  64.0f , 5.0f, 1.0f, 1.0f,
+	 64.0f, -64.0f , 5.0f, 1.0f, 0.0f,
 };
 
 GLuint indices[] =
 {
 	0, 2, 1,
-	0, 3, 2
+	0, 3, 2,
+	4, 6, 5,
+	4, 7, 6
 };
 
 
@@ -70,6 +79,7 @@ int main()
 	}
 	glViewport(0, 0, actual_width, actual_height);
 
+	glEnable(GL_BLEND);
 
 	GLuint VAO, VBO, EBO;
 	{
@@ -102,9 +112,9 @@ int main()
 
 	Game::Game scene1("hi", 1024, 1024, 4, 8, 1024, 1024, 1000);
 
-	inMyMind.setMat4("uProjectionMatrix", scene1.transforms->ProjectionMatrix);
-	inMyMind.setMat4("uViewMatrix",  scene1.transforms->ViewMatrix);
-	inMyMind.setMat4("uModelMatrix",  scene1.transforms->ModelMatrix);
+	inMyMind.setMat4("uProjectionMatrix", scene1._transforms->ProjectionMatrix);
+	inMyMind.setMat4("uViewMatrix",  scene1._transforms->ViewMatrix);
+	inMyMind.setMat4("uModelMatrix",  scene1._transforms->ModelMatrix);
 
 	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
 	// this shouldnt change
@@ -136,15 +146,16 @@ int main()
 	{
 		auto start_time = Clock::now();
 
-		inMyMind.setMat4("uViewMatrix", scene1.transforms->ViewMatrix);
+		inMyMind.setMat4("uViewMatrix", scene1._transforms->ViewMatrix);
+		scene1._transforms->rotateView(0.5,0.5,0.5);
 
 		dejaVu.useProgram();
 		glDispatchCompute(1024, 1024, 1);
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 		scene1.updateImageBulk(0, fakeImg);
-		std::copy(fakeImg, fakeImg + 1024*1024*4, scene1.layers.at(0));
-		heyworld.copyDataFloat(scene1.layers.at(0));
+		std::copy(fakeImg, fakeImg + 1024*1024*4, scene1._layers.at(0));
+		heyworld.copyDataFloat(scene1._layers.at(0));
 
 		inMyMind.useProgram();
 		glBindTextureUnit(0, halfwayThroughNovember.getID());
