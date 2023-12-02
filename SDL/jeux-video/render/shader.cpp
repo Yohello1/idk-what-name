@@ -11,30 +11,30 @@ namespace Shaders
         if (type != "PROGRAM")
         {
             glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
-            if (hasCompiled == GL_FALSE)
-            {
                 glGetShaderInfoLog(shader, 1024, NULL, infoLog);
                 std::cout << "SHADER_COMPILATION_ERROR for:" << type << "\n" << infoLog << std::endl;
             }
+            if (hasCompiled == GL_FALSE)
+            {
         }
         else if (type != "COMPUTE")
         {
             glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
-            if (hasCompiled == GL_FALSE)
-            {
                 glGetShaderInfoLog(shader, 1024, NULL, infoLog);
                 std::cout << "SHADER_COMPILATION_ERROR for:" << type << "\n" << infoLog << std::endl;
+            if (hasCompiled == GL_FALSE)
+            {
             }
 
         }
         else
         {
             glGetProgramiv(shader, GL_LINK_STATUS, &hasCompiled);
-            if (hasCompiled == GL_FALSE)
-            {
                 glGetProgramInfoLog(shader, 1024, NULL, infoLog);
                 std::cout << "SHADER_LINKING_ERROR for:" << type << "\n" << infoLog << std::endl;
             }
+            if (hasCompiled == GL_FALSE)
+            {
         }
 
 	/* pfffffft who needs to check for errors

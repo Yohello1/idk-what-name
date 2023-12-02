@@ -8,8 +8,8 @@ void main()
 {
     FragColor = vec4(0.0,0.0,0.0,0.0);
 	vec4 tempColor = texture(screen, UVs);
-    float tempVal = sqrt(tempColor.x*tempColor.x+tempColor.y*tempColor.y+tempColor.z*tempColor.z)/sqrt(3);
-    if(tempVal < 0.0)
+    float tempVal = tempColor.a;
+    if(tempVal < 0.5)
     {
         FragColor = vec4(0.0,0.0,0.0,1.0);
         discard;
