@@ -80,10 +80,13 @@ namespace Game
         ~ Game()
         {
             // tiddy muncher 5000
+
             for(int i = _layers.size(); i > 0; i--)
             {
-                free(_layers.at(0));
+                std::cout << "SCENE FREED: " << _name << " LAYER FREED: " << (i-1) << std::endl;
+                free(_layers.at(i-1));
             }
+
         }
 
         private:
