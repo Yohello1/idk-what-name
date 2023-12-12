@@ -42,6 +42,7 @@ namespace Game
         // Offset is the offset of the actual data, assuming in the same layer
         // There are no validity checks :P
         // value is the value it will be updated to
+        // btw use the funny y = mx or wtv, you can figure it out x
         void updateValue(int layerNum, int index, float value)
         {
             _layers.at(layerNum)[index] = value;
@@ -58,13 +59,14 @@ namespace Game
             _transforms->rotateView(x,y,z);
         }
 
+
         void translateView(float x, float y, float z)
         {
             _transforms->translateView(x,y,z);
         }
 
-
         // I cannot be bothered to get this working
+        // what was past me complaning about
         std::string getName()
         {
             // if(name == NULL)
@@ -79,7 +81,7 @@ namespace Game
 
         ~ Game()
         {
-            // tiddy muncher 5000
+            // tiddy muncher 5000 is sleeping AGAIn
 
             for(int i = _layers.size(); i > 0; i--)
             {
