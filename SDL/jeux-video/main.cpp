@@ -82,28 +82,6 @@ int main()
 
 	glViewport(0, 0, actual_width, actual_height);
 
-
-	GLuint VAO, VBO, EBO;
-	{
-		glCreateVertexArrays(1, &VAO);
-		glCreateBuffers(1, &VBO);
-		glCreateBuffers(1, &EBO);
-
-		glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
-
-		glEnableVertexArrayAttrib(VAO, 0);
-		glVertexArrayAttribBinding(VAO, 0, 0);
-		glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
-
-		glEnableVertexArrayAttrib(VAO, 1);
-		glVertexArrayAttribBinding(VAO, 1, 0);
-		glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
-
-		glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
-		glVertexArrayElementBuffer(VAO, EBO);
-	}
-
 	std::cout << "vert and frag shaders being made" << std::endl;
 	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
 	std::cout << "vert and frag shaders have been made" << std::endl;
@@ -164,7 +142,7 @@ int main()
 		inMyMind.useProgram();
 		glBindTextureUnit(0, halfwayThroughNovember.getID());
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
-		glBindVertexArray(VAO);
+		glBindVertexArray(scene1.VAO);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
 
 		auto end_time = Clock::now();
