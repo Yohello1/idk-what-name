@@ -114,9 +114,9 @@ int main()
 
 	Game::Game scene1("hi", 1024, 1024, 4, 8, 1024, 1024, 1000);
 
-	inMyMind.setMat4("uProjectionMatrix", scene1._transforms->ProjectionMatrix);
-	inMyMind.setMat4("uViewMatrix",  scene1._transforms->ViewMatrix);
-	inMyMind.setMat4("uModelMatrix",  scene1._transforms->ModelMatrix);
+	inMyMind.setMat4("uProjectionMatrix", scene1._transforms->_ProjectionMatrix);
+	inMyMind.setMat4("uViewMatrix",  scene1._transforms->_ViewMatrix);
+	inMyMind.setMat4("uModelMatrix",  scene1._transforms->_ModelMatrix);
 
 	Shaders::computeShader dejaVu("render/shaders/compute.glsl");
 	// this shouldnt change
@@ -150,7 +150,7 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		inMyMind.setMat4("uViewMatrix", scene1._transforms->ViewMatrix);
+		inMyMind.setMat4("uViewMatrix", scene1._transforms->_ViewMatrix);
 		scene1._transforms->rotateView(0.5,0.5,0.5);
 
 		dejaVu.useProgram();
