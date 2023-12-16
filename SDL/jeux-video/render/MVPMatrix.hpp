@@ -15,7 +15,7 @@ namespace MVPMatrix
         // Projection matrix needs to be italized w 3 things
         // Viewport size
         // and how far back/forwards to look
-        MVPMatrixes(uint8_t aspect, uint16_t width, uint16_t height, uint16_t farCloseDistance)
+        MVPMatrixes(float aspect, uint16_t width, uint16_t height, uint16_t farCloseDistance)
         {
             _halfHeight = (height / 2.f) / (aspect); // ok go search it up, I aint explaning it here
             _halfWidth = (width / 2.f) / aspect;
@@ -46,7 +46,7 @@ namespace MVPMatrix
         // btw we assume that farCloseDistance remains constant
         void scaleView(float aspect, uint16_t width, uint16_t height)
         {
-            _halfHeight = (height / 2.f) / (aspect); // ok go search it up, I aint explaning it here
+            _halfHeight = (height / 2.f) / (aspect);
             _halfWidth = (width / 2.f) / aspect;
             _aspect = aspect;
             _ProjectionMatrix = glm::ortho(-_halfWidth, _halfWidth, -_halfHeight, _halfHeight, (float)-_farCloseDistance, (float)_farCloseDistance);
@@ -54,13 +54,37 @@ namespace MVPMatrix
 
         void scaleView(float newAspect)
         {
-            _halfHeight /= newAspect; // ok go search it up, I aint explaning it here
+            _halfHeight /= newAspect;
             _halfWidth /= newAspect;
             _aspect = newAspect;
             _ProjectionMatrix = glm::ortho(-_halfWidth, _halfWidth, -_halfHeight, _halfHeight, (float)-_farCloseDistance, (float)_farCloseDistance);
         }
 
+        // I both wish I did, and didnt get into that mess
+        // I hope the person is smart enough to relise dating
+        // is a bad idea, and being friends is good enough
 
+
+        // basically creates a new projection matrix LMAO
+        void makeProjection(float aspect, uint16_t width, uint16_t height, uint16_t farCloseDistance)
+        {
+            _halfHeight = (height / 2.f) / (aspect); // ok go search it up, I aint explaning it here
+            _halfWidth = (width / 2.f) / aspect;
+            _aspect = aspect;
+            _farCloseDistance = farCloseDistance;
+            _ProjectionMatrix = glm::ortho(-_halfWidth, _halfWidth, -_halfHeight, _halfHeight, (float)-farCloseDistance, (float)farCloseDistance);
+        }
+
+        // having a model matrix would make sense
+        // like me not talking would make sense
+        // yet here we are, so we dont talk abt it
+        // we just try and reconcile
+        // and dont talk abt it
+        // I feel bad for them, cause now
+        // its like people who were their friend
+        // are no longer their friend :( because of that
+        // now they dont rlly have people to fall back on oh well
+        // Sadge
         private:
     };
 }

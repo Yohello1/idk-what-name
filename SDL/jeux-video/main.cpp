@@ -132,10 +132,10 @@ int main()
 	functions::fakeRandomImage(fakeImg, 0);
 	cigaretteDayDreams.copyDataFloat(fakeImg);
 
-	dejaVu.printMaxComputeSize();
-	int work_grp_inv;
-	glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &work_grp_inv);
-	std::cout << "Max invocations count per work group: " << work_grp_inv << "\n";
+	// dejaVu.printMaxComputeSize();
+	// int work_grp_inv;
+	// glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &work_grp_inv);
+	// std::cout << "Max invocations count per work group: " << work_grp_inv << "\n";
 
 	//fake image maker :)
 	functions::fakeRandomImage(fakeImg, 0);
