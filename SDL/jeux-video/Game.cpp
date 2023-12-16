@@ -145,12 +145,12 @@ namespace Game
         // i feel like the person kinda made this a lot worse than it shouldve been
         // :(
 
-        void generatePlanes(uint8_t layersNum, uint16_t height, uint16_t width)
+        void generatePlanes(uint8_t layersNum)
         {
             // create the plane which is the size of the map, and at diff depths
             _verticies = new GLfloat[20*layersNum]; // 20 = 4*5 = (vert per plane) * (parts per plane)
 
-            for(int i = 0; i < layers; i++)
+            for(int i = 0; i < layersNum; i++)
             {
                 // x, y, z, u, v
                 // 2 . 3
@@ -160,8 +160,8 @@ namespace Game
                 // therfore:
                 // 1,2,4
                 // 2,4,3
-                int halfWidth = width/2;
-                int halfHeight = Height/2;
+                int halfWidth = _mapX/2;
+                int halfHeight = _mapY/2;
 
                 // 1
                 _verticies[i*20+0] = -1*halfWidth;
@@ -193,17 +193,17 @@ namespace Game
             }
             // then make the indices
 
-            _indicies = new GLint[6*layers];
-            for(int i = 0; i < layers; i++)
+            _indicies = new GLint[6*layersNum];
+            for(int i = 0; i < layersNum; i++)
             {
                 int InOffset = i*6;
                 int VeOffset = i*4;
-                _indices[InOffset+0] = 0 + VeOffset;
-                _indices[InOffset+1] = 1 + VeOffset;
-                _indices[InOffset+2] = 3 + VeOffset;
-                _indices[InOffset+3] = 1 + VeOffset;
-                _indices[InOffset+4] = 3 + VeOffset;
-                _indices[InOffset+5] = 2 + VeOffset;
+                _indicies[InOffset+0] = 0 + VeOffset;
+                _indicies[InOffset+1] = 1 + VeOffset;
+                _indicies[InOffset+2] = 3 + VeOffset;
+                _indicies[InOffset+3] = 1 + VeOffset;
+                _indicies[InOffset+4] = 3 + VeOffset;
+                _indicies[InOffset+5] = 2 + VeOffset;
             }
         }
 
