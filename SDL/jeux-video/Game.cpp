@@ -22,6 +22,8 @@ namespace Game
         // Yes these are public for simplicites sake
         std::vector<float*> _layers; // i have no idea how to use unique pointers correctly here :P
         MVPMatrix::MVPMatrixes* _transforms;
+        GLfloat* _verticies;
+        GLint* _indicies;
         GLuint VAO, VBO, EBO;
 
         Game(std::string sceneName, unsigned int map_x, unsigned int map_y, uint8_t layersAmt, int aspect, int width, int height, int farCloseDistance) // wtf else do I put LMAO
@@ -61,13 +63,17 @@ namespace Game
                     4, 6, 5,
                     4, 7, 6
                 };
+
+            generatePlanes(4);
+
+
             // VBO and EBO stuff
             {
                 glCreateVertexArrays(1, &VAO);
                 glCreateBuffers(1, &VBO);
                 glCreateBuffers(1, &EBO);
 
-                glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
+                glNamedBufferData(VBO, sizeof(GLfloat)*layersAmt*20, _verticies, GL_STATIC_DRAW);
                 glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
 
                 glEnableVertexArrayAttrib(VAO, 0);
@@ -136,8 +142,6 @@ namespace Game
 }
 
         private:
-        GLfloat* _verticies;
-        GLint* _indicies;
         std::string _name;
         unsigned int _mapX;
         unsigned int _mapY;
@@ -166,28 +170,28 @@ namespace Game
                 // 1
                 _verticies[i*20+0] = -1*halfWidth;
                 _verticies[i*20+1] = -1*halfHeight;
-                _verticies[i*20+2] = -1*i;
+                _verticies[i*20+2] = -1*i*50;
                 _verticies[i*20+3] = -1*0; // why are uv vertexs mapped differently than cords?
                 _verticies[i*20+4] = -1*0;
 
                 // 2
                 _verticies[i*20+5] = -1*halfWidth;
                 _verticies[i*20+6] =  1*halfHeight;
-                _verticies[i*20+7] = -1*i;
+                _verticies[i*20+7] = -1*i*50;
                 _verticies[i*20+8] = 0;
                 _verticies[i*20+9] = 1;
 
                 // 3
                 _verticies[i*20+10] =  1*halfWidth;
                 _verticies[i*20+11] =  1*halfHeight;
-                _verticies[i*20+12] = -1*i;
+                _verticies[i*20+12] = -1*i*50;
                 _verticies[i*20+13] = 1;
                 _verticies[i*20+14] = 1;
 
                 // 4
                 _verticies[i*20+15] =  1*halfWidth;
                 _verticies[i*20+16] = -1*halfHeight;
-                _verticies[i*20+17] = -1*i;
+                _verticies[i*20+17] = -1*i*50;
                 _verticies[i*20+18] = 1;
                 _verticies[i*20+19] = 0;
             }
