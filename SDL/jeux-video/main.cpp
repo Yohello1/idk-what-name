@@ -111,7 +111,7 @@ int main()
 	cigaretteDayDreams.copyDataFloat(fakeImg);
 
 	// dejaVu.printMaxComputeSize();
-	// int work_grp_inv;
+	// int work_grp_iv;
 	// glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &work_grp_inv);
 	// std::cout << "Max invocations count per work group: " << work_grp_inv << "\n";
 
@@ -143,7 +143,7 @@ int main()
 		glBindTextureUnit(0, halfwayThroughNovember.getID());
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
 		glBindVertexArray(scene1.VAO);
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 
 		auto end_time = Clock::now();
 		std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
