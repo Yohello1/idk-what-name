@@ -74,7 +74,7 @@ namespace Game
                 glCreateBuffers(1, &EBO);
 
                 glNamedBufferData(VBO, sizeof(GLfloat)*layersAmt*20, _verticies, GL_STATIC_DRAW);
-                glNamedBufferData(EBO, sizeof(indices), indices, GL_STATIC_DRAW);
+                glNamedBufferData(EBO, sizeof(GLint)*24, _indicies, GL_STATIC_DRAW);
 
                 glEnableVertexArrayAttrib(VAO, 0);
                 glVertexArrayAttribBinding(VAO, 0, 0);
