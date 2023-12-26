@@ -90,7 +90,7 @@ int main()
 	// Aspect, is well, the ratio of actual to logical
 	float* fakeImg = new float[4194304];
 
-	Game::Game scene1("hi", 1024, 1024, 4, 1, 1024, 1024, 1000);
+	Game::Game scene1("hi", 1024, 1024, 255, 1, 1024, 1024, 10000000);
 
 	inMyMind.setMat4("uProjectionMatrix", scene1._transforms->_ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix",  scene1._transforms->_ViewMatrix);
@@ -142,8 +142,8 @@ int main()
 		inMyMind.useProgram();
 		glBindTextureUnit(0, halfwayThroughNovember.getID());
 		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
-		glBindVertexArray(scene1.VAO);
-		glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(scene1._VAO);
+		glDrawElements(GL_TRIANGLES, scene1.getIndiciesSize(), GL_UNSIGNED_INT, 0);
 
 		auto end_time = Clock::now();
 		std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';

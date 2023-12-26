@@ -24,7 +24,7 @@ namespace Game
         MVPMatrix::MVPMatrixes* _transforms;
         GLfloat* _verticies;
         GLint* _indicies;
-        GLuint VAO, VBO, EBO;
+        GLuint _VAO, _VBO, _EBO;
 
         Game(std::string sceneName, unsigned int map_x, unsigned int map_y, uint8_t layersAmt, int aspect, int width, int height, int farCloseDistance) // wtf else do I put LMAO
         {
@@ -38,54 +38,27 @@ namespace Game
             }
 
             _transforms = new MVPMatrix::MVPMatrixes(aspect, width, height, farCloseDistance);
-
-
-
-            // we do not talk abt this
-            //
-            GLfloat vertices[] =
-                {
-                    -64.0f, -64.0f , 0.0f, 0.0f, 0.0f,
-                    -64.0f,  64.0f , 0.0f, 0.0f, 1.0f,
-                    64.0f,  64.0f , 0.0f, 1.0f, 1.0f,
-                    64.0f, -64.0f , 0.0f, 1.0f, 0.0f,
-
-                    -64.0f, -64.0f , 5.0f, 0.0f, 0.0f,
-                    -64.0f,  64.0f , 5.0f, 0.0f, 1.0f,
-                    64.0f,  64.0f , 5.0f, 1.0f, 1.0f,
-                    64.0f, -64.0f , 5.0f, 1.0f, 0.0f,
-                };
-
-            GLuint indices[] =
-                {
-                    0, 2, 1,
-                    0, 3, 2,
-                    4, 6, 5,
-                    4, 7, 6
-                };
-
-            generatePlanes(4);
-
+            generatePlanes(layersAmt);
 
             // VBO and EBO stuff
             {
-                glCreateVertexArrays(1, &VAO);
-                glCreateBuffers(1, &VBO);
-                glCreateBuffers(1, &EBO);
+                glCreateVertexArrays(1, &_VAO);
+                glCreateBuffers(1, &_VBO);
+                glCreateBuffers(1, &_EBO);
 
-                glNamedBufferData(VBO, sizeof(GLfloat)*layersAmt*20, _verticies, GL_STATIC_DRAW);
-                glNamedBufferData(EBO, sizeof(GLint)*24, _indicies, GL_STATIC_DRAW);
+                glNamedBufferData(_VBO, sizeof(GLfloat)*layersAmt*20, _verticies, GL_STATIC_DRAW);
+                glNamedBufferData(_EBO, sizeof(GLint)*getIndiciesSize(), _indicies, GL_STATIC_DRAW);
 
-                glEnableVertexArrayAttrib(VAO, 0);
-                glVertexArrayAttribBinding(VAO, 0, 0);
-                glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
+                glEnableVertexArrayAttrib(_VAO, 0);
+                glVertexArrayAttribBinding(_VAO, 0, 0);
+                glVertexArrayAttribFormat(_VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
 
-                glEnableVertexArrayAttrib(VAO, 1);
-                glVertexArrayAttribBinding(VAO, 1, 0);
-                glVertexArrayAttribFormat(VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
+                glEnableVertexArrayAttrib(_VAO, 1);
+                glVertexArrayAttribBinding(_VAO, 1, 0);
+                glVertexArrayAttribFormat(_VAO, 1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat));
 
-                glVertexArrayVertexBuffer(VAO, 0, VBO, 0, 5 * sizeof(GLfloat));
-                glVertexArrayElementBuffer(VAO, EBO);
+                glVertexArrayVertexBuffer(_VAO, 0, _VBO, 0, 5 * sizeof(GLfloat));
+                glVertexArrayElementBuffer(_VAO, _EBO);
             }
         }
 
@@ -127,19 +100,22 @@ namespace Game
         void changeTitle(GLFWwindow* window)
         {
             glfwSetWindowTitle(window, _name.c_str());
-}
+        }
+
+        int getIndiciesSize()
+        {
+            return _layers.size()*6;
+        }
 
         ~ Game()
         {
             // tiddy muncher 5000 is sleeping AGAIn
-
             for(int i = _layers.size(); i > 0; i--)
             {
                 std::cout << "SCENE FREED: " << _name << " LAYER FREED: " << (i-1) << std::endl;
                 free(_layers.at(i-1));
             }
-
-}
+        }
 
         private:
         std::string _name;
