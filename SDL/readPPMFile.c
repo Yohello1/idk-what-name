@@ -1,12 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
+#include <time.h>
 
 void writeImageTest();
 void readImageTest();
 
 int main(void)
 {
+    time_t t;
+    srand((unsigned) time(&t));
     // writeImageTest();
     readImageTest();
     return EXIT_SUCCESS;
@@ -62,8 +66,10 @@ void readImageTest()
     }
 
 
-    unsigned short *data = malloc(width*height); // or whaterver size
-    fread(fp,width*height,1,data);
+    uint8_t *data = malloc(width*height); // or whaterver size
+    fread(data,width*height,1,fp);
+
+    printf("data: %i", data[rand() % (height*width)]);
 
 
 }
