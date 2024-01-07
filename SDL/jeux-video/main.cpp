@@ -90,7 +90,7 @@ int main()
 	// Aspect, is well, the ratio of actual to logical
 	float* fakeImg = new float[4194304];
 
-	Game::Game scene1("hi", 1024, 1024, 255, 1, 1024, 1024, 10000000);
+	Game::Game scene1("hi", 1024, 1024, 2, 1, 1024, 1024, 10000000);
 
 	inMyMind.setMat4("uProjectionMatrix", scene1._transforms->_ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix",  scene1._transforms->_ViewMatrix);
@@ -118,9 +118,12 @@ int main()
 	//fake image maker :)
 	functions::fakeRandomImage(fakeImg, 0);
 	scene1.updateImageBulk(0, fakeImg);
+	scene1.changeTitleOfWindow(window);
+
 	std::cout << "IMG MADE2" << '\n';
 
-	scene1.changeTitle(window);
+	scene1.loadSceneFromFile("jeux-video/testData/testScene.pcsf");
+
 
 	while (!glfwWindowShouldClose(window))
 	{

@@ -26,6 +26,7 @@ namespace Game
         GLint* _indicies;
         GLuint _VAO, _VBO, _EBO;
 
+        // turn this into ints of specific sizes
         Game(std::string sceneName, unsigned int map_x, unsigned int map_y, uint8_t layersAmt, int aspect, int width, int height, int farCloseDistance) // wtf else do I put LMAO
         {
             _name = sceneName;
@@ -70,23 +71,23 @@ namespace Game
         void updateValue(int layerNum, int index, float value)
         {
             _layers.at(layerNum)[index] = value;
-}
+        }
 
         void updateImageBulk(int layerNum, float* data)
         {
             // here memcpy
             std::copy(data, data + _mapX*_mapY*4, _layers.at(layerNum));
-}
+        }
 
         void rotateView(float x, float y, float z)
         {
             _transforms->rotateView(x,y,z);
-}
+        }
 
         void translateView(float x, float y, float z)
         {
             _transforms->translateView(x,y,z);
-}
+        }
 
         // I cannot be bothered to get this working
         // what was past me complaning about
@@ -95,9 +96,9 @@ namespace Game
             // if(name == NULL)
             //     return "";
             return _name;
-}
+        }
 
-        void changeTitle(GLFWwindow* window)
+        void changeTitleOfWindow(GLFWwindow* window)
         {
             glfwSetWindowTitle(window, _name.c_str());
         }
@@ -117,6 +118,56 @@ namespace Game
             }
         }
 
+        // loading file
+        // dam this song rlly like
+        // right one for this mood
+
+        bool loadSceneFromFile(std::string filePath) // no you cannot load from memory, at least not yet
+        {
+
+            std::cout << "data should be getting outputted" << std::endl;
+            // ok for ur ass rn
+            // File Format:
+            // first line: 0-255 headerSize
+            // and then in order!
+            // Scene name (String)
+            // X,Y (size of map 65536)
+            // X,Y (size of viewport)
+            // X,Y (viewport limits)
+            // farClose distance
+            // Layer num (0-255)
+            // Then the layer info should be stored in other files
+            // The file's relative locations will be stored here
+
+            // ok this is gonna be some C code
+            // magic number: YG A0 SX TV
+            FILE *fp = fopen("testData/testScene.pcsf", "r");
+            // i made the name rn LMAO
+            // Poisioned Chlorine will be the name
+            // of the engine
+
+            if(fp == NULL)
+                {
+                    return -1;
+                }
+            char magicNumber[12];
+            char validNumber[] = "YG A0 SX TV";
+            fgets(magicNumber, 12, fp);
+            std::cout << "magic fetch: " << magicNumber << std::endl;
+            if(strcmp(magicNumber, validNumber) != 0)
+            {
+                std::cout << "INVALID " << std::endl;
+                return -1;
+            }
+            else
+            {
+                std::cout << "VALID FILE" << std::endl;
+            }
+
+
+            return 0;
+        }
+
         private:
         std::string _name;
         unsigned int _mapX;
@@ -124,6 +175,19 @@ namespace Game
 
         // i feel like the person kinda made this a lot worse than it shouldve been
         // :(
+
+
+        /* Let this monstrosicty be a warning to all others who dare try and shorten it
+
+
+         float temp[20] = {-1*halfWidth, -1*halfHeight, -0.5, 0,0,-1*halfWidth, 1*halfHeight, -0.5,0,-1, halfWidth, halfHeight, -0.5, 1, 1, halfWidth, -1*halfHeight, -0.5, 1, 0};
+
+            for(int i = 0; i < 20*layersNum; i++)
+            {
+                _verticies[i] = temp[i%20];
+                if(temp[i%20] == -0.5)
+                    _verticies[i] = -1*floor(i/20);
+        */
 
         void generatePlanes(uint8_t layersNum)
         {
@@ -186,6 +250,7 @@ namespace Game
                 _indicies[InOffset+5] = 2 + VeOffset;
             }
         }
+
 
     };
 }
