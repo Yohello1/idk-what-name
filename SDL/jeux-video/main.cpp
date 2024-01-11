@@ -118,11 +118,11 @@ int main()
 	//fake image maker :)
 	functions::fakeRandomImage(fakeImg, 0);
 	scene1.updateImageBulk(0, fakeImg);
+	scene1.loadSceneFromFile("jeux-video/testData/testScene.pcsf");
 	scene1.changeTitleOfWindow(window);
 
 	std::cout << "IMG MADE2" << '\n';
 
-	scene1.loadSceneFromFile("jeux-video/testData/testScene.pcsf");
 
 
 	while (!glfwWindowShouldClose(window))
