@@ -128,12 +128,12 @@ namespace Game
             std::cout << "data should be getting outputted" << std::endl;
             // ok for ur ass rn
             // File Format:
-            // first line: 0-255 headerSize
+            // magic number: "YG A0 SX TV"
             // and then in order!
             // Scene name (String)
-            // X,Y (size of map 65536)
-            // X,Y (size of viewport)
-            // X,Y (viewport limits)
+            // X Y (size of map 65536)
+            // X Y (size of viewport)
+            // X Y (viewport limits)
             // farClose distance
             // Layer num (0-255)
             // Then the layer info should be stored in other files
@@ -141,11 +141,12 @@ namespace Game
 
             // ok this is gonna be some C code
             // magic number: YG A0 SX TV
-            FILE *fp = fopen("testData/testScene.pcsf", "r");
             // i made the name rn LMAO
             // Poisioned Chlorine will be the name
             // of the engine
 
+            /*
+            FILE *fp = fopen("testData/testScene.pcsf", "r");
             if(fp == NULL)
                 {
                     return -1;
@@ -163,6 +164,51 @@ namespace Game
             {
                 std::cout << "VALID FILE" << std::endl;
             }
+
+            // Scene name, yes the 64 is arbitary limit
+            char sceneName[64];
+            char discardVal[8]; // yes, its a workaround, yes its cancer
+            fgets(discardVal, 8, fp);
+            fgets(sceneName, 64, fp);
+            std::cout << "name" << sceneName << std::endl;
+
+            // size of map
+            int mapX, mapY;
+            fscanf()
+
+
+            // size of viewport (window)
+
+            // viewport limits (how far they can see)
+
+            */
+
+            std::ifstream sceneDataFile;
+            sceneDataFile.open("testData/testScene.pcsf");
+
+            if (!sceneDataFile) //checks to see if file opens properly
+            {
+                std::cout << "Error: Could not find the requested file." << std::endl;
+                return 1;
+            }
+
+            std::string magicNumber;
+
+            std::getline(sceneDataFile, magicNumber);
+            std::cout << "magic " << magicNumber << std::endl;
+
+            if(magicNumber.compare("YG A0 SX TV") != 0)
+            {
+                std::cout << "incorrect file type" << std::endl;
+                return 1;
+            }
+
+            std::getline(sceneDataFile, _name);
+
+            sceneDataFile >> _mapX;
+            sceneDataFile >> _mapY;
+
+            std::cout << "( " << _mapX << " , " << _mapY << " )" << std::endl;
 
 
             return 0;
