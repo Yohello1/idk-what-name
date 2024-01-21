@@ -199,7 +199,7 @@ namespace Game
 
             if(magicNumber.compare("YG A0 SX TV") != 0)
             {
-                std::cout << "incorrect file type" << std::endl;
+                std::cout << "Error: incorrect file type" << std::endl;
                 return 1;
             }
 
@@ -257,7 +257,7 @@ namespace Game
                 _verticies[i*20+0] = -1*halfWidth;
                 _verticies[i*20+1] = -1*halfHeight;
                 _verticies[i*20+2] = -1*i*50;
-                _verticies[i*20+3] = -1*0; // why are uv vertexs mapped differently than cords?
+                _verticies[i*20+3] = -1*0; // why are uv vertexes mapped differently than cords?
                 _verticies[i*20+4] = -1*0;
 
                 // 2
