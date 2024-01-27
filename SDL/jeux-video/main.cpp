@@ -26,26 +26,26 @@ std::mutex mtx2;
 entites::Coordinator Conductor;
 
 
-GLfloat vertices[] =
-{
-	-64.0f, -64.0f , 0.0f, 0.3f, 0.0f,
-	-64.0f,  64.0f , 0.0f, 0.3f, 1.0f,
-	 64.0f,  64.0f , 0.0f, 1.0f, 1.0f,
-	 64.0f, -64.0f , 0.0f, 1.0f, 0.0f,
+// GLfloat vertices[] =
+// {
+// 	-64.0f, -64.0f , 0.0f, 0.3f, 0.0f,
+// 	-64.0f,  64.0f , 0.0f, 0.3f, 1.0f,
+// 	 64.0f,  64.0f , 0.0f, 1.0f, 1.0f,
+// 	 64.0f, -64.0f , 0.0f, 1.0f, 0.0f,
 
-	-64.0f, -64.0f , 5.0f, 0.0f, 0.0f,
-	-64.0f,  64.0f , 5.0f, 0.0f, 1.0f,
-	 64.0f,  64.0f , 5.0f, 1.0f, 1.0f,
-	 64.0f, -64.0f , 5.0f, 1.0f, 0.0f,
-};
+// 	-64.0f, -64.0f , 5.0f, 0.0f, 0.0f,
+// 	-64.0f,  64.0f , 5.0f, 0.0f, 1.0f,
+// 	 64.0f,  64.0f , 5.0f, 1.0f, 1.0f,
+// 	 64.0f, -64.0f , 5.0f, 1.0f, 0.0f,
+// };
 
-GLuint indices[] =
-{
-	0, 2, 1,
-	0, 3, 2,
-	4, 6, 5,
-	4, 7, 6
-};
+// GLuint indices[] =
+// {
+// 	0, 2, 1,
+// 	0, 3, 2,
+// 	4, 6, 5,
+// 	4, 7, 6
+// };
 
 
 int main()
@@ -90,7 +90,7 @@ int main()
 	// Aspect, is well, the ratio of actual to logical
 	float* fakeImg = new float[4194304];
 
-	Game::Game scene1("hi", 1024, 1024, 2, 1, 1024, 1024, 10000000);
+	Game::Game scene1("hi", 1024, 1024, 3, 1, 1024, 1024, 10000000);
 
 	inMyMind.setMat4("uProjectionMatrix", scene1._transforms->_ProjectionMatrix);
 	inMyMind.setMat4("uViewMatrix",  scene1._transforms->_ViewMatrix);
@@ -111,15 +111,18 @@ int main()
 	cigaretteDayDreams.copyDataFloat(fakeImg);
 
 	// dejaVu.printMaxComputeSize();
-	// int work_grp_iv;
-	// glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &work_grp_inv);
-	// std::cout << "Max invocations count per work group: " << work_grp_inv << "\n";
+	int work_grp_inv;
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &work_grp_inv);
+	std::cout << "Max invocations count per work group: " << work_grp_inv << "\n";
 
 	//fake image maker :)
 	functions::fakeRandomImage(fakeImg, 0);
 	scene1.updateImageBulk(0, fakeImg);
 	scene1.loadSceneFromFile("jeux-video/testData/testScene.pcsf");
 	scene1.changeTitleOfWindow(window);
+
+	scene1.saveSceneToFile("jeux-video/testData/testSave.pcsf");
+
 
 	std::cout << "IMG MADE2" << '\n';
 

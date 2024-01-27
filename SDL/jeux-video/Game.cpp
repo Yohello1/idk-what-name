@@ -203,22 +203,70 @@ namespace Game
                 return 1;
             }
 
+            // Scene name (String)
+            // X Y (size of map 65536)
+            // X Y (size of viewport)
+            // X Y (viewport limits)
+            // farClose distance
+            // Layer num (0-255)
+
             std::getline(sceneDataFile, _name);
 
             sceneDataFile >> _mapX;
             sceneDataFile >> _mapY;
 
-            std::cout << "( " << _mapX << " , " << _mapY << " )" << std::endl;
+            // this is for proj matrixes
+            int winSizeX, winSizeY;
+            int viewSizeX, viewSizeY;
+            int farClose;
+            int layerNum;
+            sceneDataFile >> winSizeX;
+            sceneDataFile >> winSizeY;
+            sceneDataFile >> viewSizeX;
+            sceneDataFile >> viewSizeY;
+            sceneDataFile >> farClose;
+            sceneDataFile >> layerNum;
 
+
+            std::cout << "( " << _mapX << " , " << _mapY << " )" << std::endl;
 
             return 0;
         }
 
+        bool saveSceneToFile(std::string filePath)
+        {
+            // Magic number
+            // Scene name (String)
+            // X Y (size of map 65536)
+            // X Y (size of viewport)
+            // X Y (viewport limits)
+            // farClose distance
+            // Layer num (0-255)
+
+            // schnoigingers bug, i got an illegal instruction from here once
+            // write a print statment to start debugging...
+            // they'll fear for the worst
+            // and will fall back in like
+            // fear will keep them in line
+
+            std::ofstream saveFile;
+            saveFile.open(filePath);
+            saveFile << "YG A0 SX TV\n";
+            saveFile << _name << '\n';
+            saveFile << _mapX << ' ' << _mapY << '\n'; // could be def be computed
+            saveFile << _viewportSizeX << ' ' << _viewportSizeY << '\n';
+            saveFile << _viewportLimitX << ' ' << _viewportLimitY << '\n';
+            saveFile << _transforms->_farCloseDistance << '\n';
+            saveFile << _layers.size() << '\n';
+
+            return true;
+        }
+
         private:
         std::string _name;
-        unsigned int _mapX;
-        unsigned int _mapY;
-
+        unsigned int _mapX, _mapY;
+        unsigned int _viewportSizeX, _viewportSizeY;
+        unsigned int _viewportLimitX, _viewportLimitY;
         // i feel like the person kinda made this a lot worse than it shouldve been
         // :(
 
@@ -237,6 +285,8 @@ namespace Game
 
         void generatePlanes(uint8_t layersNum)
         {
+            // this is going to get expoentially worse ToT
+
             // create the plane which is the size of the map, and at diff depths
             _verticies = new GLfloat[20*layersNum]; // 20 = 4*5 = (vert per plane) * (parts per plane)
 
