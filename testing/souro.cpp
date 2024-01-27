@@ -30,7 +30,7 @@ int randNumber(uint16_t max)
 
 int main()
 {
-    std::cout << "You are expected to of used -D to set the defines stuff, \n otherwise defaults will be used. \n This is problem 2's generator/solver" << std::endl;
+   // std::cout << "You are expected to of used -D to set the defines stuff, \n otherwise defaults will be used. \n This is problem 2's generator/solver" << std::endl;
 
     srand(SEED);
 
@@ -64,11 +64,24 @@ int main()
         for(int j = 0; j < WIDTH; j++)
         {
             sum += matrix[i][j];
+            std::cerr << "K" << std::endl;
         }
     }
 
     sum -= (WIDTH-(TIME*SLIP_RATE))*WIDTH;
+
+    if(sum < 1)
+        sum = 0;
+    if(WIDTH < (TIME*SLIP_RATE))
+        sum = 0;
     std::cerr << sum << std::endl;
 
-
 }
+
+
+/**
+ *The matrix will be of a width between 0 ≤ M ≤ 1000.
+The amount of time that will pass by will be between 0 ≤ X ≤ 100.
+The rate of slippage will be between 0 ≤ Y ≤ 100
+The range of values that can be on the matrix are 0 ≤ N ≤ 10000
+*/
