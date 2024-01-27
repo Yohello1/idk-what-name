@@ -14,7 +14,7 @@
 #endif
 
 #ifndef NAME_MAX
- #define NAME_MAX 32
+ #define NAME_MAX 61
 #endif
 
 #ifndef HEIGHT_MAX
@@ -69,7 +69,7 @@ std::string gen_random(const int len)
 
 int main()
 {
-    std::cout << "You are expected to of used -D to set the defines stuff, \n otherwise defaults will be used. \n This is problem 2's generator/solver" << std::endl;
+    // std::cout << "You are expected to of used -D to set the defines stuff, \n otherwise defaults will be used. \n This is problem 2's generator/solver" << std::endl;
     srand(SEED);
 
     std::cout << PPLC << ' ' << CERTC << '\n';
@@ -94,13 +94,13 @@ int main()
         std::cout << people.at(i).name << ' ' << people.at(i).grade << ' ' << people.at(i).height << '\n';
     }
 
-    std::sort(people.begin(), people.end(), sortFunction);
-    std::cout << "SORTED " << std::endl << std::endl << std::endl << std::endl;
+    // std::sort(people.begin(), people.end(), sortFunction);
+    // std::cout << "SORTED " << std::endl << std::endl << std::endl << std::endl;
 
-    for(int i = 0; i < PPLC; i++)
-    {
-        std::cout << people.at(i).name << ' ' << people.at(i).grade << ' ' << people.at(i).height << '\n';
-    }
+    // for(int i = 0; i < PPLC; i++)
+    // {
+    //     std::cout << people.at(i).name << ' ' << people.at(i).grade << ' ' << people.at(i).height << '\n';
+    // }
 
 
 
