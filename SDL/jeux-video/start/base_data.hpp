@@ -23,6 +23,7 @@
 #include <boost/algorithm/clamp.hpp>
 #include <algorithm>
 #include <iomanip>
+#include <filesystem>
 #include "../include/glad/glad.h"
 #include <GL/gl.h>
 #include <GL/glu.h>

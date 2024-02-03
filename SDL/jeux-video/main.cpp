@@ -118,10 +118,10 @@ int main()
 	//fake image maker :)
 	functions::fakeRandomImage(fakeImg, 0);
 	scene1.updateImageBulk(0, fakeImg);
-	scene1.loadSceneFromFile("jeux-video/testData/testScene.pcsf");
+	scene1.loadSceneFromFile("testData/testScene.pcsf");
 	scene1.changeTitleOfWindow(window);
 
-	scene1.saveSceneToFile("jeux-video/testData/testSave.pcsf");
+	scene1.saveSceneToFile("testData/testSave.pcsf");
 
 
 	std::cout << "IMG MADE2" << '\n';
@@ -152,7 +152,7 @@ int main()
 		glDrawElements(GL_TRIANGLES, scene1.getIndiciesSize(), GL_UNSIGNED_INT, 0);
 
 		auto end_time = Clock::now();
-		std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
+		// std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';
 
 		float tempTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000;
 		tempTime /= 25;

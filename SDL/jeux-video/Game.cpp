@@ -259,6 +259,27 @@ namespace Game
             saveFile << _transforms->_farCloseDistance << '\n';
             saveFile << _layers.size() << '\n';
 
+            // no fucking idea what Im doing here
+            filePath.erase(filePath.length()-5);
+            std::filesystem::create_directories(filePath);
+            std::cout << filePath << " NAME" << std::endl;
+
+            for(int i = 0; i < _layers.size(); i++)
+            {
+                std::string tempPath = filePath;
+                tempPath += "/";
+                tempPath += std::to_string(i);
+
+                std::ofstream layerFile(tempPath);
+                layerFile << "i can try\n";
+                layerFile.close();
+
+                std::cout << tempPath << std::endl;
+            }
+
+            saveFile.close();
+
+
             return true;
         }
 
