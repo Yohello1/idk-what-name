@@ -64,11 +64,8 @@ int main()
         for(int j = 0; j < WIDTH; j++)
         {
             sum += matrix[i][j];
-            std::cerr << "K" << std::endl;
         }
     }
-
-    sum -= (WIDTH-(TIME*SLIP_RATE))*WIDTH;
 
     if(sum < 1)
         sum = 0;
