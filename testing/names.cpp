@@ -21,5 +21,6 @@ int main()
 
     for(auto name : out) std::cout << name << "\n";
 
+    std::cout << "SIZE" << input.size() << " " << M ;
     return 0;
 }
