@@ -27,7 +27,7 @@
 
 int main()
 {
-        std::cout << "You are expected to of used -D to set the defines stuff, \n otherwise defaults will be used. \n This is problem 2's generator/solver" << std::endl;
+        // std::cout << "You are expected to of used -D to set the defines stuff, \n otherwise defaults will be used. \n This is problem 3's generator/solver" << std::endl;
 
         // choose random characters, add them to vector (can I put a vector into a struct?, yes, wtf is this)
         // that will be the func name
@@ -38,16 +38,27 @@ int main()
         // if a rand between 0-5 == 2, we jmp to a random existent character
         // then the end is just jmp to an extenst character
         // wait how do i actually contain the data LMFAO
+        //
+        // Le guide de reccomendation!
+        // Seed: self explainatory
+        // Funcs: amount of functions
+        // Length: TOTAL FUNCTION LENGTH!!!! as in, the amt of instructions output
+        // EndLen: the length of the last two instructions, it doesnt output the last function lmao
+        //        Like 2, means 1 actual funciton thrown out
+        // CHANCE_OF_JMP: how common are jmps
+        // btw, (length-endlen) has to be divisible by FUNCS, with a result of =>3, or it will break stuff
 
         srand(SEED);
 
-        int independentSize = LENGTH - ENDLEN;
+        int independentSize = (LENGTH - ENDLEN)/FUNCS;
 
         // wait this could(?) be exploited
 
         std::map<char, std::pair<char, std::pair<int, std::vector<std::string>>>> existentFunctions; // this is redundant
         std::vector<char> nameFuncs;
-        
+
+
+        std::cout << LENGTH-1 << '\n';
 
         for(int i = 0; i < FUNCS; i++)
         {
@@ -117,7 +128,7 @@ int main()
 
         // now to make the end!
         // uhhh take end, and rand it!!!
-        for(int i = 0; i < ENDLEN; i++)
+        for(int i = 0; i < ENDLEN - 1; i++)
         {
                 int randVal = rand() % CHANCE_OF_JMP;
                 if(randVal == 3)
