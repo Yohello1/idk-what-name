@@ -45,3 +45,8 @@ leaderPathFinding : leaderPathFinding.cpp
 	$(CC) $(COMPILER_FLAGS) -c leaderPathFinding.cpp
 	$(CC) leaderPathFinding.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+ell : ell.cpp
+	$(CC) $(COMPILER_FLAGS) -c ell.cpp
+	$(CC) ell.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2
