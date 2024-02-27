@@ -186,7 +186,7 @@ namespace Game
             std::ifstream sceneDataFile;
             sceneDataFile.open("testData/testScene.pcsf");
 
-            if (!sceneDataFile) //checks to see if file opens properly
+            if (!sceneDataFile) //checks tom see if file opens properly
             {
                 std::cout << "Error: Could not find the requested file." << std::endl;
                 return 1;
@@ -272,6 +272,24 @@ namespace Game
 
                 std::ofstream layerFile(tempPath);
                 layerFile << "i can try\n";
+
+                // why do you hate me, hate me, still trying to get rid of me
+                // aaaaaaaaaaaaaaaaaaaaaaa
+                // oh well, that was a mistake I will not be making again
+                // never EVER get into love again
+                // im starting to think she was lying
+                // from the very start abt actually liking me
+                // like,, to leave without even saying anything is kinda not nice
+                // idk what to do in the end tho, cause like, I cannot force them to
+                // like me, so aaaaaaaa
+                for(long long j = 0; j < (long long) (_mapX*_mapY*4); j++)
+                {
+                    float temp = getFloatLayerDirect(j, i);
+                    layerFile << temp;
+                    if(temp != 0)
+                        std::cout << temp;
+                }
+
                 layerFile.close();
 
                 std::cout << tempPath << std::endl;
@@ -291,18 +309,24 @@ namespace Game
         // i feel like the person kinda made this a lot worse than it shouldve been
         // :(
 
+        /*
+        ** x,y is the coordinate
+        ** layer is the layer the data you want is on
+        ** pos is which part of the rgba you want, 0-4
+         */
+        float getFloatLayerCoordinate(unsigned int x, unsigned int y, uint8_t layer, uint8_t pos)
+        {
+            float returnVal = _layers.at(layer)[y*_mapX*4+x*4+pos];
+            return returnVal;
+        }
 
-        /* Let this monstrosicty be a warning to all others who dare try and shorten it
-
-
-         float temp[20] = {-1*halfWidth, -1*halfHeight, -0.5, 0,0,-1*halfWidth, 1*halfHeight, -0.5,0,-1, halfWidth, halfHeight, -0.5, 1, 1, halfWidth, -1*halfHeight, -0.5, 1, 0};
-
-            for(int i = 0; i < 20*layersNum; i++)
-            {
-                _verticies[i] = temp[i%20];
-                if(temp[i%20] == -0.5)
-                    _verticies[i] = -1*floor(i/20);
-        */
+        /*
+        ** just pull the float directly from the layer
+         */
+        float getFloatLayerDirect(long long position, uint8_t layer)
+        {
+            return _layers.at(layer)[position];
+        }
 
         void generatePlanes(uint8_t layersNum)
         {

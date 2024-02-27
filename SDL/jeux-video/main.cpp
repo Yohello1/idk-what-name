@@ -118,7 +118,7 @@ int main()
 	//fake image maker :)
 	functions::fakeRandomImage(fakeImg, 0);
 	scene1.updateImageBulk(0, fakeImg);
-	scene1.loadSceneFromFile("testData/testScene.pcsf");
+	// scene1.loadSceneFromFile("testData/testScene.pcsf");
 	scene1.changeTitleOfWindow(window);
 
 	scene1.saveSceneToFile("testData/testSave.pcsf");
