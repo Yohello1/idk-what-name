@@ -117,7 +117,8 @@ int main()
 
 	//fake image maker :)
 	functions::fakeRandomImage(fakeImg, 0);
-	scene1.updateImageBulk(0, fakeImg);
+//	scene1.updateImageBulk(0, fakeImg);
+	std::copy(fakeImg, fakeImg + 1024*1024*4, scene1._layers.at(0));
 	// scene1.loadSceneFromFile("testData/testScene.pcsf");
 	scene1.changeTitleOfWindow(window);
 
