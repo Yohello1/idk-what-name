@@ -282,12 +282,20 @@ namespace Game
                 // like,, to leave without even saying anything is kinda not nice
                 // idk what to do in the end tho, cause like, I cannot force them to
                 // like me, so aaaaaaaa
-                for(long long j = 0; j < (long long) (_mapX*_mapY*4); j++)
+                for(long long j = 0; j < _mapY; j++)
                 {
-                    float temp = getFloatLayerDirect(j, i);
-                    layerFile << temp;
-                    if(temp != 0)
-                        std::cout << temp;
+                    for(int k = 0; k < _mapX; k++)
+                        {
+                            for(int q = 0; q < 4; q++)
+                                {
+                                    float temp = getFloatLayerDirect(j*1024*4+k*4+q, i);
+                                    // temp = 0.5;
+                                    layerFile << temp;
+                                    if(temp != 0)
+                                        std::cout << temp;
+
+                                }
+                        }
                 }
 
                 layerFile.close();
