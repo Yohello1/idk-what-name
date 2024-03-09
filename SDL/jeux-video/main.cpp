@@ -83,7 +83,7 @@ int main()
 	glViewport(0, 0, actual_width, actual_height);
 
 	std::cout << "vert and frag shaders being made" << std::endl;
-	Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
+	Shaders::Shader inMyMind("render/shaders/vert.glsl", "render/shaders/frag.glsl");
 	std::cout << "vert and frag shaders have been made" << std::endl;
 	inMyMind.useProgram();
 
@@ -123,7 +123,6 @@ int main()
 	scene1.changeTitleOfWindow(window);
 
 	// scene1.saveSceneToFile("testData/testSave.pcsf");
-	scene1.computeDispatch(&dejaVu);
 
 	std::cout << "IMG MADE2" << '\n';
 
@@ -138,19 +137,17 @@ int main()
 		inMyMind.setMat4("uViewMatrix", scene1._transforms->_ViewMatrix);
 		scene1._transforms->rotateView(0.5,0.5,0.5);
 
-		dejaVu.useProgram();
-		glDispatchCompute(1024, 1024, 1);
-		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-		scene1.updateImageBulk(0, fakeImg);
-		std::copy(fakeImg, fakeImg + 1024*1024*4, scene1._layers.at(0));
-		heyworld.copyDataFloat(scene1._layers.at(0));
+		// scene1.computeDispatch(&dejaVu);
 
-		inMyMind.useProgram();
-		glBindTextureUnit(0, halfwayThroughNovember.getID());
-		glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
-		glBindVertexArray(scene1._VAO);
-		glDrawElements(GL_TRIANGLES, scene1.getIndiciesSize(), GL_UNSIGNED_INT, 0);
+
+		// inMyMind.useProgram();
+		// glBindTextureUnit(0, halfwayThroughNovember.getID());
+		// glUniform1i(glGetUniformLocation(inMyMind.shaderProgram, "screen"), 0);
+		// glBindVertexArray(scene1._VAO);
+		// glDrawElements(GL_TRIANGLES, scene1.getIndiciesSize(), GL_UNSIGNED_INT, 0);
+
+		scene1.render(&dejaVu, &inMyMind, &halfwayThroughNovember);
 
 		auto end_time = Clock::now();
 		// std::cout << "Delta time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count()/1000000 << '\n';

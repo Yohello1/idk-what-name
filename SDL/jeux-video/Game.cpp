@@ -309,12 +309,17 @@ namespace Game
             return true;
         }
 
+        // TODO: dispatch compute should be dependent upon Fullimg size
         void computeDispatch(::Shaders::computeShader* shaderInput )
         {
            shaderInput->useProgram();
+           glDispatchCompute(1024,1024,1);
+           glMemoryBarrier(GL_ALL_BARRIER_BITS);
         }
 
-        void render()
+
+        // COMPUTEIN IS TEMPORARY FOR TESTING/TRANSITIONAL PURPOSES
+        void render(::Shaders::computeShader* computeShaderIn, ::Shaders::Shader* renderShader, ::Shaders::computeImageOut* computeTemp )
         {
             // why did u lie to me
             // why didnt u tell me
@@ -324,6 +329,18 @@ namespace Game
             // idk why it hurt me
             // that was vv mean of you
 
+            computeDispatch(computeShaderIn);
+
+            renderShader->useProgram();
+            // hypnodancer
+            // ok now we dance with the devil trying to render these
+            // ok I still dont have loading setupppppp
+            // CRIIII
+            // TODO: for loop later for each layer
+            glBindTextureUnit(computeTemp->unit, computeTemp->getID());
+            glUniform1i(glGetUniformLocation(renderShader->shaderProgram, "screen"), 0);
+            glBindVertexArray(_VAO);
+            glDrawElements(GL_TRIANGLES, getIndiciesSize(), GL_UNSIGNED_INT, 0);
         }
 
 

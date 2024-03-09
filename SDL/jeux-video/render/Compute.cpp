@@ -4,7 +4,7 @@ namespace Shaders
     class computeShader
     {
     public:
-      GLuint ID;
+      GLuint _ID;
 
     computeShader(const char* computeShaderSource)
     {
@@ -18,10 +18,10 @@ namespace Shaders
         glCompileShader(computeTest);
         Shaders::compileErrors(computeTest, "COMPUTE");
 
-        ID = glCreateProgram();
-        glAttachShader(ID, computeTest);
-        glLinkProgram(ID);
-        Shaders::compileErrors(ID, "PROGRAM");
+        _ID = glCreateProgram();
+        glAttachShader(_ID, computeTest);
+        glLinkProgram(_ID);
+        Shaders::compileErrors(_ID, "PROGRAM");
     }
 
     /**
@@ -29,7 +29,7 @@ namespace Shaders
      (glUseProgram, basically) */
     void useProgram()
     {
-        glUseProgram(ID);
+        glUseProgram(_ID);
     }
 
     void printMaxComputeSize()
@@ -58,7 +58,7 @@ namespace Shaders
     class computeImageOut
     {
     public:
-        GLuint ID;
+        GLuint _ID;
         uint8_t unit; // unit refering to which of the 32 texture slots it occupies
                       // Like 0: in slot 1/32
                       // 1: 2/32
@@ -72,19 +72,19 @@ namespace Shaders
           write only */
         computeImageOut(uint16_t x, uint16_t y, uint8_t unit)
         {
-            glCreateTextures(GL_TEXTURE_2D, 1, &ID);
-            glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTextureStorage2D(ID, 1, GL_RGBA32F, x, y);
-            glBindImageTexture(unit, ID, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+            glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
+            glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTextureStorage2D(_ID, 1, GL_RGBA32F, x, y);
+            glBindImageTexture(unit, _ID, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
         }
 
         GLuint getID()
         {
-            return ID;
+            return _ID;
         }
     private:
     };
@@ -94,7 +94,7 @@ namespace Shaders
     class computeImageIn
     {
     public:
-        GLuint ID;
+        GLuint _ID;
         GLuint unit; // unit refering to which of the 32 texture slots it occupies
                       // Like 0: in slot 1/32
                       // 1: 2/32
@@ -111,26 +111,26 @@ namespace Shaders
         {
             width = x;
             height = y;
-            glCreateTextures(GL_TEXTURE_2D, 1, &ID);
-            glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTextureStorage2D(ID, 1, GL_RGBA32F, x, y);
-            glBindImageTexture(unit , ID, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+            glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
+            glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTextureStorage2D(_ID, 1, GL_RGBA32F, x, y);
+            glBindImageTexture(unit , _ID, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
 
         }
 
         GLuint getID()
         {
-            return ID;
+            return _ID;
         }
 
         /**
           Float data */
         void copyDataFloat(float* rawData)
         {
-            glTextureSubImage2D(ID, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, rawData);
+            glTextureSubImage2D(_ID, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, rawData);
         }
 
         // ok now lets do the
