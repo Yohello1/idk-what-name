@@ -21,6 +21,7 @@ namespace Game
         public:
         // Yes these are public for simplicites sake
         std::vector<float*> _layers; // i have no idea how to use unique pointers correctly here :P
+        std::vector<::Shaders::computeImageOut> _computeOut;
         MVPMatrix::MVPMatrixes* _transforms;
         GLfloat* _verticies;
         GLint* _indicies;
@@ -337,7 +338,7 @@ namespace Game
             // ok I still dont have loading setupppppp
             // CRIIII
             // TODO: for loop later for each layer
-            glBindTextureUnit(computeTemp->unit, computeTemp->getID());
+            glBindTextureUnit(computeTemp->_unit, computeTemp->getID());
             glUniform1i(glGetUniformLocation(renderShader->shaderProgram, "screen"), 0);
             glBindVertexArray(_VAO);
             glDrawElements(GL_TRIANGLES, getIndiciesSize(), GL_UNSIGNED_INT, 0);
