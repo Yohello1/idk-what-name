@@ -342,6 +342,16 @@ namespace Game
 
             // create the plane which is the size of the map, and at diff depths
             _verticies = new GLfloat[20*layersNum]; // 20 = 4*5 = (vert per plane) * (parts per plane)
+            // x,y,z,u(x),v(y)
+            // gonna just cycle these in & out-
+            // pairs of 2 coordinates
+            // 0 1 2
+            // 3 4 5
+            // 6 7 8
+            // float[18] uvCoords = {0,1,0.5,0.5,1,1,1,0,0.5,0.5,0.5,1,0.5,0,0,0.5,0,1,0};
+
+
+            int currComputeImage = 0;
 
             for(int i = 0; i < layersNum; i++)
             {
@@ -360,29 +370,93 @@ namespace Game
                 _verticies[i*20+0] = -1*halfWidth;
                 _verticies[i*20+1] = -1*halfHeight;
                 _verticies[i*20+2] = -1*i*50;
-                _verticies[i*20+3] = -1*0; // why are uv vertexes mapped differently than cords?
-                _verticies[i*20+4] = -1*0;
-
                 // 2
                 _verticies[i*20+5] = -1*halfWidth;
                 _verticies[i*20+6] =  1*halfHeight;
                 _verticies[i*20+7] = -1*i*50;
-                _verticies[i*20+8] = 0;
-                _verticies[i*20+9] = 1;
-
                 // 3
                 _verticies[i*20+10] =  1*halfWidth;
                 _verticies[i*20+11] =  1*halfHeight;
                 _verticies[i*20+12] = -1*i*50;
-                _verticies[i*20+13] = 1;
-                _verticies[i*20+14] = 1;
-
                 // 4
                 _verticies[i*20+15] =  1*halfWidth;
                 _verticies[i*20+16] = -1*halfHeight;
                 _verticies[i*20+17] = -1*i*50;
+
+                // uvCoordsPosition
+                // 2 3
+                // 0 1
+                int layoutPosition = i % 4;
+                if(layoutPosition == 0)
+                {
+                    _verticies[i*20+3] = 0.0; // why are uv vertexes mapped differently than cords?
+                    _verticies[i*20+4] = 0.0;
+
+                    _verticies[i*20+8] = 0.0;
+                    _verticies[i*20+9] = 0.5;
+
+                    _verticies[i*20+13] = 0.5;
+                    _verticies[i*20+14] = 0.5;
+
+                    _verticies[i*20+18] = 0.5;
+                    _verticies[i*20+19] = 0.0;
+                }
+                else if(layoutPosition == 1)
+                {
+                    _verticies[i*20+3] = 0.5;
+                    _verticies[i*20+4] = 0.0;
+
+                    _verticies[i*20+8] = 0.5;
+                    _verticies[i*20+9] = 0.5;
+
+                    _verticies[i*20+13] = 1.0;
+                    _verticies[i*20+14] = 0.5;
+
+                    _verticies[i*20+18] = 1.0;
+                    _verticies[i*20+19] = 0.0;
+                }
+                else if(layoutPosition == 2)
+                {
+                    _verticies[i*20+3] = 0.0;
+                    _verticies[i*20+4] = 0.5;
+
+                    _verticies[i*20+8] = 0.0;
+                    _verticies[i*20+9] = 1.0;
+
+                    _verticies[i*20+13] = 0.5;
+                    _verticies[i*20+14] = 1.0;
+
+                    _verticies[i*20+18] = 0.5;
+                    _verticies[i*20+19] = 0.5;
+                }
+                else if(layoutPosition == 3)
+                {
+                    _verticies[i*20+3] = 0.5;
+                    _verticies[i*20+4] = 0.5;
+
+                    _verticies[i*20+8] = 0.5;
+                    _verticies[i*20+9] = 1.0;
+
+                    _verticies[i*20+13] = 1.0;
+                    _verticies[i*20+14] = 1.0;
+
+                    _verticies[i*20+18] = 1.0;
+                    _verticies[i*20+19] = 0.5;
+                }
+                /*
+                _verticies[i*20+3] = -1*0; // why are uv vertexes mapped differently than cords?
+                _verticies[i*20+4] = -1*0;
+
+                _verticies[i*20+8] = 0;
+                _verticies[i*20+9] = 1;
+
+                _verticies[i*20+13] = 1;
+                _verticies[i*20+14] = 1;
+
                 _verticies[i*20+18] = 1;
                 _verticies[i*20+19] = 0;
+                */
+
             }
             // then make the indices
 
