@@ -123,7 +123,7 @@ int main()
 	scene1.changeTitleOfWindow(window);
 
 	// scene1.saveSceneToFile("testData/testSave.pcsf");
-
+	scene1.computeDispatch(&dejaVu);
 
 	std::cout << "IMG MADE2" << '\n';
 

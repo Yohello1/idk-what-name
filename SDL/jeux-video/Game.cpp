@@ -309,6 +309,24 @@ namespace Game
             return true;
         }
 
+        void computeDispatch(::Shaders::computeShader* shaderInput )
+        {
+           shaderInput->useProgram();
+        }
+
+        void render()
+        {
+            // why did u lie to me
+            // why didnt u tell me
+            // that you didnt like me
+            // why couldnt you be more clear
+            // it really hurt me
+            // idk why it hurt me
+            // that was vv mean of you
+
+        }
+
+
         private:
         std::string _name;
         unsigned int _mapX, _mapY;
