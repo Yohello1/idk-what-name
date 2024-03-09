@@ -59,7 +59,8 @@ namespace Shaders
     {
     public:
         GLuint _ID;
-        uint8_t unit; // unit refering to which of the 32 texture slots it occupies
+        uint16_t _width, _height;
+        uint8_t _unit; // unit refering to which of the 32 texture slots it occupies
                       // Like 0: in slot 1/32
                       // 1: 2/32
                       // etc etc
@@ -72,13 +73,16 @@ namespace Shaders
           write only */
         computeImageOut(uint16_t x, uint16_t y, uint8_t unit)
         {
+            _unit = unit;
+            _width = x;
+            _height = y;
             glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
             glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTextureStorage2D(_ID, 1, GL_RGBA32F, x, y);
-            glBindImageTexture(unit, _ID, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+            glBindImageTexture(_unit, _ID, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
         }
 
@@ -95,11 +99,11 @@ namespace Shaders
     {
     public:
         GLuint _ID;
-        GLuint unit; // unit refering to which of the 32 texture slots it occupies
+        uint16_t _width, _height;
+        GLuint _unit; // unit refering to which of the 32 texture slots it occupies
                       // Like 0: in slot 1/32
                       // 1: 2/32
                       // etc etc
-        uint16_t width, height;
       /**
           btw, 2d texture,
           min & mag filters: gl_nearest
@@ -109,15 +113,16 @@ namespace Shaders
           write only */
         computeImageIn(uint16_t x, uint16_t y, GLuint unit)
         {
-            width = x;
-            height = y;
+            _width = x;
+            _height = y;
+            _unit = unit;
             glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
             glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTextureStorage2D(_ID, 1, GL_RGBA32F, x, y);
-            glBindImageTexture(unit , _ID, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+            glBindImageTexture(_unit , _ID, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
 
         }
 
@@ -130,7 +135,7 @@ namespace Shaders
           Float data */
         void copyDataFloat(float* rawData)
         {
-            glTextureSubImage2D(_ID, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, rawData);
+            glTextureSubImage2D(_ID, 0, 0, 0, _width, _height, GL_RGBA, GL_FLOAT, rawData);
         }
 
         // ok now lets do the
