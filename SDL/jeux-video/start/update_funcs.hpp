@@ -26,7 +26,7 @@ namespace functions
                 for(int k = 0; k < 4; k++)
                 {
 
-                    randImgOut[i*1024*4+j*4+k] = 0.1;
+                    // randImgOut[i*1024*4+j*4+k] = 0.1;
                     if(100 < i && i < 150)
                     {
                         if(300 < j && j < 724)
