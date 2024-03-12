@@ -11,7 +11,7 @@ CC = g++
 # -w suppresses all warnings
 # -Wall shows ALL warnings
 
-COMPILER_FLAGS =
+COMPILER_FLAGS = -std=c++17
 LINKER_FLAGS =
 OBJ_NAME = a.out
 
@@ -19,3 +19,8 @@ lcg : jesse.cpp
 	$(CC) $(COMPILER_FLAGS) -c jesse.cpp
 	$(CC) jesse.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 # 	./(OBJ_NAME)
+
+monte : monte.cpp
+	$(CC) $(COMPILER_FLAGS) -c monte.cpp
+	$(CC) monte.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	./$(OBJ_NAME)

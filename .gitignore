@@ -5,3 +5,11 @@ CMakeFiles/
 /CMakeFiles/
 SDL/jeux-video/build/.cmake/*
 *testData*
+*_region_.*
+*.aux
+*.bbl
+*.blg
+*.log
+*.synctex.gz
+*.log
+*.el
