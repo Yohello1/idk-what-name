@@ -1,0 +1,5 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{}%
+\contentsline {section}{\numberline {2}background}{2}{}%
+\contentsline {subsection}{\numberline {2.1}Random Number Generators}{2}{}%
+\contentsline {subsubsection}{\numberline {2.1.1}Multiplicitve Random Number Generator}{2}{}%
+\contentsline {subsubsection}{\numberline {2.1.2}Linear Congruential Generators}{2}{}%

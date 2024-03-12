@@ -6,16 +6,20 @@
 #include <numeric>
 #include <string>
 #include <vector>
+#include <set>
 
-uint64_t seed, multiplier, moduloVal, addedVal;
-uint32_t amtVals = 4294967295;
-std::vector<uint64_t> values;
+uint32_t seed, multiplier, moduloVal, addedVal;
+uint32_t amtVals = 1000*6;
+std::vector<uint32_t> values;
+std::vector<uint32_t> absDeterminateVal;
 
 bool isPrime(int num);
+int32_t determinateOfMatrix(uint16_t position);
+uint32_t largestFactorDeterminates();
 
 int main(int argc, char *argv[])
 {
-    std::cout << "It is suggested that the moduloVal is a prime number" << std::endl;
+    std::cout << "It is suggested that all numbers are primes" << std::endl;
     // x_{k+1}  = g*x_{k} % m
     if(argc == 1)
     {
@@ -43,18 +47,82 @@ int main(int argc, char *argv[])
         }
     }
 
-
-    // ok gonna compute 2^12 numbers (4096)
     values.reserve(amtVals);
     values[0] = seed;
     for(uint32_t i = 1; i < amtVals;i++)
     {
-        values[i] = (values[i-1]*multiplier + addedVal) % moduloVal;
-        // std::cout << values[i] << std::endl;
+        values[i] = (values[i-1]*multiplier+addedVal) % moduloVal;
     }
+
+    absDeterminateVal.reserve(amtVals/6);
+    for(uint32_t i = 0; i < amtVals/6; i+=6)
+    {
+        absDeterminateVal.push_back(std::abs(determinateOfMatrix(i)));
+    }
+
+    std::cout << "Largest Factor " << std::endl;
+    largestFactorDeterminates();
 }
 
+uint32_t largestFactorDeterminates()
+{
+    uint32_t result = 0;
 
+    std::set<uint32_t> factorPrev;
+    std::set<uint32_t> factorCurr;
+    std::set<uint32_t> factorNext;
+
+    for(uint32_t i = 0; i < (uint32_t)absDeterminateVal.size() - 1; i++)
+    {
+        for(uint32_t j = 1; j < absDeterminateVal[i]; j++)
+        {
+            if((absDeterminateVal[i] % j) == 0)
+                factorPrev.insert(j);
+        }
+
+        for(uint32_t j = 1; j < absDeterminateVal[i+1]; j++)
+        {
+            if((absDeterminateVal[i+1] % j) == 0)
+                factorCurr.insert(j);
+        }
+
+        // insersect
+        std::set_intersection(factorPrev.begin(), factorPrev.end(), factorCurr.begin(), factorCurr.end(), std::inserter(factorNext, factorNext.begin()));
+
+
+        // wipe & prep
+        factorPrev.clear();
+        factorCurr.clear();
+        factorPrev.insert(factorNext.begin(), factorNext.end());
+        factorNext.clear();
+
+    }
+
+    std::cout << *factorPrev.rbegin();
+
+    return result;
+}
+
+int32_t determinateOfMatrix(uint16_t position)
+{
+    // a1 a2 1
+    // b1 b2 1
+    // c1 c2 1
+    //
+    // x   x+1 1
+    // x+2 x+3 1
+    // x+4 x+5 1
+    //
+    // = a1(b2-c2) - a2(b1-c1) + (b1*c2-b2*c1)
+
+    int32_t result = 0;
+
+    uint32_t cal[6] = {values[position], values[position+1], values[position+2], values[position+3], values[position+4], values[position+5]};
+
+    result = cal[0]*(cal[3]-cal[5]) - cal[1]*(cal[2]-cal[4]) + 1*(cal[2]*cal[5]-cal[3]*cal[4]);
+
+    return result;
+}
 
 bool isPrime(int num)
 {
