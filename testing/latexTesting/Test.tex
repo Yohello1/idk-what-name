@@ -5,7 +5,7 @@
 \usepackage{url}
 \usepackage[]{multicol}
 \usepackage[strings]{underscore}
-\usepackage[a4paper, bindingoffset=0.2in, left=0.25in, right=0.25in, top=0.5in, bottom=0.5in]{geometry}
+\usepackage[a4paper, bindingoffset=0.2in, left=0.5in, right=0.5in, top=0.5in, bottom=0.5in]{geometry}
 \title{Investigating whether the inputs of a Multiplicative Congruential Generator can be determined using the outputs}
 \author{Yohwllo}
 \date{March 10th 2024}
@@ -38,11 +38,56 @@
     address = "Waterloo, Canada"
 }
 
+@misc{jukSource,
+    author =  "Juk Developers",
+    title =  "playlist.cpp",
+    howpublished = {\url{https://github.com/KDE/juk/blob/master/playlist.cpp#L676}},
+    year = "2024",
+    publisher = "KDE Foundatation",
+    address = "Berlin Germany",
+}
+
+@article{fallOntoPlanes,
+    author = "George Marsaglia",
+    title =  "Random Numbers Fall Mainly In The Planes",
+    journal = "Mathematics research Laboratory, Boeing Scientific Research Laboratories ",
+    year = 1968
+}
+
+@article{linuxRNG,
+    author = "Huzaifa Sidhurwala",
+    title = "Understanding Random Number Generators and their Limitations, In Linux",
+    journal = "Red Hat Blog",
+    year = 2019
+}
+@misc{modArth,
+    author = "Art Of Problem Solving",
+    title = "Modular Arithmetic/Introduction",
+    howpublished = {\url{https://artofproblemsolving.com/wiki/index.php/Modular_arithmetic/Introduction}},
+    year = 2024,
+}
+
+@misc{utahMod,
+    author = "Utah State University",
+    title = "Modular Arithmetic Properties",
+    howpublished = {\url{http://5010.mathed.usu.edu/Fall2019/SSwallow/ModProperties.html}},
+    year = 2024
+}
+
+@misc{cornelMod,
+    author = "Cornell University",
+    title = "Everything You Need To Know About Modular Arithmetic",
+    howpublished = {\url{https://pi.math.cornell.edu/~morris/135/mod.pdf}},
+    year = 2006
+}
+
+
 @misc{waterlooLCG}
 
 
 \end{filecontents}
 
+% An article needs, author, title, journal, year,
 
 
 \begin{document}
@@ -54,17 +99,32 @@
 \begin{multicols}{2}
   \section{Introduction}
   Ever since I was a young child the concept of random has amazed me. For randomness could at times not seem random, for example, number generators more often than not are far from random, instead they are psuedo random number generators, which are not truely random. These pesudo random number genrators are not truely random, but rather just a mathematical equation which is being done itteratively, and if the developer was forward thinking, it used a different seed every time too. \\
-  Now among random number generators there is a particularly common one called the Multiplicative Congruential Generator (MCG for short), it has been extensively used for various tasks that could require a lot of random numbers, that only need to be 'random enough'. For example creating test data, or for things such as dice rolling in games. There is also another type of random number genreator similar to it called the Linear Congruential Generator which is very similar in terms of how it functions.
+  Now among random number generators there is a particularly common one called the Multiplicative Congruential Generator (MCG for short), it has been extensively used for various tasks that could require a lot of random numbers, that only need to be 'random enough'. For example creating test data, or for things such as dice rolling in games. There is also another type of random number genreatofr similar to it called the Linear Congruential Generator which is very similar in terms of how it functions.
 
   \section{background}
   \subsection{Random Number Generators}
   \subsubsection{Multiplicitve Random Number Generator}
-  Usually an MCG works based off of the equation \(x_{i+1} = (a*x_{i}) \bmod m\). Where the next value is equal to the current value multiplied by a constant, and then its modulus is set as the remainder. \citep{waterlooMCG}
+  Usually an MCG works based off of the equation \(x_{i+1} = (a*x_{i}) \bmod m\). Where the next value is equal to the current value multiplied by a constant, and then its modulus is set as the remainder. \citep{waterlooMCG} \citep{fallOntoPlanes}
   \subsubsection{Linear Congruential Generators}
   In contrast an LCG (Linear Congruential Generator) works in a very similar way, just adding a constant. Its equation looks like \(x_{i+1} = (a*x_{i} +b ) \bmod m\) \citep{waterlooMCG}
+  \subsubsection{How LCG/MCG's are used}
+  Linear/Multiplicative congruential generators are used in a variety of settings, from monte carlo simulations \citep{fallOntoPlanes}, to the shuffle function in music players \citep{jukSource}, these are jus the implmentations that are public and known about. Considering that these types of random number generators are also used in glibc's \citep{linuxRNG} random function, no one knows just how many things use these types of generators for their random numbers. So the implication of these random number generators not being random would have an unknown impact on the world.
+  \subsubsection{Flaws of LCG/MCG's}
+  Now these types of linear congruential generators have some flaws that were found by Gorge Marsaglia \citep{fallOntoPlanes}. That is, if you know how to arange these numbers on a 3d object, all of said numbers will fall upon \(\sqrt[n]{{n}! \cdot m}\) hyper planes \citep{fallOntoPlanes}. A hyperplane is a plane of \(n-1 \) dimensions, with \(n\) being the number of diemensions. As George Marsaglia put it, ``the points are about as randomly spaced in the unit n-cube as the atoms in a perfect crystal at absolute zero''. Later on in his paper he goes over a method that can be used to determine the inputs to such an equation.
+  \subsection{Modular Arithmetic}
+  Modular arithmetic, as well as its properties play an important roll in both the generation, and solving of linear/multiplictive congruential generators. Infact the equations themselves use modular arithmetic, so knowing how it works, as well as its properties will prove useful when solving for the variables. \citep{modArth}
+  \subsubsection{Residues}
+  An important concept in modular arithmetic is residues, a residue is what is left when you subtract the modulo value as much as you can, before subtracing anymore would result in a negative number. It is also called the remainder in the contest of division. An example would be, \( 10 \bmod 3\), would have a residue of 1, as \(10 - ( 3 + 3 + 3 ) = 1\), subtracing anymore would result in a negative number. Thus the residue is 1. It is also important to note that a residue can be 0, such is the case of \( 12 \bmod 3\), where \( 12 - ( 3 + 3 + 3 + 3 ) = 0\), this is a case where the residue is equal to 0. \citep{modArth}
+  \subsubsection{Congruence}
+  We say a number, or equation is congruent to one another when all of residues/remainders of that value modulo a constant are the same. It is often shown through the sign \( \equiv \). An example of it being used correctly would be the equation; \( 2 \equiv 7 \equiv 12 (\bmod 5)\), as each of the values \( 5 \bmod 5\) will have the same result, meaning they are congruent. \citep{modArth}
+  \subsubsection{Relations}
+  The relation between \(x \equiv b (\bmod m)\) and \(x \equiv b (\bmod m )\). The first one is for equivalence, which i sthe same as equality. In comparision the second equation is equality. As a note from Cornell University put it; \\ ``\(x = b (\bmod m)\) is the smallest positive solution to the equation \( x \equiv b (\bmod m)\)'' \cite{cornelMod}
+  \subsubsection{Rules to note:}
+  Sum Rule: if \(a \equiv b ( \bmod m)\) then \( a + c \equiv b + c(\bmod m)\) \cite{cornelMod} \\ \\
+  Multiplication Rule: if \(a \equiv b (\bmod m)\) and if \(c \equiv d (\bmod m)\) then \( a \cdot c \equiv b \cdot d (\bmod m)\)  \cite{cornelMod} \\
 
-
-  \columnbreak
+  \subsubsection{Otherways It Can Be Written }
+  Another way which \( a \equiv b (\bmod m)\) can be written is \(a = k \cdot m + b\), where \(k\) is an arbitary integer. Yet another way it can be written is \(n | (a-b) \), which means, \(a-b\) is a multiple of \(n\). This becomes very useful when solving for the variables later on.
 
 \end{multicols}
 
