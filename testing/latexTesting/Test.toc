@@ -3,3 +3,11 @@
 \contentsline {subsection}{\numberline {2.1}Random Number Generators}{2}{}%
 \contentsline {subsubsection}{\numberline {2.1.1}Multiplicitve Random Number Generator}{2}{}%
 \contentsline {subsubsection}{\numberline {2.1.2}Linear Congruential Generators}{2}{}%
+\contentsline {subsubsection}{\numberline {2.1.3}How LCG/MCG's are used}{2}{}%
+\contentsline {subsubsection}{\numberline {2.1.4}Flaws of LCG/MCG's}{2}{}%
+\contentsline {subsection}{\numberline {2.2}Modular Arithmetic}{2}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}Residues}{2}{}%
+\contentsline {subsubsection}{\numberline {2.2.2}Congruence}{2}{}%
+\contentsline {subsubsection}{\numberline {2.2.3}Relations}{2}{}%
+\contentsline {subsubsection}{\numberline {2.2.4}Rules to note:}{2}{}%
+\contentsline {subsubsection}{\numberline {2.2.5}Otherways It Can Be Written }{2}{}%
