@@ -15,3 +15,4 @@
 \contentsline {subsubsection}{\numberline {2.3.1}Forming The Matrix}{3}{}%
 \contentsline {subsubsection}{\numberline {2.3.2}Finding \(m\)}{3}{}%
 \contentsline {subsubsection}{\numberline {2.3.3}Solving for \(a\) in an MCG}{3}{}%
+\contentsline {section}{\numberline {3}Investigation}{3}{}%
