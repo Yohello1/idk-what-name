@@ -9,9 +9,9 @@
 \usepackage{xcolor}
 \usepackage[]{amsfonts}
 \usepackage[]{amsmath}
-%\definecolor{pageGrey}{HTML}{111111}
-%\pagecolor{pageGrey}
-%\color{white}
+\definecolor{pageGrey}{HTML}{111111}
+\pagecolor{pageGrey}
+\color{white}
 \title{Investigating whether the inputs of a Multiplicative Congruential Generator can be determined using the outputs}
 \author{Yohwllo}
 \date{March 10th 2024}
@@ -229,12 +229,15 @@
   Some of the factors were ommited because they could not be displayed in an organised manner, and/or they have no affect on the end result. The greatest common factor between all 4 numbers/
   In the case of the numbers above, the greatest common factor is 25. Thus the value of \(m\) in the equation of an MCG/LCG is 25.
 
-  \subsubsection{Solving for \(a\) in an MCG}
+  \subsubsection{Solving for \(a\) in an LCG}
   To solve for the remaining variables of an MCG, we will use the equation
-  \[a \cdot x_{i} = x_{i-1} \bmod m\]
-  Since we have \(m\), and have \(x_{i}\), we just have to solve for \(a\), which is trivial. In addition \(a\) is the value which the previous integer is multiplied by before being put through a modulo operation.
+  \[a \cdot x_{i} = (x_{i-1} + k) \bmod m\]
+  Since we have \(m\), and have \(x_{i}\), we just have to solve for \(a\), which is trivial. In addition \(a\) is the value which the previous integer is multiplied by before being put through a modulo operation. \(k\) is a constant value
 
-
+  \section{Investigation}
+  To begin, a multiplictive congruential generator will be used to generate 72 numbers. Then those numbers will be used to find the original inputs to the generator, to check if the inputs are correct, the values which were found will be used as inputs to the multiplictive congruential generator.
+  \subsubsection{Values}
+  The 72 numbers which were found are stated below \\
 
 \end{multicols}
 

@@ -51,17 +51,34 @@ int main(int argc, char *argv[])
     values[0] = seed;
     for(uint32_t i = 1; i < amtVals;i++)
     {
-        values[i] = (values[i-1]*multiplier+addedVal) % moduloVal;
+        values[i] = (values[i-1]*multiplier + addedVal) % moduloVal;
     }
 
     absDeterminateVal.reserve(amtVals/6);
     for(uint32_t i = 0; i < amtVals/6; i+=6)
     {
-        absDeterminateVal.push_back(std::abs(determinateOfMatrix(i)));
+        if(std::abs(determinateOfMatrix(i)) != 0)
+        {
+            absDeterminateVal.push_back(std::abs(determinateOfMatrix(i)));
+            std::cout << std::abs(determinateOfMatrix(i)) << std::endl;
+        }
     }
 
     std::cout << "Largest Factor " << std::endl;
     largestFactorDeterminates();
+}
+
+std::vector<uint32_t> intersection(std::vector<uint32_t> v1,
+                                   std::vector<uint32_t> v2){
+    std::vector<uint32_t> v3;
+
+    std::sort(v1.begin(), v1.end());
+    std::sort(v2.begin(), v2.end());
+
+    std::set_intersection(v1.begin(),v1.end(),
+                          v2.begin(),v2.end(),
+                          back_inserter(v3));
+    return v3;
 }
 
 uint32_t largestFactorDeterminates()
