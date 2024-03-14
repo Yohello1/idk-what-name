@@ -6,6 +6,12 @@
 \usepackage[]{multicol}
 \usepackage[strings]{underscore}
 \usepackage[a4paper, bindingoffset=0.2in, left=0.5in, right=0.5in, top=0.5in, bottom=0.5in]{geometry}
+\usepackage{xcolor}
+\usepackage[]{amsfonts}
+\usepackage[]{amsmath}
+%\definecolor{pageGrey}{HTML}{111111}
+%\pagecolor{pageGrey}
+%\color{white}
 \title{Investigating whether the inputs of a Multiplicative Congruential Generator can be determined using the outputs}
 \author{Yohwllo}
 \date{March 10th 2024}
@@ -81,6 +87,14 @@
     year = 2006
 }
 
+@article{reteamHal,
+  author = "Haldir[RET]",
+  title = "How to Crack A Linear Congruential Generator",
+  journal = "reteam.org",
+  year = 2004,
+  howpublished = {\url{https://www.reteam.org/papers/e59.pdf}},
+  note = " https://www.reteam.org/papers/e59.pdf"
+}
 
 @misc{waterlooLCG}
 
@@ -125,6 +139,102 @@
 
   \subsubsection{Otherways It Can Be Written }
   Another way which \( a \equiv b (\bmod m)\) can be written is \(a = k \cdot m + b\), where \(k\) is an arbitary integer. Yet another way it can be written is \(n | (a-b) \), which means, \(a-b\) is a multiple of \(n\). This becomes very useful when solving for the variables later on.
+
+  \subsection{Method Of Solving }
+  % originally \citep{reteamHal}
+  The original paper by George Marsaglia \citep{fallOntoPlanes} mentioned a method which could be used in order to solve for the original inputs given a sufficent amount of input. This was then expanded upon by Haldir \citep{reteamHal}. The expanded upon method showcased by Haldir will be used, although first how it works will be explained in this section.
+  \subsubsection{Forming The Matrix}
+  To begin solving for the input values you need to obtatin 6 values from the generator, let these values be \( \{ 1 \leq i \leq 6 \} , \{1 \leq x_{i} | x_{i} \in \mathbb{Z}^{+}\} \). Letting \( i \) be the index of the value, and \( x_{i}\) being the value. \\
+  The method that was used in this investigation, and the method used in Marsaglia's, and Haldir's paper differ here. In their papers they setup the matrix as; \citep{fallOntoPlanes} \citep{reteamHal}
+    \[
+    \begin{bmatrix}
+      x_{1} & x_{2} & 1 \\
+      x_{2} & x_{3} & 1 \\
+      x_{3} & x_{4} & 1 \\
+    \end{bmatrix}
+  \]
+    However, during my inital calculations I had made a critical error, and had arranged it as such instead;
+  \[
+    \begin{bmatrix}
+      x_{1} & x_{2} & 1 \\
+      x_{3} & x_{4} & 1 \\
+      x_{5} & x_{6} & 1 \\
+    \end{bmatrix}
+  \]
+
+  At the time I did not relise my error, yet once I reached the end I had gotten the same answer, this shows arranging the matrix as I did by accident also worked. Thus the calculations will continue with the arrangment that was done by accident.
+
+  \subsubsection{Finding \(m\)}
+  Now that the matrix has been arranged as;
+ \[
+    \begin{bmatrix}
+      x_{1} & x_{2} & 1 \\
+      x_{3} & x_{4} & 1 \\
+      x_{5} & x_{6} & 1 \\
+    \end{bmatrix}
+  \]
+  We need to find the determinate, as Haldir, and Marsaglia found, the determinte of this matrix is an integer multiple of the value of \(m\) in the equation of the LCG/MCGs. \\
+  Before finding the determinte, for the sake of simplicty we will assign variable names to each of the points in the matrix before replacing them witht he actual numbers. They will be labeled as such;
+  \[
+    A =
+    \begin{bmatrix}
+      a_{1} & a_{2} & a_{3} \\
+      b_{1} & b_{2} & b_{3} \\
+      c_{1} & c_{2} & c_{3} \\
+    \end{bmatrix}
+  \]
+
+  \[
+    \det(A) =
+    a_{1} \cdot
+    \begin{vmatrix}
+      b_{2} & b_{3} \\
+      c_{2} & c_{3} \\
+    \end{vmatrix}
+    -
+    a_{2}
+    \cdot
+    \begin{vmatrix}
+      b_{1} & b_{3} \\
+      c_{1} & c_{3} \\
+    \end{vmatrix}
+    -
+    a_{3}
+    \begin{vmatrix}
+      b_{1} & b_{2} \\
+      c_{1} & c_{2} \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(A) = a_{1} \cdot (b_{2} \cdot c_{3} - b_{3} \cdot c_{2}) - a_{2}(b_{1} \cdot c_{3} - b_{3} \cdot c_{1}) + a_{3}(b_{1} \cdot c_{2} - b_{2} \cdot c_{1})
+  \]
+  Then after replacing the letters a,b, and c, you end up with the equation below.
+  \[
+  = x_{1} \cdot ((x_{3} \cdot 1)- (x_{5} \cdot 1)) - x_{2} \cdot ((x_{2} \cdot 1) - (cal_{4} \cdot 1)) + 1 \cdot ((x_{2} \cdot x_{5}) - (x_{3} \cdot x_{4}))
+  \]
+  After simplifying this equation one will end up with;
+  \[
+  \det(A) = x_{1} \cdot (x_{3}- x_{5}) - x_{2} \cdot (x_{2} - x_{4}) + ((x_{2} \cdot x_{5}) - (x_{3} \cdot x_{4}))
+  \]
+  Now that we have the determinte for one set of numbers, we need to repeat it a lot of times and record all of the determinates. The theoretical minimum number of determinates needed is found in George Marsaglia's paper \citep{fallOntoPlanes}. It has a table of the number needed, for the purposes of this investigation the process will just be repeated an abritary amount of times.
+
+  Now that we have obtained an arbitary amount of determinates, we will need to find their largest common factor. I suggest using a compute program to find the factors of each number, and then save them. After all of the factors have been found, find the largest common number between them all. An example will be shown below with arbitary numbers 500, 525, 450, 700
+  \begin{flalign}
+    & 500 : 1, 2, 4, 5, 10, 20, 25, 50, 100, 125, 250, 500 \\
+    & 525 : 1, 3, 5, 7, 15, 21, 25, 35, 75,  105, 175, 525 \\
+    & 450 : 1, 2, 3, 5, 6, 9, 10, 15, 18, 25, 30, 45, 50,..., 450 \\
+    & 700 : 1, 2, 4, 5, 7, 10, 14, 20, 25, 28, 35, 50, ..., 700
+  \end{flalign}
+
+  Some of the factors were ommited because they could not be displayed in an organised manner, and/or they have no affect on the end result. The greatest common factor between all 4 numbers/
+  In the case of the numbers above, the greatest common factor is 25. Thus the value of \(m\) in the equation of an MCG/LCG is 25.
+
+  \subsubsection{Solving for \(a\) in an MCG}
+  To solve for the remaining variables of an MCG, we will use the equation
+  \[a \cdot x_{i} = x_{i-1} \bmod m\]
+  Since we have \(m\), and have \(x_{i}\), we just have to solve for \(a\), which is trivial. In addition \(a\) is the value which the previous integer is multiplied by before being put through a modulo operation.
+
+
 
 \end{multicols}
 
