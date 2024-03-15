@@ -54,13 +54,16 @@ int main(int argc, char *argv[])
         values[i] = (values[i-1]*multiplier + addedVal) % moduloVal;
     }
 
+    for(int i = 0; i < 72; i++)
+        std::cout << values[i] << ", ";
+
     absDeterminateVal.reserve(amtVals/6);
     for(uint32_t i = 0; i < amtVals/6; i+=6)
     {
         if(std::abs(determinateOfMatrix(i)) != 0)
         {
             absDeterminateVal.push_back(std::abs(determinateOfMatrix(i)));
-            std::cout << std::abs(determinateOfMatrix(i)) << std::endl;
+            // std::cout << std::abs(determinateOfMatrix(i)) << std::endl;
         }
     }
 
