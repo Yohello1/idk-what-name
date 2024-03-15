@@ -10,8 +10,8 @@
 \usepackage[]{amsfonts}
 \usepackage[]{amsmath}
 \definecolor{pageGrey}{HTML}{111111}
-\pagecolor{pageGrey}
-\color{white}
+%\pagecolor{pageGrey}
+%\color{white}
 \title{Investigating whether the inputs of a Multiplicative Congruential Generator can be determined using the outputs}
 \author{Yohwllo}
 \date{March 10th 2024}
@@ -118,9 +118,9 @@
   \section{background}
   \subsection{Random Number Generators}
   \subsubsection{Multiplicitve Random Number Generator}
-  Usually an MCG works based off of the equation \(x_{i+1} = (a*x_{i}) \bmod m\). Where the next value is equal to the current value multiplied by a constant, and then its modulus is set as the remainder. \citep{waterlooMCG} \citep{fallOntoPlanes}
+  Usually an MCG works based off of the equation \(x_{i+1} = (a \cdot x_{i}) \bmod m\). Where the next value is equal to the current value multiplied by a constant, and then its modulus is set as the remainder. \citep{waterlooMCG} \citep{fallOntoPlanes}
   \subsubsection{Linear Congruential Generators}
-  In contrast an LCG (Linear Congruential Generator) works in a very similar way, just adding a constant. Its equation looks like \(x_{i+1} = (a*x_{i} +b ) \bmod m\) \citep{waterlooMCG}
+  In contrast an LCG (Linear Congruential Generator) works in a very similar way, just adding a constant. Its equation looks like \(x_{i+1} = (a \cdot x_{i} +b ) \bmod m\) \citep{waterlooMCG}
   \subsubsection{How LCG/MCG's are used}
   Linear/Multiplicative congruential generators are used in a variety of settings, from monte carlo simulations \citep{fallOntoPlanes}, to the shuffle function in music players \citep{jukSource}, these are jus the implmentations that are public and known about. Considering that these types of random number generators are also used in glibc's \citep{linuxRNG} random function, no one knows just how many things use these types of generators for their random numbers. So the implication of these random number generators not being random would have an unknown impact on the world.
   \subsubsection{Flaws of LCG/MCG's}
@@ -198,7 +198,7 @@
       b_{1} & b_{3} \\
       c_{1} & c_{3} \\
     \end{vmatrix}
-    -
+    +
     a_{3}
     \begin{vmatrix}
       b_{1} & b_{2} \\
@@ -210,7 +210,7 @@
   \]
   Then after replacing the letters a,b, and c, you end up with the equation below.
   \[
-  = x_{1} \cdot ((x_{3} \cdot 1)- (x_{5} \cdot 1)) - x_{2} \cdot ((x_{2} \cdot 1) - (cal_{4} \cdot 1)) + 1 \cdot ((x_{2} \cdot x_{5}) - (x_{3} \cdot x_{4}))
+  = x_{1} \cdot ((x_{3} \cdot 1)- (x_{5} \cdot 1)) - x_{2} \cdot ((x_{2} \cdot 1) - (x_{4} \cdot 1)) +((x_{2} \cdot x_{5}) - (x_{3} \cdot x_{4}))
   \]
   After simplifying this equation one will end up with;
   \[
@@ -237,7 +237,409 @@
   \section{Investigation}
   To begin, a multiplictive congruential generator will be used to generate 72 numbers. Then those numbers will be used to find the original inputs to the generator, to check if the inputs are correct, the values which were found will be used as inputs to the multiplictive congruential generator.
   \subsubsection{Values}
-  The 72 numbers which were found are stated below \\
+  The 72 numbers which were found are stated below; \\
+  547, 91, 73, 200, 19, 159, 109, 157, 170, 90, 209, 61, 144, 39, 182, 146, 189, 38, 107, 7, 103, 129, 180, 207, 122, 77, 78, 153, 81, 167, 76, 3, 14, 206, 47, 149, 203, 33, 154, 156, 95, 162, 123, 152, 6, 28, 201, 94, 87, 195, 66, 97, 101, 190, 113, 35, 93, 12, 56, 191, 188, 174, 179, 132, 194, 202, 169, 15, 70, 186, 24, 112 \\
+  These values will be used for the calculation of the input values of the MCG.
+  \subsubsection{Setting up the matrixes}
+  Now we will need to setup the 12 matrixes we will be using to find the value of \(m\). The matrixes will be setup as such
+  \[
+    A =
+    \begin{bmatrix}
+      547 & 91  & 1 \\
+      73  & 200 & 1 \\
+      19  & 159 & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    B =
+    \begin{bmatrix}
+      109 & 157 & 1 \\
+      170 & 90  & 1 \\
+      209 & 61  & 1\\
+    \end{bmatrix}
+  \]
+
+
+  \[
+    C =
+    \begin{bmatrix}
+      144 & 39  & 1 \\
+      182 & 146 & 1 \\
+      189 & 38  & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    D =
+    \begin{bmatrix}
+      107 & 7   & 1 \\
+      103 & 129 & 1 \\
+      180 & 207 & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    E =
+    \begin{bmatrix}
+      122 & 77  & 1 \\
+      782 & 153 & 1 \\
+      81  & 167 & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    F =
+    \begin{bmatrix}
+      76  & 3   & 1 \\
+      14  & 206 & 1 \\
+      47  & 149 & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    G =
+    \begin{bmatrix}
+      203 & 33  & 1 \\
+      154 & 156 & 1 \\
+      95  & 162 & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    H =
+    \begin{bmatrix}
+      123 & 152 & 1 \\
+      6   & 28  & 1 \\
+      201 & 94  & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    I =
+    \begin{bmatrix}
+      87  & 195 & 1 \\
+      66  & 97  & 1 \\
+      101 & 190 & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    J =
+    \begin{bmatrix}
+      113 & 35  & 1 \\
+      93  & 12  & 1 \\
+      56  & 191 & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    K =
+    \begin{bmatrix}
+      118 & 174 & 1 \\
+      179 & 132 & 1 \\
+      194 & 202 & 1\\
+    \end{bmatrix}
+  \]
+
+  \[
+    L =
+    \begin{bmatrix}
+      169 & 15  & 1 \\
+      70  & 186 & 1 \\
+      24  & 112 & 1\\
+    \end{bmatrix}
+  \]
+
+  \subsubsection{Getting the Determinates of the Matrixes}
+  Now that we've arranged all the matrixes we need to get the absolute value of their determinates, absolute values for simplicties sake later on when we need to find the factors. The function \(\det(A)\) shall represent it, letting \(A\) be the matrix.
+
+  \[
+    \det(A) =
+    547 \cdot
+    \begin{vmatrix}
+      200 & 1 \\
+      159 & 1 \\
+    \end{vmatrix}
+    -
+    91 \cdot
+    \begin{vmatrix}
+      73 & 1 \\
+      19 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      547 & 91 \\
+      19 & 159 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(A) = 25320
+  \]
+
+  \[
+    \det(B) =
+    109 \cdot
+    \begin{vmatrix}
+      90 & 1 \\
+      61 & 1 \\
+    \end{vmatrix}
+    -
+    157 \cdot
+    \begin{vmatrix}
+      170 & 1 \\
+      209 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      109 & 157 \\
+      209 & 61 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(B) = 844
+  \]
+
+  \[
+    \det(C) =
+    144 \cdot
+    \begin{vmatrix}
+      146 & 1 \\
+      38 & 1 \\
+    \end{vmatrix}
+    -
+    39 \cdot
+    \begin{vmatrix}
+      182 & 1 \\
+      189 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      144 & 39 \\
+      189 & 38 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(C) = 4853
+  \]
+
+  \[
+    \det(D) =
+    107 \cdot
+    \begin{vmatrix}
+      129 & 1 \\
+      207 & 1 \\
+    \end{vmatrix}
+    -
+    7 \cdot
+    \begin{vmatrix}
+      103 & 1 \\
+      180 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      107 & 7 \\
+      180 & 207 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(D) = 9706
+  \]
+
+  \[
+    \det(E) =
+    122 \cdot
+    \begin{vmatrix}
+      153 & 1 \\
+      167 & 1 \\
+    \end{vmatrix}
+    -
+    77 \cdot
+    \begin{vmatrix}
+      78 & 1 \\
+      81 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      122 & 77 \\
+      81 & 167 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(E) = 844
+  \]
+
+  \[
+    \det(F) =
+    76 \cdot
+    \begin{vmatrix}
+      206 & 1 \\
+      149 & 1 \\
+    \end{vmatrix}
+    -
+    3 \cdot
+    \begin{vmatrix}
+      14 & 1 \\
+      47 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      76 & 3 \\
+      47 & 149 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(F) = -3165
+  \]
+
+  \[
+    \det(G) =
+    203 \cdot
+    \begin{vmatrix}
+      156 & 1 \\
+      162 & 1 \\
+    \end{vmatrix}
+    -
+    33 \cdot
+    \begin{vmatrix}
+      154 & 1 \\
+      95 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      203 & 33 \\
+      95 & 162 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(G) = 6963
+  \]
+
+  \[
+    \det(H) =
+    123 \cdot
+    \begin{vmatrix}
+      28 & 1 \\
+      94 & 1 \\
+    \end{vmatrix}
+    -
+    152 \cdot
+    \begin{vmatrix}
+      6 & 1 \\
+      201 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      123 & 152 \\
+      201 & 94 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(H) = 16458
+  \]
+
+  \[
+    \det(I) =
+    87 \cdot
+    \begin{vmatrix}
+      97 & 1 \\
+      190 & 1 \\
+    \end{vmatrix}
+    -
+    195 \cdot
+    \begin{vmatrix}
+      66 & 1 \\
+      101 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      87 & 195 \\
+      101 & 190 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(I) = 1477
+  \]
+
+  \[
+    \det(J) =
+    113 \cdot
+    \begin{vmatrix}
+      12 & 1 \\
+      191 & 1 \\
+    \end{vmatrix}
+    -
+    35 \cdot
+    \begin{vmatrix}
+      93 & 1 \\
+      56 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      113 & 35 \\
+      56 & 191 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(J) = 4431
+  \]
+
+  \[
+    \det(K) =
+    188 \cdot
+    \begin{vmatrix}
+      132 & 1 \\
+      202 & 1 \\
+    \end{vmatrix}
+    -
+    174 \cdot
+    \begin{vmatrix}
+      179 & 1 \\
+      194 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      188 & 174 \\
+      194 & 202 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(K) = 0
+  \]
+
+  \[
+    \det(L) =
+    169 \cdot
+    \begin{vmatrix}
+      186 & 1 \\
+      112 & 1 \\
+    \end{vmatrix}
+    -
+    15 \cdot
+    \begin{vmatrix}
+      70 & 1 \\
+      24 & 1 \\
+    \end{vmatrix}
+    +
+    \begin{vmatrix}
+      169 & 15 \\
+      24 & 112 \\
+    \end{vmatrix}
+  \]
+  \[
+    \det(L) = 15192
+  \]
+
+  Excluding the determinate(s) which are 0, we have the determinates, 25320, 844, 4853, 9706, 844, 3165, 6963, 16458, 1477, 4431, 15192.
+
+  \subsubsection{Solving for the inital values}
+
+  From the determinates of the matrix we can solve for \(m\), using the method which was previously states. That is, to find the greatest common factor between all of the determinates. After solving for the greatest common factor, a value of \(211\) is obtained. That means that the equation of the MCG that is generating these values should look similar to \(x_{i+1} = (a \cdot x_{i}) (\bmod {211})\). \\
+  % b is the remainder
+  % m is modulo
+  % a is the next val, i think
+  % k is the last val, times whatever the constant was
+
 
 \end{multicols}
 

@@ -14,5 +14,9 @@
 \contentsline {subsection}{\numberline {2.3}Method Of Solving }{2}{}%
 \contentsline {subsubsection}{\numberline {2.3.1}Forming The Matrix}{3}{}%
 \contentsline {subsubsection}{\numberline {2.3.2}Finding \(m\)}{3}{}%
-\contentsline {subsubsection}{\numberline {2.3.3}Solving for \(a\) in an MCG}{3}{}%
+\contentsline {subsubsection}{\numberline {2.3.3}Solving for \(a\) in an LCG}{3}{}%
 \contentsline {section}{\numberline {3}Investigation}{3}{}%
+\contentsline {subsubsection}{\numberline {3.0.1}Values}{3}{}%
+\contentsline {subsubsection}{\numberline {3.0.2}Setting up the matrixes}{3}{}%
+\contentsline {subsubsection}{\numberline {3.0.3}Getting the Determinates of the Matrixes}{4}{}%
+\contentsline {subsubsection}{\numberline {3.0.4}Solving for the inital values}{4}{}%
