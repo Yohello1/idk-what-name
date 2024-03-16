@@ -10,8 +10,8 @@
 \usepackage[]{amsfonts}
 \usepackage[]{amsmath}
 \definecolor{pageGrey}{HTML}{111111}
-%\pagecolor{pageGrey}
-%\color{white}
+\pagecolor{pageGrey}
+\color{white}
 \title{Investigating whether the inputs of a Multiplicative Congruential Generator can be determined using the outputs}
 \author{Yohwllo}
 \date{March 10th 2024}
@@ -230,7 +230,7 @@
   In the case of the numbers above, the greatest common factor is 25. Thus the value of \(m\) in the equation of an MCG/LCG is 25.
 
   \subsubsection{Solving for \(a\) in an LCG}
-  To solve for the remaining variables of an MCG, we will use the equation
+  To solve for the remaining variables of an LCG, we will use the equation
   \[a \cdot x_{i} = (x_{i-1} + k) \bmod m\]
   Since we have \(m\), and have \(x_{i}\), we just have to solve for \(a\), which is trivial. In addition \(a\) is the value which the previous integer is multiplied by before being put through a modulo operation. \(k\) is a constant value
 
@@ -634,12 +634,26 @@
 
   \subsubsection{Solving for the inital values}
 
-  From the determinates of the matrix we can solve for \(m\), using the method which was previously states. That is, to find the greatest common factor between all of the determinates. After solving for the greatest common factor, a value of \(211\) is obtained. That means that the equation of the MCG that is generating these values should look similar to \(x_{i+1} = (a \cdot x_{i}) (\bmod {211})\). \\
-  % b is the remainder
-  % m is modulo
-  % a is the next val, i think
-  % k is the last val, times whatever the constant was
+  From the determinates of the matrix we can solve for \(m\), using the method which was previously states. That is, to find the greatest common factor between all of the determinates. After solving for the greatest common factor, a value of \(211\) is obtained. That means that the equation of the MCG that is generating these values should look similar to \(x_{i+1} \equiv (a \cdot x_{i}) (\bmod {211})\). \\
+  Using some of the equations previously mentioned, we can re-arrange them to craft the equation. \cite{reteamHal}
+  \[ a \cdot x_{i - 1} \equiv x_{i} ( \bmod m )\]
+  Since we know the value of \(m\) is 211, we can insert it into the equation, getting
+  \[a \cdot x_{i-1} \equiv x_{i} (\bmod 211)\]
+  To determine \(a\) we shall use 6 different values of \(x\), if the solved values of \(a\) are all the same, we will have found \(a\). The values used will be; 109, 157, 73, 200, 19, and 159. Putting these into equations we get the equations;
 
+  \AtBeginEnvironment{align}{\setcounter{equation}{0}}
+  \begin{gather*}
+      157 \equiv 109 \cdot a (\bmod 211) \\
+      200 \equiv 73 \cdot a (\bmod 211)  \\
+      157 \equiv 109 \cdot a (\bmod 211) \\
+    \end{gather*}
+
+    By brute forcing these equations for the value of \(a\), and using wolframAlpha, a value of \(75\) is obtained.
+
+    Thus the values of \(a\) is \(75\), and \(m\) is \(211\). You only need one value from the generator to predict all the values which come after it, so we have everything that is needed.
+
+    \subsubsection{Checking The Values}
+    To check our values, we will need one value from the MCG to act as the seed, and then we'll need to solve for the next values.
 
 \end{multicols}
 
