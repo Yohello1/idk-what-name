@@ -1,0 +1,120 @@
+#+TITLE Engine Dev path
+#+AUTHOR: Yo Hello
+#+EMAIL: mp2702737@gmail.com
+
+* Current Dev pat
+- [11/11] Text rendering
+  - [X] Conduct research on fesability to do it inhouse
+  - [X] Chose to use STB_TrueType
+  - [X] Read the docs
+  - [X] Stand-alone implementation
+  - [X] Figuring out what needs to be split up
+  - [X] Write out the parts needed
+  - [X] Basic Implementation into engine
+  - [X] Colours
+  - [X] Colour blending
+  - [X]  Cords
+  - [X] Un cancerousingx
+
+- [X] restructure it to not be cancerous
+- [6/6] Do the `#if` things to run debug garbage
+  - [X] Terrain.hpp
+  - [X] input.hpp (and input_Large), should merge into one file though
+  - [X] Vector math
+  - [X] Physics .hpp
+  - [X] Render.hpp
+  - [X] ui.hp
+- [ ] Write a test
+- [X] Proper ECS system
+  - [X] manager
+  - [X] entntiy
+  - [X] Typies
+  - [X] Test
+- [ ] Quality of Programming the engine life
+  - [ ] Switching to type def
+- [13/26] Render life
+  - [X] Colours p2
+  - [ ] Make a class to contain each world
+  - [ ] Figure out how to run the map -> Material -> Img
+  - [ ] Temp representation
+  - [ ] Pressure representation
+  - [X] Make vert & Frag shader
+  - [ ] Make UI stuff diff vert shaders?
+  - [ ] Make material class, and port everything over to refernce the material instead
+  - [ ] Send material data to GPU
+  - [ ] Send map of the cells' materials to the GPU
+  - [ ] Render that stuff out
+  - How will rendering work?
+    Well firstly it will send data like, display size, and set that as a 'uniform', as this will be used everywhere
+    Then it will get 3 sets of verts (as of now, may change in the future), one set will be the GUI parts, another will just encapsulate the entire background, and the final will be the effects (like dust, blood, etc etc)
+    Then each layer is assigned an image texture which comes from the cpu
+  - [-] CPU texture creation
+    - [ ] Create worker/thread/slave which purely takes most recent data and throws it into an array
+    - [X] Declare the array an image
+    - [X] Load that image into VRAM every frame update
+    - [ ] Create a method to handle the buffers, loading, deleting, updating
+  - [ ] Oragnise, and refactor it to not be terrible
+  - [X] Draw a sqaure
+  - [X] Create EBO, VBO, and VAO
+  - [X] Create FBO // Honestly tho, this isnt needed
+  - [X] Create windw
+  - [X] Create plane
+  - [X] Map image onto plane
+  - [X] Orthographic camera
+  - [ ] Organise this *part 15*
+  - [X] Load texture raw files
+  - [X] Load them to GPU
+  - [X] BIND them
+  - [X] Setup the frag shader
+  - [ ] Setup the like 20 matricies
+    - [ ] make classes which can operate on them???
+    - [ ] model
+    - [ ] View
+- [1/3] optimisation
+  - [X] Chunk simulation
+  - [ ] Multi threading (Physics)
+  - [-] Rewrite SDL code in uh, opengl (I dont have a choice)
+    - [X] Open a window
+    - [X] Display colours
+    - [X] Frag/vert shader
+    - [ ] Compositor
+- [ ] Import/Export maps
+- [ ] Write a proper input system
+- [ ] Make file buffer for text render within its own class
+- [7/10] Final version of physics system
+  - [X] Correct types
+  - [X] Data handling
+  - [X] Basic add and subtract from neighbouxr
+  - [X] Method to put new_version to pixels
+    - [X] Add value to new_version
+    - [X] Add data from new_version + pixels -> pixels, new_versio.reset()
+    - [X] stuff u can figure it out future me
+  - [X] Basic add and subtract from neighbours
+  - [X] Find issue with pressure exiting/entering from random points
+  - [X] Create seperate thread which checks for inconsitenceis
+  - [ ] Port pressure to temp
+  - [ ] Solids
+    - [ ] Implement the data types needed
+    - [ ] Use the data types
+    - [ ] Figure out how to display it
+  - [ ] Make a better version of the cross die thingy
+  - [ ] Change class members to like _name, to make it more clear
+  - [ ] Create logging function
+  - [ ] Start using unique_ptr instead of raw pointers
+  - [ ] arena memory thingy
+  - [ ] vectors can have smth pre-allocated btw
+  - [ ] redo the rgb thingy
+  - [ ] use const pointers for reference thingy
+  - [ ] String view usage instead
+* Bugs
+
+* Future Problem
+- [ ] documentation
+- Parallize this
+- [ ]  Chemical engine lmaoooooo
+* Resources
+
+* Notes
+- Colour thing is gonna be complex (just turn them into vectors then ge the avg) https://stackoverflow.com/questions/1351442/is-there-an-algorithm-for-color-mixing-that-works-like-mixing-real-colors)
+  - Probs just gonna yeet this
+-
