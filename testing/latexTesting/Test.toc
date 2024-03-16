@@ -19,4 +19,5 @@
 \contentsline {subsubsection}{\numberline {3.0.1}Values}{3}{}%
 \contentsline {subsubsection}{\numberline {3.0.2}Setting up the matrixes}{3}{}%
 \contentsline {subsubsection}{\numberline {3.0.3}Getting the Determinates of the Matrixes}{4}{}%
-\contentsline {subsubsection}{\numberline {3.0.4}Solving for the inital values}{4}{}%
+\contentsline {subsubsection}{\numberline {3.0.4}Solving for the inital values}{5}{}%
+\contentsline {subsubsection}{\numberline {3.0.5}Checking The Values}{5}{}%
