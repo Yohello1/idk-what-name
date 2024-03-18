@@ -5,13 +5,14 @@
 \usepackage{url}
 \usepackage[]{multicol}
 \usepackage[strings]{underscore}
-\usepackage[a4paper, bindingoffset=0.2in, left=0.5in, right=0.5in, top=0.5in, bottom=0.5in]{geometry}
+\usepackage[a4paper, bindingoffset=0.2in, left=1in, right=1in, top=1in, bottom=1in]{geometry}
 \usepackage{xcolor}
 \usepackage[]{amsfonts}
 \usepackage[]{amsmath}
 \definecolor{pageGrey}{HTML}{111111}
 \pagecolor{pageGrey}
 \color{white}
+\linespread{2.0}
 \title{Investigating whether the inputs of a Multiplicative Congruential Generator can be determined using the outputs}
 \author{Yohwllo}
 \date{March 10th 2024}
@@ -653,15 +654,18 @@
     Thus the values of \(a\) is \(75\), and \(m\) is \(211\). You only need one value from the generator to predict all the values which come after it, so we have everything that is needed.
 
     \subsubsection{Checking The Values}
-    To check our values, we will need one value from the MCG to act as the seed, and then we'll need to solve for the next values.
+    To check our values, we will need one value from the MCG to act as the seed, and then we'll need to solve for the next values, if the values line up, we'll know we had the correct values. Using the equation \(x_{i} = x_{i-1} \cdot a (\bmod m)\) we can solve for them. The value of \(x_{1}\) will be 547, as that is the first value to come out of the generator, the values of \(m\), and \(a\), have already been solved for, and were shown to be 211, and 75 respectively. This means we get an equation of \( x_{i} \equiv x_{i-1} \cdot 75 (\bmod 211)\). Inserting in 547, the number we get out is 91. Repeating that 10 times, we get the sequence; 547, 91, 73, 200, 19, 159, 109, 157, 170, 90.Which perfectly matches the order, and values that were extracted from the actual generator, meaning our values are correct.
+
+    \subsubsection{Applications/Implications of Knowing The Inputs}
+    There are many implications of being able to predict the next ``random'' number, infact there are so many implications that we do not really know just how far reaching the consequences are. One of the implciations as stated before is about about cryptography, as quite a few badly built cryptographyic programs use Linear, and Multiplicative Congruential Generators as randomness generators. Another consequence is the use of random in video games, and computer graphics. In video games they are often used to place objects, or to randomise behaviours of characters. Whilst in computer graphics random generators are used to seed the rendering equations to make renders seem more realistic, as there is ``random''. So these random number generators being predictable means that, these applications are not getting truely random values.
 
 \end{multicols}
 
-Some asdclaisdm \citep{example}
+%Some asdclaisdm \citep{example}
 
-\citet{waterlooMCG}
+%\citet{waterlooMCG}
 
-\citet{whack}
+%\citet{whack}
 
 \bibliographystyle{plainnat}
 \bibliography{\jobname}
