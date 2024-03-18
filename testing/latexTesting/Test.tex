@@ -10,8 +10,8 @@
 \usepackage[]{amsfonts}
 \usepackage[]{amsmath}
 \definecolor{pageGrey}{HTML}{111111}
-\pagecolor{pageGrey}
-\color{white}
+%\pagecolor{pageGrey}
+%\color{white}
 \linespread{2.0}
 \title{Investigating whether the inputs of a Multiplicative Congruential Generator can be determined using the outputs}
 \author{Yohwllo}
@@ -26,14 +26,6 @@
     year = "1993",
     publisher = "Addison-Wesley",
     address = "Reading,  Massachusetts"
-}
-
-@book{whack,
-    author = "noi",
-    title =  "the whack man" ,
-    year = " 2001" ,
-    publisher = " nomanssky" ,
-    address = " reading Massachusetts"
 }
 
 @misc{waterlooMCG,
@@ -659,13 +651,15 @@
     \subsubsection{Applications/Implications of Knowing The Inputs}
     There are many implications of being able to predict the next ``random'' number, infact there are so many implications that we do not really know just how far reaching the consequences are. One of the implciations as stated before is about about cryptography, as quite a few badly built cryptographyic programs use Linear, and Multiplicative Congruential Generators as randomness generators. Another consequence is the use of random in video games, and computer graphics. In video games they are often used to place objects, or to randomise behaviours of characters. Whilst in computer graphics random generators are used to seed the rendering equations to make renders seem more realistic, as there is ``random''. So these random number generators being predictable means that, these applications are not getting truely random values.
 
+    Now some of the applications of this would be; being able to predict the next drops in a gacha game, the outcomes of certain actions in games which have some element of random, or being able to decrypt communications.
+
 \end{multicols}
 
 %Some asdclaisdm \citep{example}
-
 %\citet{waterlooMCG}
-
 %\citet{whack}
+
+\newpage
 
 \bibliographystyle{plainnat}
 \bibliography{\jobname}
