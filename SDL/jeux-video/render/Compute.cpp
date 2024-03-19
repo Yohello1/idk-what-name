@@ -4,7 +4,7 @@ namespace Shaders
     class computeShader
     {
     public:
-      GLuint ID;
+      GLuint _ID;
 
     computeShader(const char* computeShaderSource)
     {
@@ -16,12 +16,12 @@ namespace Shaders
         GLuint computeTest = glCreateShader(GL_COMPUTE_SHADER);
         glShaderSource (computeTest, 1, &computeShaderCode, NULL);
         glCompileShader(computeTest);
-        shaders::compileErrors(computeTest, "COMPUTE");
+        Shaders::compileErrors(computeTest, "COMPUTE");
 
-        ID = glCreateProgram();
-        glAttachShader(ID, computeTest);
-        glLinkProgram(ID);
-        shaders::compileErrors(ID, "PROGRAM");
+        _ID = glCreateProgram();
+        glAttachShader(_ID, computeTest);
+        glLinkProgram(_ID);
+        Shaders::compileErrors(_ID, "PROGRAM");
     }
 
     /**
@@ -29,7 +29,7 @@ namespace Shaders
      (glUseProgram, basically) */
     void useProgram()
     {
-        glUseProgram(ID);
+        glUseProgram(_ID);
     }
 
     void printMaxComputeSize()
@@ -58,8 +58,9 @@ namespace Shaders
     class computeImageOut
     {
     public:
-        GLuint ID;
-        uint8_t unit; // unit refering to which of the 32 texture slots it occupies
+        GLuint _ID;
+        uint16_t _width, _height;
+        uint8_t _unit; // unit refering to which of the 32 texture slots it occupies
                       // Like 0: in slot 1/32
                       // 1: 2/32
                       // etc etc
@@ -72,19 +73,22 @@ namespace Shaders
           write only */
         computeImageOut(uint16_t x, uint16_t y, uint8_t unit)
         {
-            glCreateTextures(GL_TEXTURE_2D, 1, &ID);
-            glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTextureStorage2D(ID, 1, GL_RGBA32F, x, y);
-            glBindImageTexture(unit, ID, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+            _unit = unit;
+            _width = x;
+            _height = y;
+            glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
+            glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTextureStorage2D(_ID, 1, GL_RGBA32F, x, y);
+            glBindImageTexture(_unit, _ID, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
         }
 
         GLuint getID()
         {
-            return ID;
+            return _ID;
         }
     private:
     };
@@ -94,13 +98,12 @@ namespace Shaders
     class computeImageIn
     {
     public:
-        GLuint ID;
-        GLuint unit; // unit refering to which of the 32 texture slots it occupies
+        GLuint _ID;
+        uint16_t _width, _height;
+        GLuint _unit; // unit refering to which of the 32 texture slots it occupies
                       // Like 0: in slot 1/32
                       // 1: 2/32
                       // etc etc
-        uint16_t width, height;
-        float* image;
       /**
           btw, 2d texture,
           min & mag filters: gl_nearest
@@ -110,47 +113,47 @@ namespace Shaders
           write only */
         computeImageIn(uint16_t x, uint16_t y, GLuint unit)
         {
-            width = x;
-            height = y;
-            image = new float[x*y*4];
-            glCreateTextures(GL_TEXTURE_2D, 1, &ID);
-            glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTextureStorage2D(ID, 1, GL_RGBA32F, x, y);
-            glBindImageTexture(unit , ID, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+            _width = x;
+            _height = y;
+            _unit = unit;
+            glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
+            glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTextureStorage2D(_ID, 1, GL_RGBA32F, x, y);
+            glBindImageTexture(_unit , _ID, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
 
         }
 
         GLuint getID()
         {
-            return ID;
+            return _ID;
         }
 
         /**
           Float data */
         void copyDataFloat(float* rawData)
         {
-            glTextureSubImage2D(ID, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, rawData);
+            glTextureSubImage2D(_ID, 0, 0, 0, _width, _height, GL_RGBA, GL_FLOAT, rawData);
         }
 
-            // ok now lets do the
-            // thinking
-            // To render we have to copy the data
-            // from several 'textures'/maps to the gpu
-            // and then it just does the math required
-            // to turn that into the final product
-            // So what I need is a function which
-            // just fetches the data from the cell data
-            // type, and from the rgb data type
-            // Also needs to just edit a specific rang ofc
-            //
-            // We'll also need to leave the alpha channel open
-            // to being changed, cause like compositing sanity
+        // ok now lets do the
+        // thinking
+        // To render we have to copy the data
+        // from several 'textures'/maps to the gpu
+        // and then it just does the math required
+        // to turn that into the final product
+        // So what I need is a function which
+        // just fetches the data from the cell data
+        // type, and from the rgb data type
+        // Also needs to just edit a specific rang ofc
+        //
+        // We'll also need to leave the alpha channel open
+        // to being changed, cause like compositing sanity
 
-            // wait this should all be in compute shaders LMAO
+        // wait this should all be in compute shaders LMAO
+
     private:
     };
-
 }
