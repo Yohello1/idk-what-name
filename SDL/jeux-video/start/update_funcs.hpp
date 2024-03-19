@@ -17,30 +17,35 @@ namespace functions
     std::uniform_real_distribution<double> dist(0,255);
 
     // 1024 x 1024
-    void fakeRandomImage(float *randImgOut)
+    void fakeRandomImage(float *randImgOut, float shade)
     {
-        /*
         for(int i = 0; i < 1024; i++)
         {
             for(int j = 0; j < 1024; j++)
             {
-                // randImgOut[i][j] = glm::vec4((float)dist(mt)/255,(float)dist(mt)/255,(float)dist(mt)/255, 1.0);
-                // randImgOut[i][j].x = (float)dist(mt)/255;
-                // randImgOut[i][j] = glm::vec4( glm::vec3( 0.0 ), 1.0 );
-                // randImgOut[i][j] = glm::vec4(1.0);
-                // randImgOut = glm::vec4(1.0);
                 for(int k = 0; k < 4; k++)
                 {
-                    std::cout << "val: " << i*1024+j*4+k << '\n';
-                    randImgOut[i*1024+j*4+k] = (float)(dist(mt)/255);
+
+                    // randImgOut[i*1024*4+j*4+k] = 0.1;
+                    if(100 < i && i < 150)
+                    {
+                        if(300 < j && j < 724)
+                            randImgOut[i*1024*4+j*4+k] = (rand() % 128)/64;
+                    }
+                    else if(874 < i && i < 924)
+                    {
+                        if(300 < j && j < 724)
+                            randImgOut[i*1024*4+j*4+k] = (rand() % 128)/64;
+                    }
+                    else if(149 < i && i < 875)
+                    {
+                        if(462 < j && j < 562)
+                            randImgOut[i*1024*4+j*4+k] = (rand() % 128)/64;
+                    }
                 }
             }
         }
-        */
-        for(int i = 0; i < 4194304; i++)
-        {
-            randImgOut[i] = (float)(dist(mt)/255);
-        }
+
     }
 
     void whiteSquares(float *randImgOut)

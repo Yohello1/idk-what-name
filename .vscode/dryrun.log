@@ -1,6 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/media/yohello/hrm2/code-stuff/generation'
-make: Leaving directory '/media/yohello/hrm2/code-stuff/generation'
- 
-make: *** No targets specified and no makefile found.  Stop.
-

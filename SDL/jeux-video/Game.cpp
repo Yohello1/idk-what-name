@@ -21,6 +21,7 @@ namespace Game
         public:
         // Yes these are public for simplicites sake
         std::vector<float*> _layers; // i have no idea how to use unique pointers correctly here :P
+        std::vector<::Shaders::computeImageOut> _computeOut;
         MVPMatrix::MVPMatrixes* _transforms;
         GLfloat* _verticies;
         GLint* _indicies;
@@ -186,7 +187,7 @@ namespace Game
             std::ifstream sceneDataFile;
             sceneDataFile.open("testData/testScene.pcsf");
 
-            if (!sceneDataFile) //checks to see if file opens properly
+            if (!sceneDataFile) //checks tom see if file opens properly
             {
                 std::cout << "Error: Could not find the requested file." << std::endl;
                 return 1;
@@ -230,7 +231,6 @@ namespace Game
 
             std::cout << "( " << _mapX << " , " << _mapY << " )" << std::endl;
 
-
             return 0;
         }
 
@@ -260,26 +260,90 @@ namespace Game
             saveFile << _transforms->_farCloseDistance << '\n';
             saveFile << _layers.size() << '\n';
 
-            // now we save the layers! next the entities!
+            // no fucking idea what Im doing here
+            filePath.erase(filePath.length()-5);
+            std::filesystem::create_directories(filePath);
+            std::cout << filePath << " NAME" << std::endl;
+
             for(int i = 0; i < _layers.size(); i++)
             {
-                std::string temp = filePath;
-                temp.concat("/");
-                temp.concat(_name);
-                temp.concat(i);
-                saveFile << temp << '\n';
+                std::string tempPath = filePath;
+                tempPath += "/";
+                tempPath += std::to_string(i);
+
+                std::ofstream layerFile(tempPath);
+                layerFile << "i can try\n";
+
+                // why do you hate me, hate me, still trying to get rid of me
+                // aaaaaaaaaaaaaaaaaaaaaaa
+                // oh well, that was a mistake I will not be making again
+                // never EVER get into love again
+                // im starting to think she was lying
+                // from the very start abt actually liking me
+                // like,, to leave without even saying anything is kinda not nice
+                // idk what to do in the end tho, cause like, I cannot force them to
+                // like me, so aaaaaaaa
+                for(long long j = 0; j < _mapY; j++)
+                {
+                    for(int k = 0; k < _mapX; k++)
+                        {
+                            for(int q = 0; q < 4; q++)
+                                {
+                                    float temp = getFloatLayerDirect(j*1024*4+k*4+q, i);
+                                    // temp = 0.5;
+                                    layerFile << temp;
+                                    if(temp != 0)
+                                        std::cout << temp;
+
+                                }
+                        }
+                }
+
+                layerFile.close();
+
+                std::cout << tempPath << std::endl;
             }
 
-
-
-
             saveFile.close();
-            std::cout << "saved" << std::endl;
-
 
 
             return true;
         }
+
+        // TODO: dispatch compute should be dependent upon Fullimg size
+        void computeDispatch(::Shaders::computeShader* shaderInput )
+        {
+           shaderInput->useProgram();
+           glDispatchCompute(1024,1024,1);
+           glMemoryBarrier(GL_ALL_BARRIER_BITS);
+        }
+
+
+        // COMPUTEIN IS TEMPORARY FOR TESTING/TRANSITIONAL PURPOSES
+        void render(::Shaders::computeShader* computeShaderIn, ::Shaders::Shader* renderShader, ::Shaders::computeImageOut* computeTemp )
+        {
+            // why did u lie to me
+            // why didnt u tell me
+            // that you didnt like me
+            // why couldnt you be more clear
+            // it really hurt me
+            // idk why it hurt me
+            // that was vv mean of you
+
+            computeDispatch(computeShaderIn);
+
+            renderShader->useProgram();
+            // hypnodancer
+            // ok now we dance with the devil trying to render these
+            // ok I still dont have loading setupppppp
+            // CRIIII
+            // TODO: for loop later for each layer
+            glBindTextureUnit(computeTemp->_unit, computeTemp->getID());
+            glUniform1i(glGetUniformLocation(renderShader->shaderProgram, "screen"), 0);
+            glBindVertexArray(_VAO);
+            glDrawElements(GL_TRIANGLES, getIndiciesSize(), GL_UNSIGNED_INT, 0);
+        }
+
 
         private:
         std::string _name;
@@ -289,18 +353,24 @@ namespace Game
         // i feel like the person kinda made this a lot worse than it shouldve been
         // :(
 
+        /*
+        ** x,y is the coordinate
+        ** layer is the layer the data you want is on
+        ** pos is which part of the rgba you want, 0-4
+         */
+        float getFloatLayerCoordinate(unsigned int x, unsigned int y, uint8_t layer, uint8_t pos)
+        {
+            float returnVal = _layers.at(layer)[y*_mapX*4+x*4+pos];
+            return returnVal;
+        }
 
-        /* Let this monstrosicty be a warning to all others who dare try and shorten it
-           btw this isnt its final form
-
-         float temp[20] = {-1*halfWidth, -1*halfHeight, -0.5, 0,0,-1*halfWidth, 1*halfHeight, -0.5,0,-1, halfWidth, halfHeight, -0.5, 1, 1, halfWidth, -1*halfHeight, -0.5, 1, 0};
-
-            for(int i = 0; i < 20*layersNum; i++)
-            {
-                _verticies[i] = temp[i%20];
-                if(temp[i%20] == -0.5)
-                    _verticies[i] = -1*floor(i/20);
-        */
+        /*
+        ** just pull the float directly from the layer
+         */
+        float getFloatLayerDirect(long long position, uint8_t layer)
+        {
+            return _layers.at(layer)[position];
+        }
 
         void generatePlanes(uint8_t layersNum)
         {
@@ -308,6 +378,16 @@ namespace Game
 
             // create the plane which is the size of the map, and at diff depths
             _verticies = new GLfloat[20*layersNum]; // 20 = 4*5 = (vert per plane) * (parts per plane)
+            // x,y,z,u(x),v(y)
+            // gonna just cycle these in & out-
+            // pairs of 2 coordinates
+            // 0 1 2
+            // 3 4 5
+            // 6 7 8
+            // float[18] uvCoords = {0,1,0.5,0.5,1,1,1,0,0.5,0.5,0.5,1,0.5,0,0,0.5,0,1,0};
+
+
+            int currComputeImage = 0;
 
             for(int i = 0; i < layersNum; i++)
             {
@@ -326,29 +406,93 @@ namespace Game
                 _verticies[i*20+0] = -1*halfWidth;
                 _verticies[i*20+1] = -1*halfHeight;
                 _verticies[i*20+2] = -1*i*50;
-                _verticies[i*20+3] = -1*0; // why are uv vertexes mapped differently than cords?
-                _verticies[i*20+4] = -1*0;
-
                 // 2
                 _verticies[i*20+5] = -1*halfWidth;
                 _verticies[i*20+6] =  1*halfHeight;
                 _verticies[i*20+7] = -1*i*50;
-                _verticies[i*20+8] = 0;
-                _verticies[i*20+9] = 1;
-
                 // 3
                 _verticies[i*20+10] =  1*halfWidth;
                 _verticies[i*20+11] =  1*halfHeight;
                 _verticies[i*20+12] = -1*i*50;
-                _verticies[i*20+13] = 1;
-                _verticies[i*20+14] = 1;
-
                 // 4
                 _verticies[i*20+15] =  1*halfWidth;
                 _verticies[i*20+16] = -1*halfHeight;
                 _verticies[i*20+17] = -1*i*50;
+
+                // uvCoordsPosition
+                // 2 3
+                // 0 1
+                int layoutPosition = i % 4;
+                if(layoutPosition == 0)
+                {
+                    _verticies[i*20+3] = 0.0; // why are uv vertexes mapped differently than cords?
+                    _verticies[i*20+4] = 0.0;
+
+                    _verticies[i*20+8] = 0.0;
+                    _verticies[i*20+9] = 0.5;
+
+                    _verticies[i*20+13] = 0.5;
+                    _verticies[i*20+14] = 0.5;
+
+                    _verticies[i*20+18] = 0.5;
+                    _verticies[i*20+19] = 0.0;
+                }
+                else if(layoutPosition == 1)
+                {
+                    _verticies[i*20+3] = 0.5;
+                    _verticies[i*20+4] = 0.0;
+
+                    _verticies[i*20+8] = 0.5;
+                    _verticies[i*20+9] = 0.5;
+
+                    _verticies[i*20+13] = 1.0;
+                    _verticies[i*20+14] = 0.5;
+
+                    _verticies[i*20+18] = 1.0;
+                    _verticies[i*20+19] = 0.0;
+                }
+                else if(layoutPosition == 2)
+                {
+                    _verticies[i*20+3] = 0.0;
+                    _verticies[i*20+4] = 0.5;
+
+                    _verticies[i*20+8] = 0.0;
+                    _verticies[i*20+9] = 1.0;
+
+                    _verticies[i*20+13] = 0.5;
+                    _verticies[i*20+14] = 1.0;
+
+                    _verticies[i*20+18] = 0.5;
+                    _verticies[i*20+19] = 0.5;
+                }
+                else if(layoutPosition == 3)
+                {
+                    _verticies[i*20+3] = 0.5;
+                    _verticies[i*20+4] = 0.5;
+
+                    _verticies[i*20+8] = 0.5;
+                    _verticies[i*20+9] = 1.0;
+
+                    _verticies[i*20+13] = 1.0;
+                    _verticies[i*20+14] = 1.0;
+
+                    _verticies[i*20+18] = 1.0;
+                    _verticies[i*20+19] = 0.5;
+                }
+                /*
+                _verticies[i*20+3] = -1*0; // why are uv vertexes mapped differently than cords?
+                _verticies[i*20+4] = -1*0;
+
+                _verticies[i*20+8] = 0;
+                _verticies[i*20+9] = 1;
+
+                _verticies[i*20+13] = 1;
+                _verticies[i*20+14] = 1;
+
                 _verticies[i*20+18] = 1;
                 _verticies[i*20+19] = 0;
+                */
+
             }
             // then make the indices
 

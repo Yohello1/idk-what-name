@@ -1,3 +1,20 @@
+<<<<<<< HEAD
+// #include "VAO.hpp"
+// #include "VBO.hpp"
+// #include "EBO.hpp"
+
+namespace render
+{
+    class engineContainer
+    {
+        GLuint VAO, VBO, EBO;
+
+        engineContainer()
+        {
+
+        }
+    };
+=======
 // I should at some point go through this and fix all the naming convention stuff
 // but i cannot be bothered to rn
 namespace render
@@ -18,4 +35,5 @@ namespace render
 
     // wait this should all be in compute shaders LMAO
 
+>>>>>>> 32f4599c8a2d81d8a7567a5870758c85cd20fcb3
 }
