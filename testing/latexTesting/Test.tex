@@ -5,14 +5,15 @@
 \usepackage{url}
 \usepackage[]{multicol}
 \usepackage[strings]{underscore}
-\usepackage[a4paper, bindingoffset=0.2in, left=1in, right=1in, top=1in, bottom=1in]{geometry}
+\usepackage[a4paper, bindingoffset=0.0in, left=0.5in, right=0.5in, top=1in, bottom=1in]{geometry}
 \usepackage{xcolor}
 \usepackage[]{amsfonts}
 \usepackage[]{amsmath}
 \definecolor{pageGrey}{HTML}{111111}
 %\pagecolor{pageGrey}
 %\color{white}
-\linespread{2.0}
+\linespread{1.5}
+\setlength{\columnseprule}{0.4pt}
 \title{Investigating whether the inputs of a Multiplicative Congruential Generator can be determined using the outputs}
 \author{Yohwllo}
 \date{March 10th 2024}
@@ -80,6 +81,20 @@
     year = 2006
 }
 
+@misc{standChinese,
+  author = "Standford University",
+  title = "The Chinese Remainder Theorem",
+  howpublished = {\url{https://crypto.stanford.edu/pbc/notes/numbertheory/crt.html}},
+  year = 2024
+}
+
+@misc{steinAlgo,
+  author = "Algorithmica.org",
+  title = "Bineary GDC",
+  howpublished = {\url{https://en.algorithmica.org/hpc/algorithms/gcd/}},
+  year = 2024
+}
+
 @article{reteamHal,
   author = "Haldir[RET]",
   title = "How to Crack A Linear Congruential Generator",
@@ -105,17 +120,16 @@
 
 \begin{multicols}{2}
   \section{Introduction}
-  Ever since I was a young child the concept of random has amazed me. For randomness could at times not seem random, for example, number generators more often than not are far from random, instead they are psuedo random number generators, which are not truely random. These pesudo random number genrators are not truely random, but rather just a mathematical equation which is being done itteratively, and if the developer was forward thinking, it used a different seed every time too. \\
-  Now among random number generators there is a particularly common one called the Multiplicative Congruential Generator (MCG for short), it has been extensively used for various tasks that could require a lot of random numbers, that only need to be 'random enough'. For example creating test data, or for things such as dice rolling in games. There is also another type of random number genreatofr similar to it called the Linear Congruential Generator which is very similar in terms of how it functions.
-
+  Ever since I was a young child the concept of random has amazed me. Randomness could at times not seem random, for example, number generators more often than not are far from random, instead they are pseudo-random number generators, which are not truly random. These pseudo-random number generators are not truly random, but rather just a mathematical equation which is being done iteratively, and if the developer was forward-thinking, it used a different seed (a seed is the first value) every time too. \\
+  Now among random number generators, there is a particularly common one called the Multiplicative Congruential Generator (MCG for short), it has been extensively used for various tasks that could require a lot of random numbers, that only need to be ``random enough''. For example, creating test data, or for things such as dice rolling in games. There is also another type of random number generator similar to it called the Linear Congruential Generator which is very similar in terms of how it functions.
   \section{background}
   \subsection{Random Number Generators}
   \subsubsection{Multiplicitve Random Number Generator}
-  Usually an MCG works based off of the equation \(x_{i+1} = (a \cdot x_{i}) \bmod m\). Where the next value is equal to the current value multiplied by a constant, and then its modulus is set as the remainder. \citep{waterlooMCG} \citep{fallOntoPlanes}
+  Usually an MCG works based off of the equation \(x_{i+1} = (a \cdot x_{i}) \bmod m\). Where the next value is equal to the current value multiplied by constant, modulus a constant. \citep{waterlooMCG} \citep{fallOntoPlanes}
   \subsubsection{Linear Congruential Generators}
-  In contrast an LCG (Linear Congruential Generator) works in a very similar way, just adding a constant. Its equation looks like \(x_{i+1} = (a \cdot x_{i} +b ) \bmod m\) \citep{waterlooMCG}
+  In contrast an LCG (Linear Congruential Generator) works in a very similar way, just adding a constant before the modulus operation. Its equation looks like \(x_{i+1} = (a \cdot x_{i} +b ) \bmod m\) \citep{waterlooMCG}
   \subsubsection{How LCG/MCG's are used}
-  Linear/Multiplicative congruential generators are used in a variety of settings, from monte carlo simulations \citep{fallOntoPlanes}, to the shuffle function in music players \citep{jukSource}, these are jus the implmentations that are public and known about. Considering that these types of random number generators are also used in glibc's \citep{linuxRNG} random function, no one knows just how many things use these types of generators for their random numbers. So the implication of these random number generators not being random would have an unknown impact on the world.
+  Linear/Multiplicative congruential generators are used in a variety of settings, from Monte Carlo simulations \citep{fallOntoPlanes}, to the shuffle function in music players \citep{jukSource}, these are just the implementations that are public and known about. Considering that these types of random number generators are also used in glibc's \citep{linuxRNG} random function, no one knows just how many things use these types of generators for their random numbers. So the implication of these random number generators not being random would have an unknown impact on the world.
   \subsubsection{Flaws of LCG/MCG's}
   Now these types of linear congruential generators have some flaws that were found by Gorge Marsaglia \citep{fallOntoPlanes}. That is, if you know how to arange these numbers on a 3d object, all of said numbers will fall upon \(\sqrt[n]{{n}! \cdot m}\) hyper planes \citep{fallOntoPlanes}. A hyperplane is a plane of \(n-1 \) dimensions, with \(n\) being the number of diemensions. As George Marsaglia put it, ``the points are about as randomly spaced in the unit n-cube as the atoms in a perfect crystal at absolute zero''. Later on in his paper he goes over a method that can be used to determine the inputs to such an equation.
   \subsection{Modular Arithmetic}
@@ -125,13 +139,30 @@
   \subsubsection{Congruence}
   We say a number, or equation is congruent to one another when all of residues/remainders of that value modulo a constant are the same. It is often shown through the sign \( \equiv \). An example of it being used correctly would be the equation; \( 2 \equiv 7 \equiv 12 (\bmod 5)\), as each of the values \( 5 \bmod 5\) will have the same result, meaning they are congruent. \citep{modArth}
   \subsubsection{Relations}
-  The relation between \(x \equiv b (\bmod m)\) and \(x \equiv b (\bmod m )\). The first one is for equivalence, which i sthe same as equality. In comparision the second equation is equality. As a note from Cornell University put it; \\ ``\(x = b (\bmod m)\) is the smallest positive solution to the equation \( x \equiv b (\bmod m)\)'' \cite{cornelMod}
+  The relation between \(x \equiv b (\bmod m)\) and \(x = b (\bmod m )\). The first one is for equivalence. In comparision the second equation is equality. As a note from Cornell University put it; \\ ``\(x = b (\bmod m)\) is the smallest positive solution to the equation \( x \equiv b (\bmod m)\)'' \cite{cornelMod}
   \subsubsection{Rules to note:}
-  Sum Rule: if \(a \equiv b ( \bmod m)\) then \( a + c \equiv b + c(\bmod m)\) \cite{cornelMod} \\ \\
-  Multiplication Rule: if \(a \equiv b (\bmod m)\) and if \(c \equiv d (\bmod m)\) then \( a \cdot c \equiv b \cdot d (\bmod m)\)  \cite{cornelMod} \\
-
+  Sum Rule: if \(a \equiv b ( \bmod m)\), and \(c \equiv d (\bmod m)\) then \( a + c \equiv b + c(\bmod m)\) \cite{cornelMod} \\ \\
+  Multiplication Rule: if \(a \equiv b (\bmod m)\) and if \(c \equiv d (\bmod m)\) then \( a \cdot c \equiv b \cdot d (\bmod m)\)  \cite{cornelMod} \
   \subsubsection{Otherways It Can Be Written }
   Another way which \( a \equiv b (\bmod m)\) can be written is \(a = k \cdot m + b\), where \(k\) is an arbitary integer. Yet another way it can be written is \(n | (a-b) \), which means, \(a-b\) is a multiple of \(n\). This becomes very useful when solving for the variables later on.
+
+  \subsubsection{Chinese Remainder Theorm}
+  Chinese remainder theorm is a suprise tool that will help us later on. Chinese remainder therom is a method to solve for \(x\) in a system of equations which are written as such; \(x = q_{n} (\bmod m_{n})\). Ben Lynn of Standford University states it;
+   \[x = q_{1} (\bmod m_{1})\]
+  \[x = q_{n} (\bmod m_{n})\]
+  \citep{standChinese}
+  For our purposes, only \(q_{n}\) changes, as the value of \(m\) stays constant. Meaning our equations will resemble;
+  \[x = q_{1} (\bmod m)\]
+  \[x = q_{n} (\bmod m)\]
+  But because \(q_{n}\) is simply a constant multiplied by the previous number, like;
+  \[q_{n} = a \cdot g \]
+  Where \(g\) is the last value, and \(a\) is a constant whole number integer. \\
+  So this means our equation really looks like;
+  \[ q_{i} = a \cdot g (\bmod m)\]
+  From this it has been said that we can use some special trickery (sum rule) to figure out the value of \(a\). However, brute forcing is a valid method, and in many cases is much simplier.
+
+  \subsubsection{Brute Forcing}
+  Brute force is a method of trial and error, where different values are continously tried until a value works.
 
   \subsection{Method Of Solving }
   % originally \citep{reteamHal}
@@ -222,18 +253,18 @@
   Some of the factors were ommited because they could not be displayed in an organised manner, and/or they have no affect on the end result. The greatest common factor between all 4 numbers/
   In the case of the numbers above, the greatest common factor is 25. Thus the value of \(m\) in the equation of an MCG/LCG is 25.
 
-  \subsubsection{Solving for \(a\) in an LCG}
+  \subsubsection{Solving for \(a\) in an MCG}
   To solve for the remaining variables of an LCG, we will use the equation
-  \[a \cdot x_{i} = (x_{i-1} + k) \bmod m\]
-  Since we have \(m\), and have \(x_{i}\), we just have to solve for \(a\), which is trivial. In addition \(a\) is the value which the previous integer is multiplied by before being put through a modulo operation. \(k\) is a constant value
+  \[ x_{i} = (x_{i-1} \cdot a ) \bmod m\]
+  Since we have \(m\), and have \(x_{i}\), we just have to solve for \(a\), which is trivial, it can be done using Chinese Remainder Therom, or using brute force.  In addition \(a\) is the value which the previous integer is multiplied by before being put through a modulo operation. \(k\) is a constant value
 
   \section{Investigation}
   To begin, a multiplictive congruential generator will be used to generate 72 numbers. Then those numbers will be used to find the original inputs to the generator, to check if the inputs are correct, the values which were found will be used as inputs to the multiplictive congruential generator.
-  \subsubsection{Values}
+  \subsection{Values}
   The 72 numbers which were found are stated below; \\
   547, 91, 73, 200, 19, 159, 109, 157, 170, 90, 209, 61, 144, 39, 182, 146, 189, 38, 107, 7, 103, 129, 180, 207, 122, 77, 78, 153, 81, 167, 76, 3, 14, 206, 47, 149, 203, 33, 154, 156, 95, 162, 123, 152, 6, 28, 201, 94, 87, 195, 66, 97, 101, 190, 113, 35, 93, 12, 56, 191, 188, 174, 179, 132, 194, 202, 169, 15, 70, 186, 24, 112 \\
   These values will be used for the calculation of the input values of the MCG.
-  \subsubsection{Setting up the matrixes}
+  \subsection{Setting up the matrixes}
   Now we will need to setup the 12 matrixes we will be using to find the value of \(m\). The matrixes will be setup as such
   \[
     A =
@@ -344,7 +375,7 @@
     \end{bmatrix}
   \]
 
-  \subsubsection{Getting the Determinates of the Matrixes}
+  \subsection{Getting the Determinates of the Matrixes}
   Now that we've arranged all the matrixes we need to get the absolute value of their determinates, absolute values for simplicties sake later on when we need to find the factors. The function \(\det(A)\) shall represent it, letting \(A\) be the matrix.
 
   \[
@@ -625,7 +656,7 @@
 
   Excluding the determinate(s) which are 0, we have the determinates, 25320, 844, 4853, 9706, 844, 3165, 6963, 16458, 1477, 4431, 15192.
 
-  \subsubsection{Solving for the inital values}
+  \subsection{Solving for the inital values}
 
   From the determinates of the matrix we can solve for \(m\), using the method which was previously states. That is, to find the greatest common factor between all of the determinates. After solving for the greatest common factor, a value of \(211\) is obtained. That means that the equation of the MCG that is generating these values should look similar to \(x_{i+1} \equiv (a \cdot x_{i}) (\bmod {211})\). \\
   Using some of the equations previously mentioned, we can re-arrange them to craft the equation. \cite{reteamHal}
@@ -645,13 +676,33 @@
 
     Thus the values of \(a\) is \(75\), and \(m\) is \(211\). You only need one value from the generator to predict all the values which come after it, so we have everything that is needed.
 
-    \subsubsection{Checking The Values}
+    \subsection{Checking The Values}
     To check our values, we will need one value from the MCG to act as the seed, and then we'll need to solve for the next values, if the values line up, we'll know we had the correct values. Using the equation \(x_{i} = x_{i-1} \cdot a (\bmod m)\) we can solve for them. The value of \(x_{1}\) will be 547, as that is the first value to come out of the generator, the values of \(m\), and \(a\), have already been solved for, and were shown to be 211, and 75 respectively. This means we get an equation of \( x_{i} \equiv x_{i-1} \cdot 75 (\bmod 211)\). Inserting in 547, the number we get out is 91. Repeating that 10 times, we get the sequence; 547, 91, 73, 200, 19, 159, 109, 157, 170, 90.Which perfectly matches the order, and values that were extracted from the actual generator, meaning our values are correct.
 
-    \subsubsection{Applications/Implications of Knowing The Inputs}
+    \subsection{Applications/Implications of Knowing The Inputs}
     There are many implications of being able to predict the next ``random'' number, infact there are so many implications that we do not really know just how far reaching the consequences are. One of the implciations as stated before is about about cryptography, as quite a few badly built cryptographyic programs use Linear, and Multiplicative Congruential Generators as randomness generators. Another consequence is the use of random in video games, and computer graphics. In video games they are often used to place objects, or to randomise behaviours of characters. Whilst in computer graphics random generators are used to seed the rendering equations to make renders seem more realistic, as there is ``random''. So these random number generators being predictable means that, these applications are not getting truely random values.
 
     Now some of the applications of this would be; being able to predict the next drops in a gacha game, the outcomes of certain actions in games which have some element of random, or being able to decrypt communications.
+
+    \subsection{Limitations}
+    However, there many limitations of this method to determine the input variables using the outputs. The first and largest limitation is, determing whether an LCG/MCG is being used, as you would need access to the code of the application in order to determine whether an LCG/MCG is being used. The alternative method of a spectral analysis to determine whether an LCG/MCG would require a significant number of data points, which may be unrealistic to collect. \\
+    The next limitation would be the amount of numbers needed, as to extract the required number of values needed would take a significant amount of time and energy. \\
+    Then there is the time it would take to find the GCD of larger numbers, as computing the factors of numbers takes a sufficiently long time, and as the numbers grow larger, the time taken also grows. So if a lot of values were extracted, and thus determinates found, it would take quite a while to find the value of \(m\). However the use of Chinese Remainder Therom, and Stein's algorithim could potentially decrease the time taken. As these algorithims would allow you to find the factors, and the value of \(m\) with far less brute forcing than otherwise. \\
+
+    \subsection{Extensions}
+    There are many methods to extend this investigation, such as; investigating the use of Steins's algorithim, and Chinese Remainder Therom. Steins's algorithim is often used to find the greatest common denominator between two non-negative numbers \(u\), and \(v\) by repeatedly applying these identities;
+    \begin{enumerate}
+      \item Let \(gcd(a,b)\) be a function which returns the greatest integer by which both values can be divided by which results in a posititive integer
+      \item \(gcd(0,b) = b\), and symmetrically; \(gcd(a,0) = a\)
+      \item \(gcd(2a,2b) = 2 \cdot gcd(a,b)\)
+      \item \(gcd(2a, b) = gcd(a,b)\) if \(b\) is odd,\\
+            then \(gcd(a,b) = gcd(a,2b) \) if \(a\) is odd
+      \item \(gcd(a,b) = gcd(|a-b|, min(a,b))\),\\
+            if \(a\) and \(b\) are both odd
+    \end{enumerate}
+    (Note: Symmetrically in this context, means the other way around, as in the values swapped)
+    Stein's algorithim is simply the continous application of these rules until the \(gcd\) is found. \citep{steinAlgo}. The use of Stein's algorithim would be a great step forwards when it comes to decreasing the time taken to find the value of \(m\). \\
+    Continuing, Chinese Remainder Therom as previously mentioned could be used in order to make the calculations done by hand much faster. It could also be applied to solve for a Linear Congruential Generator. However the existence of fast computers makes brute forcing a much more reasonable operation. Until the values are sufficently large, where solving by hand is quicker. \citep{fallOntoPlanes}
 
 \end{multicols}
 

@@ -4,6 +4,7 @@ SDL/opengl_migration/CMakeFiles/
 CMakeFiles/
 /CMakeFiles/
 SDL/jeux-video/build/.cmake/*
+<<<<<<< HEAD
 *testData*
 *_region_.*
 *.aux
@@ -13,3 +14,8 @@ SDL/jeux-video/build/.cmake/*
 *.synctex.gz
 *.log
 *.el
+=======
+*.in
+*.out
+testing/souro/*
+>>>>>>> 32f4599c8a2d81d8a7567a5870758c85cd20fcb3

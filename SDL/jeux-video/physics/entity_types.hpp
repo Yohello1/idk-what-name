@@ -1,1 +1,0 @@
-extern entites::Coordinator Conductor;
