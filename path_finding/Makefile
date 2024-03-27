@@ -7,7 +7,7 @@ CC = g++
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS = -Wall -g
+COMPILER_FLAGS = 
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
@@ -50,3 +50,9 @@ ell : ell.cpp
 	$(CC) $(COMPILER_FLAGS) -c ell.cpp
 	$(CC) ell.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+tea : tea.cpp
+	$(CC) $(COMPILER_FLAGS) -O3 -g -c tea.cpp
+	$(CC) tea.o $(COMPILER_FLAGS) -O3 $(LINKER_FLAGS) -o draw2
+	./draw2
+
