@@ -20,6 +20,7 @@ int future[MAP_SIZE][MAP_SIZE];
 void drawMap();
 void generateMap();
 void gameOfLife();
+void outputRegion(std::pair<int, int> left, std::pair<int, int> right);
 
 int main()
 {
@@ -38,7 +39,7 @@ int main()
     }
 
 
-    while (window.isOpen())
+    for (int i = 0; i < 10000; i++)
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -46,10 +47,11 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        window.clear();
+        // window.clear();
         gameOfLife();
-        drawMap();
-        window.display();
+        outputRegion({(MAP_SIZE/2 - MAP_SIZE/4), (MAP_SIZE/2 - MAP_SIZE/4)}, {(MAP_SIZE/2 + MAP_SIZE/4), (MAP_SIZE/2 + MAP_SIZE/4) });
+        // drawMap();
+        // window.display();
         // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
@@ -105,7 +107,6 @@ void generateMap()
 
         }
     }
-    std::cout << "MAP GENERATED" << std::endl;
 }
 
 
@@ -166,4 +167,16 @@ void gameOfLife()
     memset( &map[0][0], 0, sizeof(future) );
     std::memcpy(&map, &future, sizeof(int)*MAP_SIZE*MAP_SIZE);
     memset( &future[0][0], 0, sizeof(future) );
+}
+
+void outputRegion(std::pair<int, int> left, std::pair<int, int> right)
+{
+    for(int i = left.first; i < right.first; i++)
+    {
+        for(int j = left.second; j < right.second; j++)
+        {
+            std::cout << map[i][j] << ' ';
+        }
+        std::cout << '\n';
+    }
 }
