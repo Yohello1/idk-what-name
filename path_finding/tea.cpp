@@ -37,12 +37,12 @@ int main()
     // generate Map
     {
         srand(time(0));
-        loadMap("conwayLoad.in",{(MAP_SIZE/2 - MAP_SIZE/32), (MAP_SIZE/2 - MAP_SIZE/32)} );
-        // generateMap();
+        // loadMap("conwayLoad.in",{(MAP_SIZE/2 - MAP_SIZE/32), (MAP_SIZE/2 - MAP_SIZE/32)} );
+        generateMap();
     }
 
 
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 500; i++)
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -52,10 +52,10 @@ int main()
         }
         window.clear();
         gameOfLife();
-        // outputRegion({(MAP_SIZE/2 - MAP_SIZE/32), (MAP_SIZE/2 - MAP_SIZE/32)}, {(MAP_SIZE/2 + MAP_SIZE/32), (MAP_SIZE/2 + MAP_SIZE/32) });
+        //outputRegion({(MAP_SIZE/2 - MAP_SIZE/64), (MAP_SIZE/2 - MAP_SIZE/64)}, {(MAP_SIZE/2 + MAP_SIZE/64), (MAP_SIZE/2 + MAP_SIZE/64) });
         drawMap();
         window.display();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
     return 0;
@@ -102,7 +102,7 @@ void generateMap()
     {
         for(int j =  (MAP_SIZE/2 - (MAP_SIZE/temp)); j <  (MAP_SIZE/2 + (MAP_SIZE/temp)); j++)
         {
-            int randInt = rand() % 100;
+            int randInt = rand() % 3;
             if(randInt == 0)
                 map[i][j] = 1;
             else
@@ -143,85 +143,37 @@ void gameOfLife()
         for(int j = 0; j < MAP_SIZE; j++)
         {
             uint8_t count = 0;
-            uint8_t tempC = 0;
             // 0 1 2
             // 3 X 4
             // 5 6 7
-
-            if(!((map[i][j] == 1) || (map[i][j] == 0)))
-                std::cout << "ERROR" << map[i][j] << std::endl;
-
 
             // one massive bounds check LMAO
             if((i != 0) && (j != 0) && (i != (MAP_SIZE-1)) && (j != (MAP_SIZE-1)))
             {
                 count += map[i-1][j-1];
-                if(map[i][j-1] == 1)
-                    tempC += 1;
-                //tempC += map[i][j-1];
+                count += map[i]  [j-1];
                 count += map[i+1][j-1];
 
                 count += map[i-1][j];
                 count += map[i+1][j];
 
                 count += map[i-1][j+1];
-                //tempC += map[i][j+1];
-                if(map[i][j+1] == 1)
-                    tempC += 1;
+                count += map[i]  [j+1];
                 count += map[i+1][j+1];
             }
 
-            /*
-            // top row
-            if((i != 0) && (j != 0))
-                count += map[i-1][j-1];
-            if((j != 0))
-                count += map[i][j-1];
-            if((i != (MAP_SIZE-1)) && (j != 0))
-                count += map[i+1][j-1];
-
-
-            // mid row
-            if((i != 0))
-                count += map[i-1][j];
-            if((i != (MAP_SIZE -1)))
-                count += map[i+1][j];
-
-            // Bottom row
-            if((i != 0) && (j != (MAP_SIZE-1)))
-                count += map[i-1][j+1];
-            if( (j != (MAP_SIZE-1)))
-                count += map[i][j+1];
-            if((i != (MAP_SIZE-1)) && (j != (MAP_SIZE-1)))
-                count += map[i+1][j+1];
-             */
 
             if(count == 0)
                 future[i][j] = 0;
-            if(count == 1)
+            else if(count == 1)
                 future[i][j] = 0;
-            if(count == 2)
+            else if(count == 2 && map[i][j] == 1)
                 future[i][j] = 1;
-            if(count == 3)
-                future[i][j] = 1; // should be 1, but looks worse :P
-            if(count > 3)
-                future[i][j] = 0;
-
-            if(tempC != 0)
-            {
-                uint8_t weird1 = map[i][j+1];
-                uint8_t weird2 = map[i][j-1];
-                uint8_t weird = weird1 + weird2;
-                std::cout << (int) tempC << ' ' << (int) map[i][i-1] << ' ' << (int) map[i][j+1] << "val: " << (int) map[i][j+1] + map[i][j-1]  <<  ' ' << (int) weird << std::endl;
-
-            }
-
-            /*
-            if(count != 2)
-                future[i][j] = 0;
-            else
+            else if(count == 3)
                 future[i][j] = 1;
-            */
+            else if(count > 3)
+                future[i][j] = 0;
+
         }
     }
 
@@ -236,7 +188,7 @@ void outputRegion(std::pair<int, int> left, std::pair<int, int> right)
     {
         for(int j = left.second; j < right.second; j++)
         {
-            std::cout << map[i][j] << ' ';
+            std::cout <<(int) map[i][j] << ' ';
         }
         std::cout << '\n';
     }
