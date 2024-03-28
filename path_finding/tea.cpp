@@ -15,8 +15,8 @@
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
 
 
-int map[MAP_SIZE][MAP_SIZE];
-int future[MAP_SIZE][MAP_SIZE];
+uint8_t map[MAP_SIZE][MAP_SIZE];
+uint8_t future[MAP_SIZE][MAP_SIZE];
 
 void drawMap();
 void generateMap();
@@ -30,8 +30,8 @@ int main()
     // Filling array
     {
         // map.fill(0);
-        memset( &map[0][0], 0, sizeof(int)*MAP_SIZE*MAP_SIZE );
-        memset( &future[0][0], 0, sizeof(int)*MAP_SIZE*MAP_SIZE );
+        memset( &map[0][0], 0, sizeof(uint8_t)*MAP_SIZE*MAP_SIZE );
+        memset( &future[0][0], 0, sizeof(uint8_t)*MAP_SIZE*MAP_SIZE );
     }
 
     // generate Map
@@ -142,7 +142,8 @@ void gameOfLife()
     {
         for(int j = 0; j < MAP_SIZE; j++)
         {
-            uint32_t count = 0;
+            uint8_t count = 0;
+            uint8_t tempC = 0;
             // 0 1 2
             // 3 X 4
             // 5 6 7
@@ -155,14 +156,18 @@ void gameOfLife()
             if((i != 0) && (j != 0) && (i != (MAP_SIZE-1)) && (j != (MAP_SIZE-1)))
             {
                 count += map[i-1][j-1];
-                count += map[i][j-1];
+                if(map[i][j-1] == 1)
+                    tempC += 1;
+                //tempC += map[i][j-1];
                 count += map[i+1][j-1];
 
                 count += map[i-1][j];
                 count += map[i+1][j];
 
                 count += map[i-1][j+1];
-                count += map[i][j+1];
+                //tempC += map[i][j+1];
+                if(map[i][j+1] == 1)
+                    tempC += 1;
                 count += map[i+1][j+1];
             }
 
@@ -202,8 +207,14 @@ void gameOfLife()
             if(count > 3)
                 future[i][j] = 0;
 
-            if(count != 0)
-                std::cout << count << std::endl;
+            if(tempC != 0)
+            {
+                uint8_t weird1 = map[i][j+1];
+                uint8_t weird2 = map[i][j-1];
+                uint8_t weird = weird1 + weird2;
+                std::cout << (int) tempC << ' ' << (int) map[i][i-1] << ' ' << (int) map[i][j+1] << "val: " << (int) map[i][j+1] + map[i][j-1]  <<  ' ' << (int) weird << std::endl;
+
+            }
 
             /*
             if(count != 2)
@@ -215,7 +226,7 @@ void gameOfLife()
     }
 
     memset( &map[0][0], 0, sizeof(future) );
-    std::memcpy(&map, &future, sizeof(int)*MAP_SIZE*MAP_SIZE);
+    std::memcpy(&map, &future, sizeof(uint8_t)*MAP_SIZE*MAP_SIZE);
     memset( &future[0][0], 0, sizeof(future) );
 }
 
