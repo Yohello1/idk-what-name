@@ -7,6 +7,7 @@
 #include <random>
 #include <cmath>
 #include <thread>
+#include <fstream>
 #include <unistd.h>
 
 #define MAP_SIZE 1024
@@ -21,6 +22,7 @@ void drawMap();
 void generateMap();
 void gameOfLife();
 void outputRegion(std::pair<int, int> left, std::pair<int, int> right);
+void loadMap(std::string filepath, std::pair<int, int> startPoint);
 
 int main()
 {
@@ -35,11 +37,12 @@ int main()
     // generate Map
     {
         srand(time(0));
-        generateMap();
+        loadMap("conwayLoad.in",{(MAP_SIZE/2 - MAP_SIZE/32), (MAP_SIZE/2 - MAP_SIZE/32)} );
+        // generateMap();
     }
 
 
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 1000; i++)
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -47,12 +50,12 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        // window.clear();
+        window.clear();
         gameOfLife();
-        outputRegion({(MAP_SIZE/2 - MAP_SIZE/4), (MAP_SIZE/2 - MAP_SIZE/4)}, {(MAP_SIZE/2 + MAP_SIZE/4), (MAP_SIZE/2 + MAP_SIZE/4) });
-        // drawMap();
-        // window.display();
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        // outputRegion({(MAP_SIZE/2 - MAP_SIZE/32), (MAP_SIZE/2 - MAP_SIZE/32)}, {(MAP_SIZE/2 + MAP_SIZE/32), (MAP_SIZE/2 + MAP_SIZE/32) });
+        drawMap();
+        window.display();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
     return 0;
@@ -109,6 +112,29 @@ void generateMap()
     }
 }
 
+void loadMap(std::string filePath, std::pair<int, int> startPoint)
+{
+    std::ifstream myfile;
+    myfile.open(filePath);
+
+    std::string temp;
+    int y_pos = startPoint.second;
+    while(myfile)
+    {
+        std::getline(myfile, temp);
+        // let's assume it's 64 chars long
+        for(int i = 0; i < temp.length(); i++)
+        {
+            if(temp[i] == '1')
+                map[startPoint.first+i][y_pos] = 1;
+            else
+                map[startPoint.first+i][y_pos] = 0;
+        }
+
+        y_pos++;
+    }
+}
+
 
 void gameOfLife()
 {
@@ -121,7 +147,26 @@ void gameOfLife()
             // 3 X 4
             // 5 6 7
 
+            if(!((map[i][j] == 1) || (map[i][j] == 0)))
+                std::cout << "ERROR" << map[i][j] << std::endl;
 
+
+            // one massive bounds check LMAO
+            if((i != 0) && (j != 0) && (i != (MAP_SIZE-1)) && (j != (MAP_SIZE-1)))
+            {
+                count += map[i-1][j-1];
+                count += map[i][j-1];
+                count += map[i+1][j-1];
+
+                count += map[i-1][j];
+                count += map[i+1][j];
+
+                count += map[i-1][j+1];
+                count += map[i][j+1];
+                count += map[i+1][j+1];
+            }
+
+            /*
             // top row
             if((i != 0) && (j != 0))
                 count += map[i-1][j-1];
@@ -144,8 +189,8 @@ void gameOfLife()
                 count += map[i][j+1];
             if((i != (MAP_SIZE-1)) && (j != (MAP_SIZE-1)))
                 count += map[i+1][j+1];
+             */
 
-            /*
             if(count == 0)
                 future[i][j] = 0;
             if(count == 1)
@@ -153,14 +198,19 @@ void gameOfLife()
             if(count == 2)
                 future[i][j] = 1;
             if(count == 3)
-                future[i][j] = 0; // should be 1, but looks worse :P
+                future[i][j] = 1; // should be 1, but looks worse :P
             if(count > 3)
                 future[i][j] = 0;
-            */
+
+            if(count != 0)
+                std::cout << count << std::endl;
+
+            /*
             if(count != 2)
                 future[i][j] = 0;
             else
                 future[i][j] = 1;
+            */
         }
     }
 
