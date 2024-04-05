@@ -56,3 +56,7 @@ tea : tea.cpp
 	$(CC) tea.o $(COMPILER_FLAGS) -O3 $(LINKER_FLAGS) -o draw2
 	./draw2
 
+boba : boba.cpp
+	$(CC) $(COMPILER_FLAGS) -O3 -g -c boba.cpp
+	$(CC) boba.o $(COMPILER_FLAGS) -O3 $(LINKER_FLAGS) -o draw2
+	./draw2

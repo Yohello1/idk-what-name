@@ -56,6 +56,7 @@ int main()
         drawMap();
         window.display();
         // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        // Remember to ask them whether they want to talk at some point or not LMAO
     }
 
     return 0;
