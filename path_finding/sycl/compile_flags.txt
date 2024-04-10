@@ -1,0 +1,2 @@
+-I/opt/intel/oneapi/2024.1/include 
+-I/opt/intel/oneapi/2024.1/include/sycl
