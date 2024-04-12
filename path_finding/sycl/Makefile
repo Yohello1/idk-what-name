@@ -17,3 +17,12 @@ cpuSelector : cpuSelectorSycl.cpp
 
 explicitMemory : explicitMemory.cpp
 	icpx -fsycl -I /opt/intel/oneapi/2024.1/include -I /opt/intel/oneapi/2024.1/include/sycl explicitMemory.cpp
+
+implicitMemory : implicitMemory.cpp
+	icpx -fsycl -I /opt/intel/oneapi/2024.1/include -I /opt/intel/oneapi/2024.1/include/sycl implicitMemory.cpp
+
+bufferAccessor : bufferAccessor.cpp
+	icpx -fsycl -I /opt/intel/oneapi/2024.1/include -I /opt/intel/oneapi/2024.1/include/sycl bufferAccessor.cpp
+
+gravity : gravity.cpp
+	icpx -fsycl -Wno-deprecated -I /opt/intel/oneapi/2024.1/include -I /opt/intel/oneapi/2024.1/include/sycl gravity.cpp
