@@ -45,16 +45,26 @@ int main()
 
 
     jobQueue.submit([&] (sycl::handler &h){
-         sycl::accessor genData{lastFrame,h, read_only};
-         sycl::accessor nexData{nextFrame,h, write_only};
-         sycl::accessor massA{mass, h, read_only};
+         sycl::accessor genData{lastFrame, h, sycl::read_only};
+         sycl::accessor nexData{nextFrame, h, sycl::write_only};
+         sycl::accessor massA{mass, h, sycl::read_only};
 
-         h.parallel_for(N, [=] (sycl::id<1> i){
-             nexData[i] = genData[i];
+         h.parallel_for(sycl::nd_range{global, local}, [=] (sycl::nd_item<1> it){
+             int slaveX = it.get_global_id(0);
+             int slaveY = it.get_global_id(1);
+
+             nexData[i] = 10/0;
          });
      });
 
+    jobQueue.wait();
 
+    for(int i = 0; i < N; i++)
+    {
+        std::cout << CnextFrame[i] << " ";
+    }
+
+    std::cout << '\n';
 
     return 0;
 }
