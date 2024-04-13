@@ -61,8 +61,6 @@ int main()
              float Fx = 0, Fy = 0, Fz = 0;
 
              float G = 1;
-             uint32_t mask1 = 2147483650;
-             uint32_t mask2 = 1;
 
              for(int i = 0; i < N; i++)
              {
@@ -76,20 +74,17 @@ int main()
 
                  float diffX = (genData[slaveX*6+0] - genData[i*6+0]);
                  float diffY = (genData[slaveX*6+2] - genData[i*6+4]);
+                 float diffZ = (genData[slaveX*6+4] - genData[i*6+4]);
 
-                 int32_t SignX = (int) ((int)diffX & (int)mask1);
-                 SignX = (SignX | mask2);
+                 Fx += Mm/(R2x )*1*G;
+                 Fy += Mm/(R2y )*1*G;
+                 Fz += Mm/(R2z )*1*G;
 
-                 int32_t SignY = (int) ((int)diffY & (int)mask1);
-                 SignY = (SignY | mask2);
+                 sycl::copysign(Fx, diffX);
+                 sycl::copysign(Fy, diffY);
+                 sycl::copysign(Fz, diffZ);
 
-                 int32_t SignZ = 1;
-
-
-                 Fx += Mm/(R2x )*1*SignX*G;
-                 Fy += Mm/(R2y )*1*SignY*G;
-                 Fz += Mm/(R2z )*1*SignZ*G;
-                 debugOut << "dataX " << diffX << ' ' << SignX << ' ' << Fx << "\n";
+                 debugOut << "dataX " << diffX << ' ' << Fx << "\n";
              }
 
 
