@@ -5,7 +5,7 @@
 #define MAX_VAL 1000
 #endif
 
-constexpr int N = 42;
+constexpr int N = 5 ;
 
 
 // Pos Vel
@@ -22,7 +22,7 @@ int main()
     // Init stuff
     //
 
-    srand(time(NULL));
+    srand(10);
 
     sycl::queue jobQueue{sycl::cpu_selector_v};
     std::cout << "Selected Device: " << jobQueue.get_device().get_info<sycl::info::device::name>() << "\n";
@@ -34,8 +34,8 @@ int main()
     float Cmass[N];
     for(int i = 0; i < N*6; i++)
     {
-        ClastFrame[i] = rand() % MAX_VAL;
-        Cmass[i] = rand() % MAX_VAL;
+        ClastFrame[i] = 10 + (rand()%MAX_VAL)/10;
+        Cmass[i] = rand() % MAX_VAL+1;
         CnextFrame[i] = 0;
     }
 
@@ -44,24 +44,77 @@ int main()
     sycl::buffer<float> mass{Cmass, sycl::range{N}, {sycl::property::buffer::use_host_ptr()}};
 
 
+    // Fx = Force X axis
+    // Fy = Force Y axis, etc
+    //
+
+
     jobQueue.submit([&] (sycl::handler &h){
          sycl::accessor genData{lastFrame, h, sycl::read_only};
          sycl::accessor nexData{nextFrame, h, sycl::write_only};
          sycl::accessor massA{mass, h, sycl::read_only};
 
-         h.parallel_for(sycl::nd_range{global, local}, [=] (sycl::nd_item<1> it){
-             int slaveX = it.get_global_id(0);
-             int slaveY = it.get_global_id(1);
+         sycl::stream debugOut(4096, 1024, h);
 
-             nexData[i] = 10/0;
+         h.parallel_for(sycl::range{N}, [=] (sycl::id<1> it){
+             int slaveX = it;
+             float Fx = 0, Fy = 0, Fz = 0;
+
+             float G = 1;
+             uint32_t mask1 = 2147483650;
+             uint32_t mask2 = 1;
+
+             for(int i = 0; i < N; i++)
+             {
+                 // F = GMm/r^2
+                 // G = 1-
+                 // X-axis
+                 float Mm  =     (massA[i]*massA[slaveX]);
+                 float R2x = pow((genData[slaveX*6+0] - genData[i*6+0]),2) + 1;
+                 float R2y = pow((genData[slaveX*6+2] - genData[i*6+2]),2) + 1;
+                 float R2z = pow((genData[slaveX*6+4] - genData[i*6+4]),2) + 1;
+
+                 float diffX = (genData[slaveX*6+0] - genData[i*6+0]);
+                 float diffY = (genData[slaveX*6+2] - genData[i*6+4]);
+
+                 int32_t SignX = (int) ((int)diffX & (int)mask1);
+                 SignX = (SignX | mask2);
+
+                 int32_t SignY = (int) ((int)diffY & (int)mask1);
+                 SignY = (SignY | mask2);
+
+                 int32_t SignZ = 1;
+
+
+                 Fx += Mm/(R2x )*1*SignX*G;
+                 Fy += Mm/(R2y )*1*SignY*G;
+                 Fz += Mm/(R2z )*1*SignZ*G;
+                 debugOut << "dataX " << diffX << ' ' << SignX << ' ' << Fx << "\n";
+             }
+
+
+             nexData[slaveX*6+1] = Fx/massA[slaveX] + genData[slaveX*6+1];
+             nexData[slaveX*6+3] = Fy/massA[slaveX] + genData[slaveX*6+3];
+             nexData[slaveX*6+5] = Fz/massA[slaveX] + genData[slaveX*6+5];
+
+             nexData[slaveX*6+0] = genData[slaveX*6+0] + genData[slaveX*6+1];
+             nexData[slaveX*6+2] = genData[slaveX*6+2] + genData[slaveX*6+3];
+             nexData[slaveX*6+4] = genData[slaveX*6+4] + genData[slaveX*6+1];
          });
      });
 
     jobQueue.wait();
 
-    for(int i = 0; i < N; i++)
+    std::cout << '\n';
+    std::cout << '\n';
+    std::cout << '\n';
+
+
+    for(int i = 0; i < N*5; i++)
     {
         std::cout << CnextFrame[i] << " ";
+        if(i%6  == 0)
+            std::cout << "\n";
     }
 
     std::cout << '\n';
