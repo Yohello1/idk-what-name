@@ -25,4 +25,4 @@ bufferAccessor : bufferAccessor.cpp
 	icpx -fsycl -I /opt/intel/oneapi/2024.1/include -I /opt/intel/oneapi/2024.1/include/sycl bufferAccessor.cpp
 
 gravity : gravity.cpp
-	icpx -fsycl -g -Wno-deprecated -I /opt/intel/oneapi/2024.1/include -I /opt/intel/oneapi/2024.1/include/sycl gravity.cpp
+	acpp  -lsfml-graphics -lsfml-window -lsfml-system gravity.cpp
