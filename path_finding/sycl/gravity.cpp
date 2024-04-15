@@ -2,12 +2,14 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <unistd.h>
+#include <chrono>
+#include <thread>
 
 #ifndef MAX_VAL
-#define MAX_VAL 500
+#define MAX_VAL 200
 #endif
 
-constexpr int N = 2 ;
+constexpr int N =999;
 
 sf::RenderWindow window(sf::VideoMode(1024, 1024), "draw2");
 
@@ -36,26 +38,26 @@ int main()
     float CnextFrame[N*6];
     float Cmass[N];
 
-    for(int i = 0; i < N; i++)
-    {
-        ClastFrame[i*6+0] = 10 + (rand()%MAX_VAL);
-        ClastFrame[i*6+2] = 10 + (rand()%MAX_VAL);
-        ClastFrame[i*6+4] = 10 + (rand()%MAX_VAL);
-
-        ClastFrame[i*6+1] = 0;
-        ClastFrame[i*6+3] = 0;
-        ClastFrame[i*6+5] = 0;
-
-        Cmass[i] = 10;
-        CnextFrame[i] = 0;
-    }
-
 
     std::cout << "HELLO WORLD" << std::endl;
 
     sycl::buffer<float> lastFrame{ClastFrame, sycl::range{N*6}, {sycl::property::buffer::use_host_ptr()}};
     sycl::buffer<float> nextFrame{CnextFrame, sycl::range{N*6}, {sycl::property::buffer::use_host_ptr()}};
     sycl::buffer<float> mass{Cmass, sycl::range{N}, {sycl::property::buffer::use_host_ptr()}};
+
+    for(int i = 0; i < N; i++)
+    {
+        ClastFrame[i*6+0] = 10 + (rand()%MAX_VAL);
+        ClastFrame[i*6+2] = 10 + (rand()%MAX_VAL);
+        ClastFrame[i*6+4] = 10;
+
+        ClastFrame[i*6+1] = 0;
+        ClastFrame[i*6+3] = 0;
+        ClastFrame[i*6+5] = 0;
+
+        Cmass[i] = 50;
+        CnextFrame[i] = 0;
+    }
 
     // Fx = Force X axis
     // Fy = Force Y axis, etc
@@ -76,7 +78,7 @@ int main()
                 int slaveX = it;
                 float Fx = 0, Fy = 0, Fz = 0;
 
-                float G = 0.005;
+                float G = 0.001;
 
                 for(int i = 0; i < N; i++)
                 {
@@ -84,13 +86,13 @@ int main()
                     // G = 1-
                     // X-axis
                     float Mm  =     (massA[i]*massA[slaveX]);
-                    float R2x = pow((genData[slaveX*6+0] - genData[i*6+0]),2);       ;
+                    float R2x = pow((genData[slaveX*6+0] - genData[i*6+0]),2);
                     float R2y = pow((genData[slaveX*6+2] - genData[i*6+2]),2);
-                    float R2z = pow((genData[slaveX*6+4] - genData[i*6+4]),2) + 1;
+                    float R2z = pow((genData[slaveX*6+4] - genData[i*6+4]),2);
 
-                    float DFx = (Mm/(R2x ))*1*G;
-                    float DFy = (Mm/(R2y ))*1*G;
-                    float DFz = (Mm/(R2z ))*1*G;
+                    float DFx = (Mm/R2x)*1*G;
+                    float DFy = (Mm/R2y)*1*G;
+                    float DFz = (Mm/R2z)*1*G;
 
                     if(sycl::isinf(DFx))
                         DFx = 0;
@@ -99,15 +101,16 @@ int main()
                     if(sycl::isinf(DFz))
                         DFz = 0;
 
-                    float diffx = (genData[slaveX*6+0] - genData[i*6+0]);
-                    float diffy = (genData[slaveX*6+2] - genData[i*6+2]);
-                    float diffz = (genData[slaveX*6+4] - genData[i*6+4]);
+                    float diffx = (genData[slaveX*6+0] - genData[i*6+0])*1;
+                    float diffy = (genData[slaveX*6+2] - genData[i*6+2])*1;
+                    float diffz = (genData[slaveX*6+4] - genData[i*6+4])*1;
 
-                    debugOut << diffx << ' '  << DFx << ' '  << slaveX << ' ' << i << '\n';
+                    DFx = sycl::copysign(DFx, diffx)*-1;
+                    DFy = sycl::copysign(DFy, diffy)*-1;
+                    DFz = sycl::copysign(DFz, diffz)*-1;
 
-                    sycl::copysign(DFx, diffx);
-                    sycl::copysign(DFy, diffy);
-                    sycl::copysign(DFz, diffz);
+                    //debugOut << "dify " << diffy << ' '  << DFy << ' '  << ' ' << genData[slaveX*6+2] << ' ' << genData[i*6+2] << ' ' << slaveX << ' ' << i << '\n';
+
 
                     Fx += DFx;
                     Fy += DFy;
@@ -115,14 +118,15 @@ int main()
 
                 }
 
+                //debugOut << "vely " << Fy/massA[slaveX] << ' ' <<  genData[slaveX*6+3] << '\n';
 
-                nexData[slaveX*6+1] = Fx/massA[slaveX] + genData[slaveX*6+0];
-                nexData[slaveX*6+3] = Fy/massA[slaveX] + genData[slaveX*6+2];
-                nexData[slaveX*6+5] = Fz/massA[slaveX] + genData[slaveX*6+4];
+                nexData[slaveX*6+1] = Fx/massA[slaveX] + genData[slaveX*6+1];
+                nexData[slaveX*6+3] = Fy/massA[slaveX] + genData[slaveX*6+3];
+                nexData[slaveX*6+5] = Fz/massA[slaveX] + genData[slaveX*6+5];
 
                 nexData[slaveX*6+0] = genData[slaveX*6+0] + genData[slaveX*6+1];
                 nexData[slaveX*6+2] = genData[slaveX*6+2] + genData[slaveX*6+3];
-                nexData[slaveX*6+4] = genData[slaveX*6+4] + genData[slaveX*6+1];
+                nexData[slaveX*6+4] = genData[slaveX*6+4] + genData[slaveX*6+5];
             });
         });
 
@@ -142,7 +146,8 @@ int main()
         drawPoints(ClastFrame);
         window.display();
 
-        sleep(1);
+        //sleep(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     }
 
@@ -159,7 +164,7 @@ void drawPoints(float ClastFrame[])
 
     for(int i = 0; i < N; i++)
     {
-        shape.setPosition(ClastFrame[i*6], ClastFrame[i*6+2]);
+        shape.setPosition(ClastFrame[i*6]/10, ClastFrame[i*6+2]/10);
         window.draw(shape);
     }
 }
