@@ -1,0 +1,20 @@
+#+title: Game plan
+#+author: Yohwllo
+
+
+* Systems:
+** TODO Error Managment System
+- [ ] Make files
+- [ ] Output simple messages
+- [ ] Output different message severities
+- [ ] Write to either file, or to terminal
+- [ ] Put it onto a different thread
+- [ ] Output different data to different places (i.e startup to terminal, errors to file, etc)
+** TODO Loading/Unloading data
+** TODO General Resource manger
+** TODO Event queue
+** TODO Input system
+** TODO Physics System
+** TODO Render Engine(?)
+
+* Error management System
