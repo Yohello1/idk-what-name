@@ -18,4 +18,5 @@ target_link_libraries(draw2 sycl sfml-system sfml-graphics sfml-window opencv_co
 add_executable(getImg getImg.cpp)
 target_link_libraries(getImg sycl sfml-system sfml-graphics sfml-window opencv_core opencv_highgui opencv_imgproc opencv_imgcodecs sycl)
 
+
 # add_sycl_to_target(TARGET run_me)

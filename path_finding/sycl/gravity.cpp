@@ -55,7 +55,7 @@ int main()
         ClastFrame[i*6+3] = 0;
         ClastFrame[i*6+5] = 0;
 
-        Cmass[i] = 50;
+        Cmass[i] = 10;
         CnextFrame[i] = 0;
     }
 
