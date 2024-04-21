@@ -1,6 +1,10 @@
-#include <SFML/Graphics.hpp>
+#include <SDL2/SDL.h>
 #include <opencv4/opencv2/opencv.hpp>
 #include <sycl/sycl.hpp>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 
 //sf::RenderWindow window(sf::VideoMode(1024, 1024), "draw2");
 
@@ -8,41 +12,39 @@ int main(int argc, char** argv)
 {
     std::cout << "Hello world" << std::endl;
 
-    // opencv
-    if(argc != 2)
+    bool quit = false;
+    SDL_Event event;
+
+    SDL_Init(SDL_INIT_VIDEO);
+
+    SDL_Window * window = SDL_CreateWindow("SDL2 Displaying Image",
+                                           SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 1024, 0);
+    SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
+
+    int width, height, channels;
+    unsigned char* img = stbi_load("webcam_output.jpeg", &width, &height, &channels, 4);
+    if (img == 0)
     {
-        std::cout << "Missing img path" << std::endl;
+        std::cout << "Error loading image file" << std::endl;
         return -1;
     }
 
 
-    cv::Mat image;
 
-    image = cv::imread(argv[1], 1);
-
-    if(!image.data)
+    while (!quit)
     {
-        std::cout << "No Image Data" << std::endl;
-        return -1;
+        SDL_WaitEvent(&event);
+
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            quit = true;
+            break;
+        }
     }
 
-    cv::namedWindow("DisplayImage", cv::WINDOW_AUTOSIZE);
-    cv::imshow("Displaay imaage" , image);
+    SDL_Quit();
 
-    cv::waitKey(0);
+    return 0;
 
-    // while(window.isOpen())
-    // {
-    //     sf::Event event;
-
-    //     while(window.pollEvent(event))
-    //     {
-    //         if(event.type == sf::Event::Closed)
-    //             window.close();
-    //     }
-
-    //     window.clear(sf::Color::White);
-
-    //     window.display();
-    // }
 }

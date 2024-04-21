@@ -17,4 +17,12 @@
 ** TODO Physics System
 ** TODO Render Engine(?)
 
-* Error management System
+
+*  Game idea
+A game about finding your identity through a journey
+A journey during which you slowly uncover your past
+A journey during which you remember your past, and it turns to define you
+A journey which takes you through happy, and truely depressing moments
+You'll be called many names during this journey, none of which stick particiularly much
+Until one day a name someone calls you will stick, doesnt change as easily
+You'll be known for the problems you solve, and people you help
