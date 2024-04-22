@@ -22,6 +22,8 @@ void drawPoints(float ClastFrame[]);
 //
 // mass : m
 
+// Clang doesnt work :(
+
 int main()
 {
     std::cout << "Starting Gravity thingy" << std::endl;
