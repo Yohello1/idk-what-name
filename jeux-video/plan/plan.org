@@ -4,12 +4,14 @@
 
 * Systems:
 ** TODO Error Managment System
-- [ ] Make files
-- [ ] Output simple messages
+- [X] Make filse
+- [X] Class for terminal messages
+- [X] Class for file output
+- [X] Output simple messages
+- [X] Write to either file, or to terminal
+- [X] Output different data to different places (i.e startup to terminal, errors to file, etc)
 - [ ] Output different message severities
-- [ ] Write to either file, or to terminal
 - [ ] Put it onto a different thread
-- [ ] Output different data to different places (i.e startup to terminal, errors to file, etc)
 ** TODO Loading/Unloading data
 ** TODO General Resource manger
 ** TODO Event queue
