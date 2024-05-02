@@ -2,6 +2,7 @@
 
 namespace chlorine::logging
 {
+    // Terminal
 
     logToTerminal::logToTerminal(std::string prefix, std::string colorCode)
     {
@@ -17,17 +18,24 @@ namespace chlorine::logging
         std::cout << _colorCode << _prefix << value << "\033[0m\t\t";
     }
 
+
+    // To file
     logToFile::logToFile(std::string file, std::string prefix)
     {
         _file = file;
         _prefix = prefix;
         _filestream.open(file);
-        std::cout << "Outputting to file " << _file << " with internal prefix " << _prefix << "\n";
+        std::cout << "Outputting to file " << _file << " with internal prefix: " << _prefix << "\n";
     }
 
     void logToFile::log(std::string value)
     {
         _filestream << value;
+    }
+
+    logToFile::~logToFile()
+    {
+        _filestream.close();
     }
 
     void logToFile::closeFile()
