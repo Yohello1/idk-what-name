@@ -10,8 +10,7 @@
 - [X] Output simple messages
 - [X] Write to either file, or to terminal
 - [X] Output different data to different places (i.e startup to terminal, errors to file, etc)
-- [ ] Output different message severities
-- [ ] Put it onto a different thread
+- [X] Output different message severities
 ** TODO Loading/Unloading data
 ** TODO General Resource manger
 ** TODO Event queue
@@ -20,6 +19,18 @@
 ** TODO Render Engine(?)
 
 
+* What a scene is
+A scene is a collection of components
+Each component has a:
+    Position
+    class
+    Name
+    Special properties
+
+A scene file will contain a name of the scene, as well as other essential information
+After some point it will contain 'name':'[sceneName]/[filepath to compontent file]'
+The component file will contain information about the component
+As much as possibly will be human readable
 *  Game idea
 A game about finding your identity through a journey
 A journey during which you slowly uncover your past
@@ -28,3 +39,5 @@ A journey which takes you through happy, and truely depressing moments
 You'll be called many names during this journey, none of which stick particiularly much
 Until one day a name someone calls you will stick, doesnt change as easily
 You'll be known for the problems you solve, and people you help
+But eventually, you'll be backstabbed by everyone you know
+The colours using which the world is represented changes as you make decisions

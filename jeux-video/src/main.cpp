@@ -9,7 +9,6 @@ int main()
     chlorine::logging::logToTerminal helloWorld{"LOG: ", "\x1B[32m"};
     helloWorld.log("hi\n");
 
-    chlorine::logging::logToFile goodBye("log.txt", "textLog: ");
-    goodBye.log("baii");
-    goodBye.closeFile();
+    // chlorine::logging::logToFile goodBye("log.txt", "textLog: ");
+    // goodBye.log("baii");
 }

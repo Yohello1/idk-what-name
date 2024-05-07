@@ -38,8 +38,4 @@ namespace chlorine::logging
         _filestream.close();
     }
 
-    void logToFile::closeFile()
-    {
-        _filestream.close();
-    }
 }
