@@ -23,7 +23,6 @@ namespace chlorine::logging
         public:
             explicit logToFile(std::string file, std::string prefix="");
             void log(std::string value);
-            void closeFile();
             ~logToFile();
 
         private:
