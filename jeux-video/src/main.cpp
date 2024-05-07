@@ -1,6 +1,8 @@
 #include <iostream>
 
 #include "logs/logs.hpp"
+#include "scene/scene.hpp"
+#include "io/io.hpp"
 
 int main()
 {
