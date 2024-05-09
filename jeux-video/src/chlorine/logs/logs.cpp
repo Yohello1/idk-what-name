@@ -1,9 +1,14 @@
-#include "logs.hpp"
+#include <chlorine/logs/logs.hpp>
 
 namespace chlorine::logging
 {
-    // Terminal
 
+    void logBase::log(std::string value)
+    {
+        std::cout << "ERROR BASE CLASS PASSED";
+    }
+
+    // Terminal
     logToTerminal::logToTerminal(std::string prefix, std::string colorCode)
     {
         _prefix = prefix;

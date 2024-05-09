@@ -7,7 +7,14 @@
 
 namespace chlorine::logging
 {
-    class logToTerminal
+
+    class logBase
+    {
+        public:
+        virtual void log(std::string value);
+    };
+
+    class logToTerminal: public logBase
     {
         public:
             explicit logToTerminal(std::string prefix="", std::string colorCode="\\003[0m");
@@ -18,7 +25,7 @@ namespace chlorine::logging
             std::string _colorCode;
     };
 
-    class logToFile
+    class logToFile: public logBase
     {
         public:
             explicit logToFile(std::string file, std::string prefix="");
