@@ -19,5 +19,5 @@ int main()
 
     chlorine::scene::scene tempScene(logOut);
 
-    chlorine::io::sceneImport(tempScene, "tempData.txt", logOut);
+    chlorine::io::sceneImport(tempScene, "../test/world.pcsf", logOut);
 }
