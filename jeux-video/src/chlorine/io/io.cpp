@@ -21,8 +21,7 @@ namespace chlorine::io
             std::istringstream iss(line);
             std::string dataName, dataValue;
             if(!(iss >> dataName >> dataValue)) { break; }
-            logOut->log(dataName);
-
+            logOut->log("Data looks like: " + dataName + " " + dataValue + "\n");
         }
 
         // close file and stuff
