@@ -12,13 +12,23 @@
 - [X] Output different data to different places (i.e startup to terminal, errors to file, etc)
 - [X] Output different message severities
 ** TODO Loading/Unloading data
+- [ ] Read master file
+- [ ] Interpret data in master file
+- [ ] Put data into scene file
+- [ ] Read slave files
+- [ ] Put slave data into slave compontents
 ** TODO General Resource manger
 ** TODO Event queue
 ** TODO Input system
 ** TODO Physics System
 ** TODO Render Engine(?)
 
-
+* General Notes on coding style
+- Classes:
+  - All private members start with `_`
+  - Public parts at top
+- All functions
+  - Either return a boolean, or are passed a logBase object for logging
 * What a scene is
 A scene is a collection of components
 Each component has a:
