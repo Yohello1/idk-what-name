@@ -17,4 +17,4 @@ SDL/jeux-video/build/.cmake/*
 *.out
 testing/souro/*
 *.jpeg
-/build/
+*/build/*
