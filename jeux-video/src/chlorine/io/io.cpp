@@ -3,7 +3,7 @@
 namespace chlorine::io
 {
 
-    bool componentImport(::chlorine::scene::scene sceneIn, std::string filePath, ::chlorine::logging::logBase* logOut)
+    bool componentImport(::chlorine::scene::scene& sceneIn, std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, std::string filePath, ::chlorine::logging::logBase* logOut)
     {
         std::fstream file;
         file.open(filePath);
@@ -14,14 +14,25 @@ namespace chlorine::io
             return false;
         }
 
+        std::string firstLine;
+        std::getline(file, firstLine);
+        std::istringstream iss(firstLine);
+        std::pair<std::string, std::string> tempPair;
+        iss >> tempPair.first >> tempPair.second;
+        // we assume first line is type
+        if(tempPair.first != "type")
+            return false;
+
+
+
         return true;
 
     }
 
-    bool sceneImport(::chlorine::scene::scene sceneIn, std::string filePath, ::chlorine::logging::logBase* logOut)
+    bool sceneImport(::chlorine::scene::scene& sceneIn, std::string filePath,   std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, ::chlorine::logging::logBase* logOut)
     {
         std::fstream file;
-        file.open(filePath);
+        file.open(filePath, std::ios::in);
 
         if(file.is_open() == false)
         {
@@ -51,6 +62,20 @@ namespace chlorine::io
             if(tempData[i].first == "name")
                 sceneIn.sceneName = tempData[i].second;
         }
+
+        // note: speed doesnt matter here :P
+        for(int i = 0; i < tempData.size(); i++)
+        {
+            if(tempData[i].first == "component")
+            {
+                std::string componentPath = sceneIn.sceneName + "/" + tempData[i].second;
+                logOut->log(componentPath);
+                componentImport(sceneIn, mapOfClasses, componentPath, logOut);
+            }
+
+        }
+
+
 
         logOut->log(""+sceneIn.sceneName);
 
