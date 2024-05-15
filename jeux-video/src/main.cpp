@@ -18,10 +18,12 @@ public:
         logOut->log("Pos:(" + std::to_string(position.first) + "," + std::to_string(position.second) + ")");
     }
 
-    bool loadFile(std::fstream& componentFile, std::string filePath,  ::chlorine::logging::logBase* logOut) override
+    bool loadFile(std::fstream& componentFile, std::string filePath, ::chlorine::logging::logBase* logOut) override
     {
+        logOut->log("noo");
         componentFile.clear();
         componentFile.seekg(0);
+
 
         std::string line;
         while(std::getline(componentFile, line))
@@ -44,8 +46,8 @@ public:
 
 std::map<std::string, ::chlorine::scene::component*> mapOfClasses =
     {
-        {"boxes", new boxes},
-        {"component", new ::chlorine::scene::component}
+        {"boxes", constexpr class boxes},
+        {"component", new ::chlorine::scene::component()}
     };
 
 int main()
@@ -62,5 +64,5 @@ int main()
 
     chlorine::scene::scene tempScene(logOut);
 
-    chlorine::io::sceneImport(tempScene, "../test/Arrowhead.pcsf", mapOfClasses, logOut);
+    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", mapOfClasses, logOut);
 }
