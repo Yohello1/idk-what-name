@@ -2,6 +2,22 @@
 
 namespace chlorine::io
 {
+
+    bool componentImport(::chlorine::scene::scene sceneIn, std::string filePath, ::chlorine::logging::logBase* logOut)
+    {
+        std::fstream file;
+        file.open(filePath);
+
+        if(file.is_open() == false)
+        {
+            logOut->log("Could not open file!");
+            return false;
+        }
+
+        return true;
+
+    }
+
     bool sceneImport(::chlorine::scene::scene sceneIn, std::string filePath, ::chlorine::logging::logBase* logOut)
     {
         std::fstream file;
@@ -29,10 +45,10 @@ namespace chlorine::io
             tempData.push_back(tempPair);
         }
 
-        // note: spee ddoesnt matter here :P
+        // note: speed doesnt matter here :P
         for(int i = 0; i < tempData.size(); i++)
         {
-            if(tempData[i].first == "name:")
+            if(tempData[i].first == "name")
                 sceneIn.sceneName = tempData[i].second;
         }
 
