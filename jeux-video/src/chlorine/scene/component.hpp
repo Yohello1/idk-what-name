@@ -18,9 +18,9 @@ namespace chlorine::scene
     public:
         std::string componentName;
         component() = default;
-        virtual void dumpData(::chlorine::logging::logBase* logOut) { logOut->log(componentName+"\n"); }
-        virtual bool loadFile(std::fstream& componentFile, std::string filePath,  ::chlorine::logging::logBase* logOut) {return false;};
-        virtual bool saveFile(std::string filePath, ::chlorine::logging::logBase* logOut) {return false;};
+        virtual void dumpData(std::unique_ptr<::chlorine::logging::logBase> const &logOut) { logOut->log(componentName+"\n"); }
+        virtual bool loadFile(std::fstream& componentFile, std::string filePath,  std::unique_ptr<::chlorine::logging::logBase> const &logOut) {return false;};
+        virtual bool saveFile(std::string filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) {return false;};
 
     };
 

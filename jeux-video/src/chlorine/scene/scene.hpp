@@ -20,6 +20,6 @@ namespace chlorine::scene
             std::pair<uint32_t, uint32_t> windowSize;
             std::unordered_map<std::string, std::unique_ptr<::chlorine::scene::component*>> components;
 
-            scene(::chlorine::logging::logBase* logOut);
+            scene(std::unique_ptr<::chlorine::logging::logBase> const &logOut);
     };
 }

@@ -3,7 +3,7 @@
 namespace chlorine::io
 {
 
-    bool componentImport(::chlorine::scene::scene& sceneIn, std::map<std::string, ::chlorine::scene::component*>& mapOfClasses,  std::string filePath, ::chlorine::logging::logBase* logOut)
+    bool componentImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string filePath, std::map<std::string, std::shared_ptr<::chlorine::scene::component>> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         std::fstream file;
         file.open(filePath);
@@ -42,7 +42,7 @@ namespace chlorine::io
 
     }
 
-    bool sceneImport(::chlorine::scene::scene& sceneIn, std::string pathPrefix, std::string filePath,   std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, ::chlorine::logging::logBase* logOut)
+    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string, std::shared_ptr<::chlorine::scene::component>> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         std::fstream file;
         file.open(filePath, std::ios::in);
@@ -73,7 +73,7 @@ namespace chlorine::io
         for(int i = 0; i < tempData.size(); i++)
         {
             if(tempData[i].first == "name")
-                sceneIn.sceneName = tempData[i].second;
+                sceneIn->sceneName = tempData[i].second;
         }
 
         // note: speed doesnt matter here :P
@@ -81,14 +81,14 @@ namespace chlorine::io
         {
             if(tempData[i].first == "component")
             {
-                std::string componentPath = pathPrefix + sceneIn.sceneName + "/" + tempData[i].second;
+                std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempData[i].second;
                 logOut->log("Path to open " + componentPath + '\n');
-                componentImport(sceneIn, mapOfClasses, componentPath, logOut);
+                componentImport(sceneIn, componentPath, mapOfClasses, logOut);
             }
 
         }
 
-        logOut->log(""+sceneIn.sceneName);
+        logOut->log(""+sceneIn->sceneName);
 
         // close file and stuff
 

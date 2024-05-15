@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <memory>
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
@@ -13,12 +14,12 @@ class boxes : public ::chlorine::scene::component
 public:
     std::pair<uint32_t, uint32_t> position;
 
-    void dumpData(::chlorine::logging::logBase* logOut) override
+    void dumpData(std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
     {
         logOut->log("Pos:(" + std::to_string(position.first) + "," + std::to_string(position.second) + ")");
     }
 
-    bool loadFile(std::fstream& componentFile, std::string filePath, ::chlorine::logging::logBase* logOut) override
+    bool loadFile(std::fstream& componentFile, std::string filePath,  std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
     {
         logOut->log("noo");
         componentFile.clear();
@@ -44,25 +45,24 @@ public:
     }
 };
 
-std::map<std::string, ::chlorine::scene::component*> mapOfClasses =
-    {
-        {"boxes", constexpr class boxes},
-        {"component", new ::chlorine::scene::component()}
-    };
+std::map<std::string, std::unique_ptr<::chlorine::scene::component>> mapOfClasses;
 
 int main()
 {
     std::cout << "Hello world" << std::endl;
 
-    chlorine::logging::logBase* logOut;
-    chlorine::logging::logToTerminal helloWorld{"LOG: ", "\x1B[32m"};
-    helloWorld.log("hi\n");
-    logOut = &helloWorld;
 
-    helloWorld.log("Atoms\n");
+    std::unique_ptr<chlorine::logging::logBase> logOut(new ::chlorine::logging::logToTerminal("LOG: ", "\x1B[32m"));
+
+    logOut->log("hi\n");
+
+    mapOfClasses.insert(std::make_pair("boxes", std::unique_ptr<boxes>(new boxes)));
+    mapOfClasses.insert(std::make_pair("component", std::unique_ptr<::chlorine::scene::component>(new ::chlorine::scene::component)));
+
+    logOut->log("Atoms\n");
 
 
-    chlorine::scene::scene tempScene(logOut);
+    std::unique_ptr<chlorine::scene::scene> tempScene(new ::chlorine::scene::scene(logOut));
 
-    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", mapOfClasses, logOut);
+    // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", mapOfClasses, logOut);
 }

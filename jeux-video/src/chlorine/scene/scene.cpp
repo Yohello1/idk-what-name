@@ -2,7 +2,7 @@
 
 namespace chlorine::scene
 {
-    scene::scene(::chlorine::logging::logBase* logOut)
+    scene::scene(std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         logOut->log("Created Scene\n");
     }
