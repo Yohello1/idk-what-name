@@ -3,16 +3,19 @@
 namespace chlorine::io
 {
 
-    bool componentImport(::chlorine::scene::scene& sceneIn, std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, std::string filePath, ::chlorine::logging::logBase* logOut)
+    bool componentImport(::chlorine::scene::scene& sceneIn, std::map<std::string, ::chlorine::scene::component*>& mapOfClasses,  std::string filePath, ::chlorine::logging::logBase* logOut)
     {
         std::fstream file;
         file.open(filePath);
+        logOut->log("Opened file: " + filePath + '\n');
 
         if(file.is_open() == false)
         {
-            logOut->log("Could not open file!");
+            logOut->log("Could not open file: " + filePath);
             return false;
         }
+
+        logOut->log("Successfully opened: " + filePath + '\n');
 
         std::string firstLine;
         std::getline(file, firstLine);
@@ -20,16 +23,26 @@ namespace chlorine::io
         std::pair<std::string, std::string> tempPair;
         iss >> tempPair.first >> tempPair.second;
         // we assume first line is type
+        logOut->log("Read first line" + tempPair.first);
         if(tempPair.first != "type")
             return false;
 
+        logOut->log("wa\n");
 
+        auto desiredComponent = mapOfClasses.find(tempPair.first)->second;
+        // if(desiredComponent == mapOfClasses.end())
+        //     return false;
+        logOut->log("path\n");
+
+        desiredComponent->loadFile(file, filePath, logOut);
+        logOut->log("qqq\n");
+        desiredComponent->dumpData(logOut);
 
         return true;
 
     }
 
-    bool sceneImport(::chlorine::scene::scene& sceneIn, std::string filePath,   std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, ::chlorine::logging::logBase* logOut)
+    bool sceneImport(::chlorine::scene::scene& sceneIn, std::string pathPrefix, std::string filePath,   std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, ::chlorine::logging::logBase* logOut)
     {
         std::fstream file;
         file.open(filePath, std::ios::in);
@@ -68,14 +81,12 @@ namespace chlorine::io
         {
             if(tempData[i].first == "component")
             {
-                std::string componentPath = sceneIn.sceneName + "/" + tempData[i].second;
-                logOut->log(componentPath);
+                std::string componentPath = pathPrefix + sceneIn.sceneName + "/" + tempData[i].second;
+                logOut->log("Path to open " + componentPath + '\n');
                 componentImport(sceneIn, mapOfClasses, componentPath, logOut);
             }
 
         }
-
-
 
         logOut->log(""+sceneIn.sceneName);
 

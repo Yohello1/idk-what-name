@@ -14,6 +14,5 @@
 namespace chlorine::io
 {
     bool componentImport(::chlorine::scene::scene& sceneIn, std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, std::string filePath, ::chlorine::logging::logBase* logOut);
-    bool sceneImport(::chlorine::scene::scene& sceneIn, std::string filePath,   std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, ::chlorine::logging::logBase* logOut);
-    ::chlorine::scene::component* objectFactory(std::fstream* componentfile, ::chlorine::scene::scene &sceneIn, std::map<std::string, ::chlorine::scene::component*> mapOfClasses, ::chlorine::logging::logBase* logOut);
+    bool sceneImport(::chlorine::scene::scene& sceneIn, std::string pathPrefix, std::string filePath,   std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, ::chlorine::logging::logBase* logOut);
 }
