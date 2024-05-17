@@ -18,7 +18,7 @@ namespace chlorine::scene
     public:
             std::string sceneName;
             std::pair<uint32_t, uint32_t> windowSize;
-            std::unordered_map<std::string, std::unique_ptr<::chlorine::scene::component*>> components;
+            std::unordered_map<std::string, std::unique_ptr<::chlorine::scene::component>> components;
 
             scene(std::unique_ptr<::chlorine::logging::logBase> const &logOut);
     };

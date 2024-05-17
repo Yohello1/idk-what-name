@@ -59,6 +59,7 @@ namespace chlorine::io
         logOut->log("creating component");
         ::chlorine::scene::component* temp = createComponent(file, listParts[1], filePath, mapOfClasses, logOut);
         // std::unique_ptr<::chlorine::scene::component> tempUnique(temp);
+        sceneIn->components.insert(std::make_pair(listParts[1], std::unique_ptr<::chlorine::scene::component>(temp)));
 
         return true;
 

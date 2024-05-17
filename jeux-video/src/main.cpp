@@ -68,4 +68,6 @@ int main()
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
 
     chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", mapOfClasses, logOut);
+
+    tempScene->components["boxes"]->dumpData(logOut);
 }
