@@ -2,12 +2,16 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include <memory>
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
 #include <chlorine/scene/component.hpp>
 #include <chlorine/io/io.hpp>
+
+// std::shared_ptr<::chlorine::scene::component> ::chlorine::scene::createComponent1(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string filePath, std::map<std::string, std::shared_ptr<::chlorine::scene::component>> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+// {
+
+// }
 
 class boxes : public ::chlorine::scene::component
 {
@@ -16,15 +20,13 @@ public:
 
     void dumpData(std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
     {
-        logOut->log("Pos:(" + std::to_string(position.first) + "," + std::to_string(position.second) + ")");
+        logOut->log("Pos:(" + std::to_string(position.first) + "," + std::to_string(position.second) + ")\n");
     }
 
-    bool loadFile(std::fstream& componentFile, std::string filePath,  std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
+    bool loadFile(std::fstream& componentFile, std::string filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
     {
-        logOut->log("noo");
         componentFile.clear();
         componentFile.seekg(0);
-
 
         std::string line;
         while(std::getline(componentFile, line))
@@ -40,12 +42,15 @@ public:
             if(tempPair.first == "ypos")
                 position.second = std::stoi(tempPair.second);
         }
-
         return true;
     }
 };
 
-std::map<std::string, std::unique_ptr<::chlorine::scene::component>> mapOfClasses;
+std::map<std::string, ::chlorine::scene::component*> mapOfClasses =
+    {
+        {"boxes", new boxes},
+        {"component", new ::chlorine::scene::component}
+    };
 
 int main()
 {
@@ -56,13 +61,11 @@ int main()
 
     logOut->log("hi\n");
 
-    mapOfClasses.insert(std::make_pair("boxes", std::unique_ptr<boxes>(new boxes)));
-    mapOfClasses.insert(std::make_pair("component", std::unique_ptr<::chlorine::scene::component>(new ::chlorine::scene::component)));
 
     logOut->log("Atoms\n");
 
 
-    std::unique_ptr<chlorine::scene::scene> tempScene(new ::chlorine::scene::scene(logOut));
+    std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
 
-    // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", mapOfClasses, logOut);
+    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", mapOfClasses, logOut);
 }

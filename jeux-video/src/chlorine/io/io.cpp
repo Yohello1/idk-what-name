@@ -3,11 +3,39 @@
 namespace chlorine::io
 {
 
-    bool componentImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string filePath, std::map<std::string, std::shared_ptr<::chlorine::scene::component>> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    size_t split(const std::string &txt, std::vector<std::string> &strs, char ch)
+    {
+        size_t pos = txt.find( ch );
+        size_t initialPos = 0;
+        strs.clear();
+
+        // Decompose statement
+        while( pos != std::string::npos ) {
+            strs.push_back( txt.substr( initialPos, pos - initialPos ) );
+            initialPos = pos + 1;
+
+            pos = txt.find( ch, initialPos );
+        }
+
+        // Add the last one
+        strs.push_back( txt.substr( initialPos, std::min( pos, txt.size() ) - initialPos + 1 ) );
+
+        return strs.size();
+    }
+
+    // what the cinamon toast fuck is this
+    ::chlorine::scene::component* createComponent(std::fstream& file, std::string componentType, std::string filePath, std::map<std::string, ::chlorine::scene::component*> mapOfClasses,std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    {
+        auto desiredComponent = mapOfClasses.find(componentType)->second;
+        desiredComponent->loadFile(file, filePath, logOut);
+        desiredComponent->dumpData(logOut);
+        return desiredComponent;
+    }
+
+    bool componentImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string filePath, std::map<std::string, ::chlorine::scene::component*> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         std::fstream file;
         file.open(filePath);
-        logOut->log("Opened file: " + filePath + '\n');
 
         if(file.is_open() == false)
         {
@@ -18,31 +46,25 @@ namespace chlorine::io
         logOut->log("Successfully opened: " + filePath + '\n');
 
         std::string firstLine;
+        std::vector<std::string> listParts;
         std::getline(file, firstLine);
-        std::istringstream iss(firstLine);
-        std::pair<std::string, std::string> tempPair;
-        iss >> tempPair.first >> tempPair.second;
-        // we assume first line is type
-        logOut->log("Read first line" + tempPair.first);
-        if(tempPair.first != "type")
+        ::chlorine::io::split(firstLine, listParts, ' ');
+        logOut->log(listParts[0]);
+
+        logOut->log("Napped" + '\n');
+
+        if(listParts[0] != "type")
             return false;
 
-        logOut->log("wa\n");
-
-        auto desiredComponent = mapOfClasses.find(tempPair.first)->second;
-        // if(desiredComponent == mapOfClasses.end())
-        //     return false;
-        logOut->log("path\n");
-
-        desiredComponent->loadFile(file, filePath, logOut);
-        logOut->log("qqq\n");
-        desiredComponent->dumpData(logOut);
+        logOut->log("creating component");
+        ::chlorine::scene::component* temp = createComponent(file, listParts[1], filePath, mapOfClasses, logOut);
+        // std::unique_ptr<::chlorine::scene::component> tempUnique(temp);
 
         return true;
 
     }
 
-    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string, std::shared_ptr<::chlorine::scene::component>> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string,  ::chlorine::scene::component*> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         std::fstream file;
         file.open(filePath, std::ios::in);
@@ -88,10 +110,7 @@ namespace chlorine::io
 
         }
 
-        logOut->log(""+sceneIn->sceneName);
-
-        // close file and stuff
-
+        logOut->log("Sucessfully opened & Loaded scene: " + sceneIn->sceneName + "\n");
 
         return true;
     }

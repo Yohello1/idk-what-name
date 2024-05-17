@@ -13,6 +13,7 @@
 
 namespace chlorine::io
 {
-    bool componentImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string filePath, std::map<std::string, std::shared_ptr<::chlorine::scene::component>> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut);
-    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath,   std::map<std::string, ::chlorine::scene::component*>& mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOu);
+    bool componentImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string filePath, std::map<std::string,  ::chlorine::scene::component*> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut);
+    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string,  ::chlorine::scene::component*> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut);
+
 }
