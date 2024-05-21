@@ -69,5 +69,7 @@ int main()
 
     chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", mapOfClasses, logOut);
 
+    logOut->log("hello");
+
     tempScene->components["boxes"]->dumpData(logOut);
 }
