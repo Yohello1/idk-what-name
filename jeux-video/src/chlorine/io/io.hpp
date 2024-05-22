@@ -13,8 +13,5 @@
 
 namespace chlorine::io
 {
-    size_t splitStringToVector(std::string txt, std::vector<std::string> &strs, char ch);
-    bool componentImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string filePath, std::map<std::string,  ::chlorine::scene::component*> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut);
-    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string,  ::chlorine::scene::component*> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut);
-
+    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut);
 }

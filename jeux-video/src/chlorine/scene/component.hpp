@@ -17,11 +17,7 @@ namespace chlorine::scene
     {
     public:
         std::string componentName;
-        component() = default;
-        virtual void dumpData(std::unique_ptr<::chlorine::logging::logBase> const &logOut) { logOut->log(componentName+"\n"); }
-        virtual bool loadFile(std::fstream& componentFile, std::string filePath,  std::unique_ptr<::chlorine::logging::logBase> const &logOut) {(void)componentFile; (void)filePath; (void)logOut; return false;};
-        virtual bool saveFile(std::string filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) {(void)filePath; (void)logOut; return false;};
-
+        std::unordered_map<std::string, uint16_t> locationMap;
     };
 
 }

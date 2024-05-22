@@ -1,8 +1,9 @@
 #include <chlorine/io/io.hpp>
 
+
+
 namespace chlorine::io
 {
-
     size_t splitStringToVector(const std::string &txt, std::vector<std::string> &strs, char ch)
     {
         size_t pos = txt.find( ch );
@@ -23,16 +24,10 @@ namespace chlorine::io
         return strs.size();
     }
 
-    // what the cinamon toast fuck is this
-    ::chlorine::scene::component* createComponent(std::fstream& file, std::string componentType, std::string filePath, std::map<std::string, ::chlorine::scene::component*> mapOfClasses,std::unique_ptr<::chlorine::logging::logBase> const &logOut)
-    {
-;
-    }
-
-    bool componentImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string filePath, std::map<std::string, ::chlorine::scene::component*> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         std::fstream file;
-        file.open(filePath);
+        file.open(filePath, std::ios::in);
 
         if(file.is_open() == false)
         {
@@ -40,74 +35,30 @@ namespace chlorine::io
             return false;
         }
 
-        logOut->log("Successfully opened: " + filePath + '\n');
-
+        // Every line is split up as follows:
+        // [name of component/thingy] [value/path to component]
         std::string firstLine;
-        std::vector<std::string> listParts;
+        std::string nextLine;
+        std::vector<std::string> splitFirstLine;
+
         std::getline(file, firstLine);
-        ::chlorine::io::split(firstLine, listParts, ' ');
-        logOut->log(listParts[0]);
+        splitStringToVector(firstLine, splitFirstLine, ' ');
 
-        logOut->log("Napped" + '\n');
+        logOut->log("Strings: " + splitFirstLine[0] + splitFirstLine[1] + '\n');
 
-        if(listParts[0] != "type")
-            return false;
+        sceneIn->sceneName = splitFirstLine[1];
 
-        ::chlorine::scene::component* temp = createComponent(file, listParts[1], filePath, mapOfClasses, logOut);
-        // std::unique_ptr<::chlorine::scene::component> tempUnique(temp);
-        sceneIn->components.insert(std::make_pair(listParts[1], std::unique_ptr<::chlorine::scene::component>(createComponent(file, listParts[1], filePath, mapOfClasses, logOut))));
-
-        return true;
-
-    }
-
-    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string,  ::chlorine::scene::component*> mapOfClasses, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
-    {
-        std::fstream file;
-        file.open(filePath, std::ios::in);
-
-        if(file.is_open() == false)
+        while(std::getline(file, nextLine))
         {
-            logOut->log("Could not open file");
-            return false;
-        }
-
-        // I dont know why but adding `::` to the start makes it works
-        ::std::string line;
-
-        std::vector<std::pair<std::string, std::string>> tempData;
-
-        while(std::getline(file, line))
-        {
-            std::istringstream iss(line);
-            std::pair<std::string, std::string> tempPair;
-
-            if(!(iss >> tempPair.first >> tempPair.second)) { break; }
-            logOut->log("Data looks like: " + tempPair.first + " " + tempPair.second + "\n");
-
-            tempData.push_back(tempPair);
-        }
-
-        // note: speed doesnt matter here :P
-        for(size_t i = 0; i < tempData.size(); i++)
-        {
-            if(tempData[i].first == "name")
-                sceneIn->sceneName = tempData[i].second;
-        }
-
-        // note: speed doesnt matter here :P
-        for(size_t i = 0; i < tempData.size(); i++)
-        {
-            if(tempData[i].first == "component")
+            std::vector<std::string> tempSplit;
+            splitStringToVector(nextLine, tempSplit, ' ' );
+            std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempSplit[1];
+            if(tempSplit[0] == "component")
             {
-                std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempData[i].second;
-                logOut->log("Path to open " + componentPath + '\n');
-                componentImport(sceneIn, componentPath, mapOfClasses, logOut);
+                // sceneIn->components.insert(std::make_pair(tempSplit[1], std::unique_ptr<::chlorine::scene::component>()));
+                // logOut->log("Made component: " + tempSplit[1] + '\n');
             }
-
         }
-
-        logOut->log("Sucessfully opened & Loaded scene: " + sceneIn->sceneName + "\n");
 
         return true;
     }
