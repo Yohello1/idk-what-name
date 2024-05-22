@@ -1,0 +1,28 @@
+#pragma once
+
+#include <chlorine/scene/Types.hpp>
+
+namespace chlorine::ecs
+{
+    class Event
+    {
+    public:
+        Event() = delete;
+
+        explicit Event(EventId type) :
+        _Type(type)
+        {}
+
+        template<typename T>
+        void setParam(EventId id, T value);
+
+        template<typename T>
+        T getParam(EventId id);
+
+        EventId getType() const;
+
+    private:
+        EventId _Type{};
+        std::unordered_map<EventId, std::any> _Data{};
+    };
+}

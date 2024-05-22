@@ -11,12 +11,19 @@
 - [X] Write to either file, or to terminal
 - [X] Output different data to different places (i.e startup to terminal, errors to file, etc)
 - [X] Output different message severities
-** TODO Loading/Unloading data
+
+** TODO ECS System
+- [ ] Object which stores index
+- [ ] Arrays which hold that info
+- [ ] Handle creation of stuff
+- [ ] Handle deletion of stuff
+**  Loading/Unloading data*
 - [X] Read master file
 - [X] Interpret data in master file
 - [ ] Put data into scene file
 - [ ] Read slave files
 - [ ] Put slave data into slave compontents
+
 ** TODO General Resource manger
 ** TODO Event queue
 ** TODO Input system
