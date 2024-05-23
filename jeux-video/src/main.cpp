@@ -5,8 +5,8 @@
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
-#include <chlorine/scene/component.hpp>
 #include <chlorine/io/io.hpp>
+#include <chlorine/scene/componentManager.hpp>
 
 int main()
 {
