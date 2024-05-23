@@ -9,7 +9,6 @@
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
-#include <chlorine/scene/component.hpp>
 
 namespace chlorine::io
 {
