@@ -59,6 +59,66 @@ namespace chlorine::scene
             addComponentId<Cs...>(_componentIds, 0);
         }
 
+        std::vector<std::uint64_t> get(std::vector<decltype(std::declval<std::type_info>().hash_code())> components)
+        {
+            // there's gotta be a better way to do this :P
+            if(components.size() < 1)
+            {
+                return {};
+            }
+
+            std::vector<uint64_t> result;
+            // if(auto const found = _entities.find(components[0]); found == end(_entities))
+            for(auto const componentId : components)
+            {
+                std::vector<std::uint64_t> nextComponent;
+                std::vector<std::uint64_t> tempResult;
+
+                if(auto const found = _entities.find(componentId); found == end(_entities))
+                {
+                    return {};
+                }
+                else
+                {
+                    nextComponent = transformEntIds(found->second);
+                }
+
+                std::set_intersection(begin(result), end(result), begin(nextComponent), end(nextComponent), back_inserter(tempResult));
+                result = tempResult;
+            }
+        }
+
+        template<typename C>
+        std::optional<std::uint64_t> id()
+        {
+            // Gotta also be a better way
+            auto const& typeInfo = typeid(C);
+
+            for(std::size_t i = 0; i < _typeArrays.size(); ++i)
+            {
+                auto const type_hash = _typeArrays[i]->hash_code();
+                if(type_hash == typeInfo.hash_code())
+                {
+                    return std::make_optional<decltype(std::declval<std::type_info>().hash_code())>(type_hash);
+                }
+            }
+
+            return std::nullopt;
+        }
+
+        void set(std::uint64_t entId, std::variant<Cs...> const& component)
+        {
+            auto const index = component.index();
+            auto const componentHash = _typeArrays[index]->hash_code();
+
+            auto found = _entities.find(componentHash);
+            if(found != end(_entities))
+            {
+                found->second.push_back({entId, component});
+            }
+
+            _entities.insert({componentHash, {{entId, component}}});
+        }
     private:
         // Storing ids, and variants
         std::unordered_map<decltype(std::declval<std::type_info>().name()), std::pair<decltype(std::declval<std::type_info>().hash_code()), std::size_t>> _componentIds;
