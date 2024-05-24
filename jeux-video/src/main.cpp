@@ -8,6 +8,18 @@
 #include <chlorine/io/io.hpp>
 #include <chlorine/scene/componentManager.hpp>
 
+struct Position
+{
+    int x;
+    int y;
+} pos1, pos2, pos3;
+
+struct Name
+{
+    std::string name;
+} name1;
+
+
 int main()
 {
     std::cout << "Hello world" << std::endl;
@@ -21,17 +33,16 @@ int main()
 
 
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
-
-    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", logOut);
-
-    std::string boxesss = "boxes";
-    std::string patthh = "../test/Arrowhead/boxes.pccf";
-
-
     logOut->log("hello");
 
-    // logOut.reset();
-    // temp.reset();
+    // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", logOut);
+
+    chlorine::scene::orchestrator tempConductor;
+
+    pos1.x = 10;
+    pos1.y = 20;
+
+    tempConductor.setValue("bob", pos1, logOut);
 
 
 }
