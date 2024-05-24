@@ -5,6 +5,7 @@ namespace chlorine::logging
 
     void logBase::log(std::string value)
     {
+        (void)value;
         std::cout << "ERROR BASE CLASS PASSED";
     }
 
