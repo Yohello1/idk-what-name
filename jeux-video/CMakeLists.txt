@@ -5,7 +5,7 @@ add_compile_options(-g -Wall -Wextra -Wpedantic)
 include_directories(src/)
 
 project(posionedchlorine)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 include(CTest)
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
