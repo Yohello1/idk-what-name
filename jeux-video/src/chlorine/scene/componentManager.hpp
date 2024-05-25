@@ -18,32 +18,18 @@
 
 namespace chlorine::scene
 {
-    template<typename... T>
+    template<typename... typesIn>
     class orchestrator
     {
     public:
-        std::unordered_map<std::string, std::unordered_map<std::string, std::variant<std::monostate, T...>>> entities;
-        // std::unordered_map<std::string, std::unordered_map<std::string, uint64_t>> entities;
+        std::unordered_map<std::string, std::unordered_map<std::string, std::variant<std::monostate, typesIn...>>> tempMap;
 
-        std::unordered_map<std::type_index, std::size_t> noodles;
-
-        template<typename compT> // component Template
-        bool setValue(std::string key, compT value, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+        template<typename typeIn>
+        bool addStructToMap(typeIn valueIn, std::string key1, std::string key2)
         {
-
-            // entities["key"]["jackob"] = value.x;
-
-            // entities[key].insert({"Hello", value});
-
-            entities[key].size();
-
-            // tempMap<Pos>.insert({"temp", temp1});
-            // logOut->log("Noodles" + entities["key"]["jackob"].x  + '\n' );
-            logOut->log("french" + entities[key].size() + '\n');
-
-            return false;
+            tempMap<typeIn>[key1][key2] = valueIn;
+            return true;
         }
-
     private:
     };
 }
