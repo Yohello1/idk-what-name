@@ -42,7 +42,7 @@ int main()
     pos1.x = 10;
     pos1.y = 20;
 
-    tempConductor.setValue("bob", pos1, logOut);
-
+    // tempConductor.setValue("bob", pos1, logOut);
+    tempConductor.entities["bob"].emplace("helloWorld", pos1);
 
 }

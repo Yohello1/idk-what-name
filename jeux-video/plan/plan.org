@@ -13,10 +13,14 @@
 - [X] Output different message severities
 
 ** TODO ECS System
-- [ ] Object which stores index
-- [ ] Arrays which hold that info
-- [ ] Handle creation of stuff
-- [ ] Handle deletion of stuff
+- [ ] Hashmap with entities
+- [ ] set values
+- [ ] getIndex of structs
+- [ ] get filterd index
+- [ ] getID of type
+- [ ] getNumber of entities
+- [ ] remove index/entitiy
+
 **  Loading/Unloading data*
 - [X] Read master file
 - [X] Interpret data in master file

@@ -4,6 +4,8 @@
 rm -rf build
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Debug
-make
+cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug
+ninja
+ninja test
+ninja test_memcheck
 
