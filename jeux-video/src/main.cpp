@@ -37,11 +37,18 @@ int main()
 
     // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", logOut);
 
-    chlorine::scene::orchestrator tempConductor;
+    chlorine::scene::orchestra<int> Conductor;
 
-    pos1.x = 10;
-    pos1.y = 20;
+    Conductor.insertElement("hi", "no", 32);
+    Conductor.insertElement("hi", "ye", 73);
+    Conductor.insertElement("hi", "uu", 98);
 
-    // tempConductor.setValue("bob", pos1, logOut);
+    int a = Conductor.getElement<int>("hi", "no");
+    int b = Conductor.getElement<int>("hi", "ye");
+    int c = Conductor.getElement<int>("hi", "uu");
+
+    Conductor.removeElement("hi", "uu");
+
+    int d = Conductor.getElement<int>("hi", "uu");
 
 }

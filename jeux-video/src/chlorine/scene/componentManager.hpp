@@ -38,6 +38,7 @@ namespace chlorine::scene
     template<typename... typesIn>
     class orchestra
     {
+    public:
         std::unordered_map<std::string, std::unordered_map<std::string, instrument<typesIn...>>> instruments;
 
         // honestly insert/set are the same thing :P
@@ -47,6 +48,18 @@ namespace chlorine::scene
         {
             instruments[key1][key2] = instrumentIn;
         }
-    }
+
+        template<typename T>
+        T getElement(std::string key1, std::string key2)
+        {
+            return variantWrapper{instruments[key1][key2]};
+        }
+
+        // find of hash next
+        void removeElement(std::string key1, std::string key2)
+        {
+            instruments[key1].erase(key2);
+        }
+    };
 
 }
