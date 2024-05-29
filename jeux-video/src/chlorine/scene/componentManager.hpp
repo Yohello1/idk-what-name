@@ -39,27 +39,52 @@ namespace chlorine::scene
     class orchestra
     {
     public:
-        std::unordered_map<std::string, std::unordered_map<std::string, instrument<typesIn...>>> instruments;
+        std::unordered_map<std::string, std::unordered_map<std::type_index, instrument<typesIn...>>> instruments;
 
         // honestly insert/set are the same thing :P
         // This will be fixed laterrr
         // switch to const char* instead, or hashes
-        void insertElement(std::string key1, std::string key2, instrument<typesIn...> const& instrumentIn)
+        template<typename T, typename... Args>
+        void insertElement(std::string key1, Args... args)
         {
-            instruments[key1][key2] = instrumentIn;
+            // std::type_index key2 = typeid(T);
+            // instruments[key1][key2] = instrumentIn;
+            instruments[key1].emplace(typeid(T), args...);
         }
 
         template<typename T>
-        T getElement(std::string key1, std::string key2)
+        T getElement(std::string key1)
         {
+            std::type_index key2 = typeid(T);
             return variantWrapper{instruments[key1][key2]};
         }
 
         // find of hash next
-        void removeElement(std::string key1, std::string key2)
+        void removeElement(std::string key1, std::type_index key2)
         {
             instruments[key1].erase(key2);
         }
+
+
+        // std::vector<std::string> getByInstrument(std::vector<std::string> wantedInstruments)
+        // {
+        //     if(wantedInstruments.size() == 0)
+        //     {
+        //         return {};
+        //     }
+
+        //     std:vector<std::string> result;
+        //     if(auto const found = instruments.find(components[0]); found == end(instruments))
+        //     {
+        //         return {};
+        //     }
+        //     else
+        //     {
+        //         result = {};// fuck if i know
+        //     }
+        // }
+    private:
+        std::unordered_map<std::type_index, std::vector<std::string>> _groups;
     };
 
 }
