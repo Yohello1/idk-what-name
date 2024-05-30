@@ -50,7 +50,9 @@ namespace chlorine::scene
         {
             // std::type_index key2 = typeid(T);
             // instruments[key1][key2] = instrumentIn;
-            instruments[key1].emplace(typeid(T), std::forward<T>(args)...);
+            T tempInValue(std::forward<Args>(args)...);
+            // instruments[key1].emplace(typeid(T), std::forward<T>(args)...);
+            instruments[key1].insert({typeid(T), tempInValue});
         }
 
         template<typename T>
