@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <cstdint>
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
@@ -13,9 +14,9 @@ class NameClass
 public:
     std::string name;
 
-    NameClass(std::string nameIn)
+    NameClass(std::string nameIn) : name(nameIn)
     {
-        name = nameIn;
+        // idk
     }
 
 };
@@ -32,10 +33,10 @@ int main()
 
     // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", logOut);
 
-    chlorine::scene::orchestra<int, NameClass> Conductor;
+    chlorine::scene::orchestra<std::uint32_t, NameClass> Conductor;
 
     Conductor.insertElement<std::uint32_t>("hi",  32);
-    Conductor.insertElement<NameClass>("hi",  "vulkan");
+    // Conductor.insertElement<std::string>("hi", "kac");
 
     // int a = Conductor.getElement<int>("hi");
     // std::cout << a << std::endl;
