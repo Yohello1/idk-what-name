@@ -35,10 +35,12 @@ int main()
 
     chlorine::scene::orchestra<std::uint32_t, std::string, NameClass> Conductor;
 
-    Conductor.insertElement<std::uint32_t>("hi",  32);
-    Conductor.insertElement<std::string>("hi", "kac");
+    Conductor.insertElement<std::uint32_t, int>("hi",  32);
+    Conductor.insertElement<std::string, std::string>("hi", "kac");
+    Conductor.insertElement<NameClass, std::string>("hi", "kac");
 
     std::string a = Conductor.getElement<std::string>("hi");
+    NameClass b = Conductor.getElement<NameClass>("hi");
 
     // int a = Conductor.getElement<int>("hi");
     // std::cout << a << std::endl;
