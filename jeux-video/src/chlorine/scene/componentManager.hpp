@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <variant>
 #include <utility>
+#include <memory>
 #include <typeindex>
 #include <typeinfo>
 #include <memory>
@@ -45,11 +46,11 @@ namespace chlorine::scene
         // This will be fixed laterrr
         // switch to const char* instead, or hashes
         template<typename T, typename... Args>
-        void insertElement(std::string key1, Args... args)
+        void insertElement(std::string key1, Args&&... args)
         {
             // std::type_index key2 = typeid(T);
             // instruments[key1][key2] = instrumentIn;
-            instruments[key1].emplace(typeid(T), args...);
+            instruments[key1].emplace(typeid(T), std::forward<T>(args)...);
         }
 
         template<typename T>
