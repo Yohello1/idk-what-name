@@ -33,10 +33,12 @@ int main()
 
     // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", logOut);
 
-    chlorine::scene::orchestra<std::uint32_t, NameClass> Conductor;
+    chlorine::scene::orchestra<std::uint32_t, std::string, NameClass> Conductor;
 
     Conductor.insertElement<std::uint32_t>("hi",  32);
-    // Conductor.insertElement<std::string>("hi", "kac");
+    Conductor.insertElement<std::string>("hi", "kac");
+
+    std::string a = Conductor.getElement<std::string>("hi");
 
     // int a = Conductor.getElement<int>("hi");
     // std::cout << a << std::endl;
