@@ -7,6 +7,7 @@
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
 #include <chlorine/io/io.hpp>
+#include <chlorine/scene/component.hpp>
 #include <chlorine/scene/componentManager.hpp>
 
 class NameClass
@@ -17,6 +18,11 @@ public:
     NameClass(std::string nameIn) : name(nameIn)
     {
         // idk
+    }
+
+    void changeName(std::string nameIn)
+    {
+        name = nameIn;
     }
 
 };
@@ -33,14 +39,10 @@ int main()
 
     // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", logOut);
 
-    chlorine::scene::orchestra<std::uint32_t, std::string, NameClass> Conductor;
+    chlorine::scene::orchestra Conductor;
 
     Conductor.insertElement<std::uint32_t, int>("hi",  32);
-    Conductor.insertElement<std::string, std::string>("hi", "kac");
-    Conductor.insertElement<NameClass, std::string>("hi", "kac");
 
-    std::string a = Conductor.getElement<std::string>("hi");
-    NameClass b = Conductor.getElement<NameClass>("hi");
 
     // int a = Conductor.getElement<int>("hi");
     // std::cout << a << std::endl;

@@ -16,50 +16,24 @@
 #include <memory>
 
 #include <chlorine/logs/logs.hpp>
-
+#include <chlorine/scene/component.hpp>
 namespace chlorine::scene
 {
     // Just to access stuff
     // I literally copy pasted this code
     // God knows how it works
-    template<typename... Ts>
-    struct variantWrapper
-    {
-        std::variant<Ts...> & var;
-        template<typename T>
-        operator T() {return std::get<T>(var);}
-    };
-
-    template<typename... typesIn>
-    using instrument = std::variant<typesIn...>;
-
-    using instrumentId = decltype(std::declval<std::type_info>().hash_code());
 
 
-    template<typename... typesIn>
+
     class orchestra
     {
     public:
-        std::unordered_map<std::string, std::unordered_map<std::type_index, instrument<typesIn...>>> instruments;
+        std::unordered_map<std::string, std::unordered_map<std::type_index, std::unique_ptr<::chlorine::scene::component>>> instruments;
 
-        // honestly insert/set are the same thing :P
-        // This will be fixed laterrr
-        // switch to const char* instead, or hashes
         template<typename T, typename... Args>
         void insertElement(std::string key1, Args&&... args)
         {
-            // std::type_index key2 = typeid(T);
-            // instruments[key1][key2] = instrumentIn;
-            T tempInValue(std::forward<Args>(args)...);
-            // instruments[key1].emplace(typeid(T), std::forward<T>(args)...);
-            instruments[key1].insert({typeid(T), tempInValue});
-        }
 
-        template<typename T>
-        T getElement(std::string key1)
-        {
-            std::type_index key2 = typeid(T);
-            return variantWrapper{instruments[key1][key2]};
         }
 
         // find of hash next
@@ -68,26 +42,8 @@ namespace chlorine::scene
             instruments[key1].erase(key2);
         }
 
-
-        // std::vector<std::string> getByInstrument(std::vector<std::string> wantedInstruments)
-        // {
-        //     if(wantedInstruments.size() == 0)
-        //     {
-        //         return {};
-        //     }
-
-        //     std:vector<std::string> result;
-        //     if(auto const found = instruments.find(components[0]); found == end(instruments))
-        //     {
-        //         return {};
-        //     }
-        //     else
-        //     {
-        //         result = {};// fuck if i know
-        //     }
-        // }
     private:
-        std::unordered_map<std::type_index, std::vector<std::string>> _groups;
+        std::unordered_map<std::type_index, std::vector<std::string>> _groups; // I do NOT want this to be modified directly
     };
 
 }
