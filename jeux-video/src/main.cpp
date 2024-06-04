@@ -15,7 +15,7 @@ class NameClass : public chlorine::scene::component
 public:
     std::string name;
 
-    NameClass(std::string nameIn) : name(nameIn)
+    NameClass(std::string const& nameIn) : name(nameIn)
     {
         // idk
     }
@@ -25,6 +25,17 @@ public:
         name = nameIn;
     }
 
+};
+
+class numClass : public chlorine::scene::component
+{
+public:
+    int num;
+
+    numClass(int& temp) : num(temp)
+    {
+        // idkkk
+    }
 };
 
 
@@ -42,7 +53,12 @@ int main()
     chlorine::scene::orchestra Conductor;
 
     Conductor.insertElement<chlorine::scene::component>("hi");
-    Conductor.insertElement<NameClass, std::string>("hi", "why");
+    Conductor.insertElement<numClass, int>("hi", 32);
+
+    chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
+    numClass* tempDerived = static_cast<numClass*>(tempBase);
+    int a = tempDerived->num;
+    // logOut->log(tempDerived->num);
 
     // int a = Conductor.getElement<int>("hi");
     // std::cout << a << std::endl;
