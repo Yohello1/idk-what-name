@@ -10,7 +10,7 @@
 #include <chlorine/scene/component.hpp>
 #include <chlorine/scene/componentManager.hpp>
 
-class NameClass
+class NameClass : public chlorine::scene::component
 {
 public:
     std::string name;
@@ -41,8 +41,8 @@ int main()
 
     chlorine::scene::orchestra Conductor;
 
-    Conductor.insertElement<std::uint32_t, int>("hi",  32);
-
+    Conductor.insertElement<chlorine::scene::component>("hi");
+    Conductor.insertElement<NameClass, std::string>("hi", "why");
 
     // int a = Conductor.getElement<int>("hi");
     // std::cout << a << std::endl;

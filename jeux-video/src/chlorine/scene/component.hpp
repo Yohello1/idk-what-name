@@ -6,7 +6,7 @@ namespace chlorine::scene
     class component
     {
     public:
-        virtual void init();
-        virtual void update();
+        virtual void init() {} ;
+        virtual void update() {};
     };
 }
