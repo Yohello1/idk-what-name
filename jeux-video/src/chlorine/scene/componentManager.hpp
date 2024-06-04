@@ -25,13 +25,17 @@ namespace chlorine::scene
         std::unordered_map<std::string, std::unordered_map<std::type_index, std::unique_ptr<::chlorine::scene::component>>> instruments;
 
         template<typename T, typename ...Args>
-        void insertElement(std::string key1, Args&&... args)
+        void insertElement(std::string key1, Args ...args)
         {
             // instruments[key1].emplace(typeid(T), std::unique_ptr<std::uint32_t>(new std::uint32_t));
             // instruments[key1][typeid(T)] = std::unique_ptr<std::uint32_t>(new std::uint32_t(12));
             // instruments[key1][typeid(T)] = std::make_unique<std::uint32_t>(12);
             // instruments[key1].insert(std::make_pair(typeid(T), std::unique_ptr<T>(new T(std::forward<Args>(args)...))));
-            instruments[key1][typeid(T)] = std::unique_ptr<T>();
+
+            std::unique_ptr<::chlorine::scene::component> tempComponent = std::make_unique<T>(args...);
+
+            // instruments[key1][typeid(T)] = std::unique_ptr<T>(args...);
+            instruments[key1].emplace(typeid(T), std::move(tempComponent));
         }
 
         // find of hash next
