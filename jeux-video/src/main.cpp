@@ -3,6 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include <cstdint>
+#include <functional>
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
@@ -31,11 +32,16 @@ class numClass : public chlorine::scene::component
 {
 public:
     int num;
-
-    numClass(int& temp) : num(temp)
+    numClass()
     {
-        // idkkk
+        num = rand();
     }
+
+
+};
+
+std::map<std::string, std::function<void(std::unique_ptr<chlorine::scene::component>&)>> tempMap{
+    {"char", [](std::unique_ptr<chlorine::scene::component>& myPointer){ myPointer.reset(new numClass()); } }
 };
 
 
@@ -53,12 +59,12 @@ int main()
     chlorine::scene::orchestra Conductor;
 
     Conductor.insertElement<chlorine::scene::component>("hi");
-    Conductor.insertElement<numClass, int>("hi", 32);
+    // Conductor.insertElement<numClass, int>("hi", 32);
 
-    chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
-    numClass* tempDerived = static_cast<numClass*>(tempBase);
-    int a = tempDerived->num;
-    // logOut->log(tempDerived->num);
+    // chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
+    // numClass* tempDerived = static_cast<numClass*>(tempBase);
+    // int a = tempDerived->num;
+   // logOut->log(tempDerived->num);
 
     // int a = Conductor.getElement<int>("hi");
     // std::cout << a << std::endl;
