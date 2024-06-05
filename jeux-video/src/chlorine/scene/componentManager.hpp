@@ -27,22 +27,19 @@ namespace chlorine::scene
         template<typename T, typename ...Args>
         void insertElement(std::string key1, Args ...args)
         {
-            // instruments[key1].emplace(typeid(T), std::unique_ptr<std::uint32_t>(new std::uint32_t));
-            // instruments[key1][typeid(T)] = std::unique_ptr<std::uint32_t>(new std::uint32_t(12));
-            // instruments[key1][typeid(T)] = std::make_unique<std::uint32_t>(12);
-            // instruments[key1].insert(std::make_pair(typeid(T), std::unique_ptr<T>(new T(std::forward<Args>(args)...))));
-
             std::unique_ptr<::chlorine::scene::component> tempComponent = std::make_unique<T>(args...);
-
-            // instruments[key1][typeid(T)] = std::unique_ptr<T>(args...);
             instruments[key1].emplace(typeid(T), std::move(tempComponent));
         }
 
-        // find of hash next
         void removeElement(std::string key1, std::type_index key2);
+
+        // add everything to their respective groups
+        void groupAllElements();
 
     private:
         std::unordered_map<std::type_index, std::vector<std::string>> _groups; // I do NOT want this to be modified directly
     };
 
 }
+
+// this file, and the io.cpp file are neck and neck for the most cancerous
