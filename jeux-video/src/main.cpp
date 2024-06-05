@@ -37,11 +37,14 @@ public:
         num = rand();
     }
 
-
+    numClass(int x)
+    {
+        num = x;
+    }
 };
 
 std::map<std::string, std::function<void(std::unique_ptr<chlorine::scene::component>&)>> tempMap{
-    {"char", [](std::unique_ptr<chlorine::scene::component>& myPointer){ myPointer.reset(new numClass()); } }
+    {"numClass", [](std::unique_ptr<chlorine::scene::component>& myPointer){ myPointer.reset(new numClass()); } }
 };
 
 
@@ -59,11 +62,11 @@ int main()
     chlorine::scene::orchestra Conductor;
 
     Conductor.insertElement<chlorine::scene::component>("hi");
-    // Conductor.insertElement<numClass, int>("hi", 32);
+    Conductor.insertElement<numClass, int>("hi", 32);
 
-    // chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
-    // numClass* tempDerived = static_cast<numClass*>(tempBase);
-    // int a = tempDerived->num;
+    chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
+    numClass* tempDerived = static_cast<numClass*>(tempBase);
+    int a = tempDerived->num;
    // logOut->log(tempDerived->num);
 
     // int a = Conductor.getElement<int>("hi");
