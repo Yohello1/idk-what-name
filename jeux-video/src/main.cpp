@@ -64,9 +64,9 @@ int main()
     Conductor.insertElement<chlorine::scene::component>("hi");
     Conductor.insertElement<numClass, int>("hi", 32);
 
-    chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
-    numClass* tempDerived = static_cast<numClass*>(tempBase);
-    int a = tempDerived->num;
+    // chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
+    // numClass* tempDerived = static_cast<numClass*>(tempBase);
+    // int a = tempDerived->num;
    // logOut->log(tempDerived->num);
 
     // int a = Conductor.getElement<int>("hi");
