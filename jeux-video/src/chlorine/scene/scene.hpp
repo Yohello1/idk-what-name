@@ -18,7 +18,7 @@ namespace chlorine::scene
     public:
         std::string sceneName;
         std::pair<uint32_t, uint32_t> windowSize;
-
+        ::chlorine::scene::orchestra Conductor;
 
         scene(std::unique_ptr<::chlorine::logging::logBase> const &logOut);
     };

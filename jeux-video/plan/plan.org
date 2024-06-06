@@ -40,6 +40,9 @@
   - Public parts at top
 - All functions
   - Either return a boolean, or are passed a logBase object for logging
+  - Try to avoid passing copies, pass by reference instead
+  - Try to use unqiue_ptrs where possible
+
 * What a scene is
 A scene is a collection of components
 Each component has a:

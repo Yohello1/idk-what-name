@@ -24,11 +24,11 @@ namespace chlorine::io
         return strs.size();
     }
 
-    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string, std::function<const std::type_info&(std::unique_ptr<::chlorine::scene::component>&)>> mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
+        // open the scene file
         std::fstream file;
         file.open(filePath, std::ios::in);
-
         if(file.is_open() == false)
         {
             logOut->log("Could not open file: " + filePath);
@@ -37,8 +37,7 @@ namespace chlorine::io
 
         // Every line is split up as follows:
         // [name of component/thingy] [value/path to component]
-        std::string firstLine;
-        std::string nextLine;
+        std::string firstLine; // name of scene
         std::vector<std::string> splitFirstLine;
 
         std::getline(file, firstLine);
@@ -48,6 +47,9 @@ namespace chlorine::io
 
         sceneIn->sceneName = splitFirstLine[1];
 
+        // TODO: whilst still on scene data
+
+        std::string nextLine;
         while(std::getline(file, nextLine))
         {
             std::vector<std::string> tempSplit;
@@ -57,6 +59,20 @@ namespace chlorine::io
             {
                 // sceneIn->components.insert(std::make_pair(tempSplit[1], std::unique_ptr<::chlorine::scene::component>()));
                 // logOut->log("Made component: " + tempSplit[1] + '\n');
+                std::fstream componentFile;
+                componentFile.open(componentPath, std::ios::in);
+                if(file.is_open() == false)
+                {
+                    logOut->log("Cold not open component file: " + componentPath);
+                }
+
+                std::string componentFileLine;
+                std::getline(componentFile, componentFileLine);
+                std::vector<std::string> componentFileSplit;
+                splitStringToVector(componentFileLine, componentFileSplit, ' '); // 0 = "type", 1 = the actual type name
+
+                std::unique_ptr<::chlorine::scene::component> tempPtr;
+                mapSwitcher[componentFileSplit[1]](tempPtr);
             }
         }
 
