@@ -72,8 +72,8 @@ int main()
 
     chlorine::scene::orchestra Conductor;
 
-    Conductor.insertElement<chlorine::scene::component>("hi");
-    Conductor.insertElement<numClass, int>("hi", 32);
+    // Conductor.insertElement<chlorine::scene::component>("hi");
+    // Conductor.insertElement<numClass, int>("hi", 32);
 
     // chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
     // numClass* tempDerived = static_cast<numClass*>(tempBase);

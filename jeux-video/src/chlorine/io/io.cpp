@@ -27,9 +27,9 @@ namespace chlorine::io
     bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string, std::function<const std::type_info&(std::unique_ptr<::chlorine::scene::component>&)>> mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         // open the scene file
-        std::fstream file;
-        file.open(filePath, std::ios::in);
-        if(file.is_open() == false)
+        std::fstream sceneFile;
+        sceneFile.open(filePath, std::ios::in);
+        if(sceneFile.is_open() == false)
         {
             logOut->log("Could not open file: " + filePath);
             return false;
@@ -39,18 +39,14 @@ namespace chlorine::io
         // [name of component/thingy] [value/path to component]
         std::string firstLine; // name of scene
         std::vector<std::string> splitFirstLine;
-
-        std::getline(file, firstLine);
+        std::getline(sceneFile, firstLine);
         splitStringToVector(firstLine, splitFirstLine, ' ');
-
-        logOut->log("Strings: " + splitFirstLine[0] + splitFirstLine[1] + '\n');
-
         sceneIn->sceneName = splitFirstLine[1];
 
         // TODO: whilst still on scene data
 
         std::string nextLine;
-        while(std::getline(file, nextLine))
+        while(std::getline(sceneFile, nextLine))
         {
             std::vector<std::string> tempSplit;
             splitStringToVector(nextLine, tempSplit, ' ' );
@@ -61,7 +57,7 @@ namespace chlorine::io
                 // logOut->log("Made component: " + tempSplit[1] + '\n');
                 std::fstream componentFile;
                 componentFile.open(componentPath, std::ios::in);
-                if(file.is_open() == false)
+                if(componentFile.is_open() == false)
                 {
                     logOut->log("Cold not open component file: " + componentPath);
                 }
@@ -78,6 +74,7 @@ namespace chlorine::io
                 const std::type_info& tempTypeInfo = mapSwitcher[componentFileSplit[1]](tempPtr);
                 // Load file function
                 sceneIn->Conductor.instruments[componentName].emplace(tempTypeInfo, std::move(tempPtr));
+
             }
             else if(tempSplit[0] == "xpos")
             {
@@ -89,7 +86,7 @@ namespace chlorine::io
             }
         }
 
-        file.close();
+        sceneFile.close();
 
         return true;
     }
