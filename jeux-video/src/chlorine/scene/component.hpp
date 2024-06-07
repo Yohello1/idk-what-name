@@ -1,3 +1,5 @@
+#include <string>
+
 #pragma once
 
 namespace chlorine::scene
@@ -8,5 +10,7 @@ namespace chlorine::scene
     public:
         virtual void init() {} ;
         virtual void update() {};
+        virtual bool loadFile(std::string filePath) {(void)filePath; return false;};
     };
+
 }
