@@ -43,8 +43,19 @@ public:
     }
 };
 
-std::map<std::string, std::function<void(std::unique_ptr<chlorine::scene::component>&)>> tempMap{
-    {"numClass", [](std::unique_ptr<chlorine::scene::component>& myPointer){ myPointer.reset(new numClass()); } }
+class boxes : public chlorine::scene::component
+{
+public:
+    bool loadFile (std::string filePath) override
+    {
+        (void)filePath;
+        return true;
+    }
+
+};
+
+std::map<std::string, std::function<const std::type_info&(std::unique_ptr<chlorine::scene::component>&)>> tempMap{
+    {"boxes", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_info&{myPointer.reset(new boxes()); return typeid(boxes);}}
 };
 
 
@@ -57,7 +68,7 @@ int main()
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
     logOut->log("hello");
 
-    // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", logOut);
+    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap, logOut);
 
     chlorine::scene::orchestra Conductor;
 

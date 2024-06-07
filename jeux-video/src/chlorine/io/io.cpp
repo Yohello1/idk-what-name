@@ -66,15 +66,30 @@ namespace chlorine::io
                     logOut->log("Cold not open component file: " + componentPath);
                 }
 
-                std::string componentFileLine;
+                std::string componentFileLine, componentName;
                 std::getline(componentFile, componentFileLine);
                 std::vector<std::string> componentFileSplit;
                 splitStringToVector(componentFileLine, componentFileSplit, ' '); // 0 = "type", 1 = the actual type name
+                std::getline(componentFile, componentName);
+
+                componentFile.close();
 
                 std::unique_ptr<::chlorine::scene::component> tempPtr;
-                mapSwitcher[componentFileSplit[1]](tempPtr);
+                const std::type_info& tempTypeInfo = mapSwitcher[componentFileSplit[1]](tempPtr);
+                // Load file function
+                sceneIn->Conductor.instruments[componentName].emplace(tempTypeInfo, std::move(tempPtr));
+            }
+            else if(tempSplit[0] == "xpos")
+            {
+                sceneIn->windowSize.first = std::stoi(tempSplit[1]);
+            }
+            else if(tempSplit[0] == "ypos")
+            {
+                sceneIn->windowSize.first = std::stoi(tempSplit[1]);
             }
         }
+
+        file.close();
 
         return true;
     }
