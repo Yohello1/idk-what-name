@@ -45,6 +45,7 @@ namespace chlorine::io
 
         // TODO: whilst still on scene data
 
+
         std::string nextLine;
         while(std::getline(sceneFile, nextLine))
         {
