@@ -8,9 +8,9 @@ all: pong1
 
 
 pong.o: pong.asm
-	nasm -f elf32 -o pong.o pong.asm
+	nasm -f elf64 pong.asm -o pong.o
 
 pong1: pong.o
-	ld -m elf_i386 -o pong pong.o
+	ld -o pong pong.o
 
 # end
