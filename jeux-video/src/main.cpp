@@ -66,11 +66,11 @@ public:
             else if(lineNumber == 3)
             {
 
-                position.first = std::stoi(line);
+                position.first = 4;
 
             }
             else if(lineNumber == 4)
-                position.second = std::stoi(line);
+                position.second = 8;
         }
 
         return true;
