@@ -6,6 +6,7 @@
 #include <functional>
 
 #include <chlorine/logs/logs.hpp>
+//#include <chlorine/utils/strings.cpp>
 #include <chlorine/scene/scene.hpp>
 #include <chlorine/io/io.hpp>
 #include <chlorine/scene/component.hpp>
@@ -46,9 +47,32 @@ public:
 class boxes : public chlorine::scene::component
 {
 public:
-    bool loadFile (std::string filePath) override
+    std::pair<std::uint32_t, std::uint32_t> position;
+    std::string name;
+
+    bool loadFile (const std::string &filePath) override
     {
-        (void)filePath;
+        std::fstream componentFile;
+        componentFile.open(filePath);
+
+        std::string line;
+        std::uint32_t lineNumber = 0;
+
+        while(std::getline(componentFile, line))
+        {
+            lineNumber++;
+            if(lineNumber == 2)
+                name = line;
+            else if(lineNumber == 3)
+            {
+
+                position.first = std::stoi(line);
+
+            }
+            else if(lineNumber == 4)
+                position.second = std::stoi(line);
+        }
+
         return true;
     }
 
