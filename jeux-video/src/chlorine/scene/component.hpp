@@ -10,7 +10,7 @@ namespace chlorine::scene
     public:
         virtual void init() {} ;
         virtual void update() {};
-        virtual bool loadFile(std::string filePath) {(void)filePath; return false;};
+        virtual bool loadFile(const std::string &filePath) {(void)filePath; return false;};
     };
 
 }

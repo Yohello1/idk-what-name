@@ -1,28 +1,9 @@
 #include <chlorine/io/io.hpp>
-
+#include <chlorine/utils/strings.hpp>
 
 
 namespace chlorine::io
 {
-    size_t splitStringToVector(const std::string &txt, std::vector<std::string> &strs, char ch)
-    {
-        size_t pos = txt.find( ch );
-        size_t initialPos = 0;
-        strs.clear();
-
-        // Decompose statement
-        while( pos != std::string::npos ) {
-            strs.push_back( txt.substr( initialPos, pos - initialPos ) );
-            initialPos = pos + 1;
-
-            pos = txt.find( ch, initialPos );
-        }
-
-        // Add the last one
-        strs.push_back( txt.substr( initialPos, std::min( pos, txt.size() ) - initialPos + 1 ) );
-
-        return strs.size();
-    }
 
     bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string, std::function<const std::type_info&(std::unique_ptr<::chlorine::scene::component>&)>> mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
@@ -40,7 +21,7 @@ namespace chlorine::io
         std::string firstLine; // name of scene
         std::vector<std::string> splitFirstLine;
         std::getline(sceneFile, firstLine);
-        splitStringToVector(firstLine, splitFirstLine, ' ');
+        ::chlorine::utils::splitStringToVector(firstLine, splitFirstLine, ' ');
         sceneIn->sceneName = splitFirstLine[1];
 
         // TODO: whilst still on scene data
@@ -50,7 +31,7 @@ namespace chlorine::io
         while(std::getline(sceneFile, nextLine))
         {
             std::vector<std::string> tempSplit;
-            splitStringToVector(nextLine, tempSplit, ' ' );
+            ::chlorine::utils::splitStringToVector(nextLine, tempSplit, ' ' );
             std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempSplit[1];
             if(tempSplit[0] == "component")
             {
@@ -66,7 +47,7 @@ namespace chlorine::io
                 std::string componentFileLine, componentName;
                 std::getline(componentFile, componentFileLine);
                 std::vector<std::string> componentFileSplit;
-                splitStringToVector(componentFileLine, componentFileSplit, ' '); // 0 = "type", 1 = the actual type name
+                ::chlorine::utils::splitStringToVector(componentFileLine, componentFileSplit, ' '); // 0 = "type", 1 = the actual type name
                 std::getline(componentFile, componentName);
 
                 componentFile.close();
