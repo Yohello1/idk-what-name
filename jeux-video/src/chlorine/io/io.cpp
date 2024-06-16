@@ -22,9 +22,9 @@ namespace chlorine::io
 
         componentFile.close();
 
-        // std::type_index tempIndex =
+        std::type_index tempIndex =
             mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
-        // sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath);
+        sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath);
 
         return true;
     }
