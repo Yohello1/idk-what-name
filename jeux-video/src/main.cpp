@@ -90,9 +90,12 @@ std::map<std::string, std::function<const std::type_info&(std::unique_ptr<chlori
 // };
 
 
-std::map<std::string, std::function<std::type_index(chlorine::scene::orchestra&)>> tempMap3
+std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap3
 {
-    {"boxes", [](chlorine::scene::orchestra& Conductor) -> std::type_index{ Conductor.instruments["aa"].emplace(std::type_index(typeid(int)), std::make_unique<boxes>()) ;return std::type_index(typeid(int));}}
+    {"boxes", [](std::string stringIn, chlorine::scene::orchestra& Conductor) -> std::type_index{
+        Conductor.instruments[stringIn].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>());
+        return std::type_index(typeid(boxes));}
+    }
 };
 
 int main()
@@ -104,7 +107,7 @@ int main()
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
     logOut->log("hello");
 
-    // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap, logOut);
+    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap3, logOut);
 
     chlorine::scene::orchestra Conductor;
 

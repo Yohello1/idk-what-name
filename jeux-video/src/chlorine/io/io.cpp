@@ -4,14 +4,14 @@
 
 namespace chlorine::io
 {
-    bool componentImport(std::string componentPath, std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::map<std::string, std::function<const std::type_info&(std::unique_ptr<::chlorine::scene::component>&)>> mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    bool componentImport(std::string componentPath, std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>  mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         std::fstream componentFile;
         componentFile.open(componentPath, std::ios::in);
         if(componentFile.is_open() == false)
         {
-            logOut->log("Could not open file" + componentPath);
-            return false;
+             logOut->log("Could not open file" + componentPath);
+             return false;
         }
 
         std::string componentFileLine, componentName;
@@ -22,16 +22,14 @@ namespace chlorine::io
 
         componentFile.close();
 
-        std::unique_ptr<::chlorine::scene::component> tempPtr;
-        const std::type_info& tempTypeInfo =
-            mapSwitcher[componentFileSplit[1]](tempPtr);
-        tempPtr->loadFile(componentPath);
-        sceneIn->Conductor.instruments[componentName].emplace(tempTypeInfo, std::move(tempPtr));
+        // std::type_index tempIndex =
+            mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
+        // sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath);
 
         return true;
     }
 
-    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string, std::function<const std::type_info&(std::unique_ptr<::chlorine::scene::component>&)>> mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>  mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         // open the scene file
         std::fstream sceneFile;
