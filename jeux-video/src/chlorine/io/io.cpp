@@ -23,7 +23,8 @@ namespace chlorine::io
         componentFile.close();
 
         std::unique_ptr<::chlorine::scene::component> tempPtr;
-        const std::type_info& tempTypeInfo = mapSwitcher[componentFileSplit[1]](tempPtr);
+        const std::type_info& tempTypeInfo =
+            mapSwitcher[componentFileSplit[1]](tempPtr);
         tempPtr->loadFile(componentPath);
         sceneIn->Conductor.instruments[componentName].emplace(tempTypeInfo, std::move(tempPtr));
 
