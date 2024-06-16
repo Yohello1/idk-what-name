@@ -77,6 +77,8 @@ public:
         return true;
     }
 
+	virtual ~boxes() = default;
+
 };
 
 std::map<std::string, std::function<const std::type_info&(std::unique_ptr<chlorine::scene::component>&)>> tempMap{

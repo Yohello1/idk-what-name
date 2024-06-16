@@ -11,6 +11,7 @@ namespace chlorine::scene
         virtual void init() {} ;
         virtual void update() {};
         virtual bool loadFile(const std::string &filePath) {(void)filePath; return false;};
+        virtual ~component() { }
     };
 
 }
