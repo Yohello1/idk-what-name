@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdint>
 #include <functional>
+#include <typeindex>
 
 #include <chlorine/logs/logs.hpp>
 //#include <chlorine/utils/strings.cpp>
@@ -82,6 +83,17 @@ std::map<std::string, std::function<const std::type_info&(std::unique_ptr<chlori
     {"boxes", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_info&{myPointer.reset(new boxes()); return typeid(boxes);}}
 };
 
+// std::map<std::string, std::function<std::type_index(chlorine::scene::orchestra&)>> tempMap2
+// {
+//     {"boxes", [](chlorine::scene::orchestra& Conductor) -> std::type_index{Conductor.instruments["aa"].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>);
+//                                                                            return std::type_index(typeid(boxes)); }
+// };
+
+
+std::map<std::string, std::function<std::type_index(chlorine::scene::orchestra&)>> tempMap3
+{
+    {"boxes", [](chlorine::scene::orchestra& Conductor) -> std::type_index{ Conductor.instruments["aa"].emplace(std::type_index(typeid(int)), std::make_unique<boxes>()) ;return std::type_index(typeid(int));}}
+};
 
 int main()
 {
@@ -92,7 +104,7 @@ int main()
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
     logOut->log("hello");
 
-    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap, logOut);
+    // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap, logOut);
 
     chlorine::scene::orchestra Conductor;
 
