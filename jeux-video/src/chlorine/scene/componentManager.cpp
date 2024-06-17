@@ -17,6 +17,7 @@ namespace chlorine::scene
     void orchestra::removeElement(std::string key, std::type_index dataType, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         instruments[key].erase(dataType);
+        logOut->log("Removed element " + key + " " + dataType.name() + '\n');
 
     }
 
@@ -30,5 +31,7 @@ namespace chlorine::scene
                 _groups[instrumentCompName].insert(componentName);
             }
         }
+
+        logOut->log("Cleared & Regrouped all elements\n");
     }
 }
