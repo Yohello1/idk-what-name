@@ -26,20 +26,23 @@ namespace chlorine::scene
         std::unordered_map<std::string, std::unordered_map<std::type_index, std::unique_ptr<::chlorine::scene::component>>> instruments;
 
         template<typename T, typename ...Args>
-        void insertElement(std::string key1, Args ...args)
+        void insertElement(std::string key1, std::unique_ptr<::chlorine::logging::logBase> const &logOut, Args ...args)
         {
             std::unique_ptr<::chlorine::scene::component> tempComponent = std::make_unique<T>(args...);
             instruments[key1].emplace(std::type_index(typeid(T)), std::make_unique<T>(args...));
             _groups[std::type_index(typeid(T))].insert(key1);
+
+
+            logOut->log("Added element" + key1 + " " + std::type_index(typeid(T)).name());
         }
 
         // Removes an element??? defined in the cpp file
-        void removeElement(std::string key1, std::type_index key2);
+        void removeElement(std::string key1, std::type_index key2, std::unique_ptr<::chlorine::logging::logBase> const &logOut);
 
         // add everything to their respective groups
         // Incredibly expensive, only use when speed is NOT a concern
         // Defined in the cpp file
-        void groupAllElements();
+        void groupAllElements(std::unique_ptr<::chlorine::logging::logBase> const &logOut);
 
     private:
         std::unordered_map<std::type_index, std::set<std::string>> _groups; // I do NOT want this to be modified directly
