@@ -33,7 +33,7 @@ namespace chlorine::scene
             _groups[std::type_index(typeid(T))].insert(key1);
 
 
-            logOut->log("Added element" + key1 + " " + std::type_index(typeid(T)).name());
+            logOut->log("Added element" + key1 + " " + std::type_index(typeid(T)).name() + '\n');
         }
 
         // Removes an element??? defined in the cpp file
