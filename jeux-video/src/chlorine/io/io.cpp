@@ -73,6 +73,8 @@ namespace chlorine::io
 
         sceneFile.close();
 
+        sceneIn->Conductor.groupAllElements(logOut);
+
         return true;
     }
 }

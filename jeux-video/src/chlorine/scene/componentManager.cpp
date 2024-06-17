@@ -14,13 +14,13 @@ namespace chlorine::scene
       }
     */
 
-    void orchestra::removeElement(std::string key, std::type_index dataType)
+    void orchestra::removeElement(std::string key, std::type_index dataType, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         instruments[key].erase(dataType);
 
     }
 
-    void orchestra::groupAllElements()
+    void orchestra::groupAllElements( std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
         _groups.clear();
         for(const auto & [componentName, instrumentComponentMap] : instruments)
