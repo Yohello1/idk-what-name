@@ -110,22 +110,4 @@ int main()
     logOut->log("hello");
 
     chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap3, logOut);
-
-    chlorine::scene::orchestra Conductor;
-
-    // Conductor.insertElement<chlorine::scene::component>("hi");
-    // Conductor.insertElement<numClass, int>("hi", 32);
-
-    // chlorine::scene::component* tempBase = Conductor.instruments["hi"][typeid(numClass)].get();
-    // numClass* tempDerived = static_cast<numClass*>(tempBase);
-    // int a = tempDerived->num;
-   // logOut->log(tempDerived->num);
-
-    // int a = Conductor.getElement<int>("hi");
-    // std::cout << a << std::endl;
-    // struct Name b = Conductor.getElement<struct Name>("hi");
-    // int c = Conductor.getElement<int>("hi", "uu");
-    // Conductor.removeElement("hi", "uu");
-    // int d = Conductor.getElement<int>("hi", "uu");
-
 }

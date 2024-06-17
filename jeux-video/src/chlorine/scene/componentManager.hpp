@@ -14,6 +14,7 @@
 #include <typeindex>
 #include <typeinfo>
 #include <memory>
+#include <set>
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/component.hpp>
@@ -28,16 +29,21 @@ namespace chlorine::scene
         void insertElement(std::string key1, Args ...args)
         {
             std::unique_ptr<::chlorine::scene::component> tempComponent = std::make_unique<T>(args...);
-            instruments[key1].emplace(typeid(T), std::move(tempComponent));
+            instruments[key1].emplace(std::type_index(typeid(T)), std::make_unique<T>(args...));
+            _groups[std::type_index(typeid(T))].insert(key1);
         }
 
+        // Removes an element??? defined in the cpp file
         void removeElement(std::string key1, std::type_index key2);
 
         // add everything to their respective groups
+        // Incredibly expensive, only use when speed is NOT a concern
+        // Defined in the cpp file
         void groupAllElements();
 
     private:
-        std::unordered_map<std::type_index, std::vector<std::string>> _groups; // I do NOT want this to be modified directly
+        std::unordered_map<std::type_index, std::set<std::string>> _groups; // I do NOT want this to be modified directly
+                                                                            // make flat_set at some point?
     };
 
 }
