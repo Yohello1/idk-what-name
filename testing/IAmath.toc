@@ -1,3 +1,31 @@
 \contentsline {section}{\numberline {1}Introduction}{3}{}%
 \contentsline {section}{\numberline {2}Background}{3}{}%
-\contentsline {subsection}{\numberline {2.1}Linear Congruential Generators}{3}{}%
+\contentsline {subsection}{\numberline {2.1}Random Number Generators}{3}{}%
+\contentsline {subsubsection}{\numberline {2.1.1}Multiplicitve Random Number Generator}{3}{}%
+\contentsline {subsubsection}{\numberline {2.1.2}Linear Congruential Generators}{3}{}%
+\contentsline {subsubsection}{\numberline {2.1.3}How LCG/MCG's are used}{3}{}%
+\contentsline {subsubsection}{\numberline {2.1.4}Flaws of LCG/MCG's}{3}{}%
+\contentsline {subsection}{\numberline {2.2}Modular Arithmetic}{4}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}Residues}{4}{}%
+\contentsline {subsubsection}{\numberline {2.2.2}Congruence}{4}{}%
+\contentsline {subsubsection}{\numberline {2.2.3}Relations}{4}{}%
+\contentsline {subsubsection}{\numberline {2.2.4}Rules to note:}{4}{}%
+\contentsline {subsubsection}{\numberline {2.2.5}Otherways it can be written }{4}{}%
+\contentsline {subsubsection}{\numberline {2.2.6}Chinese Remainder Theorm}{4}{}%
+\contentsline {subsubsection}{\numberline {2.2.7}Brute Forcing}{5}{}%
+\contentsline {subsection}{\numberline {2.3}Miscellaneous}{5}{}%
+\contentsline {subsubsection}{\numberline {2.3.1}Determinate of a Matrix}{5}{}%
+\contentsline {subsection}{\numberline {2.4}Method of Solving }{5}{}%
+\contentsline {subsubsection}{\numberline {2.4.1}Forming the Matrix}{5}{}%
+\contentsline {subsubsection}{\numberline {2.4.2}Finding \(m\)}{5}{}%
+\contentsline {subsubsection}{\numberline {2.4.3}Solving for \(a\) in an MCG}{6}{}%
+\contentsline {section}{\numberline {3}Investigation}{6}{}%
+\contentsline {subsection}{\numberline {3.1}Values}{6}{}%
+\contentsline {subsection}{\numberline {3.2}Setting up the Matrixes}{6}{}%
+\contentsline {subsection}{\numberline {3.3}Getting the Determinates of the Matrixes}{7}{}%
+\contentsline {subsection}{\numberline {3.4}Solving for the Inital Values}{8}{}%
+\contentsline {subsection}{\numberline {3.5}Checking the values}{8}{}%
+\contentsline {subsection}{\numberline {3.6}Applications/Implications of knowing the inputs}{9}{}%
+\contentsline {subsection}{\numberline {3.7}Limitations}{9}{}%
+\contentsline {subsection}{\numberline {3.8}Extensions}{9}{}%
+\contentsline {section}{\numberline {4}Bibliography}{11}{}%
