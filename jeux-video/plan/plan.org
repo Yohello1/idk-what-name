@@ -4,19 +4,61 @@
 
 * Systems:
 ** TODO Error Managment System
-- [ ] Make files
-- [ ] Output simple messages
-- [ ] Output different message severities
-- [ ] Write to either file, or to terminal
-- [ ] Put it onto a different thread
-- [ ] Output different data to different places (i.e startup to terminal, errors to file, etc)
-** TODO Loading/Unloading data
+- [X] Make filse
+- [X] Class for terminal messages
+- [X] Class for file output
+- [X] Output simple messages
+- [X] Write to either file, or to terminal
+- [X] Output different data to different places (i.e startup to terminal, errors to file, etc)
+- [X] Output different message severities
+
+** TODO ECS System
+- [X] Hashmap with entities
+- [X] set values
+- [ ] get filterd index
+- [ ] getID of type
+- [ ] getNumber of entities
+- [ ] keeping track of who owns what
+- [X] remove index/entitiy
+
+**  Loading/Unloading data*
+- [X] Read master file
+- [X] Interpret data in master file
+- [ ] Put data into scene file
+- [ ] Read slave files
+- [ ] Put slave data into slave compontents
+
 ** TODO General Resource manger
 ** TODO Event queue
 ** TODO Input system
 ** TODO Physics System
 ** TODO Render Engine(?)
 
+* General Notes on coding style
+- Classes:
+  - All private members start with `_`
+  - Public parts at top
+- All functions
+  - Either return a boolean, or are passed a logBase object for logging
+  - Try to avoid passing copies, pass by reference instead
+  - Try to use unqiue_ptrs where possible
+
+* What a scene is
+A scene is a collection of components
+Each component has a:
+    Position
+    class
+    Name
+    Special properties
+
+A scene file will contain a name of the scene, as well as other essential information
+After some point it will contain 'name':'[sceneName]/[filepath to compontent file]'
+The component file will contain information about the component
+As much as possibly will be human readable
+
+Scene file: x.pcsf : Poisoned Chlorine Save file
+Scene name & file name must be the same!
+Componenet file: x/y.pccf : Poisioned chlorine component file, x is the scene file, y is the component name
 
 *  Game idea
 A game about finding your identity through a journey
@@ -26,3 +68,5 @@ A journey which takes you through happy, and truely depressing moments
 You'll be called many names during this journey, none of which stick particiularly much
 Until one day a name someone calls you will stick, doesnt change as easily
 You'll be known for the problems you solve, and people you help
+But eventually, you'll be backstabbed by everyone you know
+The colours using which the world is represented changes as you make decisions

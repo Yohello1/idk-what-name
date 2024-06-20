@@ -9,19 +9,12 @@ noodles
 
 Note: For SDL related projects, just change the file to compile in the Makefile
 ## What files do I need to compile?
-- For cellular Automata: `cellular-automata/moores_hood.c`
-- For Drunkard Walking: `drunk-walker/drunk.c` (walker.c may also be valid but it is not gaurenteed)
-- For Diffusion-Limited-Affregration `Diffusion-limited/diffuse-limit-aggregation.c` 
-- For Voroni in terminal go to the voroni and compile the only file
-- For Voroni in SDL compile `SDL/voronoi.cpp`
-- For my bad attempts at water checkout `SDL/water.cpp, sandy_water.cpp/sandy_water2.cpp`
-- I have no idea what I put in `SDL/test.cpp`
-- Sand in either `SDL/sand.cpp`, or `SDL/sandy.cpp` I feel like it's the second one
-- for random points `SDL/rand.cpp`
-- Fixed position `SDL/not_fixed.cpp` ~~Ironic I know~~, `SDL/fixed_pos` is broken
-- Spliting up simulation and rendering `SDL/mutli_array_test.cpp` 
-- For fire and random positions `SDL/im_on_fire.cpp` with fire direction
-- Broken attempt at `cellular-automata.cpp`
+- `path_finding` has a bunch of random algos I played around with, you'll need sfml, boost, and sycl, and icpx (or adaptive cpp!) to compile them. Just edit the make files, or run the rules, should generate a binary 
+- `randomAlgos` is the exact same 
+- `SDL` is just stuff that ALSO has SDL stuff, and some ncurses I think 
+- `SDL/jeux-video` i where v3 of the game engine lied 
 
 ## What about the "game engine"
-Go to `SDL/jeux-video/` and run the make file
+It's under `jeux-video`.
+Make a `build` dir, enter it, and then run `cmake ..` under that Directory
+Then run `make`, or wtv you used. 
