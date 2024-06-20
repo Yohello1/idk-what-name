@@ -1,215 +1,113 @@
-#include <vulkan/vulkan.h>
-
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
 #include <iostream>
-#include <stdexcept>
-#include <cstdlib>
-#include <vector>
-#include <cstring>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <cstdint>
+#include <functional>
+#include <typeindex>
 
-class HelloTriangleApplication {
+#include <chlorine/logs/logs.hpp>
+//#include <chlorine/utils/strings.cpp>
+#include <chlorine/scene/scene.hpp>
+#include <chlorine/io/io.hpp>
+#include <chlorine/scene/component.hpp>
+#include <chlorine/scene/componentManager.hpp>
+
+class NameClass : public chlorine::scene::component
+{
 public:
-    const uint32_t WIDTH = 800;
-    const uint32_t HEIGHT = 600;
-    void run()
+    std::string name;
+
+    NameClass(std::string const& nameIn) : name(nameIn)
     {
-        initWindow();
-        initVulkan();
-        mainLoop();
-        cleanup();
+        // idk
     }
 
-private:
-
-    GLFWwindow* window;
-    VkInstance instance;
-    VkDebugUtilsMessengerEXT debugMessenger;
-
-
-    const std::vector<const char*> validationLayers = {
-        "VK_LAYER_KHRONOS_validation"
-    };
-
-#ifdef NDEBUG
-    const bool enableValidationLayers = false;
-#else
-    const bool enableValidationLayers = true;
-#endif
-
-    void mainLoop()
+    void changeName(std::string nameIn)
     {
-        std::cout << "Main Loop has begun" << std::endl;
-        while(!glfwWindowShouldClose(window))
-        {
-            glfwPollEvents();
-        }
-    }
-
-    void cleanup()
-    {
-        vkDestroyInstance(instance, nullptr);
-        glfwDestroyWindow(window);
-        glfwTerminate();
-    }
-
-    void initWindow()
-    {
-        glfwInit();
-
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-        window = glfwCreateWindow(WIDTH, HEIGHT, "draw2", nullptr, nullptr);
-    }
-
-    void initVulkan()
-    {
-        createInstance();
-        setupDebugMessenger();
-    }
-
-    void setupDebugMessenger()
-    {
-        if(!enableValidationLayers) return;
-
-        VkDebugUtilsMessengerCreateInfoEXT createInfo{};
-        createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-        createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-        createInfo.pfnUserCallback = debugCallback;
-        createInfo.pUserData = nullptr; // Optional    }
-
-    void createInstance()
-    {
-        if(enableValidationLayers && !checkValidationLayersSupport())
-        {
-            throw std::runtime_error("validation layers requested, but not available!");
-        }
-
-        VkApplicationInfo appInfo{};
-        appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = "Hello Triangle";
-        appInfo.applicationVersion = VK_MAKE_VERSION(1,0,0);
-        appInfo.pEngineName = "No Engine";
-        appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_0;
-
-        VkInstanceCreateInfo createInfo{};
-        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        createInfo.pApplicationInfo = &appInfo;
-
-
-        auto extensions = getRequiredExtensions();
-        createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-        createInfo.ppEnabledExtensionNames = extensions.data();
-
-
-
-        VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
-
-        if(enableValidationLayers)
-        {
-            createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-            createInfo.ppEnabledLayerNames = validationLayers.data();
-        }
-        else
-        {
-            createInfo.enabledLayerCount = 0;
-        }
-
-
-        if(vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
-        {
-            throw std::runtime_error("Failed To Create Vulkan Instance, see createInstance function");
-        }
-    }
-
-    bool checkValidationLayersSupport()
-    {
-        uint32_t layerCount;
-        vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-
-        std::vector<VkLayerProperties> availableLayers(layerCount);
-        vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
-
-        for(const char* layerName : validationLayers)
-        {
-            bool layerFound = false;
-
-            for(const auto& layerProperties : availableLayers)
-            {
-                if(strcmp(layerName, layerProperties.layerName) == 0)
-                {
-                    layerFound = true;
-                    std::cout << "Head" << std::endl;
-                    break;
-                }
-                else
-                {
-                    std::cout << layerProperties.layerName << std::endl;
-                }
-            }
-
-            if(!layerFound)
-            {
-                return false;
-            }
-        }
-
-
-
-        return true;
-    }
-
-    static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback
-    (
-        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-        VkDebugUtilsMessageTypeFlagsEXT messageType,
-        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-        void* pUserData)
-    {
-        std:cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
-
-        if(messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
-        {
-            // importnt enough to talk abt
-        }
-
-        return VK_FALSE;
-    }
-
-    std::vector<const char*> getRequiredExtensions()
-    {
-        uint32_t glfwExtensionCount = 0;
-        const char** glfwExtensions;
-        glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-        std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
-
-        if(enableValidationLayers)
-        {
-            extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-        }
-
-        return extensions;
+        name = nameIn;
     }
 
 };
 
-int main() {
-    HelloTriangleApplication app;
-
-    try
+class numClass : public chlorine::scene::component
+{
+public:
+    int num;
+    numClass()
     {
-        app.run();
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-        return EXIT_FAILURE;
+        num = rand();
     }
 
-    return EXIT_SUCCESS;
+    numClass(int x)
+    {
+        num = x;
+    }
+};
+
+class boxes : public chlorine::scene::component
+{
+public:
+    std::pair<std::uint32_t, std::uint32_t> position;
+    std::string name;
+
+    bool loadFile (const std::string &filePath) override
+    {
+        std::fstream componentFile;
+        componentFile.open(filePath);
+
+        std::string line;
+        std::uint32_t lineNumber = 0;
+
+        while(std::getline(componentFile, line))
+        {
+            lineNumber++;
+            if(lineNumber == 2)
+                name = line;
+            else if(lineNumber == 3)
+            {
+
+                position.first = 4;
+
+            }
+            else if(lineNumber == 4)
+                position.second = 8;
+        }
+
+        return true;
+    }
+
+	virtual ~boxes() = default;
+
+};
+
+std::map<std::string, std::function<const std::type_info&(std::unique_ptr<chlorine::scene::component>&)>> tempMap{
+    {"boxes", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_info&{myPointer.reset(new boxes()); return typeid(boxes);}}
+};
+
+// std::map<std::string, std::function<std::type_index(chlorine::scene::orchestra&)>> tempMap2
+// {
+//     {"boxes", [](chlorine::scene::orchestra& Conductor) -> std::type_index{Conductor.instruments["aa"].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>);
+//                                                                            return std::type_index(typeid(boxes)); }
+// };
+
+
+std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap3
+{
+    {"boxes", [](std::string stringIn, chlorine::scene::orchestra& Conductor) -> std::type_index{
+        Conductor.instruments[stringIn].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>());
+        return std::type_index(typeid(boxes));}
+    }
+};
+
+int main()
+{
+    std::cout << "Hello world" << std::endl;
+
+    std::unique_ptr<chlorine::logging::logBase> logOut(std::make_unique<chlorine::logging::logToTerminal>("LOG: ", "\x1B[32m"));
+
+    std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
+    logOut->log("hello");
+
+    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap3, logOut);
 }

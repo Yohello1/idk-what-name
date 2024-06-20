@@ -1,0 +1,5 @@
+name Arrowhead
+windowX 1024
+windowY 1024
+component box.pccf
+component ray.pccf
