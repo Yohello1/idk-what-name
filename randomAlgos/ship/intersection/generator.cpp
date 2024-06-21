@@ -27,7 +27,7 @@ std::vector<std::pair<glm::vec3, std::uint8_t>> spheres;
 
 int solveVal(glm::vec3 rO, glm::vec3 rD)
 {
-    int mass;
+    float mass = 0;
 
     for(std::size_t i = 0; i < spheres.size(); i++)
     {
@@ -48,7 +48,7 @@ int solveVal(glm::vec3 rO, glm::vec3 rD)
 
     }
 
-    return mass;
+    return ceil(mass);
 }
 
 int main()
