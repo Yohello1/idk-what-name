@@ -78,11 +78,23 @@ public:
     }
 
 	virtual ~boxes() = default;
-
 };
 
-std::map<std::string, std::function<const std::type_info&(std::unique_ptr<chlorine::scene::component>&)>> tempMap{
-    {"boxes", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_info&{myPointer.reset(new boxes()); return typeid(boxes);}}
+class windowX : public chlorine::scene::component
+{
+public:
+    std::uint16_t windowX;
+};
+
+class windowY : public chlorine::scene::component
+{
+public:
+    std::uint16_t windowY;
+};
+
+std::map<std::string, std::function<const std::type_index(std::unique_ptr<chlorine::scene::component>&)>> tempMap{
+    {"boxes", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_index{myPointer.reset(new boxes()); return std::type_index(typeid(boxes));}},
+    {"windowX", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_index{myPointer.reset(new windowX()); return std::type_index(typeid(windowX));}}
 };
 
 
