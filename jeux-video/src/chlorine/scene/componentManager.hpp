@@ -45,6 +45,9 @@ namespace chlorine::scene
         // Defined in the cpp file
         void groupAllElements(std::unique_ptr<::chlorine::logging::logBase> const &logOut);
 
+        // get number of enenties of certain time
+        std::size_t getElementTypeNum(std::type_index type);
+
     private:
         std::unordered_map<std::type_index, std::set<std::string>> _groups; // I do NOT want this to be modified directly
                                                                             // make flat_set at some point?
@@ -53,3 +56,4 @@ namespace chlorine::scene
 }
 
 // this file, and the io.cpp file are neck and neck for the most cancerous
+// This is no longer true
