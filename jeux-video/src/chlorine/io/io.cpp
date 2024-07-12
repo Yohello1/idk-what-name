@@ -61,14 +61,6 @@ namespace chlorine::io
                 std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempSplit[1];
                 componentImport(componentPath, sceneIn, mapSwitcher, logOut);
             }
-            else if(tempSplit[0] == "xpos")
-            {
-                sceneIn->windowSize.first = 10;
-            }
-            else if(tempSplit[0] == "ypos")
-            {
-                sceneIn->windowSize.second = 20;
-            }
         }
 
         sceneFile.close();

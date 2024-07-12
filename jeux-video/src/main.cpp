@@ -85,12 +85,6 @@ std::map<std::string, std::function<const std::type_info&(std::unique_ptr<chlori
     {"boxes", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_info&{myPointer.reset(new boxes()); return typeid(boxes);}}
 };
 
-// std::map<std::string, std::function<std::type_index(chlorine::scene::orchestra&)>> tempMap2
-// {
-//     {"boxes", [](chlorine::scene::orchestra& Conductor) -> std::type_index{Conductor.instruments["aa"].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>);
-//                                                                            return std::type_index(typeid(boxes)); }
-// };
-
 
 std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap3
 {

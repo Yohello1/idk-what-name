@@ -36,4 +36,9 @@ namespace chlorine::scene
 
         logOut->log("Cleared & Regrouped all elements\n");
     }
+
+    std::size_t orchestra::getElementTypeNum(std::type_index type)
+    {
+        return _groups.size();
+    }
 }

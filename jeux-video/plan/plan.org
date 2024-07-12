@@ -15,10 +15,10 @@
 ** TODO ECS System
 - [X] Hashmap with entities
 - [X] set values
-- [ ] get filterd index
-- [ ] getID of type
-- [ ] getNumber of entities
-- [ ] keeping track of who owns what
+- [ ] get filterd index - what did I mean here.
+- [X] getID of type - not needed
+- [X] getNumber of entities
+- [X] keeping track of who owns what - This is controlled by the indivudal programmer.
 - [X] remove index/entitiy
 
 **  Loading/Unloading data*
