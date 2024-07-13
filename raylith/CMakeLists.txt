@@ -16,6 +16,8 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -ggdb")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+
 add_executable(raylith ${SOURCES})
 add_test(example_test raylith)
 
