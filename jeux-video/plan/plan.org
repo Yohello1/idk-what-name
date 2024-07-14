@@ -46,10 +46,10 @@
 * What a scene is
 A scene is a collection of components
 Each component has a:
-    Position
     class
-    Name
-    Special properties
+    map to other sub-components
+
+Everything is fundementally a file
 
 A scene file will contain a name of the scene, as well as other essential information
 After some point it will contain 'name':'[sceneName]/[filepath to compontent file]'
