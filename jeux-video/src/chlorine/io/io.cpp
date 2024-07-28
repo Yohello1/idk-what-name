@@ -41,26 +41,25 @@ namespace chlorine::io
         }
 
         // Every line is split up as follows:
-        // [name of component/thingy] [value/path to component]
+        // [name of component] [path to component]
         std::string firstLine; // name of scene
         std::vector<std::string> splitFirstLine;
         std::getline(sceneFile, firstLine);
         ::chlorine::utils::splitStringToVector(firstLine, splitFirstLine, ' ');
         sceneIn->sceneName = splitFirstLine[1];
 
-        // TODO: whilst still on scene data
-
+        // Since everything is a component of the Scene, we dont really need this.
+        // First part being the name of the coomponent
 
         std::string nextLine;
         while(std::getline(sceneFile, nextLine))
         {
             std::vector<std::string> tempSplit;
             ::chlorine::utils::splitStringToVector(nextLine, tempSplit, ' ' );
-            if(tempSplit[0] == "component")
-            {
-                std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempSplit[1];
-                componentImport(componentPath, sceneIn, mapSwitcher, logOut);
-            }
+
+            std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempSplit[0] + ".pccf";
+            componentImport(componentPath, sceneIn, mapSwitcher, logOut);
+
         }
 
         sceneFile.close();

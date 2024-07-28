@@ -39,7 +39,7 @@
   - All private members start with `_`
   - Public parts at top
 - All functions
-  - Either return a boolean, or are passed a logBase object for logging
+  - Either return a boolean, or are passed a logBase object for logging (for whether it worked or not)
   - Try to avoid passing copies, pass by reference instead
   - Try to use unqiue_ptrs where possible
 
