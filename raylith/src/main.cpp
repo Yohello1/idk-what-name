@@ -1,5 +1,6 @@
 #include "rtweekend.h"
 
+#include "bvh.h"
 #include "camera.h"
 #include "hittable.h"
 #include "hittable_list.h"
@@ -15,6 +16,8 @@ int main() {
 
     auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
     world.add(make_shared<sphere>(point3(0,-1000,0), 1000, ground_material));
+
+    world = hittable_list(make_shared<bvh_node>(world));
 
     for (int a = -12; a < 12; a++) {
         for (int b = -12; b < 12; b++) {
