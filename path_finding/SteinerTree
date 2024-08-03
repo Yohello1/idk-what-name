@@ -1,0 +1,96 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int INF = numeric_limits<int>::max() / 2;
+
+int countSetBits(int n) {
+    int count = 0;
+    while (n) {
+        count += n & 1;
+        n >>= 1;
+    }
+    return count;
+}
+
+class DreyfusWagner {
+private:
+    int V, K;
+    vector<vector<int>> graph;
+    vector<int> terminals;
+    vector<vector<int>> dp;
+
+public:
+    DreyfusWagner(int vertices, vector<vector<int>>& g, vector<int>& term)
+        : V(vertices), graph(g), terminals(term) {
+        K = terminals.size();
+
+        dp.resize(1 << K, vector<int>(V, INF));
+    }
+
+    int minSteinerTree() {
+        for (int i = 0; i < K; i++) {
+            for (int v = 0; v < V; v++) {
+                dp[1 << i][v] = graph[terminals[i]][v];
+            }
+        }
+
+        // subset of terminals
+        for (int mask = 1; mask < (1 << K); mask++) {
+            if (countSetBits(mask) <= 1) continue;
+
+            for (int v = 0; v < V; v++) {
+                // try all partitions
+                for (int subMask = (mask - 1) & mask; subMask > 0; subMask = (subMask - 1) & mask) {
+                    dp[mask][v] = min(dp[mask][v],
+                                      dp[subMask][v] + dp[mask ^ subMask][v]);
+                }
+
+                // other verts
+                for (int u = 0; u < V; u++) {
+                    if (u != v) {
+                        dp[mask][v] = min(dp[mask][v],
+                                          dp[mask][u] + graph[u][v]);
+                    }
+                }
+            }
+        }
+
+        // find min cost between everything
+        int result = INF;
+        for (int v = 0; v < V; v++) {
+            result = min(result, dp[(1 << K) - 1][v]);
+        }
+
+        return result;
+    }
+};
+
+int main() {
+    int V, E, K;
+    cout << "vert num, edge num, term num";
+    cin >> V >> E >> K;
+
+    vector<vector<int>> graph(V, vector<int>(V, INF));
+    for (int i = 0; i < V; i++) graph[i][i] = 0;
+
+    cout << "enter edges, u v weight" << endl;
+    for (int i = 0; i < E; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        graph[u][v] = graph[v][u] = w;
+    }
+
+    vector<int> terminals(K);
+    cout << "Enter terminals: ";
+    for (int i = 0; i < K; i++) {
+        cin >> terminals[i];
+    }
+
+    DreyfusWagner dw(V, graph, terminals);
+    int result = dw.minSteinerTree();
+
+    cout << "min cost" << result << endl;
+
+    return 0;
+}
