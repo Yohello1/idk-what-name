@@ -2,7 +2,7 @@
 
 namespace chlorine::utils
 {
-    size_t splitStringToVector(const std::string &txt, std::vector<std::string> &strs, char ch)
+    std::size_t splitStringToVector(const std::string &txt, std::vector<std::string> &strs, char ch)
     {
         size_t pos = txt.find( ch );
         size_t initialPos = 0;
@@ -20,5 +20,12 @@ namespace chlorine::utils
         strs.push_back( txt.substr( initialPos, std::min( pos, txt.size() ) - initialPos + 1 ) );
 
         return strs.size();
+    }
+
+    std::size_t stripString(std::string &str, std::string &subStr)
+    {
+        std::size_t startPos = str.find(subStr);
+        str.erase(startPos, str.length() - startPos);
+        return str.length();
     }
 }

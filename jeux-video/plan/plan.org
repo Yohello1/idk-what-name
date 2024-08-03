@@ -25,15 +25,15 @@
 - [X] Read master file
 - [X] Interpret data in master file
 - [ ] Put data into scene file
-- [ ] Read slave files
+- [X] Read slave files
 - [ ] Put slave data into slave compontents
 
+** TODO Networking
 ** TODO General Resource manger
 ** TODO Event queue
 ** TODO Input system
 ** TODO Physics System
 ** TODO Render Engine(?)
-
 * General Notes on coding style
 - Classes:
   - All private members start with `_`
