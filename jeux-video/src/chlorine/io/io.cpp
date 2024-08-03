@@ -10,7 +10,7 @@ namespace chlorine::io
         componentFile.open(componentPath, std::ios::in);
         if(componentFile.is_open() == false)
         {
-             logOut->log("Could not open file" + componentPath);
+             logOut->log("Could not open file" + componentPath + "\n");
              return false;
         }
 
@@ -22,8 +22,7 @@ namespace chlorine::io
 
         componentFile.close();
 
-        std::type_index tempIndex =
-            mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
+        std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
         sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath);
 
         return true;
@@ -36,7 +35,7 @@ namespace chlorine::io
         sceneFile.open(filePath, std::ios::in);
         if(sceneFile.is_open() == false)
         {
-            logOut->log("Could not open file: " + filePath);
+            logOut->log("Could not open file: " + filePath + "\n");
             return false;
         }
 
@@ -58,14 +57,29 @@ namespace chlorine::io
             ::chlorine::utils::splitStringToVector(nextLine, tempSplit, ' ' );
 
             std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempSplit[0] + ".pccf";
-            componentImport(componentPath, sceneIn, mapSwitcher, logOut);
+            if(!componentImport(componentPath, sceneIn, mapSwitcher, logOut))
+            {
+                logOut->log("Unable to open file, giving up: " + componentPath + "\n");
+                return false;
+            }
 
         }
-
         sceneFile.close();
-
         sceneIn->Conductor.groupAllElements(logOut);
 
         return true;
+    }
+
+    bool sceneExport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
+                     std::string filePath,
+                     std::map<std::type_index, std::string> mapConv,
+                     std::unique_ptr<::chlorine::logging::logBase> const& logOut)
+    {
+        // Ok write Scene name first line
+        // Component name file path
+        std::ofstream sceneFile;
+        sceneFile.open(filePath);
+
+
     }
 }
