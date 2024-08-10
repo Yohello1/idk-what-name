@@ -72,14 +72,16 @@ namespace chlorine::io
 
     bool sceneExport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                      std::string filePath,
-                     std::map<std::type_index, std::string> mapConv,
+                     // std::map<std::type_index, std::string> mapConv,
                      std::unique_ptr<::chlorine::logging::logBase> const& logOut)
     {
         // Ok write Scene name first line
         // Component name file path
-        std::ofstream sceneFile;
-        sceneFile.open(filePath);
+        std::string aaa = typeid(sceneIn->Conductor.instruments["box"]).name();
+        logOut->log(aaa);
+        // std::ofstream sceneFile;
+        // sceneFile.open(filePath);
 
-
+        return false;
     }
 }

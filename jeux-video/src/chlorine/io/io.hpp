@@ -22,6 +22,6 @@ namespace chlorine::io
 
     bool sceneExport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                      std::string filePath,
-                     std::map<std::type_index, std::string> mapConv,
+                     // std::map<std::type_index, std::string> mapConv,
                      std::unique_ptr<::chlorine::logging::logBase> const& logOut);
 }
