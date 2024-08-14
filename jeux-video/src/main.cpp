@@ -92,18 +92,17 @@ public:
     std::uint16_t windowY;
 };
 
-std::map<std::string, std::function<const std::type_index(std::unique_ptr<chlorine::scene::component>&)>> tempMap{
-    {"boxes", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_index{myPointer.reset(new boxes()); return std::type_index(typeid(boxes));}},
-    {"windowX", [](std::unique_ptr<chlorine::scene::component>& myPointer)-> const std::type_index{myPointer.reset(new windowX()); return std::type_index(typeid(windowX));}}
-};
-
-
 std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap3
 {
     {"boxes", [](std::string stringIn, chlorine::scene::orchestra& Conductor) -> std::type_index{
         Conductor.instruments[stringIn].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>());
         return std::type_index(typeid(boxes));}
     }
+};
+
+std::map<std::type_index, std::string> typeToStringConv
+{
+
 };
 
 int main()
