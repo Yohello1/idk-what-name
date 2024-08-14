@@ -14,14 +14,17 @@
 
 namespace chlorine::io
 {
+    std::map<std::type_index, std::string> stringTypeConv;
+
     bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
-                     std::string pathPrefix,
-                     std::string filePath,
-                     std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> mapSwitcher,
+                     const std::string& pathPrefix,
+                     const std::string& filePath,
+                     const std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>& mapSwitcher,
                      std::unique_ptr<::chlorine::logging::logBase> const& logOut);
 
     bool sceneExport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                      std::string filePath,
-                     // std::map<std::type_index, std::string> mapConv,
                      std::unique_ptr<::chlorine::logging::logBase> const& logOut);
+
+
 }

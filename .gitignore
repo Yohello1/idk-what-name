@@ -18,3 +18,4 @@ SDL/jeux-video/build/.cmake/*
 testing/souro/*
 *.jpeg
 */build/*
+*.o

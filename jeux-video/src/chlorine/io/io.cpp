@@ -6,12 +6,14 @@ namespace chlorine::io
 {
     bool componentImport(std::string componentPath, std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>  mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
+
+
         std::fstream componentFile;
         componentFile.open(componentPath, std::ios::in);
         if(componentFile.is_open() == false)
         {
-             logOut->log("Could not open file" + componentPath + "\n");
-             return false;
+            logOut->log("Could not open file" + componentPath + "\n");
+            return false;
         }
 
         std::string componentFileLine, componentName;
@@ -25,10 +27,20 @@ namespace chlorine::io
         std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
         sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath);
 
+        // If the type_index does not exist in the map, add it to the map
+        {
+            // stringTypeConv.emplace(tempIndex, componentFileSplit[1]);
+        }
+
+
         return true;
     }
 
-    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::string pathPrefix, std::string filePath, std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>  mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
+                     const std::string& pathPrefix,
+                     const std::string& filePath,
+                     const std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>& mapSwitcher,
+                     std::unique_ptr<::chlorine::logging::logBase> const& logOut)
     {
         // open the scene file
         std::fstream sceneFile;
@@ -75,13 +87,16 @@ namespace chlorine::io
                      // std::map<std::type_index, std::string> mapConv,
                      std::unique_ptr<::chlorine::logging::logBase> const& logOut)
     {
+        // TODO
         // Ok write Scene name first line
         // Component name file path
         std::string aaa = typeid(sceneIn->Conductor.instruments["box"]).name();
-        logOut->log(aaa);
+        logOut->log(aaa + "\n");
+        logOut->log(stringTypeConv[std::type_index(typeid(int))] + "\n");
         // std::ofstream sceneFile;
         // sceneFile.open(filePath);
 
         return false;
     }
+
 }
