@@ -7,7 +7,7 @@
 #include <typeindex>
 
 #include <chlorine/logs/logs.hpp>
-//#include <chlorine/utils/strings.cpp>
+// #include <chlorine/utils/strings.cpp>
 #include <chlorine/scene/scene.hpp>
 #include <chlorine/io/io.hpp>
 #include <chlorine/scene/component.hpp>
@@ -100,10 +100,6 @@ std::map<std::string, std::function<std::type_index(std::string, chlorine::scene
     }
 };
 
-std::map<std::type_index, std::string> typeToStringConv
-{
-
-};
 
 int main()
 {
