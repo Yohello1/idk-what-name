@@ -12,9 +12,13 @@
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
 
+#ifndef NANAN
+#define NANAN
+#endif
+
 namespace chlorine::io
 {
-    std::map<std::type_index, std::string> stringTypeConv;
+    extern std::map<std::type_index, std::string> stringTypeConv;
 
     bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                      const std::string& pathPrefix,

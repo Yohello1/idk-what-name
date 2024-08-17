@@ -92,7 +92,8 @@ namespace chlorine::io
         // Component name file path
         std::string aaa = typeid(sceneIn->Conductor.instruments["box"]).name();
         logOut->log(aaa + "\n");
-        logOut->log(stringTypeConv[std::type_index(typeid(int))] + "\n");
+        // logOut->log(stringTypeConv[std::type_index(typeid(int))] + "\n");
+        // stringTypeConv.size();
         // std::ofstream sceneFile;
         // sceneFile.open(filePath);
 
