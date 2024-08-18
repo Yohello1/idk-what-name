@@ -30,9 +30,10 @@ namespace chlorine::io
         sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath);
 
         // If the type_index does not exist in the map, add it to the map
-        {
-            // stringTypeConv.emplace(tempIndex, componentFileSplit[1]);
-        }
+
+        stringTypeConv.emplace(tempIndex, componentFileSplit[1]);
+        logOut->log(stringTypeConv[tempIndex] + "\n");
+
 
 
         return true;
@@ -92,10 +93,16 @@ namespace chlorine::io
         // TODO
         // Ok write Scene name first line
         // Component name file path
-        std::string aaa = typeid(sceneIn->Conductor.instruments["box"]).name();
-        logOut->log(aaa + "\n");
-        logOut->log(stringTypeConv[std::type_index(typeid(int))] + "\n");
-        // stringTypeConv.size();
+
+        stringTypeConv.size();
+        for(auto const& [key, value] : sceneIn->Conductor.instruments )
+        {
+            logOut->log("key: " + key + "For this item name or wtv\n");
+            for(auto const& [component, va] : value)
+            {
+                logOut->log("val: " + stringTypeConv[component] + "\n");
+            }
+        }
         // std::ofstream sceneFile;
         // sceneFile.open(filePath);
 
