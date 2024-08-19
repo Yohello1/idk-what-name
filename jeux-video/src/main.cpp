@@ -7,7 +7,7 @@
 #include <typeindex>
 
 #include <chlorine/logs/logs.hpp>
-// #include <chlorine/utils/strings.cpp>
+#include <chlorine/utils/strings.hpp>
 #include <chlorine/scene/scene.hpp>
 #include <chlorine/io/io.hpp>
 #include <chlorine/scene/component.hpp>
@@ -16,9 +16,8 @@
 class NameClass : public chlorine::scene::component
 {
 public:
-    std::string name;
 
-    NameClass(std::string const& nameIn) : name(nameIn)
+    NameClass(std::string const& nameIn)
     {
         // idk
     }
@@ -49,7 +48,6 @@ class boxes : public chlorine::scene::component
 {
 public:
     std::pair<std::uint32_t, std::uint32_t> position;
-    std::string name;
 
     bool loadFile (const std::string &filePath) override
     {
@@ -66,15 +64,25 @@ public:
                 name = line;
             else if(lineNumber == 3)
             {
-
-                position.first = 4;
-
+                std::vector<std::string> temppString;
+                chlorine::utils::splitStringToVector(line, temppString, ' ');
+                position.first = std::stoi(temppString[1]);
             }
             else if(lineNumber == 4)
-                position.second = 8;
+            {
+                std::vector<std::string> temppString;
+                chlorine::utils::splitStringToVector(line, temppString, ' ');
+                position.first = std::stoi(temppString[1]);
+            }
         }
 
         return true;
+    }
+
+    bool saveFile(const std::string &filePath) override
+    {
+        std::ofstream componentFile;
+        componentFile.open(filePath);
     }
 
 	virtual ~boxes() = default;
