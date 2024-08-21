@@ -27,6 +27,7 @@
 - [ ] Put data into scene file
 - [X] Read slave files
 - [ ] Put slave data into slave compontents
+- [ ] Save files
 
 ** TODO Networking
 ** TODO General Resource manger
