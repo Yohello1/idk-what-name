@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = im_on_fire.cpp
+OBJS = birds.c
 
 #CC specifies which compiler we're using
 CC = g++
