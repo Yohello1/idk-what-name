@@ -34,8 +34,6 @@ namespace chlorine::io
         stringTypeConv.emplace(tempIndex, componentFileSplit[1]);
         logOut->log(stringTypeConv[tempIndex] + "\n");
 
-
-
         return true;
     }
 

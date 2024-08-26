@@ -83,6 +83,7 @@ public:
     {
         std::ofstream componentFile;
         componentFile.open(filePath);
+        return true;
     }
 
 	virtual ~boxes() = default;
