@@ -26,6 +26,12 @@ namespace chlorine::io
 
         componentFile.close();
 
+        if(mapSwitcher.find(componentFileSplit[1]) == mapSwitcher.end())
+        {
+            logOut->log("Could not find function to create the component\n");
+            return false;
+        }
+
         std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
         sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath);
 
@@ -70,6 +76,8 @@ namespace chlorine::io
             ::chlorine::utils::splitStringToVector(nextLine, tempSplit, ' ' );
 
             std::string componentPath = pathPrefix + sceneIn->sceneName + "/" + tempSplit[0] + ".pccf";
+            logOut->log(componentPath + '\n');
+            logOut->log(nextLine + '\n');
             if(!componentImport(componentPath, sceneIn, mapSwitcher, logOut))
             {
                 logOut->log("Unable to open file, giving up: " + componentPath + "\n");
