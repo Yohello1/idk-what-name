@@ -33,7 +33,7 @@ namespace chlorine::io
         }
 
         std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
-        sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath);
+        sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath, logOut);
 
         // If the type_index does not exist in the map, add it to the map
 
