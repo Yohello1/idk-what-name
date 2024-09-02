@@ -13,44 +13,16 @@
 #include <chlorine/scene/component.hpp>
 #include <chlorine/scene/componentManager.hpp>
 
-class NameClass : public chlorine::scene::component
-{
-public:
-
-    NameClass(std::string const& nameIn)
-    {
-        // idk
-    }
-
-    void changeName(std::string nameIn)
-    {
-        name = nameIn;
-    }
-
-};
-
-class numClass : public chlorine::scene::component
-{
-public:
-    int num;
-    numClass()
-    {
-        num = rand();
-    }
-
-    numClass(int x)
-    {
-        num = x;
-    }
-};
-
 class boxes : public chlorine::scene::component
 {
 public:
     std::pair<std::uint32_t, std::uint32_t> position;
 
-    bool loadFile (const std::string &filePath) override
+    bool loadFile (const std::string &filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
     {
+        (void)logOut;
+
+
         std::fstream componentFile;
         componentFile.open(filePath);
 
@@ -79,10 +51,16 @@ public:
         return true;
     }
 
-    bool saveFile(const std::string &filePath) override
+    bool saveFile(const std::string &filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
     {
+        (void)logOut;
         std::ofstream componentFile;
         componentFile.open(filePath);
+        componentFile << "type " << chlorine::io::stringTypeConv[std::type_index(typeid(*this))] << '\n';
+        componentFile << name << '\n';
+        componentFile << "xpos " << position.first << '\n';
+        componentFile << "ypos " << position.second << '\n';
+        componentFile.close();
         return true;
     }
 
@@ -93,8 +71,9 @@ class windowX : public chlorine::scene::component
 {
 public:
     std::uint16_t windowX;
-    bool loadFile(const std::string &filePath) override
+    bool loadFile(const std::string &filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
     {
+        (void)logOut;
         std::fstream componentFile;
         componentFile.open(filePath);
 
@@ -117,13 +96,14 @@ public:
         }
         return true;
     }
+
 };
 
 class windowY : public chlorine::scene::component
 {
 public:
     std::uint16_t windowY;
-     bool loadFile(const std::string &filePath) override
+    bool loadFile(const std::string &filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
     {
         std::fstream componentFile;
         componentFile.open(filePath);
