@@ -156,6 +156,7 @@ int main()
     logOut->log("hello\n");
 
     chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap3, logOut);
-    // chlorine::io::sceneExport(tempScene, "../test/", logOut);
+    tempScene->sceneName = "timeSpent";
+    chlorine::io::sceneExport(tempScene, "../test/", logOut);
 
 }

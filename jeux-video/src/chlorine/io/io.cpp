@@ -6,7 +6,10 @@ namespace chlorine::io
 {
     std::map<std::type_index, std::string> stringTypeConv;
 
-    bool componentImport(std::string componentPath, std::unique_ptr<::chlorine::scene::scene> const& sceneIn, std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>  mapSwitcher, std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    bool componentImport(std::string componentPath, std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
+                         std::map<std::string,
+                         std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>  mapSwitcher,
+                         std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
 
 
@@ -91,6 +94,14 @@ namespace chlorine::io
         return true;
     }
 
+    bool componentImport(std::string componentPath, std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
+                         std::map<std::string,
+                         std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>  mapSwitcher,
+                         std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    {
+
+    }
+
     bool sceneExport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                      std::string filePath,
                      // std::map<std::type_index, std::string> mapConv,
@@ -109,8 +120,12 @@ namespace chlorine::io
                 logOut->log("val: " + stringTypeConv[component] + "\n");
             }
         }
-        // std::ofstream sceneFile;
-        // sceneFile.open(filePath);
+        std::ofstream sceneFile;
+        sceneFile.open(filePath);
+
+        sceneFile << "name " << sceneIn->sceneName << '\n';
+
+        sceneFile.close();
 
         return false;
     }

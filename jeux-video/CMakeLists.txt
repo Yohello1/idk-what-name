@@ -17,4 +17,18 @@ src/chlorine/scene/componentManager.cpp
 src/chlorine/utils/strings.cpp
 )
 
+if (MSVC)
+    # warning level 4
+    add_compile_options(/W4)
+else()
+    # additional warnings
+    add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+if (NOT EXISTS ${CMAKE_BINARY_DIR}/CMakeCache.txt)
+  if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "" FORCE)
+  endif()
+endif()
+
 target_include_directories(pChlorine PRIVATE src)
