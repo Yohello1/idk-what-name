@@ -1,0 +1,27 @@
+#+title: Ch1
+
+We will be following this book, I'll try to take notes for as long as possible, for you guys to read in your off time
+[[https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf]]
+
+
+* 1.1: What is RISC-V
+** RISC-V is pronounced 'risk-five'
+** It's a new instruction set(ISA) that was originally designed to support computer architecture research, and education.
+** It's goals more or less boil down to(that we care abt);
+- Be entirely open
+- Support extensive user-level ISA extensions
+- A 'small' base ISA that can be built ontop of (look at x86, makes me cry)
+** There's a lot of other stuff abt it being open, and stuff, we can skip that,
+** An important thing to note is CISC vs RISC;
+- CISC stands for; Complex instruction set. Which means, a single instruction should do as much as possible (not really)
+- RISC stands for; Reduced instruction set. Which means, only have the bare minimum when it comes to instruction sets
+** Whenever they say 'RISC-V base integer', they mean, the original RISC-V architecture. Which was originally only designed for integers. There are various versions with like floats, and stuff.
+- To read ISA names, and stuff, the first character like 'R' means RISC, then the integer that comes after that is how many bits it operates on, then the final character like 'i', or 'E' tell you whether its integer, or extended, etc etc
+
+* 1.2: Instruction length Encoding
+** ok for the purposes of our operating system, we dont need this, but it is an interesting read, and is something that sets RISC apart from X86, and ARM
+* Exceptions, Traps, and interupts
+- Exception: unusual condition occuring at runtime associated with an instruction in the current risc-v thread
+- Trap: 'The Synchronous transfer of control' to a handler caused by an exceptional condition occuring within a RISC-V thread. They normally execute in a more priviliaged envrioment
+  They're like the better exceptions
+- Interupt... It's an interupt, pauses the program, and calls the operating system to read the registers, and do whatever needs to be done
