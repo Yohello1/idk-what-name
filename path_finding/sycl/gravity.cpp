@@ -111,16 +111,11 @@ int main()
                     DFy = sycl::copysign(DFy, diffy)*-1;
                     DFz = sycl::copysign(DFz, diffz)*-1;
 
-                    //debugOut << "dify " << diffy << ' '  << DFy << ' '  << ' ' << genData[slaveX*6+2] << ' ' << genData[i*6+2] << ' ' << slaveX << ' ' << i << '\n';
-
-
                     Fx += DFx;
                     Fy += DFy;
                     Fz += DFz;
 
                 }
-
-                //debugOut << "vely " << Fy/massA[slaveX] << ' ' <<  genData[slaveX*6+3] << '\n';
 
                 nexData[slaveX*6+1] = Fx/massA[slaveX] + genData[slaveX*6+1];
                 nexData[slaveX*6+3] = Fy/massA[slaveX] + genData[slaveX*6+3];
