@@ -1,0 +1,51 @@
+#+title: Fundementals
+
+Book used:
+[[https://riscv-programming.org/book/riscv-book.html]]
+
+General Notes:
+I will skip over parts that are not relavent to us, and this is meant to be read with the book
+
+* 1: The execution of programs, ten thousand feet up
+- **A native program is encoded using instructions that can be directly executed by the computer hardware, without help from an emulator or a virtual machine**
+- Whenever we refer to a **program** here, we're going to refer to a native program
+- Most computers are built using electronic circuitry, they represent the HIGH & LOW states in voltages using ~1~s, and ~0~s. Hence the most basic, and fundemental unit of information on most modern computers is a binary bit. (1 or 0).
+- Instructions, and data are usually encoded as a sequence(s) of binary digits, or bits.
+* 1.1: Main components of computers
+** Main Memory
+- Used to store; instructions, and data.
+- Is volatile, hence if the computer is shut off, it goes bai bai
+** Central Processing Unit
+- Responsible for executing the programs
+- Retrieves instructions from memory, then runs it
+- Often reads/writes daya from/to main memory
+** Persistent Storage
+- It is, as the name suggests, memory that is persistent, preserves its state
+** Peripherals
+- Input/Output (I/O) devices that are connected to the computer
+- Examples:
+  - GPU
+  - Headphones
+  - Mouse
+** Bus
+- Main communication system that transfers data between computer, and components.
+- Made up of wires that do the transmitting.
+* 1.1.1: The main memory
+- The main memory storage device is used to store the program instructions, and data.
+- It is composed of a set of memory words
+  - it is like the smallest amount of memory that your computer can operate on at once
+- Each memory word is capable of storing a set of bits, normally 8-bits
+- Each byte is identified by a unique value, which is also refered to as a memory address.
+- It stores a single byte
+* 1.1.2: The CPU
+** Registers
+- A CPU register is a small memory device located inside the CPU
+- A cpu normally contains a couple of registers
+- They store info inside the CPU
+- Load/store instructions move info from cpu register to/from main memory
+** A Datapath
+- The cpu datapath is responsible for arithematic, and logic operations on data.
+- Comes from performing operations
+** A control unit
+- Responsible for orchestrating the operation of the computer.
+- Controls datapaths, and other components, like main memory, and stuff.
