@@ -30,14 +30,14 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 ** Bus
 - Main communication system that transfers data between computer, and components.
 - Made up of wires that do the transmitting.
-* 1.1.1: The main memory
+* : The main memory
 - The main memory storage device is used to store the program instructions, and data.
 - It is composed of a set of memory words
   - it is like the smallest amount of memory that your computer can operate on at once
 - Each memory word is capable of storing a set of bits, normally 8-bits
 - Each byte is identified by a unique value, which is also refered to as a memory address.
 - It stores a single byte
-* 1.1.2: The CPU
+* The CPU
 ** Registers
 - A CPU register is a small memory device located inside the CPU
 - A cpu normally contains a couple of registers
@@ -49,3 +49,22 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 ** A control unit
 - Responsible for orchestrating the operation of the computer.
 - Controls datapaths, and other components, like main memory, and stuff.
+* Executing Program instructions
+- Each instruction occupies 4 memory words(assuming memory is byte addressable)
+- It also states that instructions must be executed sequentially
+- A CPU normally contains a register to keep track of the next instruction to be executed.
+  - This register is called the 'Program Counter', or ~PC~
+  - On the RV32 ISA it stores the address of the sequence of memory words that store the next instruction to be executed
+  - When an instruction is executed, the ~PC~ counter is incremented
+* The boot process
+- Whenever a computer starts up, the main memory will be full of garbage
+- Thus the CPU **CANNOT** retrieve, and use instructions from the main memory
+- Hence the CPU retrieves the instructions from a nonvolatile storage medium.
+  - This thingy stores a program which performs the boot process, and sets up the basic compute rcomponents, checks boot configs, etc etc. Then it loads the operating system.
+
+* Data representation in modern computers
+- Search up numeral systems lmao, there is no good reason for explaining it here.
+- The decimal numeral system is the msot common one.
+  - Let D_{10} be the set of symbols used in the decimal number system {1,2,3,4,5,6,7,8,9,0}
+  - Let d^{i} be a digit on a number represented by a character in the set,
+  - Let number_{10} be a number represented in the decimal numeral system

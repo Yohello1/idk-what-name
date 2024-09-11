@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2024-09-09 Mon 19:42 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fundementals</title>
+<meta name="author" content="yohello" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Fundementals</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org04a43cd">1. 1: The execution of programs, ten thousand feet up</a></li>
+<li><a href="#orgc1a53a8">2. 1.1: Main components of computers</a>
+<ul>
+<li><a href="#org728a192">2.1. Main Memory</a></li>
+<li><a href="#org83aae81">2.2. Central Processing Unit</a></li>
+<li><a href="#org7ea3245">2.3. Persistent Storage</a></li>
+<li><a href="#orge055007">2.4. Peripherals</a></li>
+<li><a href="#org213aba3">2.5. Bus</a></li>
+</ul>
+</li>
+<li><a href="#orge5e6c61">3. 1.1.1: The main memory</a></li>
+<li><a href="#org28b465d">4. 1.1.2: The CPU</a>
+<ul>
+<li><a href="#org44bb8d1">4.1. Registers</a></li>
+<li><a href="#org4a84f7c">4.2. A Datapath</a></li>
+<li><a href="#orgdd76676">4.3. A control unit</a></li>
+</ul>
+</li>
+<li><a href="#org7356e63">5. 1.2: Executing Program instructions</a></li>
+</ul>
+</div>
+</div>
+<p>
+Book used:
+<a href="https://riscv-programming.org/book/riscv-book.html">https://riscv-programming.org/book/riscv-book.html</a>
+</p>
+
+<p>
+General Notes:
+I will skip over parts that are not relavent to us, and this is meant to be read with the book
+</p>
+<div id="outline-container-org04a43cd" class="outline-2">
+<h2 id="org04a43cd"><span class="section-number-2">1.</span> 1: The execution of programs, ten thousand feet up</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li><b><b>A native program is encoded using instructions that can be directly executed by the computer hardware, without help from an emulator or a virtual machine</b></b></li>
+<li>Whenever we refer to a <b><b>program</b></b> here, we&rsquo;re going to refer to a native program</li>
+<li>Most computers are built using electronic circuitry, they represent the HIGH &amp; LOW states in voltages using ~1~s, and ~0~s. Hence the most basic, and fundemental unit of information on most modern computers is a binary bit. (1 or 0).</li>
+<li>Instructions, and data are usually encoded as a sequence(s) of binary digits, or bits.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgc1a53a8" class="outline-2">
+<h2 id="orgc1a53a8"><span class="section-number-2">2.</span> 1.1: Main components of computers</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org728a192" class="outline-3">
+<h3 id="org728a192"><span class="section-number-3">2.1.</span> Main Memory</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>Used to store; instructions, and data.</li>
+<li>Is volatile, hence if the computer is shut off, it goes bai bai</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org83aae81" class="outline-3">
+<h3 id="org83aae81"><span class="section-number-3">2.2.</span> Central Processing Unit</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>Responsible for executing the programs</li>
+<li>Retrieves instructions from memory, then runs it</li>
+<li>Often reads/writes daya from/to main memory</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7ea3245" class="outline-3">
+<h3 id="org7ea3245"><span class="section-number-3">2.3.</span> Persistent Storage</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li>It is, as the name suggests, memory that is persistent, preserves its state</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orge055007" class="outline-3">
+<h3 id="orge055007"><span class="section-number-3">2.4.</span> Peripherals</h3>
+<div class="outline-text-3" id="text-2-4">
+<ul class="org-ul">
+<li>Input/Output (I/O) devices that are connected to the computer</li>
+<li>Examples:
+<ul class="org-ul">
+<li>GPU</li>
+<li>Headphones</li>
+<li>Mouse</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org213aba3" class="outline-3">
+<h3 id="org213aba3"><span class="section-number-3">2.5.</span> Bus</h3>
+<div class="outline-text-3" id="text-2-5">
+<ul class="org-ul">
+<li>Main communication system that transfers data between computer, and components.</li>
+<li>Made up of wires that do the transmitting.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orge5e6c61" class="outline-2">
+<h2 id="orge5e6c61"><span class="section-number-2">3.</span> 1.1.1: The main memory</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>The main memory storage device is used to store the program instructions, and data.</li>
+<li>It is composed of a set of memory words
+<ul class="org-ul">
+<li>it is like the smallest amount of memory that your computer can operate on at once</li>
+</ul></li>
+<li>Each memory word is capable of storing a set of bits, normally 8-bits</li>
+<li>Each byte is identified by a unique value, which is also refered to as a memory address.</li>
+<li>It stores a single byte</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org28b465d" class="outline-2">
+<h2 id="org28b465d"><span class="section-number-2">4.</span> 1.1.2: The CPU</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org44bb8d1" class="outline-3">
+<h3 id="org44bb8d1"><span class="section-number-3">4.1.</span> Registers</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>A CPU register is a small memory device located inside the CPU</li>
+<li>A cpu normally contains a couple of registers</li>
+<li>They store info inside the CPU</li>
+<li>Load/store instructions move info from cpu register to/from main memory</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org4a84f7c" class="outline-3">
+<h3 id="org4a84f7c"><span class="section-number-3">4.2.</span> A Datapath</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>The cpu datapath is responsible for arithematic, and logic operations on data.</li>
+<li>Comes from performing operations</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgdd76676" class="outline-3">
+<h3 id="orgdd76676"><span class="section-number-3">4.3.</span> A control unit</h3>
+<div class="outline-text-3" id="text-4-3">
+<ul class="org-ul">
+<li>Responsible for orchestrating the operation of the computer.</li>
+<li>Controls datapaths, and other components, like main memory, and stuff.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org7356e63" class="outline-2">
+<h2 id="org7356e63"><span class="section-number-2">5.</span> 1.2: Executing Program instructions</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>Each instruction occupies 4 memory words(assuming memory is byte addressable)</li>
+<li>It also states that instructions must be executed sequentially</li>
+<li>A CPU normally contains a register to keep track of the next instruction to be executed.
+<ul class="org-ul">
+<li>This register is called the &rsquo;Program Counter&rsquo;, or <code>PC</code></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: yohello</p>
+<p class="date">Created: 2024-09-09 Mon 19:42</p>
+</div>
+</body>
+</html>
