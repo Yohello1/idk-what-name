@@ -7,5 +7,4 @@ hello.o: hello.s
 	${CROSS_COMPILE}as -march=rv64i -mabi=lp64 -o hello.o -c hello.s
 
 run: hello
-	qemu-system-riscv64 -machine virt -bios hello
-
+	qemu-system-riscv64 -machine spike -bios hello

@@ -21,10 +21,10 @@ _start:
     addi a0, x0, 0x10
     sb a0, (a1)
 
-    li a2, 0x9
-    li a3, 0x2
+    li a2, 0x30
+    li a3, 1
 
-    addi a4, a2, 0
+    add a4, a2, a3
     sb a4, (a1)
 
 loop:

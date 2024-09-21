@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-09-09 Mon 19:42 -->
+<!-- 2024-09-20 Fri 10:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Fundementals</title>
@@ -201,25 +201,55 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org04a43cd">1. 1: The execution of programs, ten thousand feet up</a></li>
-<li><a href="#orgc1a53a8">2. 1.1: Main components of computers</a>
+<li><a href="#org62b7691">1. 1: The execution of programs, ten thousand feet up</a></li>
+<li><a href="#orgd271176">2. 1.1: Main components of computers</a>
 <ul>
-<li><a href="#org728a192">2.1. Main Memory</a></li>
-<li><a href="#org83aae81">2.2. Central Processing Unit</a></li>
-<li><a href="#org7ea3245">2.3. Persistent Storage</a></li>
-<li><a href="#orge055007">2.4. Peripherals</a></li>
-<li><a href="#org213aba3">2.5. Bus</a></li>
+<li><a href="#org57c8766">2.1. Main Memory</a></li>
+<li><a href="#org7953d46">2.2. Central Processing Unit</a></li>
+<li><a href="#org33c1da1">2.3. Persistent Storage</a></li>
+<li><a href="#org5dd6552">2.4. Peripherals</a></li>
+<li><a href="#org9723e42">2.5. Bus</a></li>
 </ul>
 </li>
-<li><a href="#orge5e6c61">3. 1.1.1: The main memory</a></li>
-<li><a href="#org28b465d">4. 1.1.2: The CPU</a>
+<li><a href="#orgc67bdca">3. : The main memory</a></li>
+<li><a href="#org472d462">4. The CPU</a>
 <ul>
-<li><a href="#org44bb8d1">4.1. Registers</a></li>
-<li><a href="#org4a84f7c">4.2. A Datapath</a></li>
-<li><a href="#orgdd76676">4.3. A control unit</a></li>
+<li><a href="#orgebb95c2">4.1. Registers</a></li>
+<li><a href="#orgcd164e5">4.2. A Datapath</a></li>
+<li><a href="#orgb4285d8">4.3. A control unit</a></li>
 </ul>
 </li>
-<li><a href="#org7356e63">5. 1.2: Executing Program instructions</a></li>
+<li><a href="#org750467c">5. Executing Program instructions</a></li>
+<li><a href="#org02869d3">6. The boot process</a></li>
+<li><a href="#org818dbfd">7. Data representation in modern computers</a>
+<ul>
+<li><a href="#orga90bff7">7.1. Integers</a>
+<ul>
+<li><a href="#orgdbbbab6">7.1.1. Unsigned integers</a></li>
+<li><a href="#org533490f">7.1.2. Signed integers</a></li>
+<li><a href="#orgbe4dfed">7.1.3. One&rsquo;s complment</a></li>
+<li><a href="#org7bccf40">7.1.4. Two&rsquo;s complement</a></li>
+</ul>
+</li>
+<li><a href="#org85ba4ab">7.2. Binary arithmetic and overflow</a>
+<ul>
+<li><a href="#orgee5e718">7.2.1. Integer overflow</a></li>
+</ul>
+</li>
+<li><a href="#org349ddd8">7.3. Representing text</a>
+<ul>
+<li><a href="#org9222c26">7.3.1. What characters could represent</a></li>
+<li><a href="#orgad5571f">7.3.2. Character encoding standards</a></li>
+</ul>
+</li>
+<li><a href="#org7a81237">7.4. Organising data on the memory</a>
+<ul>
+<li><a href="#orga52764b">7.4.1. Endian</a></li>
+</ul>
+</li>
+<li><a href="#org8ac143c">7.5. Arrays on the main memory</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -232,8 +262,8 @@ Book used:
 General Notes:
 I will skip over parts that are not relavent to us, and this is meant to be read with the book
 </p>
-<div id="outline-container-org04a43cd" class="outline-2">
-<h2 id="org04a43cd"><span class="section-number-2">1.</span> 1: The execution of programs, ten thousand feet up</h2>
+<div id="outline-container-org62b7691" class="outline-2">
+<h2 id="org62b7691"><span class="section-number-2">1.</span> 1: The execution of programs, ten thousand feet up</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li><b><b>A native program is encoded using instructions that can be directly executed by the computer hardware, without help from an emulator or a virtual machine</b></b></li>
@@ -243,12 +273,12 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc1a53a8" class="outline-2">
-<h2 id="orgc1a53a8"><span class="section-number-2">2.</span> 1.1: Main components of computers</h2>
+<div id="outline-container-orgd271176" class="outline-2">
+<h2 id="orgd271176"><span class="section-number-2">2.</span> 1.1: Main components of computers</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org728a192" class="outline-3">
-<h3 id="org728a192"><span class="section-number-3">2.1.</span> Main Memory</h3>
+<div id="outline-container-org57c8766" class="outline-3">
+<h3 id="org57c8766"><span class="section-number-3">2.1.</span> Main Memory</h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
 <li>Used to store; instructions, and data.</li>
@@ -256,8 +286,8 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </ul>
 </div>
 </div>
-<div id="outline-container-org83aae81" class="outline-3">
-<h3 id="org83aae81"><span class="section-number-3">2.2.</span> Central Processing Unit</h3>
+<div id="outline-container-org7953d46" class="outline-3">
+<h3 id="org7953d46"><span class="section-number-3">2.2.</span> Central Processing Unit</h3>
 <div class="outline-text-3" id="text-2-2">
 <ul class="org-ul">
 <li>Responsible for executing the programs</li>
@@ -266,16 +296,16 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </ul>
 </div>
 </div>
-<div id="outline-container-org7ea3245" class="outline-3">
-<h3 id="org7ea3245"><span class="section-number-3">2.3.</span> Persistent Storage</h3>
+<div id="outline-container-org33c1da1" class="outline-3">
+<h3 id="org33c1da1"><span class="section-number-3">2.3.</span> Persistent Storage</h3>
 <div class="outline-text-3" id="text-2-3">
 <ul class="org-ul">
 <li>It is, as the name suggests, memory that is persistent, preserves its state</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orge055007" class="outline-3">
-<h3 id="orge055007"><span class="section-number-3">2.4.</span> Peripherals</h3>
+<div id="outline-container-org5dd6552" class="outline-3">
+<h3 id="org5dd6552"><span class="section-number-3">2.4.</span> Peripherals</h3>
 <div class="outline-text-3" id="text-2-4">
 <ul class="org-ul">
 <li>Input/Output (I/O) devices that are connected to the computer</li>
@@ -288,8 +318,8 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </ul>
 </div>
 </div>
-<div id="outline-container-org213aba3" class="outline-3">
-<h3 id="org213aba3"><span class="section-number-3">2.5.</span> Bus</h3>
+<div id="outline-container-org9723e42" class="outline-3">
+<h3 id="org9723e42"><span class="section-number-3">2.5.</span> Bus</h3>
 <div class="outline-text-3" id="text-2-5">
 <ul class="org-ul">
 <li>Main communication system that transfers data between computer, and components.</li>
@@ -298,8 +328,8 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </div>
 </div>
 </div>
-<div id="outline-container-orge5e6c61" class="outline-2">
-<h2 id="orge5e6c61"><span class="section-number-2">3.</span> 1.1.1: The main memory</h2>
+<div id="outline-container-orgc67bdca" class="outline-2">
+<h2 id="orgc67bdca"><span class="section-number-2">3.</span> : The main memory</h2>
 <div class="outline-text-2" id="text-3">
 <ul class="org-ul">
 <li>The main memory storage device is used to store the program instructions, and data.</li>
@@ -313,12 +343,12 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </ul>
 </div>
 </div>
-<div id="outline-container-org28b465d" class="outline-2">
-<h2 id="org28b465d"><span class="section-number-2">4.</span> 1.1.2: The CPU</h2>
+<div id="outline-container-org472d462" class="outline-2">
+<h2 id="org472d462"><span class="section-number-2">4.</span> The CPU</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org44bb8d1" class="outline-3">
-<h3 id="org44bb8d1"><span class="section-number-3">4.1.</span> Registers</h3>
+<div id="outline-container-orgebb95c2" class="outline-3">
+<h3 id="orgebb95c2"><span class="section-number-3">4.1.</span> Registers</h3>
 <div class="outline-text-3" id="text-4-1">
 <ul class="org-ul">
 <li>A CPU register is a small memory device located inside the CPU</li>
@@ -328,8 +358,8 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </ul>
 </div>
 </div>
-<div id="outline-container-org4a84f7c" class="outline-3">
-<h3 id="org4a84f7c"><span class="section-number-3">4.2.</span> A Datapath</h3>
+<div id="outline-container-orgcd164e5" class="outline-3">
+<h3 id="orgcd164e5"><span class="section-number-3">4.2.</span> A Datapath</h3>
 <div class="outline-text-3" id="text-4-2">
 <ul class="org-ul">
 <li>The cpu datapath is responsible for arithematic, and logic operations on data.</li>
@@ -337,8 +367,8 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdd76676" class="outline-3">
-<h3 id="orgdd76676"><span class="section-number-3">4.3.</span> A control unit</h3>
+<div id="outline-container-orgb4285d8" class="outline-3">
+<h3 id="orgb4285d8"><span class="section-number-3">4.3.</span> A control unit</h3>
 <div class="outline-text-3" id="text-4-3">
 <ul class="org-ul">
 <li>Responsible for orchestrating the operation of the computer.</li>
@@ -347,8 +377,8 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 </div>
 </div>
 </div>
-<div id="outline-container-org7356e63" class="outline-2">
-<h2 id="org7356e63"><span class="section-number-2">5.</span> 1.2: Executing Program instructions</h2>
+<div id="outline-container-org750467c" class="outline-2">
+<h2 id="org750467c"><span class="section-number-2">5.</span> Executing Program instructions</h2>
 <div class="outline-text-2" id="text-5">
 <ul class="org-ul">
 <li>Each instruction occupies 4 memory words(assuming memory is byte addressable)</li>
@@ -356,14 +386,190 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 <li>A CPU normally contains a register to keep track of the next instruction to be executed.
 <ul class="org-ul">
 <li>This register is called the &rsquo;Program Counter&rsquo;, or <code>PC</code></li>
+<li>On the RV32 ISA it stores the address of the sequence of memory words that store the next instruction to be executed</li>
+<li>When an instruction is executed, the <code>PC</code> counter is incremented</li>
 </ul></li>
 </ul>
+</div>
+</div>
+<div id="outline-container-org02869d3" class="outline-2">
+<h2 id="org02869d3"><span class="section-number-2">6.</span> The boot process</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>Whenever a computer starts up, the main memory will be full of garbage</li>
+<li>Thus the CPU <b><b>CANNOT</b></b> retrieve, and use instructions from the main memory</li>
+<li>Hence the CPU retrieves the instructions from a nonvolatile storage medium.
+<ul class="org-ul">
+<li>This thingy stores a program which performs the boot process, and sets up the basic compute rcomponents, checks boot configs, etc etc. Then it loads the operating system.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org818dbfd" class="outline-2">
+<h2 id="org818dbfd"><span class="section-number-2">7.</span> Data representation in modern computers</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li>Search up numeral systems lmao, there is no good reason for explaining it here.</li>
+<li>The decimal numeral system is the msot common one.
+<ul class="org-ul">
+<li>Let D<sub>10</sub> be the set of symbols used in the decimal number system {1,2,3,4,5,6,7,8,9,0}</li>
+<li>Let d<sup>i</sup> be a digit on a number represented by a character in the set,</li>
+<li>Let number<sub>10</sub> be a number represented in the decimal numeral system</li>
+</ul></li>
+<li>Search up hexadecimal on your own time</li>
+<li>Literally google this, it is easier to learn via yt, then my notes here</li>
+<li>A word is an 8-bit chunk of memory.</li>
+</ul>
+</div>
+<div id="outline-container-orga90bff7" class="outline-3">
+<h3 id="orga90bff7"><span class="section-number-3">7.1.</span> Integers</h3>
+<div class="outline-text-3" id="text-7-1">
+<ul class="org-ul">
+<li>Literally google this stuff, there are very good resources on the internet abt these things</li>
+</ul>
+</div>
+<div id="outline-container-orgdbbbab6" class="outline-4">
+<h4 id="orgdbbbab6"><span class="section-number-4">7.1.1.</span> Unsigned integers</h4>
+</div>
+<div id="outline-container-org533490f" class="outline-4">
+<h4 id="org533490f"><span class="section-number-4">7.1.2.</span> Signed integers</h4>
+</div>
+<div id="outline-container-orgbe4dfed" class="outline-4">
+<h4 id="orgbe4dfed"><span class="section-number-4">7.1.3.</span> One&rsquo;s complment</h4>
+</div>
+<div id="outline-container-org7bccf40" class="outline-4">
+<h4 id="org7bccf40"><span class="section-number-4">7.1.4.</span> Two&rsquo;s complement</h4>
+</div>
+</div>
+<div id="outline-container-org85ba4ab" class="outline-3">
+<h3 id="org85ba4ab"><span class="section-number-3">7.2.</span> Binary arithmetic and overflow</h3>
+<div class="outline-text-3" id="text-7-2">
+<ul class="org-ul">
+<li>Arithmetic on unsigned binary numbers is similar on unsigned decimal numbers.</li>
+<li>When adding adding two unsigned binary numbers, the digits are added one by one, starting from the least significant digit, to the most significant digit</li>
+<li>Sometimes the addition of two digits results in a number that requires 2 digits to represent, this is an &rsquo;overflow&rsquo;.</li>
+<li>In decimal, we carry over the value to the next significant digit, and add the values</li>
+<li>Apply the same thing to subtraction</li>
+<li>Examples can be found on page 15</li>
+</ul>
+</div>
+<div id="outline-container-orgee5e718" class="outline-4">
+<h4 id="orgee5e718"><span class="section-number-4">7.2.1.</span> Integer overflow</h4>
+<div class="outline-text-4" id="text-7-2-1">
+<ul class="org-ul">
+<li>When the space that is allocated to the integer is not enough to hold the integer.</li>
+<li>Like, after adding two integers together, it ends up having a value that needs 33 bits to store, but the space we allocated to the destination is only 32 bits long.</li>
+<li>This can sometimes result in the data that&rsquo;s adjacent to the integer to have one bit overwritten</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org349ddd8" class="outline-3">
+<h3 id="org349ddd8"><span class="section-number-3">7.3.</span> Representing text</h3>
+<div class="outline-text-3" id="text-7-3">
+<ul class="org-ul">
+<li>if u ever need to render text,, Im sorry, who hurt you</li>
+<li>Anyways</li>
+<li>A character is a basic unit of information.</li>
+</ul>
+</div>
+<div id="outline-container-org9222c26" class="outline-4">
+<h4 id="org9222c26"><span class="section-number-4">7.3.1.</span> What characters could represent</h4>
+<div class="outline-text-4" id="text-7-3-1">
+<ul class="org-ul">
+<li>Letter</li>
+<li>Decimal digit</li>
+<li>Punctuation</li>
+<li>White spaces</li>
+<li>Control sequences/information</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgad5571f" class="outline-4">
+<h4 id="orgad5571f"><span class="section-number-4">7.3.2.</span> Character encoding standards</h4>
+<div class="outline-text-4" id="text-7-3-2">
+<ul class="org-ul">
+<li>It&rsquo;s an encoding standard that defines how characters are represented on comptuers</li>
+<li>For example, there&rsquo;s ASCII, American Standard Code for Information Interchange</li>
+</ul>
+</div>
+<ol class="org-ol">
+<li><a id="org886abcb"></a>ASCII<br />
+<div class="outline-text-5" id="text-7-3-2-1">
+<ul class="org-ul">
+<li>Defines that characters are represented by 7-bit numbers</li>
+<li>It was 7-bits because old comptuers processed info in blocks of 8-bits, and the 8th bit was reserved for error checking</li>
+<li>Use this table; <a href="https://www.rapidtables.com/code/text/ascii-table.html">https://www.rapidtables.com/code/text/ascii-table.html</a> for ascii values</li>
+<li>Like the value of `a` is 97 (decimal), or 110001 (binary), and the digit `2` is 50 (decimal), and 0110010 (binary)</li>
+<li>It was designed in MURICA, and works for english,, barely for anything else.</li>
+<li>Implmenting Uni code will cause me to cry</li>
+</ul>
+</div>
+</li>
+<li><a id="org837aefc"></a>EASCII<br />
+<div class="outline-text-5" id="text-7-3-2-2">
+<ul class="org-ul">
+<li>Extended ASCII, literally just an extended version of the ASCII standard</li>
+</ul>
+</div>
+</li>
+<li><a id="orgeee3335"></a>UTF-8<br />
+<div class="outline-text-5" id="text-7-3-2-3">
+<ul class="org-ul">
+<li>Apparently the most commonly used encoding standard for HTML files</li>
+<li>Unicode (Universal Coded Character Set) Transformation Format - 8-bit</li>
+<li>It is a variable-width character encoding standard</li>
+<li>A single character may be one, two, three, four,&#x2026; 8-bit numbers long</li>
+<li>Common characters aer represented by a single byte, whilst most exotic ones are represented using multiple bytes</li>
+<li>UTF-8 is backwards compatible with ASCII. Like the character `a` has a value of `90` in both standards</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org7a81237" class="outline-3">
+<h3 id="org7a81237"><span class="section-number-3">7.4.</span> Organising data on the memory</h3>
+<div class="outline-text-3" id="text-7-4">
+<ul class="org-ul">
+<li>Addressable memory, idk, you can individually access</li>
+<li>Text is simply a sequence of characters on memory.</li>
+<li>A string is a sequence of consective characters in memory</li>
+<li>A `NULL Terminated string` where the last character in the string is a `NULL` character. Strings like this take one extra character. Like `yes` will take up `4` characters, whilst `french` will take up `6` characters in memory.</li>
+<li>`Edianness` refers to the order in which bytes are stored on computing memory</li>
+</ul>
+</div>
+<div id="outline-container-orga52764b" class="outline-4">
+<h4 id="orga52764b"><span class="section-number-4">7.4.1.</span> Endian</h4>
+<div class="outline-text-4" id="text-7-4-1">
+<ul class="org-ul">
+<li>There are two common formats,</li>
+<li>Little-endian, which places the least significant byte on the memory position associated with the lowest address.</li>
+<li>Whilst big-edian places it at the highest memory position</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org8ac143c" class="outline-3">
+<h3 id="org8ac143c"><span class="section-number-3">7.5.</span> Arrays on the main memory</h3>
+<div class="outline-text-3" id="text-7-5">
+<ul class="org-ul">
+<li>A `1d` array is a contigous block of memory where the index of an element is a single number, and references a position in the contigious block</li>
+<li><p>
+A `nth d` array is the same thing, but we use
+</p>
+<div class="org-src-container">
+<pre class="src src-c">  hi
+</pre>
+</div></li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: yohello</p>
-<p class="date">Created: 2024-09-09 Mon 19:42</p>
+<p class="date">Created: 2024-09-20 Fri 10:57</p>
 </div>
 </body>
 </html>
