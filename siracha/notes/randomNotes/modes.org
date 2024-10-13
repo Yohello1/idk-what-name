@@ -1,0 +1,23 @@
+#+title: Modes
+
+* Modes
+- There are normally like >2 modes, but we'll just say there are 2 for simplicites sake
+- The modes for a kind of 'protection' ring with multiple access modes
+- The RISCV spec does not prescribe which modes must be implemented for a core, except for `M` which is Machine mode, the most priviliged mode
+- Computers with only `M` mode are simple embedded systems.
+- More secure systems have `M`, and `S`
+- CPUs that can run Unix-Like Os's have `M`, `S`, and `U` avaliable at least
+* SBI
+- RISC-V's Spec defines the layer of software that is at the bottom of the RISC-V Software stack
+- Basically a BIOS
+-
+* BIOS
+- B: Basic
+- I: Input
+- O: Output
+- S: System
+* Privileged Mode
+- This is what the computer starts in at boot time
+- Any instruction is permitted, and no address access is considered a violation
+- Once the OS takes control, the modes start switching between Privileged, and User space code
+-
