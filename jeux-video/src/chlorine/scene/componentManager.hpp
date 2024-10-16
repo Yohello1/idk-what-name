@@ -25,6 +25,8 @@ namespace chlorine::scene
     {
     public:
         std::unordered_map<std::string, std::unordered_map<std::type_index, std::unique_ptr<::chlorine::scene::component>>> instruments;
+        std::unordered_map<std::type_index, std::set<std::string>> _groups; // I do NOT want this to be modified directly
+                                                                            // make flat_set at some point?
 
         template<typename T, typename ...Args>
         void insertElement(std::string key1, std::unique_ptr<::chlorine::logging::logBase> const &logOut, Args ...args)
@@ -48,9 +50,8 @@ namespace chlorine::scene
         // get number of enenties of certain time
         std::size_t getElementTypeNum(std::type_index type);
 
-    private:
-        std::unordered_map<std::type_index, std::set<std::string>> _groups; // I do NOT want this to be modified directly
-                                                                            // make flat_set at some point?
+        // Returns a set of the id's of the objects that have that specific type of object
+        std::set<std::string> getElementType(std::type_index type);
     };
 
 }
