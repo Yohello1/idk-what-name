@@ -41,4 +41,9 @@ namespace chlorine::scene
     {
         return _groups.size();
     }
+
+    std::set<std::string> orchestra::getElementType(std::type_index type)
+    {
+        return _groups[type];
+    }
 }
