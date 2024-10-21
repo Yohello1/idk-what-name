@@ -111,6 +111,7 @@ namespace chlorine::io
         // Ok write Scene name first line
         // Component name file path
 
+
         stringTypeConv.size();
         for(auto const& [key, value] : sceneIn->Conductor.instruments )
         {
@@ -120,10 +121,16 @@ namespace chlorine::io
                 logOut->log("val: " + stringTypeConv[component] + "\n");
             }
         }
+
+        filePath += sceneIn->sceneName + ".pcsf";
+
+        // First we make the pcsf file;
         std::ofstream sceneFile;
         sceneFile.open(filePath);
 
         sceneFile << "name " << sceneIn->sceneName << '\n';
+        logOut->log("name " + sceneIn->sceneName + '\n');
+
 
         sceneFile.close();
 
