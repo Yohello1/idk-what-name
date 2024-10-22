@@ -52,6 +52,9 @@ namespace chlorine::scene
 
         // Returns a set of the id's of the objects that have that specific type of object
         std::set<std::string> getElementType(std::type_index type);
+
+        std::size_t getNumElements();
+
     };
 
 }
