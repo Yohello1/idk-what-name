@@ -131,5 +131,34 @@ I will skip over parts that are not relavent to us, and this is meant to be read
 - A `1d` array is a contigous block of memory where the index of an element is a single number, and references a position in the contigious block
 - A `nth d` array is the same thing, but we use multiple dimensions (google this)
   #+BEGIN_SRC c
+int M[][] = { {7, 8, 9},
+              {2, 8 , 1}
+            };
 
+void print_M()
+{
+    printf("Element M[0][0] = %d\n", M[0][0]);
+    printf("Element M[1][2] = %d\n", M[1][2]);
+}
   #+END_SRC
+
+** Structs
+- Literally the exact same as in C
+** Encoding instructions
+- Computer instructions are normally encoded as a sequence of bits
+- The number of bits required to encode each and every instruction varies according to the architecture
+- For example;
+  - The RV32I says that each instruction must be encoded using 32bits
+  - Meanwhile, x86 is a varying number of bits
+- RV32I:
+  - Organised into 6 Fields
+    00000000000000000000000000000000
+    11111112222233333444555556666666
+    1:  funct7
+    2:  rs2
+    3:  rs1
+    4:  funct3
+    5:  rd
+    6:  opcode
+  - funct7, funct3 and opcode
+-
