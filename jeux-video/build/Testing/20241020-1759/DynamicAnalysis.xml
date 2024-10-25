@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-c++"
+	BuildStamp="20241020-1759-Experimental"
+	Name="souro"
+	Generator="ctest-3.28.2"
+	CompilerName="/usr/lib64/ccache/c++"
+	CompilerVersion="14.2.1"
+	OSName="Linux"
+	Hostname="souro"
+	OSRelease="6.11.3-200.fc40.x86_64"
+	OSVersion="#1 SMP PREEMPT_DYNAMIC Thu Oct 10 22:31:19 UTC 2024"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="25"
+	ModelID="116"
+	ProcessorCacheSize="1024"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="69226"
+	TotalPhysicalMemory="31262"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="400"
+	>
+	<DynamicAnalysis Checker="Valgrind">
+		<StartDateTime>Oct 20 13:59 EDT</StartDateTime>
+		<StartTestTime>1729447176</StartTestTime>
+		<TestList>
+			<Test>./example_test</Test>
+		</TestList>
+		<DefectList/>
+		<EndDateTime>Oct 20 13:59 EDT</EndDateTime>
+		<EndTestTime>1729447178</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</DynamicAnalysis>
+</Site>
