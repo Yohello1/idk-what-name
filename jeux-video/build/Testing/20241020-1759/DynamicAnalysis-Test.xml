@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-c++"
+	BuildStamp="20241020-1759-Experimental"
+	Name="souro"
+	Generator="ctest-3.28.2"
+	CompilerName="/usr/lib64/ccache/c++"
+	CompilerVersion="14.2.1"
+	OSName="Linux"
+	Hostname="souro"
+	OSRelease="6.11.3-200.fc40.x86_64"
+	OSVersion="#1 SMP PREEMPT_DYNAMIC Thu Oct 10 22:31:19 UTC 2024"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="25"
+	ModelID="116"
+	ProcessorCacheSize="1024"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="69226"
+	TotalPhysicalMemory="31262"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="400"
+	>
+	<Testing>
+		<StartDateTime>Oct 20 13:59 EDT</StartDateTime>
+		<StartTestTime>1729447176</StartTestTime>
+		<TestList>
+			<Test>./example_test</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>example_test</Name>
+			<Path>.</Path>
+			<FullName>./example_test</FullName>
+			<FullCommandLine>/usr/bin/valgrind "--log-file=/home/yohello/code/generation/jeux-video/build/Testing/Temporary/MemoryChecker.1.log" "-q" "--tool=memcheck" "--leak-check=yes" "--show-reachable=yes" "--num-callers=50" "/home/yohello/code/generation/jeux-video/build/pChlorine"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>1.99817</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/valgrind "--log-file=/home/yohello/code/generation/jeux-video/build/Testing/Temporary/MemoryChecker.1.log" "-q" "--tool=memcheck" "--leak-check=yes" "--show-reachable=yes" "--num-callers=50" "/home/yohello/code/generation/jeux-video/build/pChlorine"</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Hello world
+[NON-XML-CHAR-0x1B][32mCreating class to output to terminal with prefix LOG:  and colors currently being used
+[NON-XML-CHAR-0x1B][32mLOG: Created Scene
+[NON-XML-CHAR-0x1B][0m		[NON-XML-CHAR-0x1B][32mLOG: hello
+[NON-XML-CHAR-0x1B][0m		[NON-XML-CHAR-0x1B][32mLOG: Could not open file: ../test/Arrowhead.pcsf
+[NON-XML-CHAR-0x1B][0m		
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Oct 20 13:59 EDT</EndDateTime>
+		<EndTestTime>1729447178</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
