@@ -4,7 +4,7 @@
 
 namespace chlorine::io
 {
-    std::map<std::type_index, std::string> stringTypeConv;
+    std::map<std::type_index, std::string> _stringTypeConv;
 
     bool componentImport(std::string componentPath, std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                          std::map<std::string,
@@ -40,8 +40,8 @@ namespace chlorine::io
 
         // If the type_index does not exist in the map, add it to the map
 
-        stringTypeConv.emplace(tempIndex, componentFileSplit[1]);
-        logOut->log(stringTypeConv[tempIndex] + "\n");
+        _stringTypeConv.emplace(tempIndex, componentFileSplit[1]);
+        logOut->log(_stringTypeConv[tempIndex] + "\n");
 
         return true;
     }
@@ -112,13 +112,13 @@ namespace chlorine::io
         // Component name file path
 
 
-        stringTypeConv.size();
+        _stringTypeConv.size();
         for(auto const& [key, value] : sceneIn->Conductor.instruments )
         {
             logOut->log("key: " + key + "For this item name or wtv\n");
             for(auto const& [component, va] : value)
             {
-                logOut->log("val: " + stringTypeConv[component] + "\n");
+                logOut->log("val: " + _stringTypeConv[component] + "\n");
             }
         }
 
