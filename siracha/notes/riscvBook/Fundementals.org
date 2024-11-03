@@ -161,4 +161,45 @@ void print_M()
     5:  rd
     6:  opcode
   - funct7, funct3 and opcode
--
+- Opcode is literally just the 'code' like keyword. A series of 1's, and 0's that identifies the code???
+  Like the same instruction will have the same code.
+- funct3, and funct7 are function codes?
+- rs1, rs2 are source regiters that specifies the registers/operands
+- rd: desgination
+- imm: not mentioned here, byt an immediate number of differnt lengths that can be used directly as an oeprand
+* Generating Native Programs
+- FINALLY WE CAN WRITE IN C WHOOOOOOOOOOO
+- A native program is a program encoded using instructionst hat can be directly executed by the comptuer hardware without help from an emulator or a virtual machine.
+- Programs in C are encoded as plain text
+- High level languages are agnostic of ISA (or should be)
+- The following snippet is in a high level language; C
+#+BEGIN_SRC c
+int main()
+{
+    int r = func (10);
+    return r+1;
+}
+#+END_SRC
+- A compiler is a tool that translates a program from one language to another.
+- To compile a RISC-V Program from C to ASM (RV32I), use the following command
+#+begin_src bash
+riscv64-unknown-elf-gcc -mabi=ilp32 -march=rv32i -S main.c -o main.s
+#+end_src
+The result of that should be;
+#+begin_src asm
+.text
+.align  2
+
+main:
+    addi sp, sp, -16
+    li a0, 10
+    sw ra, 12
+    jal func
+    lw ra, 12(sp)
+    addi a0, a0, 1
+    addi sp, sp, 16
+    ret
+#+end_src
+Different from high level languages, like C, Assembly is very close to the ISA
+Like the ASM above, is literally only the instructions that exist in RV32I
+As a consequence, th
