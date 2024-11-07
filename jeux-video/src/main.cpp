@@ -13,6 +13,7 @@
 #include <chlorine/scene/component.hpp>
 #include <chlorine/scene/componentManager.hpp>
 
+
 class boxes : public chlorine::scene::component
 {
 public:
@@ -56,13 +57,14 @@ public:
         (void)logOut;
         std::ofstream componentFile;
         componentFile.open(filePath);
-        componentFile << "type " << chlorine::io::stringTypeConv[std::type_index(typeid(*this))] << '\n';
+        componentFile << "type " << chlorine::io::_stringTypeConv[std::type_index(typeid(*this))] << '\n';
         componentFile << name << '\n';
         componentFile << "xpos " << position.first << '\n';
         componentFile << "ypos " << position.second << '\n';
         componentFile.close();
         return true;
     }
+
 
 	virtual ~boxes() = default;
 };
