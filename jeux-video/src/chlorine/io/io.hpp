@@ -14,7 +14,7 @@
 
 namespace chlorine::io
 {
-    extern std::map<std::type_index, std::string> stringTypeConv;
+    extern std::map<std::type_index, std::string> _stringTypeConv;
 
     bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                      const std::string& pathPrefix,
