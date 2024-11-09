@@ -102,6 +102,17 @@ namespace chlorine::io
 
     // }
 
+    bool componentExport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
+                         const std::string& pathPrefix,
+                         const std::string& filename,
+                         const std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>& mapSwitcher,
+                         std::unique_ptr<::chlorine::logging::logBase> const &logOut)
+    {
+        std::string fileLocation = pathPrefix + filename;
+        logOut->log("The location of the file " +  fileLocation);
+        return false;
+    }
+
     bool sceneExport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                      std::string filePath,
                      // std::map<std::type_index, std::string> mapConv,
@@ -111,6 +122,7 @@ namespace chlorine::io
         // Ok write Scene name first line
         // Component name file path
 
+        std::string pathPrefix = filePath;
         filePath += sceneIn->sceneName + ".pcsf";
 
         // First we make the pcsf file;
@@ -126,6 +138,7 @@ namespace chlorine::io
             for(auto const& [component, va] : value)
             {
                 sceneFile << key << '\n';
+                componentExport(sceneIn, pathPrefix, key, {}, logOut);
             }
         }
 
