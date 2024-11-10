@@ -1,10 +1,29 @@
-CROSS_COMPILE=riscv64-linux-gnu-
+##
+# NeruOs
+#
+# @file
+# @version 0.1
 
-hello: hello.o hello.ld
-	${CROSS_COMPILE}ld -T hello.ld --no-dynamic-linker -m elf64lriscv -static -nostdlib -s -o hello hello.o
+SRC=$(wildcard *.d)
+OBJ=$(SRC:.d=.o)
 
-hello.o: hello.s
-	${CROSS_COMPILE}as -march=rv64i -mabi=lp64 -o hello.o -c hello.s
+all: prog.bin
 
-run: hello
-	qemu-system-riscv64 -machine virt -bios hello
+%.o: %.d
+	ldc2 -Oz -betterC -mtriple=riscv64-unknown-elf -mattr=+m,+a,+c,+relax --code-model=medium --makedeps=$*.dep $< -c -of $@
+%.o: %.s
+	riscv64-unknown-elf-as -march=rv64imac $< -c -o $@
+prog.elf: start.o $(OBJ)
+	riscv64-unknown-elf-ld -Tlink.ld $^ -o $@
+%.bin: %.elf
+	riscv64-unknown-elf-objcopy $< -O binary $@
+%.list: %.elf
+	riscv64-unknown-elf-objdump -D $< > $@
+run: prog.bin
+	qemu-system-riscv64 -bios none -machine virt -kernel prog.bin
+clean:
+	rm -f *.bin *.list *.o *.elf *.dep
+
+-include *.dep
+
+# end
