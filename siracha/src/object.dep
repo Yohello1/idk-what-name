@@ -1,0 +1,3 @@
+object.o: \
+  object.d \
+  uart.d
