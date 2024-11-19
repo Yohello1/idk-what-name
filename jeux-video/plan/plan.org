@@ -24,12 +24,13 @@
 **  Loading/Unloading data*
 - [X] Read master file
 - [X] Interpret data in master file
-- [ ] Put data into scene file
+- [X] Put data into scene file
 - [X] Read slave files
 - [ ] Put slave data into slave compontents
-- [ ] Save files
+- [X] Save files
 
 ** TODO Networking
+- [ ] Implement sockets
 ** TODO General Resource manger
 ** TODO Event queue
 ** TODO Input system
