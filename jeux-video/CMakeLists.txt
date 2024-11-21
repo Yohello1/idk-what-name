@@ -2,6 +2,8 @@
 
 cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+include(FetchContent)
 
 project(pChlorine)
 
@@ -33,4 +35,15 @@ if (NOT EXISTS ${CMAKE_BINARY_DIR}/CMakeCache.txt)
   endif()
 endif()
 
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.x
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
+FetchContent_MakeAvailable(SFML)
+
+target_link_libraries(pChlorine PRIVATE sfml-graphics)
+target_compile_features(pChlorine PRIVATE cxx_std_17)
 target_include_directories(pChlorine PRIVATE src)
