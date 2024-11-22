@@ -137,7 +137,7 @@ int main()
     // std::cin >> birdies_amt;
 
     
-    sf::RenderWindow window(sf::VideoMode(2048, 2048), "draw2");
+    sf::RenderWindow window(sf::VideoMode(1024, 1024), "draw2");
     srand(time(NULL));
     
     sycl::queue queue;
@@ -189,7 +189,7 @@ int main()
 
             // Constants
             float steer_factor = 0.5;
-            float min_speed = 5, max_speed = 15;
+            float min_speed = 0.5, max_speed = 3;
 
             // Calculating the speed
             float old_speed, speed;
