@@ -7,7 +7,7 @@ CC = g++
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS = 
+COMPILER_FLAGS = -O3
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
@@ -32,8 +32,8 @@ aStar : aStart.cpp
 	./draw2
 
 leaderBoid : leaderBoid.cpp
-	$(CC) $(COMPILER_FLAGS) -c leaderBoid.cpp
-	$(CC) leaderBoid.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	$(CC) $(COMPILER_FLAGS) -c -O3 leaderBoid.cpp
+	$(CC) leaderBoid.o -O3 $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
 
 leaderMazeAStar : leaderMazeAStar.cpp
@@ -64,4 +64,9 @@ boba : boba.cpp
 parition : parition.cpp
 	$(CC) $(COMPILER_FLAGS) -O3 -g -c parition.cpp
 	$(CC) parition.o $(COMPILER_FLAGS) -O3 $(LINKER_FLAGS) -o draw2
+	./draw2
+
+fluid : fluidBoid.cpp
+	$(CC) $(COMPILER_FLAGS) -O3 -g -c fluidBoid.cpp
+	$(CC) fluidBoid.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
