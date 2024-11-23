@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 1000
+#define BIRD_AMT 500
 
 class bird;
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
@@ -387,7 +387,7 @@ void generateBoids()
 // Note, must be drawn AFTER map is drawn :)
 void drawBoids()
 {
-    sf::CircleShape shape(2);
+    sf::CircleShape shape(50);
     shape.setFillColor(sf::Color(13,114,214));
 
     for(int i = 0; i < BIRD_AMT; i++)
