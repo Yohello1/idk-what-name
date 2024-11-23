@@ -188,8 +188,8 @@ int main()
         h.parallel_for(sycl::range<1>(birdies_amt), [=](sycl::id<1> indx){
 
             // Constants
-            float steer_factor = 0.5;
-            float min_speed = 0.5, max_speed = 3;
+            float steer_factor = 0.00005;
+            float min_speed = 0.1, max_speed = 0.5;
 
             // Calculating the speed
             float old_speed, speed;
