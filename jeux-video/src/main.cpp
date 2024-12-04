@@ -61,8 +61,11 @@ int main()
 
     // mouse position
     float mouse_x_p = 0, mouse_y_p = 0;
-    sycl::buffer<float, 1> mouse_x_s(&mouse_x_p, sycl::range<1>(1));
-    sycl::buffer<float, 1> mouse_y_s(&mouse_y_p, sycl::range<1>(1));
+    // sycl::buffer<float, 1> mouse_x_s(&mouse_x_p, sycl::range<1>(1));
+    // sycl::buffer<float, 1> mouse_y_s(&mouse_y_p, sycl::range<1>(1));
+
+    auto mouse_x_s = malloc_shared<float>(1, queue);
+    auto mouse_y_s = malloc_shared<float>(1, queue);
 
 
     // init the data
@@ -144,8 +147,8 @@ int main()
             }
 
             sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-            mouse_x_p = localPosition.x;
-            mouse_y_p = localPosition.y;
+            *(mouse_x_s) = static_cast<float>(localPosition.x);
+            *(mouse_y_s) = static_cast<float>(localPosition.y);
         }
 
         window.clear(sf::Color::Black);
@@ -165,9 +168,6 @@ int main()
             sycl::accessor xx_vel(x_vel, h, sycl::read_write);
             sycl::accessor yy_vel(y_vel, h, sycl::read_write);
 
-            sycl::accessor x_m(mouse_x_s, h, sycl::read_only);
-            sycl::accessor y_m(mouse_y_s, h, sycl::read_only);
-
             sycl::stream out(1024, 256, h);
 
             h.parallel_for(sycl::range<1>(birdies_amt), [=](sycl::id<1> indx){
@@ -178,14 +178,14 @@ int main()
 
                 // Calculating the speed
                 float old_speed, speed;
-                old_speed = speed = sycl::sqrt(sycl::fabs(sycl::pow(xx_pos[indx] - x_m[0], 2) + sycl::pow(yy_pos[indx] - y_m[0], 2)));
+                old_speed = speed = sycl::sqrt(sycl::fabs(sycl::pow(xx_pos[indx] - mouse_x_s[0], 2) + sycl::pow(yy_pos[indx] - mouse_y_s[0], 2)));
 
                 if(sycl::isnan(speed))
                     speed = old_speed = 0;
 
 
-                float xx_speed = (xx_pos[indx] - x_m[0])/2*steer_factor +  xx_vel[indx];
-                float yy_speed = (yy_pos[indx] - y_m[0])/2*steer_factor +  yy_vel[indx];
+                float xx_speed = (xx_pos[indx] - mouse_x_s[0])/2*steer_factor +  xx_vel[indx];
+                float yy_speed = (yy_pos[indx] - mouse_y_s[0])/2*steer_factor +  yy_vel[indx];
 
                 speed = sycl::fmin(speed, max_speed);
                 speed = sycl::fmax(speed, min_speed);
@@ -233,4 +233,7 @@ int main()
         std::cout << mouse_x_p << '\n';
 
     }
+
+    free(mouse_x_s);
+    free(mouse_y_s);
 }
