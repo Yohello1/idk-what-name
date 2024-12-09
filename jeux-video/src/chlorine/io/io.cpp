@@ -114,7 +114,7 @@ namespace chlorine::io
 
 
         // uncomment when i go fix
-        // sceneIn->Conductor.instruments[filename][temp].saveFile(fileLocation, logOut);
+        sceneIn->Conductor.instruments[filename][temp]->saveFile(fileLocation, logOut);
 
         return false;
     }
