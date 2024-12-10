@@ -24,7 +24,7 @@
 
 
 long long _lcg_seed = 78947268766;
-uint64_t birdies_amt = 500000;
+uint64_t birdies_amt = 50;
 
 long long lcg_rand()
 {
@@ -173,8 +173,8 @@ int main()
             h.parallel_for(sycl::range<1>(birdies_amt), [=](sycl::id<1> indx){
 
                 // Constants
-                float steer_factor = 5;
-                float min_speed = 5, max_speed = 30;
+                float steer_factor = 0.1;
+                float min_speed = 2, max_speed = 5;
 
                 // Calculating the speed
                 float old_speed, speed;
@@ -230,10 +230,9 @@ int main()
 
         window.display();
 
-        std::cout << mouse_x_p << '\n';
-
     }
 
-    free(mouse_x_s);
-    free(mouse_y_s);
+    std::cout << "a";
+    free(mouse_x_s, queue);
+    free(mouse_y_s, queue);
 }
