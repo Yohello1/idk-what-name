@@ -24,7 +24,7 @@
 
 
 long long _lcg_seed = 78947268766;
-uint64_t birdies_amt = 50;
+uint64_t birdies_amt = 1;
 
 long long lcg_rand()
 {
