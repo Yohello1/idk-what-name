@@ -147,8 +147,8 @@ int main()
             }
 
             sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-            *(mouse_x_s) = static_cast<float>(localPosition.x);
-            *(mouse_y_s) = static_cast<float>(localPosition.y);
+            *(mouse_x_s) = 512;
+            *(mouse_y_s) = 512;
         }
 
         window.clear(sf::Color::Black);
@@ -193,6 +193,10 @@ int main()
                 // Scalling the speed
                 float x_v_scaled = xx_speed*(speed/old_speed);
                 float y_v_scaled = yy_speed*(speed/old_speed);
+
+                // test shit
+                if(sycl::sqrt(sycl::pow(x_v_scaled, 2) + sycl::pow(y_v_scaled, 2)) < 25)
+                    out << "oh no";
 
                 // Updating vel
                 xx_vel[indx] = x_v_scaled;
