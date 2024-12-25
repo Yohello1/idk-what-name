@@ -1,0 +1,3 @@
+#+title: Question
+
+John needs to attend a lot of meetings, and needs to figure out how many of his meetings are overlapping. He's tasked you with writting a function called 'find_overlap', which will take a list of a tuple of two integers. The first integer is the time(in seconds), and the second integer is the length of the meeting in seconds. Determine how many overlaps in meetings John has.
