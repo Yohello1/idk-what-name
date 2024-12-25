@@ -1,0 +1,82 @@
+#+title: Boot Process
+
+* Author's notes
+- This is incredibly messy, so please have a 'search all files' thing present, most things are defined, dm me if anything is missing
+
+** Memory addresses
+- Anything prefixed with `0x` is probably a memory address
+- When you see a `_` in a memory address, it means nothing.
+  It's like a comma in english, just used to break things up
+  so we can read it more easily
+** Device Tree Blob
+- When I first read this, I was like, what the fuckity fuck is this bullshit
+- It's a file containing information about the board, and it's hardware.
+- Most embeded platforms do not provide a way of discovering the hardware they have.
+- So either, we have to guess, or we have to give the kernel info abt the board
+- Before DTB, every board needed a kernel compiled for it specifically for it, and that's fucking painful
+** DRAM
+- I dont know why this wasnt obvious, but not having enough space in ram to load the thingy crashes
+
+* ZSBL
+- We'll be dealing with OpenSBI, it's placed at 0x8000_0000
+- After the ZSBL runs, it will jump to OpenSBI, and run it, and make sure everything after its initalisation can run.
+- Jumps to OpenSBI
+* OpenSBI
+- There are three main flavours of OpenSBI
+** FW_PAYLOAD
+- Point the `make` tool to whatever you want to run after OpenSBI, and it will build a single binary that will/cat start from 0x8000_0000
+** FW_JUMP
+- You hardcode the address of your software that comes after OpenSBI
+** FW_DYNAMIC
+- bro this is magic
+- This gets the info abt booting from the ZBSL.
+
+** Stuff we can use OpenSBI for
+- We can delegate a lot of stuff to OpenSBI, making our software more portable
+- Like we can delegate the responsibility of
+** How do we interact with OpenSBI?
+- The same way you would with interupts on like linux
+- We'll populate some registers, and invoke a interrupt/trap to pass control down to the software stack to OpenSBI.
+- Here's a full list of stuff that can be done  [[https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc]]
+** Writting to UART using OpenSBI
+- Binary Encoding is well documented here (Im not going to write out a org file on this); [[https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/binary-encoding.adoc]]
+- register `a7` contains the Extension ID (EID),
+- and `a6` encodes the individual Function ID (FID) within that instruction
+- The parameters are passed via `a0`, `a1`, and `a2`.
+- First we're going to put `0x4442434E` into `a7`, since that's the extension we'll be needing(?) [[https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-debug-console.adoc]]
+- Then we'll put `0x00` into `a6`, since that's the function we'll need.
+Here's an example of the code we'll use;
+#+begin_src asm
+.global _start
+        .section .text.kernel
+
+_start: li a7, 0x4442434E
+        li a6, 0x00
+        li a0, 12
+        lla a1, debug_string
+        li a2, 0
+        ecall
+
+loop:   j loop
+
+        .section .rodata
+debug_string:
+        .string "Hello world\n"
+#+end_src
+* PINE64 bootloader
+- The Pine64 uses OpenSBI as it's ZSBL (Zero stage bootloader)
+** Zero Stage Boot loder (ZBSL)
+- There is [checks notes] no info on this!
+- The Stage-0 bootloader is the first thing loaded after the computer is turned on (reset)
+** The boot order (as of my knowledge)
+- The ZSBL is contained (in hiFive boards) at 0x0001_0000
+- The ROM chip that contains it is integrated directly into the chip
+- All it does is evaluate the MSEL pins (the hardwired sutff), and load the FSBL from the corresponding place (SD card, flash, etc etc) onto the L2 Cache of the flash chip. Then it jumps to it (check the program counter, I have a feeling this will be hwacky)
+- We're writting the FSBL.
+- Now we're executing the First Stage Bootloader. This exists at address `0x0800_0000`
+- This is **allegedly** provided by U-Boot-SPL. But like, who fucking knows, this shit is undocumented
+- However, if it is provided by U-Boot-SPL. It is a downsized version of U-BOOT-SPL.-
+- It **allegedly** just initisalizes the ddr memory, then it loads the real U-Boot, and jumps into it
+- The third stage is U-Boot Proper.
+- On the HiFive, it's loacated on 0x8000_0000 (DDR memory).
+- This contains both U-Boot, and OpenSBI, and Device Tree Blob
