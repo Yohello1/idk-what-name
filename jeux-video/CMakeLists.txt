@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_C_COMPILER gcc)
 set(CMAKE_CXX_COMPILER acpp)
-SET(CMAKE_CXX_FLAGS "-g")
+SET(CMAKE_CXX_FLAGS "-g -lsycl  ")
 SET(CMAKE_EXE_LINKER_FLAGS  "-lsfml-graphics -lsfml-window -lsfml-system")
 
 include(FetchContent)
