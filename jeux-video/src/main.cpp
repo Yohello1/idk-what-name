@@ -24,20 +24,9 @@
 
 
 long long _lcg_seed = 78947268766;
-uint64_t birdies_amt = 1;
+uint64_t birdies_amt = 25000;
 
-long long lcg_rand()
-{
-    _lcg_seed *= 38933243;
-    _lcg_seed += 3249;
-    _lcg_seed %= _lcg_seed;
-    return _lcg_seed;
-}
 
-std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap
-{
-
-};
 
 
 int main()
@@ -66,6 +55,7 @@ int main()
 
     auto mouse_x_s = malloc_shared<float>(1, queue);
     auto mouse_y_s = malloc_shared<float>(1, queue);
+    auto ctr = malloc_shared<uint64_t>(1, queue);
 
 
     // init the data
@@ -145,10 +135,70 @@ int main()
             {
                 window.close();
             }
+            switch(event.type)
+            {
+            case sf::Event::Closed:
+                window.close();
+                break;
+
+                // SCATTER
+            case sf::Event::KeyPressed:
+                queue.submit([&](sycl::handler& h) {
+                    sycl::accessor xx_pos(x_pos, h, sycl::read_write);
+                    sycl::accessor yy_pos(y_pos, h, sycl::read_write);
+
+                    sycl::accessor xx_vel(x_vel, h, sycl::read_write);
+                    sycl::accessor yy_vel(y_vel, h, sycl::read_write);
+
+                    h.parallel_for(sycl::range<1>(birdies_amt), [=](sycl::id<1> indx)
+                    {
+                        float steer_factor = 0.05;
+                        float min_speed = 8, max_speed = 15;
+
+                        float vel_x = xx_vel[indx];
+                        float vel_y = yy_vel[indx];
+
+                        // update position
+                        if(( 0 < (vel_x + xx_pos[indx])) && ((vel_x + xx_pos[indx]) < 1024))
+                            xx_pos[indx] += vel_x;
+
+                        if(( 0 < (vel_y + yy_pos[indx])) && ((vel_y + yy_pos[indx]) < 1024))
+                            yy_pos[indx] += vel_y;
+
+                        // determine new speed
+                        vel_x = ((mouse_x_s[0]-xx_pos[indx])/2);
+                        vel_y = ((mouse_y_s[0]-yy_pos[indx])/2);
+
+
+                        // update speed
+                        float speed = sycl::sqrt(sycl::pow(vel_x, 2) + sycl::pow(vel_y, 2));
+                        if(speed > max_speed)
+                        {
+                            vel_x = vel_x/speed*max_speed;
+                            vel_y = vel_y/speed*max_speed;
+                        }
+                        else if(speed < min_speed)
+                        {
+                            vel_x = vel_x/speed*min_speed;
+                            vel_y = vel_y/speed*min_speed;
+                        }
+
+                        xx_vel[indx] = vel_x;
+                        yy_vel[indx] = vel_y;
+                    });
+                });
+                queue.wait();
+                std::cout << "ASADASD";
+
+                break;
+            default:
+                break;
+            }
+
 
             sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-            *(mouse_x_s) = 512;
-            *(mouse_y_s) = 512;
+            *(mouse_x_s) = localPosition.x;
+            *(mouse_y_s) = localPosition.y;
         }
 
         window.clear(sf::Color::Black);
@@ -160,6 +210,7 @@ int main()
         // mouse_x_p = temp1;
         // mouse_y_p = temp2;
 
+        auto t1 = std::chrono::steady_clock::now();
         queue.submit([&](sycl::handler& h) {
 
             sycl::accessor xx_pos(x_pos, h, sycl::read_write);
@@ -173,44 +224,51 @@ int main()
             h.parallel_for(sycl::range<1>(birdies_amt), [=](sycl::id<1> indx){
 
                 // Constants
-                float steer_factor = 0.1;
-                float min_speed = 2, max_speed = 5;
+                float steer_factor = 0.01 ;
+                float min_speed = 15, max_speed = 16;
 
-                // Calculating the speed
-                float old_speed, speed;
-                old_speed = speed = sycl::sqrt(sycl::fabs(sycl::pow(xx_pos[indx] - mouse_x_s[0], 2) + sycl::pow(yy_pos[indx] - mouse_y_s[0], 2)));
+                float vel_x = xx_vel[indx];
+                float vel_y = yy_vel[indx];
 
-                if(sycl::isnan(speed))
-                    speed = old_speed = 0;
+                // update position
+                if(( 0 < (vel_x + xx_pos[indx])) && ((vel_x + xx_pos[indx]) < 1024))
+                    xx_pos[indx] += vel_x;
+
+                if(( 0 < (vel_y + yy_pos[indx])) && ((vel_y + yy_pos[indx]) < 1024))
+                    yy_pos[indx] += vel_y;
 
 
-                float xx_speed = (xx_pos[indx] - mouse_x_s[0])/2*steer_factor +  xx_vel[indx];
-                float yy_speed = (yy_pos[indx] - mouse_y_s[0])/2*steer_factor +  yy_vel[indx];
+                // determine new speed
+                vel_x += ((mouse_x_s[0]-xx_pos[indx])/2)*steer_factor;
+                vel_y += ((mouse_y_s[0]-yy_pos[indx])/2)*steer_factor;
 
-                speed = sycl::fmin(speed, max_speed);
-                speed = sycl::fmax(speed, min_speed);
 
-                // Scalling the speed
-                float x_v_scaled = xx_speed*(speed/old_speed);
-                float y_v_scaled = yy_speed*(speed/old_speed);
+                // update speed
+                float speed = sycl::sqrt(sycl::pow(vel_x, 2) + sycl::pow(vel_y, 2));
+                if(speed > max_speed)
+                {
+                    vel_x = (vel_x/speed)*max_speed;
+                    vel_y = (vel_y/speed)*max_speed;
+                }
+                else if(speed < min_speed)
+                {
+                    vel_x = (vel_x/speed)*min_speed;
+                    vel_y = (vel_y/speed)*min_speed;
+                }
 
-                // test shit
-                if(sycl::sqrt(sycl::pow(x_v_scaled, 2) + sycl::pow(y_v_scaled, 2)) < 25)
-                    out << "oh no";
-
-                // Updating vel
-                xx_vel[indx] = x_v_scaled;
-                yy_vel[indx] = y_v_scaled;
-
-                // Updating the position
-                xx_pos[indx] = xx_pos[indx] + xx_vel[indx]*-1;
-                yy_pos[indx] = yy_pos[indx] + yy_vel[indx]*-1;
-
-                // out << xx_pos[indx] << ' ' << speed <<  '\n';
+                xx_vel[indx] = vel_x;
+                yy_vel[indx] = vel_y;
             });
         });
 
+        ctr++;
+        // std::cout << ctr <<  '\n';
+
         queue.wait();
+
+        auto t2 = std::chrono::steady_clock::now();
+
+        std::cout << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << '\n';
 
         std::vector<float> x_positions(birdies_amt);
         std::vector<float> y_positions(birdies_amt);
