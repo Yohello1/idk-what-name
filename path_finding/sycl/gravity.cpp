@@ -9,7 +9,7 @@
 #define MAX_VAL 200
 #endif
 
-constexpr int N =999;
+constexpr int N =9999;
 
 sf::RenderWindow window(sf::VideoMode(1024, 1024), "draw2");
 
@@ -68,7 +68,7 @@ int main()
 
     while(window.isOpen())
     {
-        std::cout << "next: "  << ClastFrame[7] << ' ' << ClastFrame[9] << ' ' << ClastFrame[11] << '\n';
+        // std::cout << "next: "  << ClastFrame[7] << ' ' << ClastFrame[9] << ' ' << ClastFrame[11] << '\n';
         jobQueue.submit([&] (sycl::handler &h){
             sycl::accessor genData{lastFrame, h, sycl::read_only};
             sycl::accessor nexData{nextFrame, h, sycl::write_only};
@@ -111,16 +111,11 @@ int main()
                     DFy = sycl::copysign(DFy, diffy)*-1;
                     DFz = sycl::copysign(DFz, diffz)*-1;
 
-                    //debugOut << "dify " << diffy << ' '  << DFy << ' '  << ' ' << genData[slaveX*6+2] << ' ' << genData[i*6+2] << ' ' << slaveX << ' ' << i << '\n';
-
-
                     Fx += DFx;
                     Fy += DFy;
                     Fz += DFz;
 
                 }
-
-                //debugOut << "vely " << Fy/massA[slaveX] << ' ' <<  genData[slaveX*6+3] << '\n';
 
                 nexData[slaveX*6+1] = Fx/massA[slaveX] + genData[slaveX*6+1];
                 nexData[slaveX*6+3] = Fy/massA[slaveX] + genData[slaveX*6+3];
