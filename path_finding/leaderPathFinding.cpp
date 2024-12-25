@@ -11,8 +11,8 @@
 #include <cmath>
 
 #define MAP_SIZE 128
-// #define LEADER_AMT 5 // crashes above 25, no idea why
-// #define BIRD_AMT 2
+#define LEADER_AMT 5 // crashes above 25, no idea why
+#define BIRD_AMT 2
 
 float maxSpeed = 1, minSpeed = 0.5;
 double centeringFactor = 0.5;
