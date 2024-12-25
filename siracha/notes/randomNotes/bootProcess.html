@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2024-10-13 Sun 01:22 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Boot Process</title>
+<meta name="author" content="yohello" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Boot Process</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orge11d7d6">1. Author&rsquo;s notes</a>
+<ul>
+<li><a href="#orgdb5d715">1.1. Memory addresses</a></li>
+<li><a href="#orgdeb96f4">1.2. Device Tree Blob</a></li>
+<li><a href="#orgdf586a1">1.3. DRAM</a></li>
+</ul>
+</li>
+<li><a href="#org5792a0b">2. ZSBL</a></li>
+<li><a href="#org717b532">3. OpenSBI</a>
+<ul>
+<li><a href="#org99f79b2">3.1. FW<sub>PAYLOAD</sub></a></li>
+<li><a href="#org1e25d3d">3.2. FW<sub>JUMP</sub></a></li>
+<li><a href="#org1111c1d">3.3. FW<sub>DYNAMIC</sub></a></li>
+<li><a href="#org1a89a8a">3.4. Stuff we can use OpenSBI for</a></li>
+<li><a href="#org8bbd8c3">3.5. How do we interact with OpenSBI?</a></li>
+<li><a href="#orgf852414">3.6. Writting to UART using OpenSBI</a></li>
+</ul>
+</li>
+<li><a href="#orgb0fb6f9">4. PINE64 bootloader</a>
+<ul>
+<li><a href="#org6d353df">4.1. Zero Stage Boot loder (ZBSL)</a></li>
+<li><a href="#orgee2e9bb">4.2. The boot order (as of my knowledge)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orge11d7d6" class="outline-2">
+<h2 id="orge11d7d6"><span class="section-number-2">1.</span> Author&rsquo;s notes</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>This is incredibly messy, so please have a &rsquo;search all files&rsquo; thing present, most things are defined, dm me if anything is missing</li>
+</ul>
+</div>
+<div id="outline-container-orgdb5d715" class="outline-3">
+<h3 id="orgdb5d715"><span class="section-number-3">1.1.</span> Memory addresses</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Anything prefixed with `0x` is probably a memory address</li>
+<li>When you see a `_` in a memory address, it means nothing.
+It&rsquo;s like a comma in english, just used to break things up
+so we can read it more easily</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgdeb96f4" class="outline-3">
+<h3 id="orgdeb96f4"><span class="section-number-3">1.2.</span> Device Tree Blob</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>When I first read this, I was like, what the fuckity fuck is this bullshit</li>
+<li>It&rsquo;s a file containing information about the board, and it&rsquo;s hardware.</li>
+<li>Most embeded platforms do not provide a way of discovering the hardware they have.</li>
+<li>So either, we have to guess, or we have to give the kernel info abt the board</li>
+<li>Before DTB, every board needed a kernel compiled for it specifically for it, and that&rsquo;s fucking painful</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgdf586a1" class="outline-3">
+<h3 id="orgdf586a1"><span class="section-number-3">1.3.</span> DRAM</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>I dont know why this wasnt obvious, but not having enough space in ram to load the thingy crashes</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org5792a0b" class="outline-2">
+<h2 id="org5792a0b"><span class="section-number-2">2.</span> ZSBL</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>We&rsquo;ll be dealing with OpenSBI, it&rsquo;s placed at 0x8000<sub>0000</sub></li>
+<li>After the ZSBL runs, it will jump to OpenSBI, and run it, and make sure everything after its initalisation can run.</li>
+<li>Jumps to OpenSBI</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org717b532" class="outline-2">
+<h2 id="org717b532"><span class="section-number-2">3.</span> OpenSBI</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>There are three main flavours of OpenSBI</li>
+</ul>
+</div>
+<div id="outline-container-org99f79b2" class="outline-3">
+<h3 id="org99f79b2"><span class="section-number-3">3.1.</span> FW<sub>PAYLOAD</sub></h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>Point the `make` tool to whatever you want to run after OpenSBI, and it will build a single binary that will/cat start from 0x8000<sub>0000</sub></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1e25d3d" class="outline-3">
+<h3 id="org1e25d3d"><span class="section-number-3">3.2.</span> FW<sub>JUMP</sub></h3>
+<div class="outline-text-3" id="text-3-2">
+<ul class="org-ul">
+<li>You hardcode the address of your software that comes after OpenSBI</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1111c1d" class="outline-3">
+<h3 id="org1111c1d"><span class="section-number-3">3.3.</span> FW<sub>DYNAMIC</sub></h3>
+<div class="outline-text-3" id="text-3-3">
+<ul class="org-ul">
+<li>bro this is magic</li>
+<li>This gets the info abt booting from the ZBSL.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1a89a8a" class="outline-3">
+<h3 id="org1a89a8a"><span class="section-number-3">3.4.</span> Stuff we can use OpenSBI for</h3>
+<div class="outline-text-3" id="text-3-4">
+<ul class="org-ul">
+<li>We can delegate a lot of stuff to OpenSBI, making our software more portable</li>
+<li>Like we can delegate the responsibility of</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org8bbd8c3" class="outline-3">
+<h3 id="org8bbd8c3"><span class="section-number-3">3.5.</span> How do we interact with OpenSBI?</h3>
+<div class="outline-text-3" id="text-3-5">
+<ul class="org-ul">
+<li>The same way you would with interupts on like linux</li>
+<li>We&rsquo;ll populate some registers, and invoke a interrupt/trap to pass control down to the software stack to OpenSBI.</li>
+<li>Here&rsquo;s a full list of stuff that can be done  <a href="https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc">https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgf852414" class="outline-3">
+<h3 id="orgf852414"><span class="section-number-3">3.6.</span> Writting to UART using OpenSBI</h3>
+<div class="outline-text-3" id="text-3-6">
+<ul class="org-ul">
+<li>Binary Encoding is well documented here (Im not going to write out a org file on this); <a href="https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/binary-encoding.adoc">https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/binary-encoding.adoc</a></li>
+<li>register `a7` contains the Extension ID (EID),</li>
+<li>and `a6` encodes the individual Function ID (FID) within that instruction</li>
+<li>The parameters are passed via `a0`, `a1`, and `a2`.</li>
+<li>First we&rsquo;re going to put `0x4442434E` into `a7`, since that&rsquo;s the extension we&rsquo;ll be needing(?) <a href="https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-debug-console.adoc">https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-debug-console.adoc</a></li>
+<li>Then we&rsquo;ll put `0x00` into `a6`, since that&rsquo;s the function we&rsquo;ll need.</li>
+</ul>
+<p>
+Here&rsquo;s an example of the code we&rsquo;ll use;
+</p>
+<div class="org-src-container">
+<pre class="src src-asm">            <span style="color: #cc7833;">.global</span> _start
+        <span style="color: #cc7833;">.section</span> .text.kernel
+
+<span style="color: #ffc66d;">_start</span>: <span style="color: #cc7833;">li</span> a7, 0x4442434E
+        <span style="color: #cc7833;">li</span> a6, 0x00
+        <span style="color: #cc7833;">li</span> a0, <span style="color: #6d9cbe;">12</span>
+        <span style="color: #cc7833;">lla</span> a1, debug_string
+        <span style="color: #cc7833;">li</span> a2, <span style="color: #6d9cbe;">0</span>
+        <span style="color: #cc7833;">ecall</span>
+
+<span style="color: #ffc66d;">loop</span>:   <span style="color: #cc7833;">j</span> loop
+
+        <span style="color: #cc7833;">.section</span> .rodata
+<span style="color: #ffc66d;">debug_string</span>:
+        <span style="color: #cc7833;">.string</span> <span style="color: #a5c261;">"Hello world\n"</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb0fb6f9" class="outline-2">
+<h2 id="orgb0fb6f9"><span class="section-number-2">4.</span> PINE64 bootloader</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>The Pine64 uses OpenSBI as it&rsquo;s ZSBL (Zero stage bootloader)</li>
+</ul>
+</div>
+<div id="outline-container-org6d353df" class="outline-3">
+<h3 id="org6d353df"><span class="section-number-3">4.1.</span> Zero Stage Boot loder (ZBSL)</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>There is [checks notes] no info on this!</li>
+<li>The Stage-0 bootloader is the first thing loaded after the computer is turned on (reset)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgee2e9bb" class="outline-3">
+<h3 id="orgee2e9bb"><span class="section-number-3">4.2.</span> The boot order (as of my knowledge)</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>The ZSBL is contained (in hiFive boards) at 0x0001<sub>0000</sub></li>
+<li>The ROM chip that contains it is integrated directly into the chip</li>
+<li>All it does is evaluate the MSEL pins (the hardwired sutff), and load the FSBL from the corresponding place (SD card, flash, etc etc) onto the L2 Cache of the flash chip. Then it jumps to it (check the program counter, I have a feeling this will be hwacky)</li>
+<li>We&rsquo;re writting the FSBL.</li>
+<li>Now we&rsquo;re executing the First Stage Bootloader. This exists at address `0x0800<sub>0000</sub>`</li>
+<li>This is <b><b>allegedly</b></b> provided by U-Boot-SPL. But like, who fucking knows, this shit is undocumented</li>
+<li>However, if it is provided by U-Boot-SPL. It is a downsized version of U-BOOT-SPL.-</li>
+<li>It <b><b>allegedly</b></b> just initisalizes the ddr memory, then it loads the real U-Boot, and jumps into it</li>
+<li>The third stage is U-Boot Proper.</li>
+<li>On the HiFive, it&rsquo;s loacated on 0x8000<sub>0000</sub> (DDR memory).</li>
+<li>This contains both U-Boot, and OpenSBI, and Device Tree Blob</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: yohello</p>
+<p class="date">Created: 2024-10-13 Sun 01:22</p>
+</div>
+</body>
+</html>

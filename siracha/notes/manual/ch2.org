@@ -1,0 +1,24 @@
+#+title: Ch2
+
+* 2.1: Programmers' Model for base integer Subset
+- There are **31** general purpose registers ~x1-x31~, which hold integer values.
+- Register ~x0~ is hard wired to be a ~0~ at all times.
+  - The reasons for there being a ~0~ register boil down to;
+    1. By having ~x0~ you dont need a sign extension every time you need a ~0~
+    2. Kill an op due to branch mis-prediction.
+    3. You have a `0`
+    4. Many branch compare instructions that ~0~, so it helps
+    5. It apparently makes hardware design nicer, and makes it more energy efficient.
+
+* 2.2: Base instruction formats
+- There is also one more user-visible register, the program counter ~pc~ register which holds the addresses of the current instruction
+- There are four core instructions (R/I/S/U). All are a fixed 32 bits in length, and must be aligned on a four-byte boundary in memory.
+- An 'instruction address misaligned' excpetion is generated on a taken branch and/or an unconditional jump if the target address is NOT four-byte aligned.
+- 'No instruction misaligned exception is generated' for a conditional branch that is not taken(?)
+- The RISC-V ISA keeps the source (~rs1~, and ~rs2~), and the destination (~rd~) registers at the same position in all formats to simplify decoding.
+  - Except for th 5-bit immediates used in CSR(control status registers) instructions.
+- Immediates are always sign-extended(google this), and are generally packed towards the leftmost avaliable bits in the instruction, and have been allocated to reduce harware complexity. In particular, the sign for all bites is always in bit 31 of the instruction to speed sign-extension circuitry
+* 2.3: Immediate Encoding variants
+- There are two variants of the instruction formats (B/J) based on the handling of immediates.
+- The only difference between the S & B formats is the 12-bit immediate field is used to encode branch offsets in multiples of 2
+- ukw, you should read this on your own, this is too dense
