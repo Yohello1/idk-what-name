@@ -139,11 +139,14 @@ namespace chlorine::io
 
         for(auto const& [key, value] : sceneIn->Conductor.instruments )
         {
-            logOut->log("key: " + key + "For this item name or wtv\n");
+            std::string fileLocation = pathPrefix + "/" + sceneIn->sceneName + "/";
+
+            logOut->log("key: " + key + " will be stored at: " + fileLocation + "\n");
+
             for(auto const& [component, va] : value)
             {
-                sceneFile << key << '\n';
-                componentExport(sceneIn, pathPrefix, key, component, logOut);
+
+                componentExport(sceneIn, fileLocation, key, component, logOut);
             }
         }
 
