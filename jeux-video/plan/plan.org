@@ -61,7 +61,7 @@ As much as possibly will be human readable
 Scene file: x.pcsf : Poisoned Chlorine Save file
 Scene name & file name must be the same!
 Componenet file: x/y.pccf : Poisioned chlorine component file, x is the scene file, y is the component name
-
+It is important to note that; order is not preserved, or kept when loading/saving files
 *  Game idea
 A game about finding your identity through a journey
 A journey during which you slowly uncover your past
