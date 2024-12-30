@@ -8,7 +8,7 @@
 #include <memory>
 #include <functional>
 #include <typeindex>
-
+#include <filesystem>
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
 
