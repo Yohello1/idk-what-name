@@ -20,3 +20,4 @@ testing/souro/*
 */build/*
 *.o
 */.vscode/*
+*/Debug/*

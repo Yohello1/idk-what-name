@@ -35,8 +35,8 @@ namespace chlorine::io
             return false;
         }
 
-        std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
-        sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath, logOut);
+        std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentName, sceneIn->Conductor);
+        sceneIn->Conductor.instruments[componentName][tempIndex]->loadFile(componentPath, logOut);
 
         // If the type_index does not exist in the map, add it to the map
 
@@ -109,7 +109,7 @@ namespace chlorine::io
                          const std::type_index temp,
                          std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
-        std::string fileLocation = pathPrefix + filename;
+        std::string fileLocation = pathPrefix + filename + ".pccf";
         logOut->log("The location of the file " +  fileLocation + '\n');
 
 
