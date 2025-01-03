@@ -99,6 +99,17 @@ public:
         return true;
     }
 
+    bool saveFile(const std::string &filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
+    {
+        (void)logOut;
+        std::ofstream componentFile;
+        componentFile.open(filePath);
+        componentFile << "type " << chlorine::io::_stringTypeConv[std::type_index(typeid(*this))] << '\n';
+        componentFile << name << '\n';
+        componentFile << name << ' ' << windowX << '\n';
+        componentFile.close();
+        return true;
+    }
 };
 
 class windowY : public chlorine::scene::component
@@ -129,6 +140,18 @@ public:
         }
         return true;
     }
+
+    bool saveFile(const std::string &filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
+    {
+        (void)logOut;
+        std::ofstream componentFile;
+        componentFile.open(filePath);
+        componentFile << "type " << chlorine::io::_stringTypeConv[std::type_index(typeid(*this))] << '\n';
+        componentFile << name << '\n';
+        componentFile << name << ' ' << windowY << '\n';
+        componentFile.close();
+        return true;
+    }
 };
 
 std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap3
@@ -157,8 +180,8 @@ int main()
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
     logOut->log("hello\n");
 
-    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/Arrowhead.pcsf", tempMap3, logOut);
-    tempScene->sceneName = "timeSpent";
-    chlorine::io::sceneExport(tempScene, "../test/", logOut);
+    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/timeSpent.pcsf", tempMap3, logOut);
+    // tempScene->sceneName = "timeSpent";
+    // chlorine::io::sceneExport(tempScene, "../test/", logOut);
 
 }
