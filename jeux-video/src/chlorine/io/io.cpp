@@ -156,6 +156,8 @@ namespace chlorine::io
         {
             logOut->log("key: " + key + " will be stored at: " + pathPrefix + "\n");
 
+            sceneFile << key << '\n';
+
             for(auto const& [component, va] : value)
             {
 
