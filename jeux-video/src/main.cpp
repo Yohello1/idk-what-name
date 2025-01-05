@@ -6,7 +6,7 @@
 #include <functional>
 #include <typeindex>
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <chlorine/logs/logs.hpp>
@@ -71,6 +71,30 @@ public:
 
 	virtual ~boxes() = default;
 };
+
+class boxies : public chlorine::scene::component
+{
+public:
+    std::pair<std::uint32_t, std::uint32_t> position;
+
+    bool loadFile (const std::string &filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
+    {
+        (void)logOut;
+
+        return true;
+    }
+
+    bool saveFile(const std::string &filePath, std::unique_ptr<::chlorine::logging::logBase> const &logOut) override
+    {
+        (void)logOut;
+
+        return true;
+    }
+
+
+	virtual ~boxies() = default;
+};
+
 
 std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap3
 {
