@@ -55,7 +55,7 @@ target_link_libraries(pChlorine PRIVATE
                                 glm::glm
                                 OpenGL::GL
                                 glad
-                                stdc++fs)
+                                )
 
 
 
