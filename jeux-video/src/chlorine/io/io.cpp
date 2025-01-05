@@ -35,8 +35,8 @@ namespace chlorine::io
             return false;
         }
 
-        std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentFileSplit[1], sceneIn->Conductor);
-        sceneIn->Conductor.instruments[componentFileSplit[1]][tempIndex]->loadFile(componentPath, logOut);
+        std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentName, sceneIn->Conductor);
+        sceneIn->Conductor.instruments[componentName][tempIndex]->loadFile(componentPath, logOut);
 
         // If the type_index does not exist in the map, add it to the map
 
@@ -109,8 +109,8 @@ namespace chlorine::io
                          const std::type_index temp,
                          std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
-        std::string fileLocation = pathPrefix + filename;
-        logOut->log("The location of the file " +  fileLocation);
+        std::string fileLocation = pathPrefix + filename + ".pccf";
+        logOut->log("The location of the file " +  fileLocation + '\n');
 
 
         // uncomment when i go fix
@@ -127,7 +127,7 @@ namespace chlorine::io
         // Ok write Scene name first line
         // Component name file path
 
-        std::string pathPrefix = filePath;
+        std::string pathPrefix = filePath + sceneIn->sceneName;
         filePath += sceneIn->sceneName + ".pcsf";
 
         // First we make the pcsf file;
@@ -137,12 +137,30 @@ namespace chlorine::io
         sceneFile << "name " << sceneIn->sceneName << '\n';
         logOut->log("name " + sceneIn->sceneName + '\n');
 
+
+        if(!std::filesystem::is_directory(pathPrefix))
+        {
+            logOut->log("Not a directory!\n");
+            std::filesystem::create_directory(pathPrefix);
+        }
+        else
+        {
+            logOut->log("Removing all files in directory, then recreating!\n");
+            std::filesystem::remove_all(pathPrefix);
+            std::filesystem::create_directory(pathPrefix);
+        }
+
+        pathPrefix += "/";
+
         for(auto const& [key, value] : sceneIn->Conductor.instruments )
         {
-            logOut->log("key: " + key + "For this item name or wtv\n");
+            logOut->log("key: " + key + " will be stored at: " + pathPrefix + "\n");
+
+            sceneFile << key << '\n';
+
             for(auto const& [component, va] : value)
             {
-                sceneFile << key << '\n';
+
                 componentExport(sceneIn, pathPrefix, key, component, logOut);
             }
         }

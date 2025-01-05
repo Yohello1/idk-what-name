@@ -1,5 +1,4 @@
 name Arrowhead
-box
-ray
+myBox1
 windowX
 windowY
