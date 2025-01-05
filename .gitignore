@@ -19,3 +19,5 @@ testing/souro/*
 *.jpeg
 */build/*
 *.o
+*/.vscode/*
+*/Debug/*
