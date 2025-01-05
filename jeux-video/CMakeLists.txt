@@ -6,13 +6,15 @@ cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_C_COMPILER gcc)
-set(CMAKE_CXX_COMPILER acpp)
-SET(CMAKE_CXX_FLAGS "-g -lsycl  ")
+set(CMAKE_CXX_COMPILER gcc)
+SET(CMAKE_CXX_FLAGS "")
 SET(CMAKE_EXE_LINKER_FLAGS  "-lsfml-graphics -lsfml-window -lsfml-system")
 
-include(FetchContent)
-
 project(pChlorine)
+
+include(FetchContent)
+find_package(glfw3 3.3 REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_executable(pChlorine src/main.cpp
 src/chlorine/io/io.hpp
@@ -52,5 +54,7 @@ endif()
 # FetchContent_MakeAvailable(SFML)
 
 # target_link_libraries(pChlorine PRIVATE sfml-graphics)
+target_link_libraries(pChlorine glfw)
+target_link_libraries(pChlorine OpenGL::GL)
 target_compile_features(pChlorine PRIVATE cxx_std_17)
 target_include_directories(pChlorine PRIVATE src)

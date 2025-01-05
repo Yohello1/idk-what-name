@@ -1,8 +1,0 @@
-# ninja log v6
-5	1429	1732233657138229723	CMakeFiles/pChlorine.dir/src/chlorine/utils/strings.cpp.o	a32b1a96c8ee3112
-3	2130	1732233657136229719	CMakeFiles/pChlorine.dir/src/chlorine/logs/logs.cpp.o	6665b8e9bf2f9b91
-4	2327	1732233657137229721	CMakeFiles/pChlorine.dir/src/chlorine/scene/scene.cpp.o	45ba78c3d5e4c953
-4	3289	1732233657137229721	CMakeFiles/pChlorine.dir/src/chlorine/scene/componentManager.cpp.o	146e38cb5c632384
-3	4500	1732233657136229719	CMakeFiles/pChlorine.dir/src/chlorine/io/io.cpp.o	b7efaa9e8ba733a4
-2	15610	1732233657135229718	CMakeFiles/pChlorine.dir/src/main.cpp.o	7ebbf1a222c5ca9f
-15611	15787	1732233672744255603	bin/pChlorine	535e6636f9ab447b
