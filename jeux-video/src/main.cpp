@@ -6,8 +6,8 @@
 #include <functional>
 #include <typeindex>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+// #include <glad/glad.h>
+// #include <GLFW/glfw3.h>
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/utils/strings.hpp>
