@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <functional>
 #include <typeindex>
+#include <any>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -84,7 +85,7 @@ public:
 
     uint16_t width, height;
 
-    window_container(std::string string_in)
+    window_container()
     {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -101,7 +102,7 @@ public:
 
         std::vector<std::string> splitVector;
 
-        ::chlorine::utils::splitStringToVector(string_in, &splitVector, ' ');
+        // ::chlorine::utils::splitStringToVector(string_in, splitVector, ' ');
 
     }
 
@@ -141,14 +142,13 @@ public:
 	virtual ~window_container() = default;
 };
 
-
-std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap3
+std::map<std::string, std::function<std::type_index(std::string, std::vector<std::any>, chlorine::scene::orchestra&)>> tempMap3
 {
-    {"boxes", [](std::string stringIn, chlorine::scene::orchestra& Conductor) -> std::type_index{
+    {"boxes", [](std::string stringIn, std::vector<std::any> input, chlorine::scene::orchestra& Conductor) -> std::type_index{
         Conductor.instruments[stringIn].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>());
         return std::type_index(typeid(boxes));}
     },
-    {"window_container", [](std::string stringIn, chlorine::scene::orchestra& Conductor) -> std::type_index{
+    {"window_container", [](std::string stringIn, std::vector<std::any> input, chlorine::scene::orchestra& Conductor) -> std::type_index{
         Conductor.instruments[stringIn].emplace(std::type_index(typeid(window_container)),
                                                 std::make_unique<window_container>());
         return std::type_index(typeid(window_container));}
