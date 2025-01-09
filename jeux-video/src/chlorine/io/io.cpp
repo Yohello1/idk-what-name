@@ -8,7 +8,7 @@ namespace chlorine::io
 
     bool componentImport(std::string componentPath, std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                          std::map<std::string,
-                         std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>  mapSwitcher,
+                         std::function<std::type_index(std::string, std::vector<std::any>, chlorine::scene::orchestra&)>>  mapSwitcher,
                          std::unique_ptr<::chlorine::logging::logBase> const &logOut)
     {
 
@@ -35,7 +35,7 @@ namespace chlorine::io
             return false;
         }
 
-        std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentName, sceneIn->Conductor);
+        std::type_index tempIndex = mapSwitcher[componentFileSplit[1]](componentName, { }, sceneIn->Conductor);
         sceneIn->Conductor.instruments[componentName][tempIndex]->loadFile(componentPath, logOut);
 
         // If the type_index does not exist in the map, add it to the map
@@ -49,7 +49,7 @@ namespace chlorine::io
     bool sceneImport(std::unique_ptr<::chlorine::scene::scene> const& sceneIn,
                      const std::string& pathPrefix,
                      const std::string& filePath,
-                     const std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>>& mapSwitcher,
+                     const std::map<std::string, std::function<std::type_index(std::string, std::vector<std::any>,  chlorine::scene::orchestra&)>>&  mapSwitcher,
                      std::unique_ptr<::chlorine::logging::logBase> const& logOut)
     {
         // open the scene file
@@ -112,8 +112,6 @@ namespace chlorine::io
         std::string fileLocation = pathPrefix + filename + ".pccf";
         logOut->log("The location of the file " +  fileLocation + '\n');
 
-
-        // uncomment when i go fix
         sceneIn->Conductor.instruments[filename][temp]->saveFile(fileLocation, logOut);
 
         return false;

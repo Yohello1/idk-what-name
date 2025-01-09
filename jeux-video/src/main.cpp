@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <functional>
 #include <typeindex>
+#include <any>
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/utils/strings.hpp>
@@ -154,17 +155,17 @@ public:
     }
 };
 
-std::map<std::string, std::function<std::type_index(std::string, chlorine::scene::orchestra&)>> tempMap3
+std::map<std::string, std::function<std::type_index(std::string, std::vector<std::any>,  chlorine::scene::orchestra&)>> tempMap3
 {
-    {"boxes", [](std::string stringIn, chlorine::scene::orchestra& Conductor) -> std::type_index{
+    {"boxes", [](std::string stringIn, std::vector<std::any> initVals, chlorine::scene::orchestra& Conductor) -> std::type_index{
         Conductor.instruments[stringIn].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>());
         return std::type_index(typeid(boxes));}
     },
-    {"windowX", [](std::string stringIn, chlorine::scene::orchestra& Conductor) -> std::type_index{
+    {"windowX", [](std::string stringIn, std::vector<std::any> initVals, chlorine::scene::orchestra& Conductor) -> std::type_index{
         Conductor.instruments[stringIn].emplace(std::type_index(typeid(windowX)), std::make_unique<windowX>());
         return std::type_index(typeid(windowX));}
     },
-    {"windowY", [](std::string stringIn, chlorine::scene::orchestra& Conductor) -> std::type_index{
+    {"windowY", [](std::string stringIn, std::vector<std::any> initVals, chlorine::scene::orchestra& Conductor) -> std::type_index{
         Conductor.instruments[stringIn].emplace(std::type_index(typeid(windowY)), std::make_unique<windowY>());
         return std::type_index(typeid(windowY));}
     },
