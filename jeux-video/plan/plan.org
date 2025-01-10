@@ -44,6 +44,9 @@
   - Either return a boolean, or are passed a logBase object for logging (for whether it worked or not)
   - Try to avoid passing copies, pass by reference instead
   - Try to use unqiue_ptrs where possible
+- Types
+  - I should have probably tried to be a bit more consistent when it comes to naming
+  - Typedef complicated ones, that will be used externally, and stuff like that
 
 * What a scene is
 A scene is a collection of components
