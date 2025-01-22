@@ -19,6 +19,9 @@
 
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/component.hpp>
+
+// using stringTypeFactory = std::map<std::string, std::function<std::type_index(std::string, std::vector<std::any>, chlorine::scene::orchestra&)>>;
+
 namespace chlorine::scene
 {
     class orchestra

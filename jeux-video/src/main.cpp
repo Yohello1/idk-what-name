@@ -83,9 +83,9 @@ class window_container : public chlorine::scene::component
 public:
     GLFWwindow *window;
 
-    uint16_t width, height;
+    const uint16_t width, height;
 
-    window_container()
+    window_container(std::vector<std:any> input_vals): width(dynamic_cast<uint16_t>(input_vals[0])), height(dynamic_cast<uint16_t>(input_vals[1]))
     {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -150,7 +150,7 @@ std::map<std::string, std::function<std::type_index(std::string, std::vector<std
     },
     {"window_container", [](std::string stringIn, std::vector<std::any> input, chlorine::scene::orchestra& Conductor) -> std::type_index{
         Conductor.instruments[stringIn].emplace(std::type_index(typeid(window_container)),
-                                                std::make_unique<window_container>());
+                                                std::make_unique<window_container>(input));
         return std::type_index(typeid(window_container));}
     }
 
