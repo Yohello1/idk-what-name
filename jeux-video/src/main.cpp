@@ -85,7 +85,7 @@ public:
 
     const uint16_t width, height;
 
-    window_container(std::vector<std:any> input_vals): width(dynamic_cast<uint16_t>(input_vals[0])), height(dynamic_cast<uint16_t>(input_vals[1]))
+    window_container(std::vector<std::any> input_vals): width(std::any_cast<uint16_t>(input_vals[0])), height(std::any_cast<uint16_t>(input_vals[1]))
     {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
