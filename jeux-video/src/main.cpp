@@ -155,7 +155,7 @@ public:
     }
 };
 
-std::map<std::string, std::function<std::type_index(std::string, std::vector<std::any>,  chlorine::scene::orchestra&)>> tempMap3
+chlorineObjectFactory tempMap3
 {
     {"boxes", [](std::string stringIn, std::vector<std::any> initVals, chlorine::scene::orchestra& Conductor) -> std::type_index{
         Conductor.instruments[stringIn].emplace(std::type_index(typeid(boxes)), std::make_unique<boxes>());
