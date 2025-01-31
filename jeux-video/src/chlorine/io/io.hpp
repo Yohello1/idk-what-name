@@ -13,6 +13,8 @@
 #include <chlorine/logs/logs.hpp>
 #include <chlorine/scene/scene.hpp>
 
+using chlorineObjectFactory = std::map<std::string, std::function<std::type_index(std::string, std::vector<std::any>, chlorine::scene::orchestra&)>>;
+
 namespace chlorine::io
 {
     extern std::map<std::type_index, std::string> _stringTypeConv;
