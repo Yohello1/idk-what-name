@@ -32,6 +32,7 @@ public:
     {
         (void)logOut;
 
+        name = "draw2";
 
         std::fstream componentFile;
         componentFile.open(filePath);
@@ -167,7 +168,14 @@ int main()
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
     logOut->log("hello\n");
 
-    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/timeSpent.pcsf", tempMap3, logOut);
+    tempScene->Conductor.insertElement<window_container, std::vector<std::any>>("window", logOut, {(uint16_t)1024, (uint16_t)1024});
+
+    std::cout << "wa";
+
+    logOut->log(tempScene->Conductor.instruments["window"][std::type_index(typeid(window_container))]->name + '\n');
+    logOut->log("hai" + '\n');
+
+    // chlorine::io::sceneImport(tempScene, "../test/" ,"../test/timeSpent.pcsf", tempMap3, logOut);
     // tempScene->sceneName = "timeSpent";
     // chlorine::io::sceneExport(tempScene, "../test/", logOut);
 
