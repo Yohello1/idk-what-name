@@ -172,6 +172,7 @@ int main()
 
     std::cout << "wa";
 
+    // why r u not running?
     logOut->log(tempScene->Conductor.instruments["window"][std::type_index(typeid(window_container))]->name + '\n');
     logOut->log("hai" + '\n');
 
