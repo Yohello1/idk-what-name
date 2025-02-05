@@ -170,6 +170,7 @@ int main()
 
     // I think the `std::any` is what's causing the issues here?
     // Could also be the cursed casting????
+    // Could be uninitliased stuff causing issues somewhere
     tempScene->Conductor.insertElement<window_container, std::vector<std::any>>("window", logOut, {(uint16_t)1024, (uint16_t)1024});
 
     std::cout << "wa";

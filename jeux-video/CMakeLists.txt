@@ -5,6 +5,7 @@
 cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_FLAGS "-g -Wall  ")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 project(pChlorine)
@@ -57,3 +58,6 @@ target_link_libraries(pChlorine PRIVATE
 
 
 target_include_directories(pChlorine PRIVATE src)
+
+
+
