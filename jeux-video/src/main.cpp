@@ -168,6 +168,8 @@ int main()
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
     logOut->log("hello\n");
 
+    // I think the `std::any` is what's causing the issues here?
+    // Could also be the cursed casting????
     tempScene->Conductor.insertElement<window_container, std::vector<std::any>>("window", logOut, {(uint16_t)1024, (uint16_t)1024});
 
     std::cout << "wa";
