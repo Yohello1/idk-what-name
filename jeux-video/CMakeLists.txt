@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-SET(CMAKE_CXX_FLAGS "-g -Wall  ")
+set(CMAKE_CXX_FLAGS "-g -Wall  ")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 project(pChlorine)
@@ -13,6 +13,8 @@ project(pChlorine)
 find_package(glfw3 3.3 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
+
+include (CTest)
 
 add_library(glad STATIC
     include/glad/glad.c
@@ -59,5 +61,13 @@ target_link_libraries(pChlorine PRIVATE
 
 target_include_directories(pChlorine PRIVATE src)
 
-
-
+#
+#
+# Tests, for memory, and leaks
+#
+#
+add_custom_target(test_memcheck
+    COMMAND ${CMAKE_CTEST_COMMAND}
+        --force-new-ctest-process --test-action memcheck
+    COMMAND ${CMAKE_COMMAND} -E cat "${CMAKE_BINARY_DIR}/Testing/Temporary/MemoryChecker.*.log"
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
