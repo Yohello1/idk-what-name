@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define MAP_SIZE 128
-#define BIRD_AMT 8000
+#define BIRD_AMT 64000
 
 class bird;
 sf::RenderWindow window(sf::VideoMode(1024,1024), "SFML works!");
