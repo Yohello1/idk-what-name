@@ -21,14 +21,14 @@ int currenttime = (unsigned int)time(NULL);
 
 int main(void)
 {
-    int upscaling = 1;
+    int upscaling = 2;
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     std::cout << "Time = " << currenttime << "\n";
     SDL_Event event;
     SDL_Renderer *renderer;
     SDL_Window *window;
 
-    int amount_of_points = 500;
+    int amount_of_points = 1000;
     struct positions spots[amount_of_points];
     srand(currenttime + noise_run);
 
