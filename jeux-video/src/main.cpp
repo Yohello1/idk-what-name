@@ -24,8 +24,4 @@ int main()
     std::unique_ptr<chlorine::scene::scene> tempScene = std::make_unique<::chlorine::scene::scene>(logOut);
     logOut->log("hello\n");
 
-    chlorine::io::sceneImport(tempScene, "../test/" ,"../test/timeSpent.pcsf", tempMap3, logOut);
-    // tempScene->sceneName = "timeSpent";
-    // chlorine::io::sceneExport(tempScene, "../test/", logOut);
-
 }
