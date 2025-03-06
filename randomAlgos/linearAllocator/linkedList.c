@@ -32,9 +32,9 @@ struct _Node* getElementIndex(struct _Node* head, size_t index)
 
 // Gets the size of the linked list
 // head: struct _Node*
-size_t getlength(struct _Node* head)
+size_t getLength(struct _Node* head)
 {
-    size_t i = 0;
+    size_t i = 1;
     while((head->_next) != NULL)
     {
         i++;
@@ -46,17 +46,29 @@ size_t getlength(struct _Node* head)
 // Removes an element based upon the index
 // head: struct _Node*
 // index: size_t
-void removeElementIndex(struct _Node* head, size_t index)
+struct _Node* removeElementIndex(struct _Node* head, size_t index)
 {
-    // FIXME: Does not handle first, and last elements
-    struct _Node* elementBefore = getElementIndex(head, index - 1); // get the element before
-    struct _Node* elementNext = (elementBefore->_next)->_next; // get the next-next element
 
-    // Free the element at the specific index
-    free(elementBefore->_next);
+    if(index == 0)
+    {
+        struct _Node* temp = head->_next;
+        free(head);
+        head = temp;
+    }
+    else
+    {
+        struct _Node* elementBefore = getElementIndex(head, index - 1); // get the element before
+        struct _Node* elementNext = (elementBefore->_next)->_next; // get the next-next element
 
-    // set the ptr from before, to point to next
-    elementBefore->_next = elementNext;
+        // Free the element at the specific index
+        free(elementBefore->_next);
+
+        // set the ptr from before, to point to next
+        elementBefore->_next = elementNext;
+    }
+
+
+    return head;
 }
 
 

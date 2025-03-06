@@ -16,7 +16,7 @@ struct _Node
 bool addElement(struct _Node* head, size_t val);
 struct _Node* getElementIndex(struct _Node* head, size_t index);
 size_t getLength(struct _Node* head);
-void removeElementIndex(struct _Node* head, size_t index);
+struct _Node* removeElementIndex(struct _Node* head, size_t index);
 struct _Node* getHead(struct _Node* head);
 struct _Node* getTail(struct _Node* head);
 void freeList(struct _Node* head);
