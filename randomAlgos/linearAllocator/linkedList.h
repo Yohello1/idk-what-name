@@ -4,13 +4,14 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 struct _Node;
 
 struct _Node
 {
     struct _Node* _next;
-    size_t val;
+    uint64_t val;
 };
 
 bool addElement(struct _Node* head, size_t val);
