@@ -8,14 +8,20 @@ static size_t getSummedValues(struct _Node* head)
 
 void* alloc(size_t allocSize, struct _alloc_block* block)
 {
+    // There is def a better... less sketchy way to do this
+
     // is it bigger than the block
     if(allocSize > block->_size)
         return 0x0;
 
     // get curr position, and determine whether there is enough space left
     // If there isnt enough space, return null
-    if((block->_size - getSummedValues(block->list) - allocSize < 0))
+    if((block->_size - getSummedValues(block->list) < 0))
        return 0x0;
 
-    return block->_start + getSummedValues(block->list) + 1;
+    void* ptr = block->_start + getSummedValues(block->list) + 1;
+
+    addElement(block->list, allocSize);
+
+    return ptr;
 }
