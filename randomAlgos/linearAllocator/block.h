@@ -13,6 +13,6 @@ struct _alloc_block
 
 void* alloc(size_t size, struct _alloc_block* block);
 
-void dealloc(void* start);
+void dealloc(void* start, struct _alloc_block* block);
 
 #endif // BLOCK_H_

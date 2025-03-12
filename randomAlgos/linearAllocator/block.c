@@ -19,9 +19,12 @@ void* alloc(size_t allocSize, struct _alloc_block* block)
     if((block->_size - getSummedValues(block->list) < 0))
        return 0x0;
 
-    void* ptr = block->_start + getSummedValues(block->list) + 1;
-
     addElement(block->list, allocSize);
 
-    return ptr;
+    return (block->_start + getSummedValues(block->list));
+}
+
+void dealloc(void* start, struct _alloc_block* block)
+{
+    // itterate through the list till we find the block that the memory is allocated to
 }
