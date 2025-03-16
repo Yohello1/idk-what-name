@@ -7,7 +7,7 @@
 
 
 CC=gcc
-CFLAGS=
+CFLAGS=-g
 
 LDER=-ld
 

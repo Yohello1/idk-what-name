@@ -3,9 +3,11 @@
 // Sum the values in a linked list
 static size_t getSummedValues(struct _Node* head)
 {
-    return (head->val + ((head->_next == NULL) ? 0 : getSummedValues(head->_next)));
+    /* return (head->val + ((head->_next == NULL) ? 0 : getSummedValues(head->_next))); */
+    return ((head->_next == NULL) ? head->val : getSummedValues(head->_next) + head->val);
 }
 
+// Alloc needs to look for the smallest contigious block that is large enough
 void* alloc(size_t allocSize, struct _alloc_block* block)
 {
     // There is def a better... less sketchy way to do this
@@ -24,7 +26,23 @@ void* alloc(size_t allocSize, struct _alloc_block* block)
     return (block->_start + getSummedValues(block->list));
 }
 
+
+// Dealloc simply needs to set area to 0, and then remove from linked list
 void dealloc(void* start, struct _alloc_block* block)
 {
-    // itterate through the list till we find the block that the memory is allocated to
+    size_t prevSize;
+    void* i = block->_start;
+    struct _Node* temp = block->list;
+
+    while(i < start)
+    {
+        if(temp == NULL)
+            return;
+        prevSize = temp->val;
+        i += temp->val;
+        temp = temp->_next;
+    }
+
+    memcpy(i-prevSize, i, getSummedValues(temp));
+
 }

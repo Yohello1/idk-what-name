@@ -3,6 +3,7 @@
 
 #include "linkedList.h"
 #include <stdint.h>
+#include <string.h>
 
 struct _alloc_block
 {

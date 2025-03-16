@@ -7,6 +7,7 @@
 #include "linkedList.h"
 
 
+
 int main()
 {
     printf("Testing linked list functionality\n");
@@ -54,5 +55,39 @@ int main()
 
 
     freeList(head);
+    printf("Done testing the linked list\n");
     // End of linked list testing
+
+    // Alloc/Dealloc testing!
+    printf("Testing out the arena pointer\n");
+
+    struct _alloc_block myBlock;
+    myBlock._start = malloc(sizeof(char)*256);
+    myBlock._size = 256;
+    myBlock.list = malloc(sizeof(struct _Node));
+
+    int* a = alloc(sizeof(int)*16, &myBlock);
+    for(int i = 0; i < 16; i++)
+    {
+        a[i] = i;
+    }
+    int* b = alloc(sizeof(int)*16, &myBlock);
+    for(int i = 0; i < 16; i++)
+    {
+        b[i] = i+16;
+    }
+
+    for(int i = 0; i < 16; i++)
+    {
+        printf("a[%i]: %i\n", i, a[i]);
+    }
+    for(int i = 0; i < 16; i++)
+    {
+        printf("b[%i]: %i\n", i, b[i]);
+    }
+
+    dealloc(a, &myBlock);
+
+    // Ending it
+    free(myBlock._start);
 }
