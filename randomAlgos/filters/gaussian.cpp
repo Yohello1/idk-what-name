@@ -7,21 +7,21 @@
 #include <stdio.h>
 
 
-cv::Mat createGaussianKernel(int size, double sigma) {
-    cv::Mat kernel(size, size, CV_16F);
+void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     int center = size / 2;
-    double sum = 0.0;
-
-    for (int y = -center; y <= center; ++y) {
-        for (int x = -center; x <= center; ++x) {
-            kernel.at<double>(y + center, x + center) = exp(-(x * x + y * y) / (2.0 * sigma * sigma));
-            sum += kernel.at<double>(y + center, x + center);
+    float sum = 0.0f;
+    for(int i = 0; i < 64; i++)
+    {
+        for(int j = 0; j < 64; j++)
+        {
+            float x = std::pow(i-center,2);
+            float y = std::pow(y-center,2);
+            kernel.at<float>(i,j) = (float)std::exp(-(x+y)/(2.0f*sigma*sigma));
+            sum +=  std::exp(-(x+y)/(2.0f*sigma*sigma));
         }
     }
 
-    kernel /= sum;
-
-    return kernel;
+    kernel /= 1;  // Normalize to ensure the kernel sums to 1
 }
 
 #define sigmaLarge 3.0
@@ -30,6 +30,7 @@ cv::Mat createGaussianKernel(int size, double sigma) {
 #define bigDist 14
 #define smallDist 5
 
+
 void processImageParallel(cv::Mat& img, cv::Mat& output) {
     // Ensure output is initialized properly
     // if (output.empty() || output.size() != img.size()) {
@@ -37,10 +38,12 @@ void processImageParallel(cv::Mat& img, cv::Mat& output) {
     // }
 
     // Create the Gaussian kernels outside the parallel loop
-    cv::Mat gaussianKernelSmall = createGaussianKernel(smallDist, sigmaSmall);
-    cv::Mat gaussianKernelLarge = createGaussianKernel(bigDist, sigmaLarge);
-    int kernelRadiusSmall = gaussianKernelSmall.rows / 2;
-    int kernelRadiusLarge = gaussianKernelLarge.rows / 2;
+    cv::Mat gaussianKernelSmall(smallDist, smallDist, CV_32F);
+    createGaussianKernel(gaussianKernelSmall, smallDist, sigmaSmall);
+    cv::Mat gaussianKernelLarge(bigDist, bigDist, CV_32F);
+    createGaussianKernel(gaussianKernelLarge, bigDist, sigmaLarge);
+    int kernelRadiusSmall = smallDist / 2;
+    int kernelRadiusLarge = bigDist / 2;
 
     // Parallel loop
     cv::parallel_for_(cv::Range(kerDist, img.rows - kerDist), [&](const cv::Range& range) {
@@ -85,8 +88,9 @@ void processImageParallel(cv::Mat& img, cv::Mat& output) {
 
 int main(int, char**)
 {
-    cv::Mat frame(1280, 720, CV_8U), tempdst(1280+kerDist*2, 720+kerDist*2, CV_8U), tempdst2(1280+kerDist*2, 720+kerDist*2, CV_8U), dst(1280+kerDist*2, 720+kerDist*2, CV_8U), output(1280+kerDist*2,720+kerDist*2, CV_8U);
+    cv::Mat frame, tempdst(1280+kerDist*2, 720+kerDist*2, CV_8U), tempdst2(1280+kerDist*2, 720+kerDist*2, CV_8U), dst(1280+kerDist*2, 720+kerDist*2, CV_8U), output(1280+kerDist*2,720+kerDist*2, CV_8U);
 
+    frame.reshape(3);
 
     cv::VideoCapture cap;
 
@@ -117,13 +121,26 @@ int main(int, char**)
             break;
         }
 
-        //processImageParallel(dst, output);
-        createGaussianKernel(64, 8.0);
+        #define tempSizeKernel 64
 
-        cv::imshow("Live", dst);
+        processImageParallel(dst, output);
+        cv::Mat bigKernelMat(tempSizeKernel, tempSizeKernel, CV_32F);
+        createGaussianKernel(bigKernelMat, tempSizeKernel, 8.0);
+
+        cv::Mat displayMat;
+        cv::normalize(bigKernelMat, displayMat, 0, 255, cv::NORM_MINMAX);
+        displayMat.convertTo(displayMat, CV_8U);  // Now it's safe for imshow
+
+        std::cout << "Type: " << bigKernelMat.type() << ", Size: " << bigKernelMat.size() << std::endl;
+
+
+
+        cv::imshow("Live", frame);
+
+
         char key = cv::waitKey(5);
         if (key == 'w' || key == 'W')  // Check if 'w' or 'W' is pressed
             break;
     }
-    return 0;
+    exit(0);
 }

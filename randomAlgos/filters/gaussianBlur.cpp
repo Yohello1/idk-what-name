@@ -28,7 +28,7 @@ cv::Mat createGaussianKernel(int size, double sigma) {
 
 void processImageParallel(cv::Mat& img) {
     cv::parallel_for_(cv::Range(10, img.rows-10), [&](const cv::Range& range) {
-        cv::Mat gaussianKernel = createGaussianKernel(21, val1);
+        cv::Mat gaussianKernel = createGaussianKernel(13, val1);
         int kernelRadius = gaussianKernel.rows/2;
 
         for (int i = range.start; i < range.end; ++i) {
