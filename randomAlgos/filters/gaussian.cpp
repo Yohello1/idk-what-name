@@ -10,9 +10,9 @@
 void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     int center = size / 2;
     float sum = 0.0f;
-    for(int i = 0; i < 64; i++)
+    for(int i = 0; i < size; i++)
     {
-        for(int j = 0; j < 64; j++)
+        for(int j = 0; j < size; j++)
         {
             float x = std::pow(i-center,2);
             float y = std::pow(j-center,2);
@@ -20,18 +20,15 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
             float factor = 1/(sigma*std::sqrt(2*3.14));
             float exp = std::exp((-1.0/2.0)*(std::pow(x_val,2)/(std::pow(sigma,2))));
             float val = factor*exp;
-            std::cout << ' ' << val;
 
 
             kernel.at<float>(i,j) = val;
             sum +=  kernel.at<float>(i,j);
             // std::cout << (std::exp(-(std::pow(z,2))/(2.0f*sigma*sigma)))*(1/(sigma*std::sqrt(3.14*2))) << '\n';
         }
-        std::cout << '\n';
     }
 
     kernel /= 1;  // Normalize to ensure the kernel sums to 1
-    std::cout << "SUM " << sum << '\n';
 }
 
 #define sigmaLarge 1.0
@@ -105,12 +102,16 @@ int main(int, char**)
             break;
         }
 
-        cv::Mat gaussianKernelSmall(64, 64, CV_32F);
+        cv::Mat gaussianKernelSmall(256, 256, CV_32F);
 
-        createGaussianKernel(gaussianKernelSmall, 64, 3);
-        gaussianKernelSmall.convertTo(gaussianKernelSmall, CV_32F, 1.0/255,0);
+        {
+            createGaussianKernel(gaussianKernelSmall, 256, 30);
+            double minVal, maxVal; cv::Point minLoc, maxLoc;
+            cv::minMaxLoc(gaussianKernelSmall, &minVal, &maxVal, &minLoc, &maxLoc);
+            std::cout << maxVal << std::endl;
+            gaussianKernelSmall.convertTo(gaussianKernelSmall, CV_8U, (1/maxVal)*std::pow(10,2), 1);
+        }
 
-        gaussianKernelSmall.convertTo(gaussianKernelSmall, CV_8U, 50000000, 1);
 
 
         cv::imshow("Live", gaussianKernelSmall);

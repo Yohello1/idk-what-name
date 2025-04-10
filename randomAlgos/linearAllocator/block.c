@@ -18,10 +18,10 @@ void* alloc(size_t allocSize, struct _alloc_block* block)
 
     // get curr position, and determine whether there is enough space left
     // If there isnt enough space, return null
-    if((block->_size - getSummedValues(block->list) < 0))
-       return 0x0;
+    struct _Node* head = block->list;
 
-    addElement(block->list, allocSize);
+
+    addElement(block->list, allocSize, allocSize);
 
     return (block->_start + getSummedValues(block->list));
 }

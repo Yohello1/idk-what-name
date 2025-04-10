@@ -12,9 +12,10 @@ struct _Node
 {
     struct _Node* _next;
     uint64_t val;
+    size_t size;
 };
 
-bool addElement(struct _Node* head, size_t val);
+bool addElement(struct _Node* head, size_t val, size_t size);
 struct _Node* getElementIndex(struct _Node* head, size_t index);
 size_t getLength(struct _Node* head);
 struct _Node* removeElementIndex(struct _Node* head, size_t index);

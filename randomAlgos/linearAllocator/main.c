@@ -20,9 +20,9 @@ int main()
 
     // adding a bunch of elements
     {
-        addElement(head, 15);
-        addElement(head, 24);
-        addElement(head, 36);
+        addElement(head, 15, 13);
+        addElement(head, 24, 14);
+        addElement(head, 36, 15);
     }
 
     // Getting an element at a certain index

@@ -3,7 +3,7 @@
 // Add an element to the end of the list
 // head: struct _Node*
 // val: size_t
-bool addElement(struct _Node* head, size_t val)
+bool addElement(struct _Node* head, size_t val, size_t size)
 {
     while((head->_next) != NULL)
     {
@@ -13,6 +13,7 @@ bool addElement(struct _Node* head, size_t val)
 
     head->_next = temp;
     temp->val = val;
+    temp->size = size;
     temp->_next = NULL;
 
     return true; // Should return false if the malloc fails, but Im lazy :P
