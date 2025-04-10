@@ -15,16 +15,26 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
         for(int j = 0; j < 64; j++)
         {
             float x = std::pow(i-center,2);
-            float y = std::pow(y-center,2);
-            kernel.at<float>(i,j) = (float)std::exp(-(x+y)/(2.0f*sigma*sigma));
-            sum +=  std::exp(-(x+y)/(2.0f*sigma*sigma));
+            float y = std::pow(j-center,2);
+            float x_val = std::sqrt(x+y);
+            float factor = 1/(sigma*std::sqrt(2*3.14));
+            float exp = std::exp((-1.0/2.0)*(std::pow(x_val,2)/(std::pow(sigma,2))));
+            float val = factor*exp;
+            std::cout << ' ' << val;
+
+
+            kernel.at<float>(i,j) = val;
+            sum +=  kernel.at<float>(i,j);
+            // std::cout << (std::exp(-(std::pow(z,2))/(2.0f*sigma*sigma)))*(1/(sigma*std::sqrt(3.14*2))) << '\n';
         }
+        std::cout << '\n';
     }
 
     kernel /= 1;  // Normalize to ensure the kernel sums to 1
+    std::cout << "SUM " << sum << '\n';
 }
 
-#define sigmaLarge 3.0
+#define sigmaLarge 1.0
 #define sigmaSmall 1.0
 #define kerDist 15
 #define bigDist 14
@@ -46,42 +56,9 @@ void processImageParallel(cv::Mat& img, cv::Mat& output) {
     int kernelRadiusLarge = bigDist / 2;
 
     // Parallel loop
-    cv::parallel_for_(cv::Range(kerDist, img.rows - kerDist), [&](const cv::Range& range) {
-        for (int i = range.start; i < range.end; ++i) {
-            for (int j = kerDist; j < img.cols - kerDist; ++j) {
-                double weightedSumSmall = 0.0;
-                double weighted2SumLarge = 0.0;
 
-                // Apply the small kernel
-                for (int ky = -kernelRadiusSmall; ky <= kernelRadiusSmall; ++ky) {
-                    for (int kx = -kernelRadiusSmall; kx <= kernelRadiusSmall; ++kx) {
-                        int ni = i + ky;
-                        int nj = j + kx;
-                        if (ni >= 0 && ni < img.rows && nj >= 0 && nj < img.cols) {
-                            weightedSumSmall += img.at<uchar>(ni, nj) * gaussianKernelSmall.at<double>(ky + kernelRadiusSmall, kx + kernelRadiusSmall);
-                        }
-                    }
-                }
 
-                // Apply the large kernel
-                for (int ky = -kernelRadiusLarge; ky <= kernelRadiusLarge; ++ky) {
-                    for (int kx = -kernelRadiusLarge; kx <= kernelRadiusLarge; ++kx) {
-                        int ni = i + ky;
-                        int nj = j + kx;
-                        if (ni >= 0 && ni < img.rows && nj >= 0 && nj < img.cols) {
-                            weighted2SumLarge += img.at<uchar>(ni, nj) * gaussianKernelLarge.at<double>(ky + kernelRadiusLarge, kx + kernelRadiusLarge);
-                        }
-                    }
-                }
 
-                // Compute the difference of Gaussians
-                double dogValue = weightedSumSmall - weighted2SumLarge;
-
-                // Clamp the result to [0, 255]
-                output.at<uchar>(i, j) = static_cast<uchar>(std::min(255.0, std::max(0.0, dogValue)));
-            }
-        }
-    });
 }
 
 
@@ -121,21 +98,22 @@ int main(int, char**)
             break;
         }
 
-        #define tempSizeKernel 64
-
-        processImageParallel(dst, output);
-        cv::Mat bigKernelMat(tempSizeKernel, tempSizeKernel, CV_32F);
-        createGaussianKernel(bigKernelMat, tempSizeKernel, 8.0);
 
         cv::Mat displayMat;
-        cv::normalize(bigKernelMat, displayMat, 0, 255, cv::NORM_MINMAX);
-        displayMat.convertTo(displayMat, CV_8U);  // Now it's safe for imshow
+        if (frame.empty()) {
+            std::cerr << "ERROR! blank frame grabbed\n";
+            break;
+        }
 
-        std::cout << "Type: " << bigKernelMat.type() << ", Size: " << bigKernelMat.size() << std::endl;
+        cv::Mat gaussianKernelSmall(64, 64, CV_32F);
+
+        createGaussianKernel(gaussianKernelSmall, 64, 3);
+        gaussianKernelSmall.convertTo(gaussianKernelSmall, CV_32F, 1.0/255,0);
+
+        gaussianKernelSmall.convertTo(gaussianKernelSmall, CV_8U, 50000000, 1);
 
 
-
-        cv::imshow("Live", frame);
+        cv::imshow("Live", gaussianKernelSmall);
 
 
         char key = cv::waitKey(5);
