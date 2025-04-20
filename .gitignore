@@ -21,3 +21,4 @@ testing/souro/*
 *.o
 */.vscode/*
 */Debug/*
+*.run
