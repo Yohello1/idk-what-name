@@ -33,13 +33,17 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
 }
 #define kerDist 16
 
-#define sigmaLarge 8.0
-#define bigDist 15
+#define sigmaLarge 2.828
+#define bigDist 19
 
-#define sigmaSmall 60.0
-#define smallDist 3
+#define sigmaSmall 1.0
+#define smallDist 13
 
-void processImageParallel(const cv::Mat& img, cv::Mat& output) {
+void processImageParallel(const cv::Mat& img, cv::Mat& output)
+{
+
+    CV_Assert(img.type() == CV_32FC1);
+
     const int bigRadius = bigDist;
     const int BigKernelSize = bigRadius * 2 + 1;
     cv::Mat gaussianKernelLarge(BigKernelSize, BigKernelSize, CV_32F);
@@ -67,23 +71,24 @@ void processImageParallel(const cv::Mat& img, cv::Mat& output) {
                     int x = i + (n - bigRadius);
                     float a = img.at<float>(y, x);
                     float b = gaussianKernelLarge.at<float>(m, n);
-                    bigSum += std::abs(a * b);
+                    float c = a*b;
+                    bigSum += std::abs(c);
                 }
             }
 
-            // float smallSum = 0.0f;
-            // for (int m = 0; m < smallKernelSize; ++m) {
-            //     int y = j + (m - smallRadius);
-            //     for (int n = 0; n < smallKernelSize; ++n) {
-            //         int x = i + (n - smallRadius);
-            //         float a = img.at<float>(y, x);
-            //         float b = gaussianKernelSmall.at<float>(m, n);
-            //         smallSum += std::abs(a * b);
-            //     }
-            // }
+            float smallSum = 0.0f;
+            for (int m = 0; m < smallKernelSize; ++m) {
+                int y = j + (m - smallRadius);
+                for (int n = 0; n < smallKernelSize; ++n) {
+                    int x = i + (n - smallRadius);
+                    float a = img.at<float>(y, x);
+                    float b = gaussianKernelSmall.at<float>(m, n);
+                    smallSum += std::abs(a * b);
+                }
+            }
 
 
-            output.at<float>(j, i) = bigSum;
+            output.at<float>(j, i) = smallSum - bigSum;
         }
     }
 }
