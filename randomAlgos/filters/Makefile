@@ -10,7 +10,7 @@ gaussian: gaussian.cpp
 	g++ -O3 -fopenmp $(shell pkg-config --cflags --libs opencv4) -g gaussian.cpp -o gaussian.run
 
 diffGaussian: gaussian.cpp
-	g++ -g -fopenmp $(shell pkg-config --cflags --libs opencv4) -g differenceOfGaussians.cpp -o differenceOfGaussians.run
+	g++ -O3 -fopenmp $(shell pkg-config --cflags --libs opencv4) differenceOfGaussians.cpp -o differenceOfGaussians.run
 
 
 

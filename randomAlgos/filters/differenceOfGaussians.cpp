@@ -31,13 +31,14 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
 
     kernel /= sum;  // Normalize to ensure the kernel sums to 1
 }
-#define kerDist 16
 
 #define sigmaLarge 2.828
 #define bigDist 19
 
 #define sigmaSmall 1.0
 #define smallDist 13
+
+#define kerDist MAX(smallDist, bigDist)
 
 void processImageParallel(const cv::Mat& img, cv::Mat& output)
 {
@@ -91,6 +92,7 @@ void processImageParallel(const cv::Mat& img, cv::Mat& output)
             output.at<float>(j, i) = smallSum - bigSum;
         }
     }
+
 }
 
 
@@ -129,7 +131,7 @@ int main(int, char**)
         output.create(img.size(), CV_32F);
         processImageParallel(img, output);
         cv::Mat disp;
-        output.convertTo(disp, CV_8U);
+        output.convertTo(disp, CV_8U, 10.0f, 0.0f);
         cv::imshow("draw2", disp);
 
 
