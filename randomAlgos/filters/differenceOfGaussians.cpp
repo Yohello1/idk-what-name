@@ -40,6 +40,10 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
 #define smallDist 11
 
 #define kerDist MAX(smallDist, bigDist)
+
+sycl::queue q(sycl::gpu_selector_v);
+
+
 void processImageParallel(const cv::Mat& img, cv::Mat& output) {
     CV_Assert(img.type() == CV_32FC1);
 
@@ -56,22 +60,23 @@ void processImageParallel(const cv::Mat& img, cv::Mat& output) {
 
     output.create(img.size(), CV_32F);
 
-    sycl::queue q(sycl::cpu_selector_v);
-
     const int rows = img.rows;
     const int cols = img.cols;
     size_t   imgCount   = size_t(rows) * cols;
     size_t   bigKCount  = size_t(bigKernelSize)  * bigKernelSize;
     size_t   smallKCount= size_t(smallKernelSize)* smallKernelSize;
 
-    float *d_img = sycl::malloc_shared<float>(imgCount,    q);
-    float *d_out = sycl::malloc_shared<float>(imgCount,    q);
-    float *d_kL  = sycl::malloc_shared<float>(bigKCount,   q);
-    float *d_kS  = sycl::malloc_shared<float>(smallKCount, q);
+    float *d_img, *d_out, *d_kL, *d_kS;
+
+    d_img = sycl::malloc_shared<float>(imgCount,    q);
+    d_out = sycl::malloc_shared<float>(imgCount,    q);
+    d_kL  = sycl::malloc_shared<float>(bigKCount,   q);
+    d_kS  = sycl::malloc_shared<float>(smallKCount, q);
 
     std::memcpy(d_img, img.ptr<float>(),              imgCount   * sizeof(float));
     std::memcpy(d_kL,  gaussianKernelLarge.ptr<float>(),  bigKCount  * sizeof(float));
     std::memcpy(d_kS,  gaussianKernelSmall.ptr<float>(),  smallKCount* sizeof(float));
+    q.memset(d_out, 0, imgCount * sizeof(float)).wait();
 
     q.parallel_for(
         sycl::range<2>( rows - 2*kerDist,
@@ -112,13 +117,26 @@ void processImageParallel(const cv::Mat& img, cv::Mat& output) {
     sycl::free(d_out, q);
     sycl::free(d_kL,  q);
     sycl::free(d_kS,  q);
+
 }
 
+void customRound(cv::Mat& mat, double cutoff = 0.8) {
+    CV_Assert(mat.type() == CV_32F);
+
+    for (int y = 0; y < mat.rows; ++y) {
+        for (int x = 0; x < mat.cols; ++x) {
+            float frac = mat.at<float>(y,x);
+
+            if (frac >= cutoff)
+                mat.at<float>(y,x) = std::ceil(mat.at<float>(y,x));
+            else
+                mat.at<float>(y,x) = std::floor(mat.at<float>(y,x));
+        }
+    }
+}
 
 int main(int, char**)
 {
-    cv::Mat frame, tempdst(720+kerDist*2, 1280+kerDist*2, CV_32F), tempdst2(720+kerDist*2, 1280+kerDist*2, CV_32F), dst(720+kerDist*2, 1280+kerDist*2, CV_32F), output(720+kerDist*2,1280+kerDist*2, CV_32F);
-
     cv::VideoCapture cap;
 
 
@@ -135,10 +153,15 @@ int main(int, char**)
     }
     std::cout << "Start grabbing" << std::endl
               << "Press 'w' key to terminate" << std::endl;
+
+
+    cv::Mat frame, gray, img, output;
+
+    bool alloced = false;
+
     for (;;)
     {
 
-        cv::Mat frame, gray, img, output;
 
         cap.read(frame);
         cv::copyMakeBorder(frame, frame,
@@ -147,9 +170,26 @@ int main(int, char**)
         cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
         gray.convertTo(img, CV_32F);
         output.create(img.size(), CV_32F);
+
+        // if(!alloced)
+        // {
+        //     alloced = true;
+        //     preAlloc(img);
+        //     std::cout << " RUN" << std::endl;
+        // }
+
+        // if (!d_img || !d_out || !d_kL || !d_kS) {
+        //     std::cerr << "Memory not allocated properly\n";
+        //     std::exit(1);
+        // }
+
+
         processImageParallel(img, output);
         cv::Mat disp;
-        output.convertTo(disp, CV_8U, 10.0f, 0.0f);
+
+        customRound(img, 0.1);
+
+        output.convertTo(disp, CV_8U, 20.0f, 0.0f);
         cv::imshow("draw2", disp);
 
 
@@ -157,5 +197,7 @@ int main(int, char**)
         if (key == 'w' || key == 'W')
             break;
     }
+
+
     exit(0);
 }
