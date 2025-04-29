@@ -17,8 +17,15 @@ std::vector<int8_t> cells; // 0 = empty, 1 = occupied
 const int SIZE = 3;
 const int LIFE_TIME = 8000; // Making this random would be cool tbh-
 const int LIFE_TIME_BRANCH = 15;
-const int START_BRANCHES = 100;
+const int START_BRANCHES = 15;
 const float SPREAD_CHANCE = 0.75;
+
+enum States
+{
+    CITY,
+    LAND,
+    STOPPED
+};
 
 // Branch storage
 class Branch;
@@ -55,6 +62,11 @@ public:
         int x = idx - y*cellCountX;
         return Pos(x,y);
     }
+
+    Pos operator+(const Pos& a) const
+    {
+        return Pos(a.x+x, a.y+y);
+    }
 };
 
 int8_t getCellData(int idx)
@@ -69,38 +81,68 @@ int8_t getCellData(Pos position)
 {
     if(position.x < 0 || position.x > cellCountX)
         return -1;
-    else if(position.y < 0 || position.y > cellCountY)
+    if(position.y < 0 || position.y > cellCountY)
         return -1;
     else
         return cells[position.toIdx(position.x, position.y)];
+}
+
+Pos getRandDirection()
+{
+    // 0-250: up
+    // 250-500: left
+    // 500-750: right
+    // 750-1000: down
+    int val = getRand();
+    if(val < 250)
+    {
+        return Pos(0,1);
+    }
+    else if (250 < val && val < 500)
+    {
+        return Pos(-1,0);
+    }
+    else if(500 < val && val < 750)
+    {
+        return Pos(1,0);
+    }
+    else
+    {
+        return Pos(0, -1);
+    }
 }
 
 class Branch
 {
 public:
     Pos pos;
-    std::string state;
-    std::string mode; // CITY == BFS, LAND == DFS
+    enum States mode; // CITY == BFS, LAND == DFS
     Pos expandDirection;
-    std::vector<Pos> ownFields;
+    std::vector<int> ownFields;
     int age;
     int lifeTime;
     int hue;
     int saturation;
     int lightness;
 
-    Branch(const Pos& pos)
+    Branch(const Pos& pos,
+           enum States state_in = CITY,
+           const Pos& expand_in = Pos(0,0),
+           int age_in = 0,
+           int lifetime_in = LIFE_TIME,
+           int hue_in = 120,
+           int saturation_in = 120,
+           int lightness_in = 120)
         : pos(pos),
-          state("RUNNING"),
-          mode("CITY"),
-          expandDirection(0, 0),
-          age(0),
-          lifeTime(LIFE_TIME),
-          hue(36),
-          saturation(255),
-          lightness(130)
+          mode(state_in),
+          expandDirection(expand_in),
+          age(age_in),
+          lifeTime(lifetime_in),
+          hue(hue_in),
+          saturation(saturation_in),
+          lightness(lightness_in)
     {
-        ownFields.push_back(pos);
+        ownFields.push_back(pos.toIdx(pos.x, pos.y));
     }
 
     sf::Color getColor()
@@ -120,15 +162,39 @@ public:
 
         // Update position and remember it
         pos = toPos;
-        ownFields.push_back(pos);
+        ownFields.push_back(toPos.toIdx(toPos.x, toPos.y));
+        cells[toPos.toIdx()] = 3;
     }
     void update(sf::RenderTexture& window)
     {
-        if(this->mode == "CITY")
+        if (this->mode == CITY)
         {
+            std::cout << "CITY" << std::endl;
         }
-
+        else if(this->mode == LAND)
+        {
+            std::cout << "LAND" << std::endl;
+            float chanceOfGoingForward = getRand();
+            if(chanceOfGoingForward > 250)
+            {
+                // Go in expansion direction
+                // Otherwise backtrack and find a free space
+                if(getCellData(pos+expandDirection) == 0)
+                {
+                    createLine(pos+expandDirection, window);
+                }
+            }
+            else
+            {
+                expandDirection = getRandDirection();
+                if(getCellData(pos+expandDirection) == 0)
+                {
+                    createLine(pos+expandDirection, window);
+                }
+            }
+        }
     }
+
 };
 
 
@@ -167,7 +233,7 @@ private:
         {
             int randomIdx = rand() % cells.size();
             Pos randomPos = Pos::fromIdx(randomIdx);
-            branches.push_back(std::make_shared<Branch>(randomPos));
+            branches.push_back(std::make_shared<Branch>(randomPos, LAND, getRandDirection()));
         }
 
         if (!dynamicBuffer.create(WINDOW_WIDTH, WINDOW_HEIGHT)) {
@@ -197,32 +263,23 @@ private:
     }
 
     void update(sf::RenderWindow& window) {
-        // No clearing of window; previous content stays visible
-        // window.clear(); // Don't clear the window
-
-        // Calculate delta time
         float deltaTime = clock.restart().asSeconds();
 
-        // drawBackground(dynamicBuffer);
-
-        // Update your simulation here
-        auto it = branches.begin();
-        while (it != branches.end()) {
-            if ((*it)->state == "STOPPED") {
-                it = branches.erase(it);
-            } else {
-                (*it)->update(dynamicBuffer);
-                ++it;
-            }
+        for(int i = 0; i < 5; i++)
+        {
+            int idx = (int)(getRand()*1000.0) % branches.size();
+            if(branches[idx] == NULL)
+                continue;
+            branches[idx]->update(dynamicBuffer );
         }
+
 
         window.clear();
         sf::Sprite dynamicSprite(dynamicBuffer.getTexture());
         window.draw(dynamicSprite);
-
-        // Display the newly drawn content
         window.display();
     }
+
 
 
     void render()
