@@ -163,6 +163,8 @@ public:
         // Update position and remember it
         pos = toPos;
         ownFields.push_back(toPos.toIdx(toPos.x, toPos.y));
+        if(cells[toPos.toIdx()] != 3)
+            std::cout << "ERROR";
         cells[toPos.toIdx()] = 3;
     }
     void update(sf::RenderTexture& window)
@@ -183,6 +185,10 @@ public:
                 {
                     createLine(pos+expandDirection, window);
                 }
+                else
+                {
+                    this->mode = STOPPED;
+                }
             }
             else
             {
@@ -190,6 +196,10 @@ public:
                 if(getCellData(pos+expandDirection) == 0)
                 {
                     createLine(pos+expandDirection, window);
+                }
+                else
+                {
+                    this->mode = STOPPED;
                 }
             }
         }

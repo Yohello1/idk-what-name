@@ -33,11 +33,11 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     kernel /= sum;  // Normalize to ensure the kernel sums to 1
 }
 
-#define sigmaLarge 2.4
-#define bigDist 15
+#define sigmaLarge 1.8
+#define bigDist 13
 
-#define sigmaSmall 1.5
-#define smallDist 11
+#define sigmaSmall 0.9
+#define smallDist 6
 
 #define kerDist MAX(smallDist, bigDist)
 
@@ -123,16 +123,27 @@ void processImageParallel(const cv::Mat& img, cv::Mat& output) {
 void customRound(cv::Mat& mat, double cutoff = 0.8) {
     CV_Assert(mat.type() == CV_32F);
 
+    float max_v = -1.0;
+
     for (int y = 0; y < mat.rows; ++y) {
         for (int x = 0; x < mat.cols; ++x) {
             float frac = mat.at<float>(y,x);
 
-            if (frac >= cutoff)
-                mat.at<float>(y,x) = std::ceil(mat.at<float>(y,x));
-            else
-                mat.at<float>(y,x) = std::floor(mat.at<float>(y,x));
+            max_v = std::max(frac, max_v);
         }
     }
+
+    for (int y = 0; y < mat.rows; ++y) {
+        for (int x = 0; x < mat.cols; ++x) {
+            float frac = (mat.at<float>(y,x))/max_v;
+
+            // if(frac > cutoff)
+            //     mat.at<float>(y,x) = 255.0;
+            // else
+            //  mat.at<float>(y,x) = 0.0;
+        }
+    }
+
 }
 
 int main(int, char**)
@@ -187,7 +198,7 @@ int main(int, char**)
         processImageParallel(img, output);
         cv::Mat disp;
 
-        customRound(img, 0.1);
+        customRound(output, 0.05);
 
         output.convertTo(disp, CV_8U, 20.0f, 0.0f);
         cv::imshow("draw2", disp);
