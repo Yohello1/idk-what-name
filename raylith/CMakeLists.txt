@@ -1,28 +1,60 @@
-cmake_minimum_required(VERSION 3.1)
-set(CMAKE_BUILD_TYPE Debug)
+cmake_minimum_required(VERSION 3.10)
+project(VulkanTest)
 
-#add_compile_options(-g -Wall -Wextra -Wpedantic)
-include_directories(src/)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 
-project(raylith)
-set(CMAKE_CXX_STANDARD 23)
-include(CTest)
+# Source file
+set(SRC src/main.cpp)
 
-file(GLOB_RECURSE SOURCES src/*.cpp)
+# Find Vulkan and GLFW
+find_package(Vulkan REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLFW REQUIRED glfw3)
 
-#SET(GCC_COVERAGE_COMPILE_FLAGS "-g")
-#SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+# Output directory for SPIR-V
+set(SHADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(SPIRV_DIR "${CMAKE_CURRENT_BINARY_DIR}/shaders")
+file(MAKE_DIRECTORY ${SPIRV_DIR})
 
+# Compile shaders with glslc
+add_custom_command(
+    OUTPUT ${SPIRV_DIR}/vert.spv
+    COMMAND glslc ${SHADER_DIR}/shader.vert -o ${SPIRV_DIR}/vert.spv
+    DEPENDS ${SHADER_DIR}/shader.vert
+    COMMENT "Compiling shader.vert to vert.spv"
+)
 
-#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -ggdb")
+add_custom_command(
+    OUTPUT ${SPIRV_DIR}/frag.spv
+    COMMAND glslc ${SHADER_DIR}/shader.frag -o ${SPIRV_DIR}/frag.spv
+    DEPENDS ${SHADER_DIR}/shader.frag
+    COMMENT "Compiling shader.frag to frag.spv"
+)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+add_custom_target(Shaders
+    DEPENDS ${SPIRV_DIR}/vert.spv ${SPIRV_DIR}/frag.spv
+)
 
-add_executable(raylith ${SOURCES})
-add_test(example_test raylith)
+# Build the executable
+add_executable(VulkanTest ${SRC})
 
-add_custom_target(test_memcheck
-    COMMAND ${CMAKE_CTEST_COMMAND}
-        --force-new-ctest-process --test-action memcheck
-    COMMAND ${CMAKE_COMMAND} -E cat "${CMAKE_BINARY_DIR}/Testing/Temporary/MemoryChecker.*.log"
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
+target_include_directories(VulkanTest PRIVATE ${GLFW_INCLUDE_DIRS})
+target_link_libraries(VulkanTest ${GLFW_LIBRARIES} Vulkan::Vulkan dl pthread X11 Xxf86vm Xrandr Xi)
+
+# Ensure shaders compile before building
+add_dependencies(VulkanTest Shaders)
+
+# Add custom "run" target
+add_custom_target(run
+    COMMAND VulkanTest
+    DEPENDS VulkanTest
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+# Optional: add a clean target like in your Makefile
+add_custom_target(clean-all
+    COMMAND ${CMAKE_COMMAND} -E rm -f VulkanTest
+    COMMAND ${CMAKE_COMMAND} -E rm -rf ${SPIRV_DIR}
+    COMMENT "Cleaning build artifacts"
+)
