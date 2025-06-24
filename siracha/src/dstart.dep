@@ -1,0 +1,5 @@
+dstart.o: \
+  dstart.d \
+  object.d \
+  uart.d \
+  main.d

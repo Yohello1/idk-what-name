@@ -1,0 +1,12 @@
+#+title: Plan
+
+- I am learning whilst going through this too lmao
+
+* Libraries
+- We want to build the OS in a way that it is portable for different systems.
+- That's what we're gonna use libraries for!
+- We'll have the system call a function like `write_uart`, and that will point to a function in a library. The library itself will do all the low-level, and device-specific stuff so we can abstract it away, and deal with it later
+- To be clear, this is a problem for later tho.
+
+* ABI
+- what

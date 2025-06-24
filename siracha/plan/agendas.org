@@ -1,0 +1,27 @@
+#+title: Agendas
+
+* 2024/09/29
+** Learning
+- Basic exercises for ASM (x86, or RISCV)
+  - Hello world
+  - Write a program that takes a user's input string, and prints it back out
+  - Redo the previous two problems with subroutines
+  - Redo the first two problems with function calls
+  - arrays
+    - Write a program that lets a user input a series of chars, and puts them into an array
+    - Ask the user for a position in the array
+    - Output the character at that position
+    - Repeat parts a, and b, but with integers
+    - Repeat parts a, and b with floats
+  - Bubble sort!
+    - Write a program which lets the user input a series of characters into an array, and bubble sort them
+- Jump tables
+  - Write a program that asks a user for which exercise (function) they want to do (1-6), then jump to that thingy using a jump table
+** Building
+- Finish reading the RISCV book
+- Figure out the ZSBL for Star64, and find the predefined address
+- Figure out how we're gonna organise the memory
+- xv6 is a very helpful resource
+** Random research that would be nice to do
+- How to turn the LED on the board on
+- Figure out how UART would work

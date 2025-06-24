@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2024-09-20 Fri 10:57 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fundementals</title>
+<meta name="author" content="yohello" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Fundementals</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org62b7691">1. 1: The execution of programs, ten thousand feet up</a></li>
+<li><a href="#orgd271176">2. 1.1: Main components of computers</a>
+<ul>
+<li><a href="#org57c8766">2.1. Main Memory</a></li>
+<li><a href="#org7953d46">2.2. Central Processing Unit</a></li>
+<li><a href="#org33c1da1">2.3. Persistent Storage</a></li>
+<li><a href="#org5dd6552">2.4. Peripherals</a></li>
+<li><a href="#org9723e42">2.5. Bus</a></li>
+</ul>
+</li>
+<li><a href="#orgc67bdca">3. : The main memory</a></li>
+<li><a href="#org472d462">4. The CPU</a>
+<ul>
+<li><a href="#orgebb95c2">4.1. Registers</a></li>
+<li><a href="#orgcd164e5">4.2. A Datapath</a></li>
+<li><a href="#orgb4285d8">4.3. A control unit</a></li>
+</ul>
+</li>
+<li><a href="#org750467c">5. Executing Program instructions</a></li>
+<li><a href="#org02869d3">6. The boot process</a></li>
+<li><a href="#org818dbfd">7. Data representation in modern computers</a>
+<ul>
+<li><a href="#orga90bff7">7.1. Integers</a>
+<ul>
+<li><a href="#orgdbbbab6">7.1.1. Unsigned integers</a></li>
+<li><a href="#org533490f">7.1.2. Signed integers</a></li>
+<li><a href="#orgbe4dfed">7.1.3. One&rsquo;s complment</a></li>
+<li><a href="#org7bccf40">7.1.4. Two&rsquo;s complement</a></li>
+</ul>
+</li>
+<li><a href="#org85ba4ab">7.2. Binary arithmetic and overflow</a>
+<ul>
+<li><a href="#orgee5e718">7.2.1. Integer overflow</a></li>
+</ul>
+</li>
+<li><a href="#org349ddd8">7.3. Representing text</a>
+<ul>
+<li><a href="#org9222c26">7.3.1. What characters could represent</a></li>
+<li><a href="#orgad5571f">7.3.2. Character encoding standards</a></li>
+</ul>
+</li>
+<li><a href="#org7a81237">7.4. Organising data on the memory</a>
+<ul>
+<li><a href="#orga52764b">7.4.1. Endian</a></li>
+</ul>
+</li>
+<li><a href="#org8ac143c">7.5. Arrays on the main memory</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Book used:
+<a href="https://riscv-programming.org/book/riscv-book.html">https://riscv-programming.org/book/riscv-book.html</a>
+</p>
+
+<p>
+General Notes:
+I will skip over parts that are not relavent to us, and this is meant to be read with the book
+</p>
+<div id="outline-container-org62b7691" class="outline-2">
+<h2 id="org62b7691"><span class="section-number-2">1.</span> 1: The execution of programs, ten thousand feet up</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li><b><b>A native program is encoded using instructions that can be directly executed by the computer hardware, without help from an emulator or a virtual machine</b></b></li>
+<li>Whenever we refer to a <b><b>program</b></b> here, we&rsquo;re going to refer to a native program</li>
+<li>Most computers are built using electronic circuitry, they represent the HIGH &amp; LOW states in voltages using ~1~s, and ~0~s. Hence the most basic, and fundemental unit of information on most modern computers is a binary bit. (1 or 0).</li>
+<li>Instructions, and data are usually encoded as a sequence(s) of binary digits, or bits.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd271176" class="outline-2">
+<h2 id="orgd271176"><span class="section-number-2">2.</span> 1.1: Main components of computers</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org57c8766" class="outline-3">
+<h3 id="org57c8766"><span class="section-number-3">2.1.</span> Main Memory</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>Used to store; instructions, and data.</li>
+<li>Is volatile, hence if the computer is shut off, it goes bai bai</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7953d46" class="outline-3">
+<h3 id="org7953d46"><span class="section-number-3">2.2.</span> Central Processing Unit</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>Responsible for executing the programs</li>
+<li>Retrieves instructions from memory, then runs it</li>
+<li>Often reads/writes daya from/to main memory</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org33c1da1" class="outline-3">
+<h3 id="org33c1da1"><span class="section-number-3">2.3.</span> Persistent Storage</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li>It is, as the name suggests, memory that is persistent, preserves its state</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5dd6552" class="outline-3">
+<h3 id="org5dd6552"><span class="section-number-3">2.4.</span> Peripherals</h3>
+<div class="outline-text-3" id="text-2-4">
+<ul class="org-ul">
+<li>Input/Output (I/O) devices that are connected to the computer</li>
+<li>Examples:
+<ul class="org-ul">
+<li>GPU</li>
+<li>Headphones</li>
+<li>Mouse</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org9723e42" class="outline-3">
+<h3 id="org9723e42"><span class="section-number-3">2.5.</span> Bus</h3>
+<div class="outline-text-3" id="text-2-5">
+<ul class="org-ul">
+<li>Main communication system that transfers data between computer, and components.</li>
+<li>Made up of wires that do the transmitting.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc67bdca" class="outline-2">
+<h2 id="orgc67bdca"><span class="section-number-2">3.</span> : The main memory</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>The main memory storage device is used to store the program instructions, and data.</li>
+<li>It is composed of a set of memory words
+<ul class="org-ul">
+<li>it is like the smallest amount of memory that your computer can operate on at once</li>
+</ul></li>
+<li>Each memory word is capable of storing a set of bits, normally 8-bits</li>
+<li>Each byte is identified by a unique value, which is also refered to as a memory address.</li>
+<li>It stores a single byte</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org472d462" class="outline-2">
+<h2 id="org472d462"><span class="section-number-2">4.</span> The CPU</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgebb95c2" class="outline-3">
+<h3 id="orgebb95c2"><span class="section-number-3">4.1.</span> Registers</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>A CPU register is a small memory device located inside the CPU</li>
+<li>A cpu normally contains a couple of registers</li>
+<li>They store info inside the CPU</li>
+<li>Load/store instructions move info from cpu register to/from main memory</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgcd164e5" class="outline-3">
+<h3 id="orgcd164e5"><span class="section-number-3">4.2.</span> A Datapath</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>The cpu datapath is responsible for arithematic, and logic operations on data.</li>
+<li>Comes from performing operations</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb4285d8" class="outline-3">
+<h3 id="orgb4285d8"><span class="section-number-3">4.3.</span> A control unit</h3>
+<div class="outline-text-3" id="text-4-3">
+<ul class="org-ul">
+<li>Responsible for orchestrating the operation of the computer.</li>
+<li>Controls datapaths, and other components, like main memory, and stuff.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org750467c" class="outline-2">
+<h2 id="org750467c"><span class="section-number-2">5.</span> Executing Program instructions</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>Each instruction occupies 4 memory words(assuming memory is byte addressable)</li>
+<li>It also states that instructions must be executed sequentially</li>
+<li>A CPU normally contains a register to keep track of the next instruction to be executed.
+<ul class="org-ul">
+<li>This register is called the &rsquo;Program Counter&rsquo;, or <code>PC</code></li>
+<li>On the RV32 ISA it stores the address of the sequence of memory words that store the next instruction to be executed</li>
+<li>When an instruction is executed, the <code>PC</code> counter is incremented</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org02869d3" class="outline-2">
+<h2 id="org02869d3"><span class="section-number-2">6.</span> The boot process</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>Whenever a computer starts up, the main memory will be full of garbage</li>
+<li>Thus the CPU <b><b>CANNOT</b></b> retrieve, and use instructions from the main memory</li>
+<li>Hence the CPU retrieves the instructions from a nonvolatile storage medium.
+<ul class="org-ul">
+<li>This thingy stores a program which performs the boot process, and sets up the basic compute rcomponents, checks boot configs, etc etc. Then it loads the operating system.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org818dbfd" class="outline-2">
+<h2 id="org818dbfd"><span class="section-number-2">7.</span> Data representation in modern computers</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li>Search up numeral systems lmao, there is no good reason for explaining it here.</li>
+<li>The decimal numeral system is the msot common one.
+<ul class="org-ul">
+<li>Let D<sub>10</sub> be the set of symbols used in the decimal number system {1,2,3,4,5,6,7,8,9,0}</li>
+<li>Let d<sup>i</sup> be a digit on a number represented by a character in the set,</li>
+<li>Let number<sub>10</sub> be a number represented in the decimal numeral system</li>
+</ul></li>
+<li>Search up hexadecimal on your own time</li>
+<li>Literally google this, it is easier to learn via yt, then my notes here</li>
+<li>A word is an 8-bit chunk of memory.</li>
+</ul>
+</div>
+<div id="outline-container-orga90bff7" class="outline-3">
+<h3 id="orga90bff7"><span class="section-number-3">7.1.</span> Integers</h3>
+<div class="outline-text-3" id="text-7-1">
+<ul class="org-ul">
+<li>Literally google this stuff, there are very good resources on the internet abt these things</li>
+</ul>
+</div>
+<div id="outline-container-orgdbbbab6" class="outline-4">
+<h4 id="orgdbbbab6"><span class="section-number-4">7.1.1.</span> Unsigned integers</h4>
+</div>
+<div id="outline-container-org533490f" class="outline-4">
+<h4 id="org533490f"><span class="section-number-4">7.1.2.</span> Signed integers</h4>
+</div>
+<div id="outline-container-orgbe4dfed" class="outline-4">
+<h4 id="orgbe4dfed"><span class="section-number-4">7.1.3.</span> One&rsquo;s complment</h4>
+</div>
+<div id="outline-container-org7bccf40" class="outline-4">
+<h4 id="org7bccf40"><span class="section-number-4">7.1.4.</span> Two&rsquo;s complement</h4>
+</div>
+</div>
+<div id="outline-container-org85ba4ab" class="outline-3">
+<h3 id="org85ba4ab"><span class="section-number-3">7.2.</span> Binary arithmetic and overflow</h3>
+<div class="outline-text-3" id="text-7-2">
+<ul class="org-ul">
+<li>Arithmetic on unsigned binary numbers is similar on unsigned decimal numbers.</li>
+<li>When adding adding two unsigned binary numbers, the digits are added one by one, starting from the least significant digit, to the most significant digit</li>
+<li>Sometimes the addition of two digits results in a number that requires 2 digits to represent, this is an &rsquo;overflow&rsquo;.</li>
+<li>In decimal, we carry over the value to the next significant digit, and add the values</li>
+<li>Apply the same thing to subtraction</li>
+<li>Examples can be found on page 15</li>
+</ul>
+</div>
+<div id="outline-container-orgee5e718" class="outline-4">
+<h4 id="orgee5e718"><span class="section-number-4">7.2.1.</span> Integer overflow</h4>
+<div class="outline-text-4" id="text-7-2-1">
+<ul class="org-ul">
+<li>When the space that is allocated to the integer is not enough to hold the integer.</li>
+<li>Like, after adding two integers together, it ends up having a value that needs 33 bits to store, but the space we allocated to the destination is only 32 bits long.</li>
+<li>This can sometimes result in the data that&rsquo;s adjacent to the integer to have one bit overwritten</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org349ddd8" class="outline-3">
+<h3 id="org349ddd8"><span class="section-number-3">7.3.</span> Representing text</h3>
+<div class="outline-text-3" id="text-7-3">
+<ul class="org-ul">
+<li>if u ever need to render text,, Im sorry, who hurt you</li>
+<li>Anyways</li>
+<li>A character is a basic unit of information.</li>
+</ul>
+</div>
+<div id="outline-container-org9222c26" class="outline-4">
+<h4 id="org9222c26"><span class="section-number-4">7.3.1.</span> What characters could represent</h4>
+<div class="outline-text-4" id="text-7-3-1">
+<ul class="org-ul">
+<li>Letter</li>
+<li>Decimal digit</li>
+<li>Punctuation</li>
+<li>White spaces</li>
+<li>Control sequences/information</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgad5571f" class="outline-4">
+<h4 id="orgad5571f"><span class="section-number-4">7.3.2.</span> Character encoding standards</h4>
+<div class="outline-text-4" id="text-7-3-2">
+<ul class="org-ul">
+<li>It&rsquo;s an encoding standard that defines how characters are represented on comptuers</li>
+<li>For example, there&rsquo;s ASCII, American Standard Code for Information Interchange</li>
+</ul>
+</div>
+<ol class="org-ol">
+<li><a id="org886abcb"></a>ASCII<br />
+<div class="outline-text-5" id="text-7-3-2-1">
+<ul class="org-ul">
+<li>Defines that characters are represented by 7-bit numbers</li>
+<li>It was 7-bits because old comptuers processed info in blocks of 8-bits, and the 8th bit was reserved for error checking</li>
+<li>Use this table; <a href="https://www.rapidtables.com/code/text/ascii-table.html">https://www.rapidtables.com/code/text/ascii-table.html</a> for ascii values</li>
+<li>Like the value of `a` is 97 (decimal), or 110001 (binary), and the digit `2` is 50 (decimal), and 0110010 (binary)</li>
+<li>It was designed in MURICA, and works for english,, barely for anything else.</li>
+<li>Implmenting Uni code will cause me to cry</li>
+</ul>
+</div>
+</li>
+<li><a id="org837aefc"></a>EASCII<br />
+<div class="outline-text-5" id="text-7-3-2-2">
+<ul class="org-ul">
+<li>Extended ASCII, literally just an extended version of the ASCII standard</li>
+</ul>
+</div>
+</li>
+<li><a id="orgeee3335"></a>UTF-8<br />
+<div class="outline-text-5" id="text-7-3-2-3">
+<ul class="org-ul">
+<li>Apparently the most commonly used encoding standard for HTML files</li>
+<li>Unicode (Universal Coded Character Set) Transformation Format - 8-bit</li>
+<li>It is a variable-width character encoding standard</li>
+<li>A single character may be one, two, three, four,&#x2026; 8-bit numbers long</li>
+<li>Common characters aer represented by a single byte, whilst most exotic ones are represented using multiple bytes</li>
+<li>UTF-8 is backwards compatible with ASCII. Like the character `a` has a value of `90` in both standards</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org7a81237" class="outline-3">
+<h3 id="org7a81237"><span class="section-number-3">7.4.</span> Organising data on the memory</h3>
+<div class="outline-text-3" id="text-7-4">
+<ul class="org-ul">
+<li>Addressable memory, idk, you can individually access</li>
+<li>Text is simply a sequence of characters on memory.</li>
+<li>A string is a sequence of consective characters in memory</li>
+<li>A `NULL Terminated string` where the last character in the string is a `NULL` character. Strings like this take one extra character. Like `yes` will take up `4` characters, whilst `french` will take up `6` characters in memory.</li>
+<li>`Edianness` refers to the order in which bytes are stored on computing memory</li>
+</ul>
+</div>
+<div id="outline-container-orga52764b" class="outline-4">
+<h4 id="orga52764b"><span class="section-number-4">7.4.1.</span> Endian</h4>
+<div class="outline-text-4" id="text-7-4-1">
+<ul class="org-ul">
+<li>There are two common formats,</li>
+<li>Little-endian, which places the least significant byte on the memory position associated with the lowest address.</li>
+<li>Whilst big-edian places it at the highest memory position</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org8ac143c" class="outline-3">
+<h3 id="org8ac143c"><span class="section-number-3">7.5.</span> Arrays on the main memory</h3>
+<div class="outline-text-3" id="text-7-5">
+<ul class="org-ul">
+<li>A `1d` array is a contigous block of memory where the index of an element is a single number, and references a position in the contigious block</li>
+<li><p>
+A `nth d` array is the same thing, but we use
+</p>
+<div class="org-src-container">
+<pre class="src src-c">  hi
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: yohello</p>
+<p class="date">Created: 2024-09-20 Fri 10:57</p>
+</div>
+</body>
+</html>

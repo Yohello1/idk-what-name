@@ -1,0 +1,31 @@
+#+title: Binary Interface
+
+* What is a 'Binary Interface'? (sometimes called ABI, 'Application Binary Interface')
+- When we want two programs to talk to eachother (like the OS, and a program, like Pong), they'll need a standard way of communicating stuff
+- In the end, it's just a definition that says how the services from the OS are invoked from the user application (Im gonna call it an ABI btw)
+- Every OS normally has a diff ABI.
+** Example with printing
+- (I ripped this code off of some random tutorial btw)
+#+begin_src asm
+    .global _start
+
+.section .text
+
+_start: mov $4, %eax ; 4 is the code for the 'write' system call
+        mov $1, %ebx ; We are writing to file 1, i.e. the 'standard output'
+        mov $message, %ecx ; The data we want to print is at the address defined by the symbol message
+        mov $5, %edx ; The length of the data we want to print is 5
+        int $0x80 ; Invoke the system call, i.e. ask kernel to print the data to the standard output
+
+        mov $1, %eax ; 1 is the code for the 'exit' system call
+        mov $0, %ebx ; 0 is the process return code
+        int $0x80  ; Invoke the system call, i.e. ask the the kernel to close this process
+
+.section .data
+message: .ascii "Hello"
+#+end_src
+- In the OS we wrote the above snippet for (linux, x86) we have to move `4` into register `eax` to indicate write.
+- THen we have to move `1` into `ebx`... etc etc
+- This changes OS to OS, and this is the ABI
+- A different ABI might have you move `8` into register `edx` to indicate write, instead of `4` into `eax`
+- The C standard libary is a wrapper for this ;-;
