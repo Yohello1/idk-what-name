@@ -146,6 +146,30 @@ void customRound(cv::Mat& mat, double cutoff = 0.8) {
 
 }
 
+uint8_t sumNeighbours(cv::mat& mat, size_t x, size_t y)
+{
+
+    /*
+     * 1 2 3
+     * 4 X 5
+     * 6 7 8
+     * */
+    uint8_t temp = 0;
+    temp = mat[y-1][x-1] + mat[y-1][x] + mat[y-1][x+1] + mat[y][x-1] + mat[y][x+1] + mat[y+1][x-1] + mat[y+1][x] + mat[y+1][x+1];
+    return temp;
+}
+
+void cellularAutomata(cv::Mat& mat, cv::Mat& out, uint8_t threshold)
+{
+    for(size_t i = kerDist; i < mat.cols - kerDist; i++)
+    {
+        for(size_t j = kerDist; j < mat.rows - kerDist; i++)
+        {
+
+        }
+    }
+}
+
 int main(int, char**)
 {
     cv::VideoCapture cap;
