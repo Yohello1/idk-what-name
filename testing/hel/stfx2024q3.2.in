@@ -1,8 +1,0 @@
-7
-sub x
-jmp y
-end
-sub y
-jmp x
-end
-jmp y
