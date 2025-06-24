@@ -17,6 +17,7 @@ SDL/jeux-video/build/.cmake/*
 *.out
 testing/souro/*
 *.jpeg
+jeux-video/build/*
 */build/*
 *.o
 */.vscode/*

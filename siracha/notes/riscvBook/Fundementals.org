@@ -1,0 +1,205 @@
+#+title: Fundementals
+
+Book used:
+[[https://riscv-programming.org/book/riscv-book.html]]
+
+General Notes:
+I will skip over parts that are not relavent to us, and this is meant to be read with the book
+
+* 1: The execution of programs, ten thousand feet up
+- **A native program is encoded using instructions that can be directly executed by the computer hardware, without help from an emulator or a virtual machine**
+- Whenever we refer to a **program** here, we're going to refer to a native program
+- Most computers are built using electronic circuitry, they represent the HIGH & LOW states in voltages using ~1~s, and ~0~s. Hence the most basic, and fundemental unit of information on most modern computers is a binary bit. (1 or 0).
+- Instructions, and data are usually encoded as a sequence(s) of binary digits, or bits.
+* 1.1: Main components of computers
+** Main Memory
+- Used to store; instructions, and data.
+- Is volatile, hence if the computer is shut off, it goes bai bai
+** Central Processing Unit
+- Responsible for executing the programs
+- Retrieves instructions from memory, then runs it
+- Often reads/writes daya from/to main memory
+** Persistent Storage
+- It is, as the name suggests, memory that is persistent, preserves its state
+** Peripherals
+- Input/Output (I/O) devices that are connected to the computer
+- Examples:
+  - GPU
+  - Headphones
+  - Mouse
+** Bus
+- Main communication system that transfers data between computer, and components.
+- Made up of wires that do the transmitting.
+* : The main memory
+- The main memory storage device is used to store the program instructions, and data.
+- It is composed of a set of memory words
+  - it is like the smallest amount of memory that your computer can operate on at once
+- Each memory word is capable of storing a set of bits, normally 8-bits
+- Each byte is identified by a unique value, which is also refered to as a memory address.
+- It stores a single byte
+* The CPU
+** Registers
+- A CPU register is a small memory device located inside the CPU
+- A cpu normally contains a couple of registers
+- They store info inside the CPU
+- Load/store instructions move info from cpu register to/from main memory
+** A Datapath
+- The cpu datapath is responsible for arithematic, and logic operations on data.
+- Comes from performing operations
+** A control unit
+- Responsible for orchestrating the operation of the computer.
+- Controls datapaths, and other components, like main memory, and stuff.
+* Executing Program instructions
+- Each instruction occupies 4 memory words(assuming memory is byte addressable)
+- It also states that instructions must be executed sequentially
+- A CPU normally contains a register to keep track of the next instruction to be executed.
+  - This register is called the 'Program Counter', or ~PC~
+  - On the RV32 ISA it stores the address of the sequence of memory words that store the next instruction to be executed
+  - When an instruction is executed, the ~PC~ counter is incremented
+* The boot process
+- Whenever a computer starts up, the main memory will be full of garbage
+- Thus the CPU **CANNOT** retrieve, and use instructions from the main memory
+- Hence the CPU retrieves the instructions from a nonvolatile storage medium.
+  - This thingy stores a program which performs the boot process, and sets up the basic compute rcomponents, checks boot configs, etc etc. Then it loads the operating system.
+
+* Data representation in modern computers
+- Search up numeral systems lmao, there is no good reason for explaining it here.
+- The decimal numeral system is the msot common one.
+  - Let D_{10} be the set of symbols used in the decimal number system {1,2,3,4,5,6,7,8,9,0}
+  - Let d^{i} be a digit on a number represented by a character in the set,
+  - Let number_{10} be a number represented in the decimal numeral system
+- Search up hexadecimal on your own time
+- Literally google this, it is easier to learn via yt, then my notes here
+- A word is an 8-bit chunk of memory.
+** Integers
+- Literally google this stuff, there are very good resources on the internet abt these things
+*** Unsigned integers
+*** Signed integers
+*** One's complment
+*** Two's complement
+** Binary arithmetic and overflow
+- Arithmetic on unsigned binary numbers is similar on unsigned decimal numbers.
+- When adding adding two unsigned binary numbers, the digits are added one by one, starting from the least significant digit, to the most significant digit
+- Sometimes the addition of two digits results in a number that requires 2 digits to represent, this is an 'overflow'.
+- In decimal, we carry over the value to the next significant digit, and add the values
+- Apply the same thing to subtraction
+- Examples can be found on page 15
+*** Integer overflow
+- When the space that is allocated to the integer is not enough to hold the integer.
+- Like, after adding two integers together, it ends up having a value that needs 33 bits to store, but the space we allocated to the destination is only 32 bits long.
+- This can sometimes result in the data that's adjacent to the integer to have one bit overwritten
+** Representing text
+- if u ever need to render text,, Im sorry, who hurt you
+- Anyways
+- A character is a basic unit of information.
+*** What characters could represent
+- Letter
+- Decimal digit
+- Punctuation
+- White spaces
+- Control sequences/information
+*** Character encoding standards
+- It's an encoding standard that defines how characters are represented on comptuers
+- For example, there's ASCII, American Standard Code for Information Interchange
+**** ASCII
+- Defines that characters are represented by 7-bit numbers
+- It was 7-bits because old comptuers processed info in blocks of 8-bits, and the 8th bit was reserved for error checking
+- Use this table; [[https://www.rapidtables.com/code/text/ascii-table.html]] for ascii values
+- Like the value of `a` is 97 (decimal), or 110001 (binary), and the digit `2` is 50 (decimal), and 0110010 (binary)
+- It was designed in MURICA, and works for english,, barely for anything else.
+- Implmenting Uni code will cause me to cry
+**** EASCII
+- Extended ASCII, literally just an extended version of the ASCII standard
+**** UTF-8
+- Apparently the most commonly used encoding standard for HTML files
+- Unicode (Universal Coded Character Set) Transformation Format - 8-bit
+- It is a variable-width character encoding standard
+- A single character may be one, two, three, four,... 8-bit numbers long
+- Common characters aer represented by a single byte, whilst most exotic ones are represented using multiple bytes
+- UTF-8 is backwards compatible with ASCII. Like the character `a` has a value of `90` in both standards
+** Organising data on the memory
+- Addressable memory, idk, you can individually access
+- Text is simply a sequence of characters on memory.
+- A string is a sequence of consective characters in memory
+- A `NULL Terminated string` where the last character in the string is a `NULL` character. Strings like this take one extra character. Like `yes` will take up `4` characters, whilst `french` will take up `6` characters in memory.
+- `Edianness` refers to the order in which bytes are stored on computing memory
+*** Endian
+- There are two common formats,
+- Little-endian, which places the least significant byte on the memory position associated with the lowest address.
+- Whilst big-edian places it at the highest memory position
+** Arrays on the main memory
+- A `1d` array is a contigous block of memory where the index of an element is a single number, and references a position in the contigious block
+- A `nth d` array is the same thing, but we use multiple dimensions (google this)
+  #+BEGIN_SRC c
+int M[][] = { {7, 8, 9},
+              {2, 8 , 1}
+            };
+
+void print_M()
+{
+    printf("Element M[0][0] = %d\n", M[0][0]);
+    printf("Element M[1][2] = %d\n", M[1][2]);
+}
+  #+END_SRC
+
+** Structs
+- Literally the exact same as in C
+** Encoding instructions
+- Computer instructions are normally encoded as a sequence of bits
+- The number of bits required to encode each and every instruction varies according to the architecture
+- For example;
+  - The RV32I says that each instruction must be encoded using 32bits
+  - Meanwhile, x86 is a varying number of bits
+- RV32I:
+  - Organised into 6 Fields
+    00000000000000000000000000000000
+    11111112222233333444555556666666
+    1:  funct7
+    2:  rs2
+    3:  rs1
+    4:  funct3
+    5:  rd
+    6:  opcode
+  - funct7, funct3 and opcode
+- Opcode is literally just the 'code' like keyword. A series of 1's, and 0's that identifies the code???
+  Like the same instruction will have the same code.
+- funct3, and funct7 are function codes?
+- rs1, rs2 are source regiters that specifies the registers/operands
+- rd: desgination
+- imm: not mentioned here, byt an immediate number of differnt lengths that can be used directly as an oeprand
+* Generating Native Programs
+- FINALLY WE CAN WRITE IN C WHOOOOOOOOOOO
+- A native program is a program encoded using instructionst hat can be directly executed by the comptuer hardware without help from an emulator or a virtual machine.
+- Programs in C are encoded as plain text
+- High level languages are agnostic of ISA (or should be)
+- The following snippet is in a high level language; C
+#+BEGIN_SRC c
+int main()
+{
+    int r = func (10);
+    return r+1;
+}
+#+END_SRC
+- A compiler is a tool that translates a program from one language to another.
+- To compile a RISC-V Program from C to ASM (RV32I), use the following command
+#+begin_src bash
+riscv64-unknown-elf-gcc -mabi=ilp32 -march=rv32i -S main.c -o main.s
+#+end_src
+The result of that should be;
+#+begin_src asm
+.text
+.align  2
+
+main:
+    addi sp, sp, -16
+    li a0, 10
+    sw ra, 12
+    jal func
+    lw ra, 12(sp)
+    addi a0, a0, 1
+    addi sp, sp, 16
+    ret
+#+end_src
+Different from high level languages, like C, Assembly is very close to the ISA
+Like the ASM above, is literally only the instructions that exist in RV32I
+As a consequence, th
