@@ -13,7 +13,7 @@ diffGaussian: gaussian.cpp
 	acpp -O3 -lsycl $(shell pkg-config --cflags --libs opencv4) differenceOfGaussians.cpp -o differenceOfGaussians.run
 
 diffGaussian: gaussian.cpp
-	acpp -O3 -lsycl $(shell pkg-config --cflags --libs opencv4) diffColours.cpp -o diffColours.run
+	acpp -g -lm -lsycl $(shell pkg-config --cflags --libs opencv4) diffColours.cpp -o diffColours.run
 
 
 clean:

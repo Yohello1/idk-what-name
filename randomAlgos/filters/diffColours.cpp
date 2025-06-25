@@ -8,6 +8,18 @@
 #include <iostream>
 #include <stdio.h>
 
+template<typename T>
+T siriMax(T x, T y)
+{
+    return (x > y) ? x : y;
+}
+
+template<typename T>
+T siriMin(T x, T y)
+{
+    return (x < y) ? x : y;
+}
+
 
 void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     int center = size / 2;
@@ -33,13 +45,16 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     kernel /= sum;  // Normalize to ensure the kernel sums to 1
 }
 
-#define sigmaLarge 1.8
-#define bigDist 13
+int bar1Val = 6, bar2Val = 13;
+int sigmaLargeV = 18, sigmaSmallV = 9;
 
-#define sigmaSmall 0.9
-#define smallDist 6
+#define sigmaLarge ((float)sigmaLargeV/(float)10.0)
+#define bigDist bar2Val
 
-#define kerDist MAX(smallDist, bigDist)
+#define sigmaSmall ((float)sigmaSmallV/(float)10.0)
+#define smallDist bar1Val
+
+#define kerDist 20
 
 sycl::queue q(sycl::gpu_selector_v);
 
@@ -129,7 +144,7 @@ void customRound(cv::Mat& mat, double cutoff = 0.8) {
         for (int x = 0; x < mat.cols; ++x) {
             float frac = mat.at<float>(y,x);
 
-            max_v = std::max(frac, max_v);
+            max_v = siriMax(frac, max_v);
         }
     }
 
@@ -146,7 +161,7 @@ void customRound(cv::Mat& mat, double cutoff = 0.8) {
 
 }
 
-uint8_t sumNeighbours(cv::mat& mat, size_t x, size_t y)
+uint8_t sumNeighbours(cv::Mat& mat, size_t x, size_t y)
 {
 
     /*
@@ -154,21 +169,55 @@ uint8_t sumNeighbours(cv::mat& mat, size_t x, size_t y)
      * 4 X 5
      * 6 7 8
      * */
-    uint8_t temp = 0;
-    temp = mat[y-1][x-1] + mat[y-1][x] + mat[y-1][x+1] + mat[y][x-1] + mat[y][x+1] + mat[y+1][x-1] + mat[y+1][x] + mat[y+1][x+1];
+    float temp = 0;
+    temp = mat.at<float>(y-1, x-1) + mat.at<float>(y-1, x) + mat.at<float>(y-1, x+1) + mat.at<float>(y, x-1) + mat.at<float>(y, x+1) + mat.at<float>(y+1, x-1) + mat.at<float>(y+1, x) + mat.at<float>(y+1, x+1);
     return temp;
 }
 
-void cellularAutomata(cv::Mat& mat, cv::Mat& out, uint8_t threshold)
+void cellularAutomata(cv::Mat& mat, cv::Mat& buff)
 {
     for(size_t i = kerDist; i < mat.cols - kerDist; i++)
     {
         for(size_t j = kerDist; j < mat.rows - kerDist; i++)
         {
+            #define neighVal 2
+            float temp = 0;
+            temp = sumNeighbours(mat, i, j);
+            buff.at<float>(i, j) = siriMin(0.0f, siriMax(temp - neighVal + 1, 0.0f));
 
         }
     }
 }
+
+static void on_trackbarlittle(int pos, void* userdata)
+{
+    (void) userdata;
+    std::cout << 'a' << pos << '\n';
+    bar1Val = pos ;
+}
+
+static void on_trackbarbig(int pos, void* userdata)
+{
+    (void) userdata;
+    std::cout << 'a' << pos << '\n';
+    bar2Val = pos ;
+}
+
+static void on_trackbarlittleSig(int pos, void* userdata)
+{
+    (void) userdata;
+    std::cout << 'a' << pos << '\n';
+    sigmaSmallV = pos ;
+}
+
+static void on_trackbarbigSig(int pos, void* userdata)
+{
+    (void) userdata;
+    std::cout << 'a' << pos << '\n';
+    sigmaLargeV = pos ;
+}
+
+
 
 int main(int, char**)
 {
@@ -179,8 +228,8 @@ int main(int, char**)
     int deviceID = 0;             // 0 = open default camera
     int apiID = cv::CAP_ANY;      // 0 = autodetect default API
     cap.open(deviceID, apiID);
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1280);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1920);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 1080);
 
     if (!cap.isOpened()) {
         std::cerr << "ERROR! Unable to open camera\n";
@@ -190,12 +239,21 @@ int main(int, char**)
               << "Press 'w' key to terminate" << std::endl;
 
 
-    cv::Mat frame, gray, img, output;
+    cv::Mat frame, gray, buff, img, output;
 
     bool alloced = false;
+    char barName1[10] = "littleDis";
+    char barName2[10] = "BigDis";
+    cv::namedWindow("draw2", cv::WINDOW_AUTOSIZE);
+    cv::createTrackbar(barName1, "draw2", &bar1Val, 20, on_trackbarlittle);
+    cv::createTrackbar(barName2, "draw2", &bar2Val, 20, on_trackbarbig);
+    cv::createTrackbar("big sigma", "draw2", &sigmaLargeV, 100, on_trackbarlittle);
+    cv::createTrackbar("small sigma", "draw2", &sigmaSmallV, 100, on_trackbarbig);
+
 
     for (;;)
     {
+        std::cout << bar1Val << std::endl;
 
 
         cap.read(frame);
@@ -229,9 +287,11 @@ int main(int, char**)
         cv::Scalar newCol = cv::Scalar(13, 0, 0);
         int loDiff = 20, upDiff = 20;
         int flags = 4;
-        cv::floodFill(output, seedPoint, newCol, 0, cv::Scalar(loDiff, loDiff, loDiff), cv::Scalar(upDiff, upDiff, upDiff), flags);
+        // cv::floodFill(output, seedPoint, newCol, 0, cv::Scalar(loDiff, loDiff, loDiff), cv::Scalar(upDiff, upDiff, upDiff), flags);
+        //cellularAutomata(output, gray);
 
         output.convertTo(disp, CV_8U, 20.0f, 0.0f);
+
         cv::imshow("draw2", disp);
 
 
