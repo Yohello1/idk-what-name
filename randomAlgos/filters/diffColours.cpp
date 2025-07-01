@@ -8,6 +8,9 @@
 #include <iostream>
 #include <stdio.h>
 
+#define VID_WIDTH 1280
+#define VID_HEIGHT 720
+
 template<typename T>
 T siriMax(T x, T y)
 {
@@ -42,11 +45,11 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
         }
     }
 
-    kernel /= sum;  // Normalize to ensure the kernel sums to 1
+    kernel /= sum;  // Normalize to ensure the kernel sums 10o 1
 }
 
-int bar1Val = 6, bar2Val = 13;
-int sigmaLargeV = 18, sigmaSmallV = 9;
+int bar1Val = 10, bar2Val = 13;
+int sigmaLargeV = 30, sigmaSmallV = 30;
 
 #define sigmaLarge ((float)sigmaLargeV/(float)10.0)
 #define bigDist bar2Val
@@ -57,10 +60,42 @@ int sigmaLargeV = 18, sigmaSmallV = 9;
 #define kerDist 20
 
 sycl::queue q(sycl::gpu_selector_v);
+size_t prevPadding = 0;
+float *d_img, *d_out, *d_kL, *d_kS;
 
+void bufferFix()
+{
+    sycl::free(d_img, q);
+    sycl::free(d_out, q);
+    sycl::free(d_kL, q);
+    sycl::free(d_kS, q);
+
+    const int bigRadius      = bigDist;
+    const int bigKernelSize  = bigRadius * 2 + 1;
+    const int smallRadius    = smallDist;
+    const int smallKernelSize= smallRadius * 2 + 1;
+
+    const int rows = VID_HEIGHT;
+    const int cols = VID_WIDTH;
+    size_t   imgCount   = size_t(rows) * cols;
+    size_t   bigKCount  = size_t(bigKernelSize)  * bigKernelSize;
+    size_t   smallKCount= size_t(smallKernelSize)* smallKernelSize;
+
+
+    d_img = sycl::malloc_shared<float>(imgCount,    q);
+    d_out = sycl::malloc_shared<float>(imgCount,    q);
+    d_kL  = sycl::malloc_shared<float>(bigKCount,   q);
+    d_kS  = sycl::malloc_shared<float>(smallKCount, q);
+}
 
 void processImageParallel(const cv::Mat& img, cv::Mat& output) {
     CV_Assert(img.type() == CV_32FC1);
+
+    // Redo it lol
+    if(img.cols != (VID_WIDTH + std::max(bigDist, smallDist)))
+    {
+        bufferFix();
+    }
 
     const int bigRadius      = bigDist;
     const int bigKernelSize  = bigRadius * 2 + 1;
@@ -75,20 +110,14 @@ void processImageParallel(const cv::Mat& img, cv::Mat& output) {
 
     output.create(img.size(), CV_32F);
 
-    const int rows = img.rows;
-    const int cols = img.cols;
-    size_t   imgCount   = size_t(rows) * cols;
-    size_t   bigKCount  = size_t(bigKernelSize)  * bigKernelSize;
-    size_t   smallKCount= size_t(smallKernelSize)* smallKernelSize;
+    volatile int rows = img.rows;
+    volatile int cols = img.cols;
+    volatile size_t   imgCount   = size_t(rows) * cols;
 
-    float *d_img, *d_out, *d_kL, *d_kS;
+    volatile size_t   bigKCount  = size_t(bigKernelSize)  * bigKernelSize;
+    volatile size_t   smallKCount= size_t(smallKernelSize)* smallKernelSize;
 
-    d_img = sycl::malloc_shared<float>(imgCount,    q);
-    d_out = sycl::malloc_shared<float>(imgCount,    q);
-    d_kL  = sycl::malloc_shared<float>(bigKCount,   q);
-    d_kS  = sycl::malloc_shared<float>(smallKCount, q);
-
-    std::memcpy(d_img, img.ptr<float>(),              imgCount   * sizeof(float));
+    std::memcpy(d_img, img.ptr<float>(),                  imgCount   * sizeof(float));
     std::memcpy(d_kL,  gaussianKernelLarge.ptr<float>(),  bigKCount  * sizeof(float));
     std::memcpy(d_kS,  gaussianKernelSmall.ptr<float>(),  smallKCount* sizeof(float));
     q.memset(d_out, 0, imgCount * sizeof(float)).wait();
@@ -127,11 +156,6 @@ void processImageParallel(const cv::Mat& img, cv::Mat& output) {
     ).wait();
 
     std::memcpy(output.ptr<float>(), d_out, imgCount * sizeof(float));
-
-    sycl::free(d_img, q);
-    sycl::free(d_out, q);
-    sycl::free(d_kL,  q);
-    sycl::free(d_kS,  q);
 
 }
 
@@ -192,14 +216,14 @@ void cellularAutomata(cv::Mat& mat, cv::Mat& buff)
 static void on_trackbarlittle(int pos, void* userdata)
 {
     (void) userdata;
-    std::cout << 'a' << pos << '\n';
+    std::cout << 'c' << pos << '\n';
     bar1Val = pos ;
 }
 
 static void on_trackbarbig(int pos, void* userdata)
 {
     (void) userdata;
-    std::cout << 'a' << pos << '\n';
+    std::cout << 'd' << pos << '\n';
     bar2Val = pos ;
 }
 
@@ -221,6 +245,7 @@ static void on_trackbarbigSig(int pos, void* userdata)
 
 int main(int, char**)
 {
+
     cv::VideoCapture cap;
 
 
@@ -228,8 +253,8 @@ int main(int, char**)
     int deviceID = 0;             // 0 = open default camera
     int apiID = cv::CAP_ANY;      // 0 = autodetect default API
     cap.open(deviceID, apiID);
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1920);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 1080);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, VID_WIDTH);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, VID_HEIGHT);
 
     if (!cap.isOpened()) {
         std::cerr << "ERROR! Unable to open camera\n";
@@ -250,11 +275,25 @@ int main(int, char**)
     cv::createTrackbar("big sigma", "draw2", &sigmaLargeV, 100, on_trackbarlittle);
     cv::createTrackbar("small sigma", "draw2", &sigmaSmallV, 100, on_trackbarbig);
 
+    const int bigRadius      = bigDist;
+    const int bigKernelSize  = bigRadius * 2 + 1;
+    const int smallRadius    = smallDist;
+    const int smallKernelSize= smallRadius * 2 + 1;
+
+    const int rows = VID_HEIGHT;
+    const int cols = VID_WIDTH;
+    size_t   imgCount   = size_t(rows) * cols;
+    size_t   bigKCount  = size_t(bigKernelSize)  * bigKernelSize;
+    size_t   smallKCount= size_t(smallKernelSize)* smallKernelSize;
+
+
+    d_img = sycl::malloc_shared<float>(imgCount,    q);
+    d_out = sycl::malloc_shared<float>(imgCount,    q);
+    d_kL  = sycl::malloc_shared<float>(bigKCount,   q);
+    d_kS  = sycl::malloc_shared<float>(smallKCount, q);
 
     for (;;)
     {
-        std::cout << bar1Val << std::endl;
-
 
         cap.read(frame);
         cv::copyMakeBorder(frame, frame,
