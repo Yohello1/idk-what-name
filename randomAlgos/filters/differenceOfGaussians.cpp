@@ -41,7 +41,7 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
 
 #define kerDist MAX(smallDist, bigDist)
 
-sycl::queue q(sycl::gpu_selector_v);
+sycl::queue q(sycl::cpu_selector_v);
 
 
 void processImageParallel(const cv::Mat& img, cv::Mat& output) {
