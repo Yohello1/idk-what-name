@@ -6,6 +6,7 @@ noodles
 - (Might also need to be on linux)
 - SDL
 - Go look at `SDL/multi_array_test.cpp` and look at the includes, I am not listing them all out
+- Sycl, CUDA, ????, icpx :3
 
 Note: For SDL related projects, just change the file to compile in the Makefile
 ## What files do I need to compile?

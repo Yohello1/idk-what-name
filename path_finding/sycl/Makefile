@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-CC = icpx
+CC = acpp
 
 test : test.cpp
 	acpp syclTemp.cpp
