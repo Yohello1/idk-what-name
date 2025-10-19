@@ -33,6 +33,9 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     kernel /= sum;  // Normalize to ensure the kernel sums to 1
 }
 
+int dist_l = 0, dist_s = 0;
+float sigma_l = 0, sigma_s = 0;
+
 #define sigmaLarge 1.8
 #define bigDist 13
 
@@ -146,9 +149,20 @@ void customRound(cv::Mat& mat, double cutoff = 0.8) {
 
 }
 
+static void sigma_s_callback(
+
+
 int main(int, char**)
 {
     cv::VideoCapture cap;
+    cv::namedWindow("draw2", cv::WINDOW_AUTOSIZE);
+
+
+    // Trackbars
+    cv::createTrackbar("big kernel size", "draw2", &dist_l, 32);
+    cv::createTrackbar("smol kernel size", "draw2", &dist_s, 32);
+    cv::createTrackbar("big sigma size", "draw2", &sigma_l, 1000);
+    cv::createTrackbar("small sigma size", "draw2", &sigma_l, 1000);
 
 
 
