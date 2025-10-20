@@ -33,33 +33,32 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     kernel /= sum;  // Normalize to ensure the kernel sums to 1
 }
 
-int dist_l = 0, dist_s = 0;
-float sigma_l = 0, sigma_s = 0;
+int dist_l = 0, dist_s = 0, sigma_lr = 0, sigma_sr = 0;
 
-#define sigmaLarge 1.8
+float sigma_l = 0, sigma_s = 0;
 #define bigDist 13
 
-#define sigmaSmall 0.9
-#define smallDist 6
-
-#define kerDist MAX(smallDist, bigDist)
-
+#define kerDist 32
 sycl::queue q(sycl::cpu_selector_v);
 
 
 void processImageParallel(const cv::Mat& img, cv::Mat& output) {
     CV_Assert(img.type() == CV_32FC1);
 
-    const int bigRadius      = bigDist;
+    sigma_l = (float) sigma_lr / 100.0;
+    sigma_s = (float) sigma_sr / 100.0;
+
+
+    const int bigRadius      = dist_l;
     const int bigKernelSize  = bigRadius * 2 + 1;
-    const int smallRadius    = smallDist;
+    const int smallRadius    = dist_s;
     const int smallKernelSize= smallRadius * 2 + 1;
 
     cv::Mat gaussianKernelLarge(bigKernelSize,  bigKernelSize,  CV_32F);
-    createGaussianKernel(gaussianKernelLarge, bigKernelSize,  sigmaLarge);
+    createGaussianKernel(gaussianKernelLarge, bigKernelSize,  sigma_l);
 
     cv::Mat gaussianKernelSmall(smallKernelSize,smallKernelSize,CV_32F);
-    createGaussianKernel(gaussianKernelSmall, smallKernelSize, sigmaSmall);
+    createGaussianKernel(gaussianKernelSmall, smallKernelSize, sigma_s);
 
     output.create(img.size(), CV_32F);
 
@@ -149,7 +148,7 @@ void customRound(cv::Mat& mat, double cutoff = 0.8) {
 
 }
 
-static void sigma_s_callback(
+
 
 
 int main(int, char**)
@@ -161,8 +160,8 @@ int main(int, char**)
     // Trackbars
     cv::createTrackbar("big kernel size", "draw2", &dist_l, 32);
     cv::createTrackbar("smol kernel size", "draw2", &dist_s, 32);
-    cv::createTrackbar("big sigma size", "draw2", &sigma_l, 1000);
-    cv::createTrackbar("small sigma size", "draw2", &sigma_l, 1000);
+    cv::createTrackbar("big sigma size", "draw2", &sigma_lr, 1000);
+    cv::createTrackbar("small sigma size", "draw2", &sigma_sr, 1000);
 
 
 
@@ -190,7 +189,10 @@ int main(int, char**)
 
         cap.read(frame);
         cv::copyMakeBorder(frame, frame,
-                           kerDist,kerDist, kerDist,kerDist,
+                          32,
+                          32,
+                          32,
+                          32,
                            cv::BORDER_CONSTANT, cv::Scalar::all(0));
         cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
         gray.convertTo(img, CV_32F);
