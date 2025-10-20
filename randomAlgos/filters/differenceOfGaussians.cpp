@@ -8,6 +8,7 @@
 #include <iostream>
 #include <stdio.h>
 
+#define kerDist 32
 
 void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     int center = size / 2;
@@ -33,20 +34,18 @@ void createGaussianKernel(cv::Mat& kernel, int size, float sigma) {
     kernel /= sum;  // Normalize to ensure the kernel sums to 1
 }
 
-int dist_l = 0, dist_s = 0, sigma_lr = 0, sigma_sr = 0;
-
+int dist_l = 0, dist_s = 0, sigma_lr = 0, sigma_sr = 0, scale_factorr;
 float sigma_l = 0, sigma_s = 0;
-#define bigDist 13
+float scale_factor = 0;
 
-#define kerDist 32
 sycl::queue q(sycl::cpu_selector_v);
-
 
 void processImageParallel(const cv::Mat& img, cv::Mat& output) {
     CV_Assert(img.type() == CV_32FC1);
 
     sigma_l = (float) sigma_lr / 100.0;
     sigma_s = (float) sigma_sr / 100.0;
+    float scale_factorl = (float) scale_factorr / 100.0;
 
 
     const int bigRadius      = dist_l;
@@ -162,7 +161,7 @@ int main(int, char**)
     cv::createTrackbar("smol kernel size", "draw2", &dist_s, 32);
     cv::createTrackbar("big sigma size", "draw2", &sigma_lr, 1000);
     cv::createTrackbar("small sigma size", "draw2", &sigma_sr, 1000);
-
+    cv::createTrackbar("scale_factor", "draw2", &scale_factorr, 1000);
 
 
     int deviceID = 0;             // 0 = open default camera

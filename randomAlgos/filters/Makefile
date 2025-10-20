@@ -11,9 +11,11 @@ gaussian: gaussian.cpp
 
 diffGaussian: gaussian.cpp
 	icpx -O3 -g -fsycl $(shell pkg-config --cflags --libs opencv4) differenceOfGaussians.cpp -o differenceOfGaussians.run
+xdog:
+	icpx -O3 -g -fsycl $(shell pkg-config --cflags --libs opencv4) extendedDOG.cpp -o xdog.run
 
 diffColours: gaussian.cpp
-	acpp -g -O0 -lm -lsycl $(shell pkg-config --cflags --libs opencv4) diffColours.cpp -o diffColours.run
+	acpp -g -O0 -lm -lsycl $(shell pkg-config --cflags --libs opencv4) extendedDOG.cpp -o extendedDOG.run
 
 
 clean:
