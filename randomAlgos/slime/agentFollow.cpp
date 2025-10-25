@@ -8,8 +8,8 @@
 
 
 // --- Configuration ---
-const int BUFFER_WIDTH = 900;
-const int BUFFER_HEIGHT = 900;
+const int BUFFER_WIDTH = 1920;
+const int BUFFER_HEIGHT = 1080;
 const int BYTES_PER_PIXEL = 3; // R, G, B
 const int SCREEN_SCALE = 1;
 
@@ -28,11 +28,11 @@ typedef struct agentData
     uint8_t b;
 };
 
-uint32_t agentsAmt = 5000;
+uint32_t agentsAmt = 25000;
 agentData* agentsData = new agentData[agentsAmt]; 
 float angleObserve = 45.0;
-float turnFactor = 0.1;
-float sensorDistance = 3.0f;
+float turnFactor = 0.05;
+float sensorDistance = 4.0f;
 
 void drawAgents()
 {
@@ -53,9 +53,9 @@ void initAgents()
     for(int i = 0; i < agentsAmt; i++)
     {
         agentsData[i].x_p = (rand() % BUFFER_WIDTH/2)+BUFFER_WIDTH/4;
-        agentsData[i].y_p = (rand() % BUFFER_HEIGHT/2)+BUFFER_WIDTH/4;
-        agentsData[i].x_v = ((rand() % 100) - 50.0)/100.0;
-        agentsData[i].y_v = ((rand() % 500) - 50.0)/100.0;
+        agentsData[i].y_p = (rand() % BUFFER_HEIGHT/2)+BUFFER_HEIGHT/4;
+        agentsData[i].x_v = ((rand() % 1000) - 500.0)/100.0;
+        agentsData[i].y_v = ((rand() % 1000) - 500.0)/100.0;
         agentsData[i].r = 255;
         agentsData[i].g = 255;
         agentsData[i].b = 255;
@@ -72,34 +72,34 @@ void simulateAgents()
 {
     for(int i = 0; i < agentsAmt; i++)
     {
-        // x_v, y_v is straight ahead
-        // use 2d rotation matrix to get the two vectors that are 45 degrees
-        // left and right, then we extract data from there 
+float vx_scaled = agentsData[i].x_v * sensorDistance;
+        float vy_scaled = agentsData[i].y_v * sensorDistance;
 
-        float x_45 = agentsData[i].x_v * std::cos(degToRad(angleObserve)) - agentsData[i].y_v * std::sin(degToRad(angleObserve));
-        float y_45 = agentsData[i].x_v * std::sin(degToRad(angleObserve)) - agentsData[i].y_v * std::cos(degToRad(angleObserve));
-        float x_v_45 = (x_45 + agentsData[i].x_p)*sensorDistance;
-        float y_v_45 = (y_45 + agentsData[i].y_p)*sensorDistance;
+        float x_45 = vx_scaled * std::cos(degToRad(angleObserve)) - vy_scaled * std::sin(degToRad(angleObserve));
+        float y_45 = vx_scaled * std::sin(degToRad(angleObserve)) + vy_scaled * std::cos(degToRad(angleObserve));
 
-        float x_45_i = agentsData[i].x_v * std::cos(-1*degToRad(angleObserve)) - agentsData[i].y_v * std::sin(-1*degToRad(angleObserve));
-        float y_45_i = agentsData[i].x_v * std::sin(-1*degToRad(angleObserve)) - agentsData[i].y_v * std::cos(-1*degToRad(angleObserve));
-        float x_v_45_i = (x_45_i + agentsData[i].x_p)*sensorDistance;
-        float y_v_45_i = (y_45_i + agentsData[i].y_p)*sensorDistance;
+        float x_v_45 = x_45 + agentsData[i].x_p;
+        float y_v_45 = y_45 + agentsData[i].y_p;
+
+        float x_45_i = vx_scaled * std::cos(-1*degToRad(angleObserve)) - vy_scaled * std::sin(-1*degToRad(angleObserve));
+        float y_45_i = vx_scaled * std::sin(-1*degToRad(angleObserve)) + vy_scaled * std::cos(-1*degToRad(angleObserve));
+        float x_v_45_i = x_45_i + agentsData[i].x_p;
+        float y_v_45_i = y_45_i + agentsData[i].y_p;
 
 
         uint16_t l_score;
-        uint16_t c_score; // center 
+        uint16_t c_score; // center
         uint16_t r_score;
-      
+
         float safe_x_l_45 = std::fmax(0.0f, std::fmin((float)BUFFER_WIDTH - 1.0f, x_v_45));
         float safe_y_l_45 = std::fmax(0.0f, std::fmin((float)BUFFER_HEIGHT - 1.0f, y_v_45));
-        
-        float safe_x_c_45 = std::fmax(0.0f, std::fmin((float)BUFFER_WIDTH - 1.0f, (agentsData[i].x_v+agentsData[i].x_p)*sensorDistance));
-        float safe_y_c_45 = std::fmax(0.0f, std::fmin((float)BUFFER_HEIGHT - 1.0f, (agentsData[i].y_v+agentsData[i].y_p)*sensorDistance));
-        
-        float safe_x_r_45 = std::fmax(0.0f, std::fmin((float)BUFFER_WIDTH - 1.0f, x_v_45_i));
-        float safe_y_r_45 = std::fmax(0.0f, std::fmin((float)BUFFER_HEIGHT - 1.0f, -1*y_v_45_i));
 
+        float safe_x_c_45 = std::fmax(0.0f, std::fmin((float)BUFFER_WIDTH - 1.0f, agentsData[i].x_p + vx_scaled));
+        float safe_y_c_45 = std::fmax(0.0f, std::fmin((float)BUFFER_HEIGHT - 1.0f, agentsData[i].y_p + vy_scaled));
+
+
+        float safe_x_r_45 = std::fmax(0.0f, std::fmin((float)BUFFER_WIDTH - 1.0f, x_v_45_i));
+        float safe_y_r_45 = std::fmax(0.0f, std::fmin((float)BUFFER_HEIGHT - 1.0f, y_v_45_i)); // Removed the -1* multiplier
         
 
 
@@ -208,7 +208,7 @@ void simulateAgents()
         if(static_rgb_buffer[i] > 0)
         {
             static_rgb_buffer[i] -= 1;
-            static_rgb_buffer[i] = std::max((int)static_rgb_buffer[i], 0);
+//static_rgb_buffer[i] = std::max((int)static_rgb_buffer[i], 3);
         }
     }
 
@@ -269,12 +269,10 @@ void applyMeanBlur() {
 
 // sycl code 
 
-// --- Drawing function that fills the static array ONCE ---
 void InitializeStaticBuffer() {
     for (int y = 0; y < BUFFER_HEIGHT; ++y) {
         for (int x = 0; x < BUFFER_WIDTH; ++x) {
             
-            // Calculate the starting index for the R, G, B components of the current pixel
             int buffer_index = (y * BUFFER_WIDTH + x) * BYTES_PER_PIXEL;
             static_rgb_buffer[buffer_index + 0] = 10; 
             static_rgb_buffer[buffer_index + 1] = 10;
@@ -284,7 +282,6 @@ void InitializeStaticBuffer() {
 }
 
 int main(int argc, char* argv[]) {
-    // 1. Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
         return 1;
@@ -293,10 +290,8 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
     initAgents();
 
-    // 2. Create and fill the static array ONCE
     InitializeStaticBuffer();
 
-    // 3. Create a window
     SDL_Window* window = SDL_CreateWindow(
         "SDL Static C-Style Array Buffer",
         SDL_WINDOWPOS_UNDEFINED,
@@ -306,18 +301,16 @@ int main(int argc, char* argv[]) {
         SDL_WINDOW_SHOWN
     );
 
-    // 4. Create an SDL_Surface that points to our C-style array
-    // We use the array name 'static_rgb_buffer' which decays to a pointer (uint8_t*)
     SDL_Surface* bufferSurface = SDL_CreateRGBSurfaceFrom(
-        static_rgb_buffer, // C-style array name acts as pointer to data
+        static_rgb_buffer,
         BUFFER_WIDTH,
         BUFFER_HEIGHT,
-        24, // Bits per pixel (3 bytes)
-        BUFFER_WIDTH * BYTES_PER_PIXEL, // Pitch (bytes per row)
-        0x00FF0000, // R-mask (standard little-endian 24-bit RGB)
-        0x0000FF00, // G-mask
-        0x000000FF, // B-mask
-        0x00000000  // No Alpha
+        24,
+        BUFFER_WIDTH * BYTES_PER_PIXEL,
+        0x00FF0000,
+        0x0000FF00,
+        0x000000FF,
+        0x00000000
     );
 
     if (bufferSurface == nullptr) {
@@ -327,16 +320,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // 5. Get the destination (window) surface
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
 
-    // Main loop variables
     bool quit = false;
     SDL_Event e;
 
-    // 6. Main application loop
     while (!quit) {
-        // Handle events
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
@@ -346,20 +335,14 @@ int main(int argc, char* argv[]) {
         drawAgents();
         simulateAgents();
 
-
-        // --- COPY (BLIT) STATIC BUFFER TO SCREEN ---
-        // Copies the fixed gradient image onto the window surface.
         SDL_BlitSurface(bufferSurface, nullptr, screenSurface, nullptr);
 
 
-        // 7. Update the window to display the fixed changes
         SDL_UpdateWindowSurface(window);
 
-        SDL_Delay(8);
+        SDL_Delay(1);
     }
 
-    // 8. Clean up resources
-    // We only free the SDL_Surface wrapper; the C-style array memory is managed by the program.
     SDL_FreeSurface(bufferSurface); 
     SDL_DestroyWindow(window);
     SDL_Quit();
