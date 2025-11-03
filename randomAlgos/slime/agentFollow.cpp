@@ -28,7 +28,7 @@ typedef struct agentData
     uint8_t b;
 };
 
-uint32_t agentsAmt = 25000;
+uint32_t agentsAmt = 100000;
 agentData* agentsData = new agentData[agentsAmt]; 
 float angleObserve = 45.0;
 float turnFactor = 0.05;

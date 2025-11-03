@@ -25,5 +25,12 @@ agentRocket : agentRocket.cpp
 	./draw2
 
 agentFollow : agentFollow.cpp
-	icpx -std=c++20 -fsycl -O3 -g agentFollow.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	icpx -std=c++20 -fsycl -O2 -g agentFollow.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+
+
+agentFollowFast : agentFollowFast.cpp
+	icpx -std=c++20 -fsycl -O2 -g agentFollowFast.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2
+
