@@ -8,8 +8,8 @@
 
 
 // --- Configuration ---
-const int BUFFER_WIDTH = 1920;
-const int BUFFER_HEIGHT = 1080;
+const int BUFFER_WIDTH = 600;
+const int BUFFER_HEIGHT = 600;
 const int BYTES_PER_PIXEL = 3; // R, G, B
 const int SCREEN_SCALE = 1;
 
@@ -28,7 +28,7 @@ typedef struct agentData
     uint8_t b;
 };
 
-uint32_t agentsAmt = 100000;
+uint32_t agentsAmt = 10000;
 agentData* agentsData = new agentData[agentsAmt]; 
 float angleObserve = 45.0;
 float turnFactor = 0.05;

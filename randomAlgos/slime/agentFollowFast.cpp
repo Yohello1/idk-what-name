@@ -8,13 +8,17 @@
 
 
 // --- Configuration ---
-#define BUFFER_WIDTH 1920
-#define BUFFER_HEIGHT 1080
-#define BYTES_PER_PIXEL 3 // R, G, B
-#define SCREEN_SCALE 1
+const int BUFFER_WIDTH = 1080;
+const int BUFFER_HEIGHT = 1080;
+const int BYTES_PER_PIXEL = 3; // R, G, B
+const int SCREEN_SCALE = 1;
 
 // This array will hold BUFFER_WIDTH * BUFFER_HEIGHT * 3 bytes (R, G, B)
-uint8_t static_rgb_buffer[BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL];
+// uint8_t static_rgb_buffer[BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL];
+sycl::queue sycl_queue{sycl::gpu_selector_v};
+uint8_t* static_rgb_buffer = sycl::malloc_shared<uint8_t>(BUFFER_WIDTH*BUFFER_HEIGHT*BYTES_PER_PIXEL, sycl_queue);
+
+uint8_t* temp_rgb_buffer = sycl::malloc_shared<uint8_t>(BUFFER_WIDTH*BUFFER_HEIGHT*BYTES_PER_PIXEL, sycl_queue);
 
 // Agents Data
 typedef struct agentData
@@ -28,14 +32,11 @@ typedef struct agentData
     uint8_t b;
 };
 
-uint32_t agentsAmt = 100000;
+uint32_t agentsAmt = 50000;
 agentData* agentsData = new agentData[agentsAmt]; 
 float angleObserve = 45.0;
 float turnFactor = 0.05;
 float sensorDistance = 4.0f;
-sycl::queue sycl_queue;
-sycl::buffer<uint8_t>  screen_buffer(sycl::range<1>(BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL));
-
 
 void drawAgents()
 {
@@ -217,42 +218,66 @@ float vx_scaled = agentsData[i].x_v * sensorDistance;
 
 }
 
-void syclApplyMeanBlur()
-{
-    #define sizee (BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL)
+void applyMeanBlur(uint8_t* arr, uint8_t* temp) {
+    // uint8_t* temp_buffer = (uint8_t*)calloc(BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL, 1);
     
-    sycl_queue.copy(static_rgb_buffer, screen_buffer, sizee);
-    sycl_queue.wait();
-
-
-    q.submit([&](sycl::handler& cgh)
-    {
-        auto accessor = screen_buffer.get_access<sycl::access::mode::read_write>(cgh);
-
-        cgh.parallel_for(sycl::range<1>(BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL), [=](sycl::id<1> idx)
-        {
-            accessor[idx] *=3;
-        });
-    }).wait()
-
-
-    q.copy(screen_buffer, static_rgb_buffer);
-    sycl_queue.wait();
-
-}
-
-void applyMeanBlur() {
-    uint8_t* temp_buffer = (uint8_t*)calloc(BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL, 1);
-
+    /*
     if (temp_buffer == nullptr) {
         std::cerr << "Memory allocation for temporary buffer failed!" << std::endl;
         return;
     }
+    */
 
     const int KERNEL_SIZE = 5;
-    const int KERNEL_RADIUS = KERNEL_SIZE / 2; // = 1
-    const int KERNEL_AREA = KERNEL_SIZE * KERNEL_SIZE; // = 9
+    const int KERNEL_RADIUS = 2; // = 1
+    const int KERNEL_AREA = KERNEL_SIZE * KERNEL_SIZE; // =5
 
+    // const size_t workSize = BUFFER_WIDTH * BUFFER_HEIGHT;
+
+
+    sycl_queue.parallel_for(sycl::range<2>(BUFFER_WIDTH, BUFFER_HEIGHT) , [=](sycl::id<2> idx){
+
+        size_t x = idx[0];
+        size_t y = idx[1];
+        
+        uint32_t sum_r = 0;
+        uint32_t sum_g = 0;
+        uint32_t sum_b = 0;
+
+        // Iterate over the 3x3 kernel neighborhood
+        for (int ky = -KERNEL_RADIUS; ky <= KERNEL_RADIUS; ++ky) {
+            for (int kx = -KERNEL_RADIUS; kx <= KERNEL_RADIUS; ++kx) {
+
+                int nx = x + kx;
+                int ny = y + ky;
+
+                nx = std::max(0, std::min(nx, BUFFER_WIDTH - 1));
+                ny = std::max(0, std::min(ny, BUFFER_HEIGHT - 1));
+
+                uint32_t neighbor_index = (ny * BUFFER_WIDTH + nx) * BYTES_PER_PIXEL;
+
+                sum_r += arr[neighbor_index + 0];
+                sum_g += arr[neighbor_index + 1];
+                sum_b += arr[neighbor_index + 2];
+            }
+        }
+
+        uint8_t avg_r = (uint8_t)(sum_r / KERNEL_AREA);
+        uint8_t avg_g = (uint8_t)(sum_g / KERNEL_AREA);
+        uint8_t avg_b = (uint8_t)(sum_b / KERNEL_AREA);
+
+        uint32_t output_index = (y * BUFFER_WIDTH + x) * BYTES_PER_PIXEL;
+
+        temp[output_index + 0] = avg_r;
+        temp[output_index + 1] = avg_g;
+        temp[output_index + 2] = avg_b;
+        
+
+    });
+    
+    sycl_queue.wait();
+
+    /*
     for (int y = 0; y < BUFFER_HEIGHT; ++y) {
         for (int x = 0; x < BUFFER_WIDTH; ++x) {
 
@@ -288,10 +313,10 @@ void applyMeanBlur() {
             temp_buffer[output_index + 1] = avg_g;
             temp_buffer[output_index + 2] = avg_b;
         }
-    }
+    } */
 
-    std::memcpy(static_rgb_buffer, temp_buffer, BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL);
-    free(temp_buffer);
+    std::memcpy(arr, temp, BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL);
+    // free(temp_buffer);
 }
 
 // sycl code 
@@ -316,6 +341,9 @@ int main(int argc, char* argv[]) {
 
     srand(time(NULL));
     initAgents();
+
+    
+
 
     InitializeStaticBuffer();
 
@@ -358,7 +386,7 @@ int main(int argc, char* argv[]) {
                 quit = true;
             }
         }
-        applyMeanBlur();
+        applyMeanBlur(static_rgb_buffer, temp_rgb_buffer);
         drawAgents();
         simulateAgents();
 
@@ -367,7 +395,7 @@ int main(int argc, char* argv[]) {
 
         SDL_UpdateWindowSurface(window);
 
-        SDL_Delay(1);
+        //SDL_Delay(15);
     }
 
     SDL_FreeSurface(bufferSurface); 
