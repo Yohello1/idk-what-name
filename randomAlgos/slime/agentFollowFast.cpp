@@ -64,6 +64,13 @@ void initAgents()
         agentsData[i].g = 255;
         agentsData[i].b = 255;
 
+        float speed = std::sqrt(agentsData[i].x_v*agentsData[i].x_v + agentsData[i].y_v*agentsData[i].y_v);
+        
+        agentsData[i].x_v /= speed;
+        agentsData[i].y_v /= speed;
+    
+        agentsData[i].x_v *= 5.0;
+        agentsData[i].y_v *= 5.0;
     }
 }
 

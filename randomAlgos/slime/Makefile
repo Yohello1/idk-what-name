@@ -31,6 +31,9 @@ agentFollow : agentFollow.cpp
 
 
 agentFollowFast : agentFollowFast.cpp
-	acpp -std=c++20 -O2 agentFollowFast.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	acpp -std=c++20 -g -O2 agentFollowFast.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
 
+agentFollowCenter : agentFollowCenter.cpp
+	acpp -std=c++20 -g -O2 agentFollowCenter.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2
