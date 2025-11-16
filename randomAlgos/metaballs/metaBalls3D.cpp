@@ -396,7 +396,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
         return 1;
     }
-
+    srand(time(NULL));
     initMetaBalls();
 
     // 2. Create and fill the static array ONCE

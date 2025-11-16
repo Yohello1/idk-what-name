@@ -27,3 +27,9 @@ metaBalls2D : metaBalls2D.cpp
 metaBalls3D: metaBalls3D.cpp
 	icpx metaBalls3D.cpp -O2 $(COMPILER_FLAGS) -qopenmp $(LINKER_FLAGS) -lm -o draw2
 	./draw2
+
+
+
+metaBallsFast3D: metaBalls3DFast.cpp
+	 acpp metaBalls3DFast.cpp -lsycl -O2 -fopenmp $(COMPILER_FLAGS) $(LINKER_FLAGS) -lm -o draw2
+	./draw2
