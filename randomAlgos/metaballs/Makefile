@@ -22,3 +22,8 @@ testDisp : testDisp.cpp
 metaBalls2D : metaBalls2D.cpp
 	icpx metaBalls2D.cpp -O2 $(COMPILER_FLAGS) $(LINKER_FLAGS) -lm -o draw2
 	./draw2
+
+
+metaBalls3D: metaBalls3D.cpp
+	icpx metaBalls3D.cpp -O2 $(COMPILER_FLAGS) -qopenmp $(LINKER_FLAGS) -lm -o draw2
+	./draw2

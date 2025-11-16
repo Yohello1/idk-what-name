@@ -17,7 +17,7 @@ uint8_t static_rgb_buffer[BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL];
 
 // Meta Balls data
 float metaBall_surface_min = 500.0;
-float metaBall_surface_max = 2300.0;
+float metaBall_surface_max = 600.0;
 uint32_t metaBalls_amt = 30.0;
 uint32_t metaBall_strength_max = 3000;
 uint32_t metaBall_strength_min = 2000;
