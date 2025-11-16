@@ -11,8 +11,8 @@
 
 
 // --- Configuration ---
-constexpr int BUFFER_WIDTH = 1280;
-constexpr int BUFFER_HEIGHT = 720;
+constexpr int BUFFER_WIDTH = 1280/2;
+constexpr int BUFFER_HEIGHT = 720/2;
 constexpr int BYTES_PER_PIXEL = 3; // R, G, B
 constexpr int SCREEN_SCALE = 1;
 
@@ -70,7 +70,7 @@ namespace meatBalls
     float g_pitch = 90.0f;
     const float g_maxDist = 300.0f;
     const float g_minDist = 1.0f;
-    float g_fov = 2.00; // 74 degrees 
+    float g_fov = 1.370; // 74 degrees 
 
     struct s_viewport_matricies g_viewport_properties;
 
@@ -201,14 +201,12 @@ namespace meatBalls
 }
 
 // Meta Balls data
-const float metaBall_surface_min = 500.0;
+const float metaBall_surface_min = 150.0;
 const float metaBall_surface_max = 2300.0;
-const uint32_t metaBalls_amt = 500;
-const uint32_t metaBall_strength_max = 1500;
-const uint32_t metaBall_strength_min = 500;
-const uint32_t metaBall_spawn_area = 1000;
-
-float* metaBall_strength_map = new float[BUFFER_WIDTH * BUFFER_HEIGHT];
+const uint32_t metaBalls_amt = 2000;
+const uint32_t metaBall_strength_max = 6000;
+const uint32_t metaBall_strength_min = 5000;
+const uint32_t metaBall_spawn_area = 500;
 
 struct s_metaBall {
     float x_p;
