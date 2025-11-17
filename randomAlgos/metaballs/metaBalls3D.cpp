@@ -24,7 +24,43 @@ uint8_t static_rgb_buffer[BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL];
 const float view_min_dist = 1.0f;
 const float maxDist = 500.0f;
 
-glm::u8vec3 castRay(glm::vec3 ray_direction);
+glm::u8vec3 castRay(glm::vec3 ray_direction)
+{
+    float t = 1.0f;
+    float dist;
+    float total;
+
+
+    while(t < maxDist)
+    {
+        total = 0.0f;
+        dist = 0.0f;;
+        glm::vec3 curr = t*ray_direction;
+
+        for(int i = 0; i < metaBalls_amt; i++)
+        {
+            total += (metaBalls[i].strength)/(std::sqrt(std::pow(curr.x - metaBalls[i].x_p, 2) + std::pow(curr.y - metaBalls[i].y_p, 2) + std::pow(curr.z - metaBalls[i].z_p, 2)));
+
+
+        }
+
+        if(total > metaBall_surface_min)
+        {
+            float dist = glm::length(t*ray_direction);
+            glm::u8vec3 temp(1,1,1);
+            temp *= (int) std::abs(dist);
+
+            return temp;
+        }
+
+        t += 1.0f;
+    }
+
+
+
+    return meatBalls::skyColour(ray_direction);
+
+}
 
 namespace meatBalls 
 {
@@ -278,43 +314,7 @@ void drawMetaBalls(uint8_t* screen_buffer, s_metaBall* balls)
 }
 
 
-glm::u8vec3 castRay(glm::vec3 ray_direction)
-{
-    float t = 1.0f;
-    float dist;
-    float total;
 
-
-    while(t < maxDist)
-    {
-        total = 0.0f;
-        dist = 0.0f;;
-        glm::vec3 curr = t*ray_direction;
-
-        for(int i = 0; i < metaBalls_amt; i++)
-        {
-            total += (metaBalls[i].strength)/(std::sqrt(std::pow(curr.x - metaBalls[i].x_p, 2) + std::pow(curr.y - metaBalls[i].y_p, 2) + std::pow(curr.z - metaBalls[i].z_p, 2))); 
-            
-
-        }
-
-        if(total > metaBall_surface_min)
-        {
-            float dist = glm::length(t*ray_direction);
-            glm::u8vec3 temp(1,1,1);
-            temp *= (int) std::abs(dist);
-
-            return temp; 
-        }
-
-        t += 1.0f;
-    }
-
-    
-
-    return meatBalls::skyColour(ray_direction);
-
-}
 
 
 
