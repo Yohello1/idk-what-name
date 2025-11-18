@@ -30,6 +30,7 @@ struct s_metaBall {
     float z_v;
 
     float strength;
+    float _padding;
 };
 typedef struct s_metaBall s_metaBall;
 
@@ -37,6 +38,7 @@ s_metaBall* g_metaBalls = new s_metaBall[META_BALLS_AMT];
 
 const float VIEW_MIN_DIST = 1.0f;
 const float MAX_DIST = 500.0f;
+const int MAX_STEPS = 256;
 
 sycl::device getBestDevice() {
     sycl::device selected_device;
@@ -77,7 +79,7 @@ namespace meatBalls
     float g_pitch = 90.0f;
     const float g_maxDist = 300.0f;
     const float g_minDist = 1.0f;
-    const float g_fov = 1.370;
+    const float g_fov = 1.370; // In radians
 
     void updateCameraVectors()
     {
@@ -148,11 +150,13 @@ namespace meatBalls
 
 void handleControls(SDL_Event* event, bool* quit)
 {
+
     while (SDL_PollEvent(event) != 0) {
         if (event->type == SDL_QUIT) {
             *quit = true;
         }
     }
+
 
     const uint8_t* state = SDL_GetKeyboardState(NULL);
 
@@ -201,20 +205,19 @@ void initMetaBalls()
 
 void drawMetaBalls(uint8_t* screen_buffer, const s_metaBall* balls, sycl::queue& sycl_queue)
 {
-    glm::vec3 w = glm::normalize(-1.0f * meatBalls::g_cameraFront); // view direction
+    glm::vec3 w = glm::normalize(-1.0f * meatBalls::g_cameraFront);
     glm::vec3 u = glm::normalize(glm::cross(meatBalls::g_cameraUp, w));
     glm::vec3 v = glm::cross(w,u); // Up vector
     glm::vec3 ray_origin = meatBalls::g_cameraPos;
-    const glm::vec3 V_DOWN = glm::vec3(0.0f, -1.0f, 0.0f);
 
     float viewportHeight = 2*meatBalls::g_minDist * std::tan(meatBalls::g_fov/2.0f);
     float viewportWidth = viewportHeight * ((float)BUFFER_WIDTH/(float) BUFFER_HEIGHT);
+
 
     sycl_queue.parallel_for(sycl::range<2>(BUFFER_HEIGHT, BUFFER_WIDTH), [=](sycl::id<2> idx)
     {
         size_t i = idx[0];
         size_t j = idx[1];
-
 
         float u_p = (((2.0*(float) j + 0.5f)/((float) BUFFER_WIDTH)) - 1.0f) *(viewportWidth/2.0f);
         float v_p = -1.0 * (((2.0*(float) i + 0.5f)/((float) BUFFER_HEIGHT))- 1.0f) *(viewportHeight/2.0f);
@@ -222,15 +225,16 @@ void drawMetaBalls(uint8_t* screen_buffer, const s_metaBall* balls, sycl::queue&
         glm::vec3 ray_direction = -1.0f * meatBalls::g_minDist * w + u_p * u + v_p * v;
         ray_direction = glm::normalize(ray_direction);
 
-        glm::u8vec3 colour;
+        glm::u8vec3 final_colour;
+        float hit_distance = MAX_DIST;
         bool hit_found = false;
 
-        float t = 1.0f;
-        float total;
+        float t = VIEW_MIN_DIST;
+        int step_count = 0;
 
-        while(t < MAX_DIST)
+        while (t < MAX_DIST && step_count < MAX_STEPS)
         {
-            total = 0.0f;
+            float total = 0.0f;
             glm::vec3 curr = t*ray_direction + ray_origin;
 
             for(int k = 0; k < META_BALLS_AMT; k++)
@@ -240,96 +244,87 @@ void drawMetaBalls(uint8_t* screen_buffer, const s_metaBall* balls, sycl::queue&
                 total += balls[k].strength / dist_sq;
             }
 
-            if(total > META_BALL_SURFACE_MIN)
+            if (total > META_BALL_SURFACE_MIN)
             {
-                float dist = glm::length(t*ray_direction);
-                glm::u8vec3 temp(1,1,1);
-                temp *= (float)(~((uint8_t) std::abs(dist / (MAX_DIST / 256))));
-                colour = temp;
+                hit_distance = t;
                 hit_found = true;
                 break;
             }
+
             t += 1.0f;
+            step_count++;
         }
 
-        if (!hit_found)
+        glm::u8vec3 hit_colour;
         {
+            float dist = glm::length(hit_distance * ray_direction);
+            glm::u8vec3 temp(1,1,1);
+            temp *= (float)(~((uint8_t) sycl::fabs(dist / (MAX_DIST / 256.0f))));
+            hit_colour = temp;
+        }
+
+        glm::u8vec3 background_colour;
+        {
+            const glm::vec3 V_DOWN = glm::vec3(0.0f, -1.0f, 0.0f);
             glm::vec3 V_INPUT_NORMALIZED = glm::normalize(ray_direction);
             float cosTheta = glm::dot(V_INPUT_NORMALIZED, V_DOWN);
-            float angleRadians = std::acos(cosTheta);
+            float angleRadians = sycl::acos(cosTheta);
 
             const float MAX_ANGLE_RADIANS = glm::pi<float>();
-            float t = angleRadians / MAX_ANGLE_RADIANS;
-            t = std::clamp(t, 0.0f, 1.0f);
+            float t_bg = angleRadians / MAX_ANGLE_RADIANS;
+            t_bg = sycl::clamp(t_bg, 0.0f, 1.0f);
 
             const float R_MAX = 78.0f;
             const float G_MAX = 179.0f;
             const float B_MAX = 252.0f;
 
-            float r = R_MAX * t;
-            float g = G_MAX * t;
-            float b = B_MAX * t;
+            float r = R_MAX * t_bg;
+            float g = G_MAX * t_bg;
+            float b = B_MAX * t_bg;
 
-            colour = glm::u8vec3((uint8_t) sycl::round(r), (uint8_t) sycl::round(g), (uint8_t) sycl::round(b));
+            background_colour = glm::u8vec3((uint8_t) sycl::round(r), (uint8_t) sycl::round(g), (uint8_t) sycl::round(b));
         }
-        screen_buffer[i*BUFFER_WIDTH*BYTES_PER_PIXEL + j*BYTES_PER_PIXEL   ] = colour.x;
-        screen_buffer[i*BUFFER_WIDTH*BYTES_PER_PIXEL + j*BYTES_PER_PIXEL + 1] = colour.y;
-        screen_buffer[i*BUFFER_WIDTH*BYTES_PER_PIXEL + j*BYTES_PER_PIXEL + 2] = colour.z;
+
+        final_colour = hit_found ? hit_colour : background_colour;
+
+        screen_buffer[i*BUFFER_WIDTH*BYTES_PER_PIXEL + j*BYTES_PER_PIXEL   ] = final_colour.x;
+        screen_buffer[i*BUFFER_WIDTH*BYTES_PER_PIXEL + j*BYTES_PER_PIXEL + 1] = final_colour.y;
+        screen_buffer[i*BUFFER_WIDTH*BYTES_PER_PIXEL + j*BYTES_PER_PIXEL + 2] = final_colour.z;
 
     }).wait();
 }
 
 void simulateMetaBalls(s_metaBall* balls, sycl::queue sycl_queue)
 {
-#pragma omp parallel for num_threads(16)
-    for(int i = 0; i < META_BALLS_AMT; i++)
+
+    sycl_queue.parallel_for(sycl::range<1>(META_BALLS_AMT), [=](sycl::id<1> idx)
     {
+        uint32_t i = idx; 
         balls[i].x_p += balls[i].x_v;
         balls[i].y_p += balls[i].y_v;
         balls[i].z_p += balls[i].z_v;
 
-        if(balls[i].x_p < 0)
-        {
-            balls[i].x_p = std::fmax(balls[i].x_p, 1.0);
-            balls[i].x_v *= -1;
-        }
+        balls[i].x_v *= std::signbit(balls[i].x_p);
+        balls[i].x_p = std::fmax(balls[i].x_p, 1.0);
+        balls[i].x_p = std::fmin(balls[i].x_p, META_BALL_SPAWN_AREA);
 
-        else if (balls[i].x_p > BUFFER_WIDTH )
-        {
-            balls[i].x_p = std::fmin(balls[i].x_p, (float)BUFFER_WIDTH-1);
-            balls[i].x_v *= -1;
-        }
+        balls[i].x_v *= std::signbit(balls[i].x_p);
+        balls[i].y_p = std::fmax(balls[i].y_p, 1.0);        
+        balls[i].y_p = std::fmin(balls[i].y_p, META_BALL_SPAWN_AREA);
 
-        if(balls[i].y_p < 0)
-        {
-            balls[i].y_p = std::fmax(balls[i].y_p, 1.0);
-            balls[i].y_v *= -1;
-        }
-        else if (balls[i].y_p > BUFFER_HEIGHT)
-        {
-            balls[i].y_p = std::fmax(balls[i].y_p, 1.0);
-            balls[i].y_v *= -1;
-        }
-
-        if(balls[i].z_p < 0)
-        {
-            balls[i].z_p = std::fmax(balls[i].z_p, 1.0);
-            balls[i].z_v *= -1;
-        }
-        else if (balls[i].z_p > BUFFER_HEIGHT)
-        {
-            balls[i].z_p = std::fmax(balls[i].z_p, 1.0);
-            balls[i].z_v *= -1;
-        }
-    }
+        balls[i].z_p = std::fmax(balls[i].z_p, 1.0);
+        balls[i].z_p = std::fmin(balls[i].z_p, META_BALL_SPAWN_AREA);
+        balls[i].x_v *= std::signbit(balls[i].z_p);
+    }).wait();
 }
 
 int main(int argc, char* argv[]) {
+    // 1. Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
         return 1;
     }
-    omp_set_num_threads(16);
+    //omp_set_num_threads(16);
     srand(time(NULL));
     initMetaBalls();
 
@@ -337,7 +332,7 @@ int main(int argc, char* argv[]) {
     sycl::queue sycl_queue(my_device);
     uint8_t* static_rgb_buffer = sycl::malloc_shared<uint8_t>(BUFFER_WIDTH*BUFFER_HEIGHT*BYTES_PER_PIXEL, sycl_queue);
 
-
+    // 3. Create a window
     SDL_Window* window = SDL_CreateWindow(
         "SDL Static C-Style Array Buffer",
         SDL_WINDOWPOS_UNDEFINED,
@@ -347,6 +342,8 @@ int main(int argc, char* argv[]) {
         SDL_WINDOW_SHOWN
     );
 
+    // 4. Create an SDL_Surface that points to our C-style array
+    // We use the array name 'static_rgb_buffer' which decays to a pointer (uint8_t*)
     SDL_Surface* bufferSurface = SDL_CreateRGBSurfaceFrom(
         static_rgb_buffer, // C-style array name acts as pointer to data
         BUFFER_WIDTH,
@@ -366,15 +363,19 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // 5. Get the destination (window) surface
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
 
+    // Main loop variables
     bool quit = false;
     SDL_Event e;
 
     meatBalls::rotateRight(1.0f);
 
 
+    // 6. Main application loop
     while (!quit) {
+        // Handle events
 
         handleControls(&e, &quit);
 
@@ -390,6 +391,8 @@ int main(int argc, char* argv[]) {
         SDL_Delay(16);
     }
 
+    // 8. Clean up resources
+    // We only free the SDL_Surface wrapper; the C-style array memory is managed by the program.
     SDL_FreeSurface(bufferSurface);
     SDL_DestroyWindow(window);
     SDL_Quit();

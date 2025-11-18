@@ -84,14 +84,10 @@ void simulateMetaBalls()
         metaBalls[i].x_p += metaBalls[i].x_v;
         metaBalls[i].y_p += metaBalls[i].y_v;
 
-        if(metaBalls[i].x_p < 0)
-        {
             metaBalls[i].x_p = std::fmax(metaBalls[i].x_p, 1.0);
-            metaBalls[i].y_p = std::fmax(metaBalls[i].y_p, 1.0);
-            metaBalls[i].x_v *= -1;
-        }
+            metaBalls[i].x_v *= std::signbit(metaBalls[i].x_p);
 
-        else if(metaBalls[i].y_p < 0)
+        if(metaBalls[i].y_p < 0)
         {
             metaBalls[i].x_p = std::fmax(metaBalls[i].x_p, 1.0);
             metaBalls[i].y_p = std::fmax(metaBalls[i].y_p, 1.0);
