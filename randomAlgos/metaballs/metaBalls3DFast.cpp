@@ -296,7 +296,7 @@ void drawMetaBalls(uint8_t* screen_buffer, const s_metaBall* balls, sycl::queue&
 
 void simulateMetaBalls(s_metaBall* balls, sycl::queue sycl_queue)
 {
-
+    // This is bugged and doesnt work for things that exceed the boundary in the positive direction, will find solution
     sycl_queue.parallel_for(sycl::range<1>(META_BALLS_AMT), [=](sycl::id<1> idx)
     {
         uint32_t i = idx; 
