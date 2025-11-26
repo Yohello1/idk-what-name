@@ -1,0 +1,2 @@
+add:
+	nvcc add.cu 
