@@ -308,13 +308,13 @@ void simulateMetaBalls(s_metaBall* balls, sycl::queue sycl_queue)
         balls[i].x_p = std::fmax(balls[i].x_p, 1.0);
         balls[i].x_p = std::fmin(balls[i].x_p, META_BALL_SPAWN_AREA);
 
-        balls[i].x_v *= std::signbit(balls[i].x_p);
+        balls[i].y_v *= std::signbit(balls[i].x_p);
         balls[i].y_p = std::fmax(balls[i].y_p, 1.0);        
         balls[i].y_p = std::fmin(balls[i].y_p, META_BALL_SPAWN_AREA);
 
         balls[i].z_p = std::fmax(balls[i].z_p, 1.0);
         balls[i].z_p = std::fmin(balls[i].z_p, META_BALL_SPAWN_AREA);
-        balls[i].x_v *= std::signbit(balls[i].z_p);
+        balls[i].z_v *= std::signbit(balls[i].z_p);
     }).wait();
 }
 
