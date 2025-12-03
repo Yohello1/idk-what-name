@@ -18,50 +18,34 @@ constexpr int SCREEN_SCALE = 1;
 uint8_t static_rgb_buffer[BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL];
 
 
+
+float metaBall_surface_min = 500.0;
+float metaBall_surface_max = 2300.0;
+uint32_t metaBalls_amt = 100.0;
+uint32_t metaBall_strength_max = 3000;
+uint32_t metaBall_strength_min = 2000;
+const uint32_t metaBall_spawn_area = 500;
+
+
+struct s_metaBall {
+    float x_p;
+    float y_p;
+    float z_p;
+    float x_v;
+    float y_v;
+    float z_v;
+
+    float strength;
+};
+
+typedef struct s_metaBall s_metaBall;
+
+s_metaBall* metaBalls = new s_metaBall[metaBalls_amt];
 // Sycl Data
 
 // Rendering Data
 const float view_min_dist = 1.0f;
 const float maxDist = 500.0f;
-
-glm::u8vec3 castRay(glm::vec3 ray_direction)
-{
-    float t = 1.0f;
-    float dist;
-    float total;
-
-
-    while(t < maxDist)
-    {
-        total = 0.0f;
-        dist = 0.0f;;
-        glm::vec3 curr = t*ray_direction;
-
-        for(int i = 0; i < metaBalls_amt; i++)
-        {
-            total += (metaBalls[i].strength)/(std::sqrt(std::pow(curr.x - metaBalls[i].x_p, 2) + std::pow(curr.y - metaBalls[i].y_p, 2) + std::pow(curr.z - metaBalls[i].z_p, 2)));
-
-
-        }
-
-        if(total > metaBall_surface_min)
-        {
-            float dist = glm::length(t*ray_direction);
-            glm::u8vec3 temp(1,1,1);
-            temp *= (int) std::abs(dist);
-
-            return temp;
-        }
-
-        t += 1.0f;
-    }
-
-
-
-    return meatBalls::skyColour(ray_direction);
-
-}
-
 namespace meatBalls 
 {
    struct s_viewport_matricies
@@ -201,31 +185,49 @@ namespace meatBalls
     }
 
 }
+glm::u8vec3 castRay(glm::vec3 ray_direction)
+{
+    float t = 1.0f;
+    float dist;
+    float total;
+
+
+    while(t < maxDist)
+    {
+        total = 0.0f;
+        dist = 0.0f;;
+        glm::vec3 curr = t*ray_direction;
+
+        for(int i = 0; i < metaBalls_amt; i++)
+        {
+            total += (metaBalls[i].strength)/(std::sqrt(std::pow(curr.x - metaBalls[i].x_p, 2) + std::pow(curr.y - metaBalls[i].y_p, 2) + std::pow(curr.z - metaBalls[i].z_p, 2)));
+
+
+        }
+
+        if(total > metaBall_surface_min)
+        {
+            float dist = glm::length(t*ray_direction);
+            glm::u8vec3 temp(1,1,1);
+            temp *= (int) std::abs(dist);
+
+            return temp;
+        }
+
+        t += 1.0f;
+    }
+
+
+
+    return meatBalls::skyColour(ray_direction);
+
+}
+
+
 
 // Meta Balls data
-float metaBall_surface_min = 500.0;
-float metaBall_surface_max = 2300.0;
-uint32_t metaBalls_amt = 100.0;
-uint32_t metaBall_strength_max = 3000;
-uint32_t metaBall_strength_min = 2000;
-const uint32_t metaBall_spawn_area = 500;
-
 float* metaBall_strength_map = new float[BUFFER_WIDTH * BUFFER_HEIGHT];
 
-struct s_metaBall {
-    float x_p;
-    float y_p;
-    float z_p;
-    float x_v;
-    float y_v;
-    float z_v;
-
-    float strength;
-};
-
-typedef struct s_metaBall s_metaBall;
-
-s_metaBall* metaBalls = new s_metaBall[metaBalls_amt];
 
 void initMetaBalls()
 {
