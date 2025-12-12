@@ -23,3 +23,13 @@ testDisp : testDisp.cpp
 grid : grid.cpp
 	g++ grid.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+
+bias : bias.cpp
+	g++ bias.cpp -g $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2
+
+
+moving : moving.cpp
+	g++ moving.cpp -g $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2
