@@ -3,6 +3,7 @@
 #include <cmath>
 #include <algorithm>
 #include <cstring>
+#include <vector>
 
 // --- Configuration ---
 const int BUFFER_WIDTH = 720;
@@ -15,12 +16,12 @@ constexpr int POINTS_WIDTH = (BUFFER_WIDTH/DISTANCE_BETWEEN_POINTS) + 1;
 constexpr int POINTS_HEIGHT = (BUFFER_HEIGHT/DISTANCE_BETWEEN_POINTS) + 1;
 constexpr int POINTS_AMT = (POINTS_HEIGHT)*(POINTS_HEIGHT);
 
-const int FLOATER_AMT = 300;
+const int FLOATER_AMT = 450;
 const int FLOATER_SPEED = 3;
 
 const int CAPACITY = 8;
 
-const uint16_t THRESHOLD = 180;
+const uint16_t THRESHOLD = 10;
 
 // The C-STYLE STATIC ARRAY for our pixel data
 // This array will hold BUFFER_WIDTH * BUFFER_HEIGHT * 3 bytes (R, G, B)
@@ -40,8 +41,8 @@ struct point
 };
 
 struct floater {
-    uint32_t x;
-    uint32_t y;
+    float x;
+    float y;
     
     float v_x; 
     float v_y;
@@ -68,7 +69,8 @@ struct quadNode
 struct point*   points = new struct point[POINTS_AMT];
 struct floater* floaters = new struct floater[FLOATER_AMT];
 
-int signBit(int a) { return a/abs(a)};
+int signBit(int a) { return a/abs(a); };
+float fsignBit(float a) { return a/abs(a); };
 
 // --- Drawing function that fills the static array ONCE ---
 void InitializeStaticBuffer() {
@@ -153,10 +155,11 @@ void initFloaters()
 {
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        floaters[i].x = rand() % BUFFER_WIDTH;
-        floaters[i].y = rand() % BUFFER_HEIGHT;
+        floaters[i].x = rand() % BUFFER_WIDTH-1;
+        floaters[i].y = rand() % BUFFER_HEIGHT-1;
 
-        floaters[i].angle = (rand() % 360);
+        floaters[i].v_x = ((rand() % 50) - 25)/10;
+        floaters[i].v_y = ((rand() % 50) - 25)/10;
 
         floaters[i].r = (rand() % 127)+128;
         floaters[i].b = (rand() % 127)+128;
@@ -165,15 +168,11 @@ void initFloaters()
 
 void initGrid()
 {
-    
-
     for(int i = 0; i < POINTS_AMT; i++)
     {
         int x = (i%POINTS_WIDTH);
-        int y = (i/POINTS_WIDTH);
+        int y = (i/POINTS_HEIGHT);
         
-        std::cout << x << ',' << y;
-
         points[i].x = x; 
         points[i].y = y;
 
@@ -205,7 +204,32 @@ void simulateFloaters()
         floaters[i].x += floaters[i].v_x;
         floaters[i].y += floaters[i].v_y;
 
-        floaters[i].x = max(
+
+        if (floaters[i].x < 0.0f) 
+        {
+            floaters[i].v_x *= -1.0f;
+            floaters[i].x = 0.0f;
+        } 
+        
+       
+        else if (floaters[i].x > (BUFFER_WIDTH-1)) 
+        {
+            floaters[i].v_x *= -1.0f; 
+            floaters[i].x = (BUFFER_WIDTH-1);
+        }
+
+
+        if (floaters[i].y < 0.0f) 
+        {
+            floaters[i].v_y *= -1.0f; 
+            floaters[i].y = 0.0f;
+        }
+        
+        else if (floaters[i].y > (BUFFER_HEIGHT-1))
+        {
+            floaters[i].v_y *= -1.0f; 
+            floaters[i].y = (BUFFER_HEIGHT-1);
+        }
     }
 }
 
@@ -216,6 +240,31 @@ void drawConnections()
     const int SQR_PER_ROW = POINTS_WIDTH - 1;
     const int SQR_PER_COL = POINTS_WIDTH - 1;
 
+    for(int i = 0; i < POINTS_WIDTH; i++)
+    {
+        for(int j = 0; j < POINTS_HEIGHT; j++)
+        {
+            int idx = POINTS_WIDTH*i+j;
+
+            float strength = 0.0f;
+
+            int x = points[idx].i_x;
+            int y = points[idx].i_y;
+
+            for(int k = 0; k < FLOATER_AMT; k++)
+            {
+                float val = (floaters[k].r+floaters[k].b)/((floaters[k].x-x)*(floaters[k].x-x)+(floaters[k].y-y)*(floaters[k].y-y));
+                strength += val;
+            }
+
+            points[idx].strength = strength;
+
+            std::cout << (strength > THRESHOLD) ? '1' : ' ';
+
+        }
+    }
+
+    std::cout << '\n';
 
     for(int i = 0; i < SQR_PER_ROW; i++)
     {
@@ -253,8 +302,6 @@ void drawConnections()
 
             int R = 255, G = 255, B = 255;
 
-            std::cout << i << ' ' << j << ' ' << idx_0 << ' ' << idx_1 << ' ' << idx_2 << ' ' << idx_3 << '\n';
-
             switch (config_index)
             {
                 case 0:
@@ -290,13 +337,11 @@ void drawConnections()
         }
     }
 
-    std::cout << "dimensions: " << SQR_PER_ROW << ' ' << SQR_PER_COL << '\n';
 
 }
 
 void drawGrid()
 {
-    std::cout << "hI" << std::endl;
     for(int i = 0; i < POINTS_AMT; i++)
     {
         int idx = points[i].i_x*BYTES_PER_PIXEL + points[i].i_y*BUFFER_WIDTH*BYTES_PER_PIXEL;
@@ -311,8 +356,6 @@ void drawGrid()
         static_rgb_buffer[idx+2] = strength;
 
     }
-
-    drawConnections();
 }
 
 int main(int argc, char* argv[]) {
@@ -381,9 +424,10 @@ int main(int argc, char* argv[]) {
         }
 
         memset(static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
-
+        simulateFloaters();
         drawFloaters();
-        drawGrid();
+        drawConnections();
+
 
         // --- COPY (BLIT) STATIC BUFFER TO SCREEN ---
         // Copies the fixed gradient image onto the window surface.
