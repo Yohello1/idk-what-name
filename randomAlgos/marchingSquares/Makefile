@@ -33,3 +33,7 @@ bias : bias.cpp
 moving : moving.cpp
 	g++ moving.cpp -g $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+quad : quad.cpp
+	g++ quad.cpp -g $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2
