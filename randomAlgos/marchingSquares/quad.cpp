@@ -67,11 +67,27 @@ struct quadNode
 
     quadNode* children[4];
 
+    // . 1 .
+    // 2 X 3
+    // . 4 . 
+    quadNode* _neighbour[4];
+    
     quadNode()
     {
         particles.reserve(CAPACITY*2);
 
-        std::memset(children, 0, sizeof(quadNode)*4);
+        std::memset(children, 0, sizeof(children));
+    }
+
+    ~quadNode()
+    {
+        if(children[0] != 0)
+        {
+            delete children[0];
+            delete children[1];
+            delete children[2];
+            delete children[3];
+        }
     }
 
     size_t size()
@@ -126,9 +142,9 @@ struct quadNode
             corner_y[1] = y;
 
             corner_x[2] = x;
-            corner_x[2] = y + height/2;
+            corner_y[2] = y + height/2;
             
-            corner_y[3] = x + width/2;
+            corner_x[3] = x + width/2;
             corner_y[3] = y + height/2;
 
             children[0]->x = corner_x[0];
@@ -182,8 +198,42 @@ struct quadNode
             particles_amt = sum;
 
             if(sum < CAPACITY)
-                // de-subdivide
+            {
+                children[0]->merge(particles);
+                children[1]->merge(particles);
+                children[2]->merge(particles);
+                children[3]->merge(particles);
 
+                delete children[0];
+                delete children[1];
+                delete children[2];
+                delete children[3];
+            }
+
+        }
+    }
+
+    // Takes in parent's array, and adds its particles to the particles
+    void merge(const std::vector<floater*>& vec)
+    {
+        if(children[0] != 0)
+        {
+            children[0]->merge(vec);
+            children[1]->merge(vec);
+            children[2]->merge(vec);
+            children[3]->merge(vec);
+
+            delete children[0];
+            delete children[1];
+            delete children[2];
+            delete children[3];
+
+            memset(children, 0, sizeof(children));
+        }
+
+        for(auto &p : particles)
+        {
+            vec.push_back(p);
         }
     }
 
