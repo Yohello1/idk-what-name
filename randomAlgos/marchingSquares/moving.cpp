@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cstring>
 #include <vector>
+#include <iomanip>
+
 
 // --- Configuration ---
 const int BUFFER_WIDTH = 720;
@@ -11,17 +13,17 @@ const int BUFFER_HEIGHT = 720;
 const int BYTES_PER_PIXEL = 3; // R, G, B
 const int SCREEN_SCALE = 1;
 
-const int DISTANCE_BETWEEN_POINTS = 32;
+const int DISTANCE_BETWEEN_POINTS = 8;
 constexpr int POINTS_WIDTH = (BUFFER_WIDTH/DISTANCE_BETWEEN_POINTS) + 1;
 constexpr int POINTS_HEIGHT = (BUFFER_HEIGHT/DISTANCE_BETWEEN_POINTS) + 1;
 constexpr int POINTS_AMT = (POINTS_HEIGHT)*(POINTS_HEIGHT);
 
-const int FLOATER_AMT = 450;
+const int FLOATER_AMT = 10000;
 const int FLOATER_SPEED = 3;
 
-const int CAPACITY = 8;
+const int CAPACITY = 1024;
 
-const uint16_t THRESHOLD = 10;
+const uint16_t THRESHOLD = 180;
 
 // The C-STYLE STATIC ARRAY for our pixel data
 // This array will hold BUFFER_WIDTH * BUFFER_HEIGHT * 3 bytes (R, G, B)
@@ -259,12 +261,12 @@ void drawConnections()
 
             points[idx].strength = strength;
 
-            std::cout << (strength > THRESHOLD) ? '1' : ' ';
+            //std::cout << (strength > THRESHOLD) ? '1' : ' ';
 
         }
     }
 
-    std::cout << '\n';
+    //std::cout << '\n';
 
     for(int i = 0; i < SQR_PER_ROW; i++)
     {
@@ -414,9 +416,13 @@ int main(int argc, char* argv[]) {
     bool quit = false;
     SDL_Event e;
 
+    clock_t start, end;
+
     // 6. Main application loop
     while (!quit) {
-        // Handle events
+
+        start = clock();
+
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
@@ -436,7 +442,12 @@ int main(int argc, char* argv[]) {
         // 7. Update the window to display the fixed changes
         SDL_UpdateWindowSurface(window);
 
-        SDL_Delay(16);
+
+        end = clock();
+        double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+        std::cout << "Time taken by program is : " << std::fixed
+        << time_taken << std::setprecision(8) << std::endl;
+
     }
 
     // 8. Clean up resources
