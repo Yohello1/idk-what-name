@@ -10,8 +10,9 @@
 // --- Configuration ---
 const int DISTANCE_BETWEEN_POINTS = 8;
 
-const int SIZE_MULTIPLIER = 96;
-const int PADDING = 3;
+const int SIZE_MULTIPLIER = 90;
+const int INFLUENCE_RADIUS = 9;
+const int PADDING = std::min(3, INFLUENCE_RADIUS+1);
 
 const int BUFFER_WIDTH = SIZE_MULTIPLIER*DISTANCE_BETWEEN_POINTS+(DISTANCE_BETWEEN_POINTS*PADDING*2);
 const int BUFFER_HEIGHT = SIZE_MULTIPLIER*DISTANCE_BETWEEN_POINTS+(DISTANCE_BETWEEN_POINTS*PADDING*2);
@@ -39,8 +40,7 @@ int offsets[BUFFER_LINE * BUFFER_LINE];
 int cells_ctr[BUFFER_LINE * BUFFER_LINE];
 int particles_loc[FLOATER_AMT];
 
-const int REGIONS_AMT = 13; //this changes like nothing btw
-
+const int REGIONS_AMT = 2*(INFLUENCE_RADIUS)*(INFLUENCE_RADIUS)-2*INFLUENCE_RADIUS + 1;
 uint8_t static_rgb_buffer[BUFFER_WIDTH * BUFFER_HEIGHT * BYTES_PER_PIXEL];
 
 struct point
@@ -146,6 +146,85 @@ void offsetsCreation()
         offsets[i] = j;
         j += cells_ctr[i];
     }
+}
+
+std::vector<std::pair<int, int>> calculateRegionsOffsets()
+{
+    
+    /*
+     * Even though this code was vv clever, there is a tiny bug in it, and I kinda dont wanan debug it
+     * also this is very hard to read, so ima decommision it in exchange for more legible code :(
+
+
+    std::vector<int> x_val;
+    std::vector<int> y_val;
+
+    // rings from 0 to INFLUENCE_RADIUS
+    // Well a quarter
+    for(int i = 0; i < INFLUENCE_RADIUS + 1; i++)
+    {
+        std::vector<int> t_x_val = {i};
+        std::vector<int> t_y_val = {0};
+        
+
+        bool ended = false;
+        while(!ended)
+        {
+            if(t_y_val.back() == i) // Immplies that it's made a quarter rotation
+            {
+                ended = true;
+                continue;
+            }
+
+            t_x_val.push_back(t_x_val.back() - 1);
+            t_y_val.push_back(t_y_val.back() + 1);
+
+        }
+
+        x_val.insert(x_val.end(), t_x_val.begin(), t_x_val.end());
+        y_val.insert(y_val.end(), t_y_val.begin(), t_y_val.end());
+
+    }
+
+    std::vector<std::pair<int, int>> combined_list;
+    combined_list.reserve(x_val.size());
+    std::transform(x_val.begin(), x_val.end(),
+                   y_val.begin(),
+                   std::back_inserter(combined_list),
+                   [](int a, int b) {return std::make_pair(a, b);});
+
+    std::transform(combined_list.begin(), combined_list.end(), std::back_inserter(combined_list),
+            [](std::pair<int, int> p) {return std::make_pair(p.first * -1, p.second);
+            });
+
+
+    std::transform(combined_list.begin(), combined_list.end(), std::back_inserter(combined_list),
+            [](std::pair<int, int> p) {return std::make_pair(p.first, p.second * -1);
+            });
+
+    for(const auto& i: combined_list)
+    {
+        std::cout << i.first << ' ' << i.second << '\n';
+    }
+    std::sort(combined_list.begin(), combined_list.end());
+    combined_list.erase(std::unique(combined_list.begin(), combined_list.end()), combined_list.end());
+
+    
+    return combined_list;
+*/
+    std::vector<std::pair<int, int>> combined_list;
+
+    for (int y = -INFLUENCE_RADIUS; y <= INFLUENCE_RADIUS; ++y) {
+        for (int x = -INFLUENCE_RADIUS; x <= INFLUENCE_RADIUS; ++x) {
+            if (std::abs(x) + std::abs(y) <= INFLUENCE_RADIUS) {
+                combined_list.push_back({x, y});
+            }
+        }
+    }
+
+    for(const auto& i: combined_list)
+        std::cout << i.first << ' ' << i.second << '\n';
+    return combined_list;
 }
 
 void computeIndicies()
@@ -256,14 +335,14 @@ void initFloaters()
 
 void initGrid()
 {
-    int  dx[13]  =  {0,  1,  -1,  0,  0,   1,  1,   -1,  -1,  2,  -2,  0,  0};
-    int  dy[13]  =  {0,  0,   0,  1, -1,   1, -1,    1,  -1,  0,   0,  2, -2};
 
-    int relative_offsets[13];
-    for(int i = 0; i < 13; i++) {
+    std::vector<std::pair<int, int>> derivative = calculateRegionsOffsets();
+
+    int relative_offsets[REGIONS_AMT];
+    for(int i = 0; i < REGIONS_AMT; i++) {
         
 
-        relative_offsets[i] = dx[i] + (dy[i] * BUFFER_LINE);
+        relative_offsets[i] = derivative[i].first + (derivative[i].second * BUFFER_LINE);
     }
 
     for(int i = 0; i < POINTS_AMT; i++)
@@ -286,7 +365,7 @@ void initGrid()
 
         int base_cell_id = cell_x + BUFFER_LINE*cell_y;
 
-        for(int j = 0; j < 13; j++)
+        for(int j = 0; j < REGIONS_AMT; j++)
         {
             points[i].regions[j] = base_cell_id + relative_offsets[j];
         }
@@ -575,9 +654,9 @@ int main(int argc, char* argv[]) {
 
         memset(static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
         simulateFloaters();
-        //drawFloaters();
+        drawFloaters();
         drawConnections();
-        drawGrid();
+        // drawGrid();
 
         // --- COPY (BLIT) STATIC BUFFER TO SCREEN ---
         // Copies the fixed gradient image onto the window surface.

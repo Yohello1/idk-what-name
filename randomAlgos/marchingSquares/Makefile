@@ -45,5 +45,5 @@ spatial : spatial.cpp
 
 
 area : area.cpp
-	g++ area.cpp -g -O2 $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	g++ area.cpp -O3 -march=native $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
