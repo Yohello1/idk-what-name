@@ -42,3 +42,8 @@ quad : quad.cpp
 spatial : spatial.cpp
 	g++ spatial.cpp -g -O2 $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
+
+
+area : area.cpp
+	g++ area.cpp -g -O2 $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	./draw2

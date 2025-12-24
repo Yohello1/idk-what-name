@@ -31,7 +31,7 @@ constexpr int POINTS_AMT = (POINTS_HEIGHT)*(POINTS_WIDTH);
 const int FLOATER_AMT = 10000;
 const int FLOATER_SPEED = 3;
 
-const uint16_t THRESHOLD = 5;
+const uint16_t THRESHOLD = 180;
 
 // spatial compute stuff
 constexpr int CELL_SIZE = DISTANCE_BETWEEN_POINTS*DISTANCE_BETWEEN_POINTS;
@@ -131,20 +131,16 @@ void offsetsCreation()
 
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        // 1. Get grid coordinates (0 to 96)
         int gx = (floaters[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
         int gy = (floaters[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
 
-        // 2. Apply the same PADDING and BUFFER_LINE stride used in initGrid
         int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
 
-        // 3. Increment (with a safety check for the very edges)
         if (idx >= 0 && idx < (BUFFER_LINE * BUFFER_LINE)) {
             cells_ctr[idx] += 1;
         }
     }
 
-    // Accumulate offsets for the entire buffer
     for(int i = 0, j = 0; i < (BUFFER_LINE * BUFFER_LINE); i++)
     {
         offsets[i] = j;
@@ -265,6 +261,8 @@ void initGrid()
 
     int relative_offsets[13];
     for(int i = 0; i < 13; i++) {
+        
+
         relative_offsets[i] = dx[i] + (dy[i] * BUFFER_LINE);
     }
 
@@ -285,13 +283,13 @@ void initGrid()
 
         int cell_x = points[i].i_x / DISTANCE_BETWEEN_POINTS;
         int cell_y = points[i].i_y / DISTANCE_BETWEEN_POINTS;
-        int base_cell_id = cell_x + PADDING + ((cell_y + PADDING) * BUFFER_LINE);
+
+        int base_cell_id = cell_x + BUFFER_LINE*cell_y;
 
         for(int j = 0; j < 13; j++)
         {
             points[i].regions[j] = base_cell_id + relative_offsets[j];
         }
-
     }
 
 }
@@ -498,11 +496,12 @@ void drawGrid()
         if(!(strength >= THRESHOLD))
             strength = 0;
 
-        static_rgb_buffer[idx] = strength;
-        static_rgb_buffer[idx+1] = strength;
-        static_rgb_buffer[idx+2] = strength;
+        static_rgb_buffer[idx] = 255;
+        static_rgb_buffer[idx+1] = 255;
+        static_rgb_buffer[idx+2] = 255;
 
     }
+
 }
 
 int main(int argc, char* argv[]) {
@@ -576,9 +575,9 @@ int main(int argc, char* argv[]) {
 
         memset(static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
         simulateFloaters();
-        drawFloaters();
+        //drawFloaters();
         drawConnections();
-        //drawGrid();
+        drawGrid();
 
         // --- COPY (BLIT) STATIC BUFFER TO SCREEN ---
         // Copies the fixed gradient image onto the window surface.
