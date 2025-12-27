@@ -5,14 +5,14 @@
 #include <cstring>
 #include <vector>
 #include <iomanip>
-
+#include <omp.h>
 
 // --- Configuration ---
 const int DISTANCE_BETWEEN_POINTS = 8;
 
 const int SIZE_MULTIPLIER = 90;
 const int INFLUENCE_RADIUS = 9;
-const int PADDING = std::min(3, INFLUENCE_RADIUS+1);
+const int PADDING = std::max(3, INFLUENCE_RADIUS+1);
 
 const int BUFFER_WIDTH = SIZE_MULTIPLIER*DISTANCE_BETWEEN_POINTS+(DISTANCE_BETWEEN_POINTS*PADDING*2);
 const int BUFFER_HEIGHT = SIZE_MULTIPLIER*DISTANCE_BETWEEN_POINTS+(DISTANCE_BETWEEN_POINTS*PADDING*2);
@@ -222,8 +222,6 @@ std::vector<std::pair<int, int>> calculateRegionsOffsets()
         }
     }
 
-    for(const auto& i: combined_list)
-        std::cout << i.first << ' ' << i.second << '\n';
     return combined_list;
 }
 
@@ -338,12 +336,14 @@ void initGrid()
 
     std::vector<std::pair<int, int>> derivative = calculateRegionsOffsets();
 
-    int relative_offsets[REGIONS_AMT];
+    std::vector<int> relative_offsets {};
     for(int i = 0; i < REGIONS_AMT; i++) {
         
 
-        relative_offsets[i] = derivative[i].first + (derivative[i].second * BUFFER_LINE);
+        relative_offsets.push_back(derivative[i].first + (derivative[i].second * BUFFER_LINE));
     }
+
+    std::sort(relative_offsets.begin(), relative_offsets.end());
 
     for(int i = 0; i < POINTS_AMT; i++)
     {
@@ -427,6 +427,9 @@ void drawConnections()
     const int SQR_PER_ROW = POINTS_WIDTH - 1;
     const int SQR_PER_COL = POINTS_HEIGHT - 1;
 
+    floater* __restrict p_floaters = floaters;
+    int* __restrict p_indices = particles_loc;
+
     /*
     for(int i = 0; i < SQR_PER_COL; i++)
     {
@@ -469,15 +472,16 @@ void drawConnections()
 
             for(int k = 0; k < cells_ctr[idx_r]; k++)
             {
-                int floater_idx = particles_loc[idx_o + k];
+                int floater_idx = p_indices[idx_o + k];
 
-                float dx = floaters[floater_idx].x - x;
-                float dy = floaters[floater_idx].y - y;
+                float dx = p_floaters[floater_idx].x - x;
+                float dy = p_floaters[floater_idx].y - y;
                 float dist_sq = dx*dx + dy*dy;
 
-                if(dist_sq < 0.001f) dist_sq = 0.001f;
+                // if(dist_sq < 0.001f) dist_sq = 0.001f;
+                dist_sq = (dist_sq < 0.001f) ? 0.001 : dist_sq; 
 
-                float val = (floaters[floater_idx].r + floaters[floater_idx].b) / dist_sq;
+                float val = (p_floaters[floater_idx].r + p_floaters[floater_idx].b)* (1.0f / dist_sq);
 
                 //float val = (floaters[particles_loc[idx_o+k]].r+floaters[particles_loc[idx_o+k]].b)/((floaters[particles_loc[idx_o+k]].x-x)*(floaters[particles_loc[idx_o+k]].x-x)+(floaters[particles_loc[idx_o+k]].y-y)*(floaters[particles_loc[idx_o+k]].y-y));
 
@@ -667,9 +671,14 @@ int main(int argc, char* argv[]) {
 
 
         end = clock();
+        
         double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+        
+        
         std::cout << "Time taken by program is : " << std::fixed
         << time_taken << std::setprecision(8) << std::endl;
+        
+
 
         offsetsCreation();
         computeIndicies();

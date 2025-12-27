@@ -45,5 +45,5 @@ spatial : spatial.cpp
 
 
 area : area.cpp
-	g++ area.cpp -O3 -march=native $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
+	g++ area.cpp -O3 -fassociative-math -fsimd-cost-model=unlimited -mavx2 -mfma -mrecip -ffast-math -omp $(COMPILER_FLAGS) $(LINKER_FLAGS) -o draw2
 	./draw2
