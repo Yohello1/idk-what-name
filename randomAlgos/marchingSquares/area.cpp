@@ -61,10 +61,10 @@ struct point
 struct floater {
     float x;
     float y;
-    
-    float v_x; 
+
+    float v_x;
     float v_y;
-    
+
     uint8_t r;
     uint8_t b;
 };
@@ -84,12 +84,12 @@ std::pair<int, int> get_mid_point(const point& p0, const point& p1)
 void InitializeStaticBuffer() {
     for (int y = 0; y < BUFFER_HEIGHT; ++y) {
         for (int x = 0; x < BUFFER_WIDTH; ++x) {
-            
+
             // Calculate the starting index for the R, G, B components of the current pixel
             int buffer_index = (y * BUFFER_WIDTH + x) * BYTES_PER_PIXEL;
 
             // --- Static Black-to-Blue Gradient Calculation ---
-            
+
             // Calculate blue component based on X position (0 to 255)
             uint8_t blue = 0;
 
@@ -98,7 +98,7 @@ void InitializeStaticBuffer() {
 
             // Store the RGB components in the array
             // Index + 0: Red
-            static_rgb_buffer[buffer_index + 0] = red; 
+            static_rgb_buffer[buffer_index + 0] = red;
             // Index + 1: Green
             static_rgb_buffer[buffer_index + 1] = green;
             // Index + 2: Blue
@@ -119,7 +119,7 @@ void offsetsCreation()
 
         int idx = x + y*POINTS_WIDTH;
 
-        cells_ctr[idx] += 1; 
+        cells_ctr[idx] += 1;
     }
 
     for(int i = 0, j = 0; i < POINTS_AMT; i++)
@@ -150,7 +150,7 @@ void offsetsCreation()
 
 std::vector<std::pair<int, int>> calculateRegionsOffsets()
 {
-    
+
     /*
      * Even though this code was vv clever, there is a tiny bug in it, and I kinda dont wanan debug it
      * also this is very hard to read, so ima decommision it in exchange for more legible code :(
@@ -165,7 +165,7 @@ std::vector<std::pair<int, int>> calculateRegionsOffsets()
     {
         std::vector<int> t_x_val = {i};
         std::vector<int> t_y_val = {0};
-        
+
 
         bool ended = false;
         while(!ended)
@@ -209,7 +209,7 @@ std::vector<std::pair<int, int>> calculateRegionsOffsets()
     std::sort(combined_list.begin(), combined_list.end());
     combined_list.erase(std::unique(combined_list.begin(), combined_list.end()), combined_list.end());
 
-    
+
     return combined_list;
 */
     std::vector<std::pair<int, int>> combined_list;
@@ -269,11 +269,11 @@ void computeIndicies()
     free(curr_pos);
 }
 
-void draw_line_std_pair(uint8_t* buffer, 
-                        std::pair<int, int> p0, 
-                        std::pair<int, int> p1, 
+void draw_line_std_pair(uint8_t* buffer,
+                        std::pair<int, int> p0,
+                        std::pair<int, int> p1,
                         uint8_t r, uint8_t g, uint8_t b) {
-    
+
     int x0 = p0.first;
     int y0 = p0.second;
     int x1 = p1.first;
@@ -286,7 +286,7 @@ void draw_line_std_pair(uint8_t* buffer,
     int sy = y0 < y1 ? 1 : -1;
 
     int err = (dx > dy ? dx : -dy) / 2;
-    int e2; 
+    int e2;
 
     int x = x0;
     int y = y0;
@@ -303,7 +303,7 @@ void draw_line_std_pair(uint8_t* buffer,
         if (x == x1 && y == y1) break;
 
         e2 = err;
-        
+
         if (e2 > -dx) {
             err -= dy;
             x += sx;
@@ -338,7 +338,7 @@ void initGrid()
 
     std::vector<int> relative_offsets {};
     for(int i = 0; i < REGIONS_AMT; i++) {
-        
+
 
         relative_offsets.push_back(derivative[i].first + (derivative[i].second * BUFFER_LINE));
     }
@@ -392,29 +392,29 @@ void simulateFloaters()
         floaters[i].y += floaters[i].v_y;
 
 
-        if (floaters[i].x < (float) BUFFER_PADDING) 
+        if (floaters[i].x < (float) BUFFER_PADDING)
         {
             floaters[i].v_x *= -1.0f;
             floaters[i].x = BUFFER_PADDING;
-        } 
-        
-       
+        }
+
+
         else if (floaters[i].x > (float) (BUFFER_WORKING + BUFFER_PADDING-1))
         {
-            floaters[i].v_x *= -1.0f; 
+            floaters[i].v_x *= -1.0f;
             floaters[i].x = (BUFFER_WORKING + BUFFER_PADDING - 1);
         }
 
 
-        if (floaters[i].y < (float) BUFFER_PADDING) 
+        if (floaters[i].y < (float) BUFFER_PADDING)
         {
-            floaters[i].v_y *= -1.0f; 
+            floaters[i].v_y *= -1.0f;
             floaters[i].y = BUFFER_PADDING;
         }
-        
+
         else if (floaters[i].y > (float) (BUFFER_WORKING + BUFFER_PADDING-1))
         {
-            floaters[i].v_y *= -1.0f; 
+            floaters[i].v_y *= -1.0f;
             floaters[i].y = (BUFFER_WORKING + BUFFER_PADDING - 1);
         }
     }
@@ -422,40 +422,15 @@ void simulateFloaters()
 
 void drawConnections()
 {
-    int offset = DISTANCE_BETWEEN_POINTS/2;    
-
+    int offset = DISTANCE_BETWEEN_POINTS / 2;
     const int SQR_PER_ROW = POINTS_WIDTH - 1;
     const int SQR_PER_COL = POINTS_HEIGHT - 1;
 
     floater* __restrict p_floaters = floaters;
     int* __restrict p_indices = particles_loc;
 
-    /*
-    for(int i = 0; i < SQR_PER_COL; i++)
-    {
-        for(int j = 0; j < SQR_PER_ROW; j++)
-        {
-            int idx = POINTS_WIDTH*i+j;
-
-            float strength = 0.0f;
-
-            int x = points[idx].i_x;
-            int y = points[idx].i_y;
-
-            for(int k = 0; k < FLOATER_AMT; k++)
-            {
-                float val = (floaters[k].r+floaters[k].b)/((floaters[k].x-x)*(floaters[k].x-x)+(floaters[k].y-y)*(floaters[k].y-y));
-                strength += val;
-            }
-
-            points[idx].strength = strength;
-
-            //std::cout << (strength > THRESHOLD) ? '1' : ' ';
-
-        }
-    }
-    */
-
+    // --- PART 1: STRENGTH CALCULATION ---
+    // (Kept your logic, but optimized the inner math)
     for(int i = 0; i < POINTS_AMT; i++)
     {
         float strength = 0.0f;
@@ -492,80 +467,53 @@ void drawConnections()
 
         points[i].strength = (uint16_t)strength;
     }
-    //std::cout << '\n';
+
+
+
+
+    // --- PART 2: MARCHING SQUARES OPTIMIZATION ---
+
+    // LUT defines which points to connect for each of the 16 cases
+    // 0=pA, 1=pB, 2=pC, 3=pD. -1 means no point.
+    static const int8_t LUT[16][4] = {
+        {-1,-1,-1,-1}, {0,3,-1,-1}, {0,1,-1,-1}, {3,1,-1,-1},
+        {1,2,-1,-1},   {0,1,2,3},   {0,2,-1,-1}, {3,2,-1,-1},
+        {3,2,-1,-1},   {0,2,-1,-1}, {0,3,1,2},   {1,2,-1,-1},
+        {3,1,-1,-1},   {0,1,-1,-1}, {0,3,-1,-1}, {-1,-1,-1,-1}
+    };
+
+    const int R = 255, G = 255, B = 255;
 
     for(int i = 0; i < SQR_PER_ROW; i++)
     {
+        // Pre-calculate row offsets
+        int row_top = i * POINTS_WIDTH;
+        int row_bot = (i + 1) * POINTS_WIDTH;
+
         for(int j = 0; j < SQR_PER_COL; j++)
         {
-            // 0 - 1
-            // - X -
-            // 2 - 3
+            int config_index = (points[row_top + j].strength     >= THRESHOLD)      |
+                               ((points[row_top + j + 1].strength >= THRESHOLD) << 1) |
+                               ((points[row_bot + j + 1].strength >= THRESHOLD) << 2) |
+                               ((points[row_bot + j].strength     >= THRESHOLD) << 3);
 
-            // 0 = sqr_per_row*row         + col
-            // 1 = sqr_per_row*row     + 1 + col
-            // 2 = (sqr_per_row+1)*row     + col
-            // 3 = (sqr_per_row+1)*row + 1 + col
-            
-            int idx_0 = POINTS_WIDTH*i + j; 
-            int idx_1 = POINTS_WIDTH*i + j + 1; 
-            int idx_2 = POINTS_WIDTH*(1+i) + j; 
-            int idx_3 = POINTS_WIDTH*(1+i) + j + 1;
+            if (config_index == 0 || config_index == 15) continue;
 
-            bool idx_0_b = (points[idx_0].strength >= THRESHOLD);
-            bool idx_1_b = (points[idx_1].strength >= THRESHOLD);
-            bool idx_2_b = (points[idx_2].strength >= THRESHOLD);
-            bool idx_3_b = (points[idx_3].strength >= THRESHOLD);
+            std::pair<int, int> pts[4];
+            pts[0] = get_mid_point(points[row_top + j],     points[row_top + j + 1]); // pA
+            pts[1] = get_mid_point(points[row_top + j + 1], points[row_bot + j + 1]); // pB
+            pts[2] = get_mid_point(points[row_bot + j + 1], points[row_bot + j]);     // pC
+            pts[3] = get_mid_point(points[row_bot + j],     points[row_top + j]);     // pD
 
-            int config_index = 0;
-            if (idx_0_b) config_index |= 1;
-            if (idx_1_b) config_index |= 2;
-            if (idx_3_b) config_index |= 4;
-            if (idx_2_b) config_index |= 8;
+            const int8_t* edges = LUT[config_index];
 
-            std::pair<int, int> pA = get_mid_point(points[idx_0], points[idx_1]);
-            std::pair<int, int> pB = get_mid_point(points[idx_1], points[idx_3]);
-            std::pair<int, int> pC = get_mid_point(points[idx_3], points[idx_2]);
-            std::pair<int, int> pD = get_mid_point(points[idx_2], points[idx_0]);
+            draw_line_std_pair(static_rgb_buffer, pts[edges[0]], pts[edges[1]], R, G, B);
 
-            int R = 255, G = 255, B = 255;
-
-            switch (config_index)
-            {
-                case 0:
-                case 15:
-                    break;
-
-                case 1: draw_line_std_pair(static_rgb_buffer, pA, pD, R, G, B); break; // P0
-                case 2: draw_line_std_pair(static_rgb_buffer, pA, pB, R, G, B); break; // P1
-                case 4: draw_line_std_pair(static_rgb_buffer, pB, pC, R, G, B); break; // P3
-                case 8: draw_line_std_pair(static_rgb_buffer, pC, pD, R, G, B); break; // P2
-
-                case 14: draw_line_std_pair(static_rgb_buffer, pA, pD, R, G, B); break;
-                case 13: draw_line_std_pair(static_rgb_buffer, pA, pB, R, G, B); break;
-                case 11: draw_line_std_pair(static_rgb_buffer, pB, pC, R, G, B); break;
-                case 7: draw_line_std_pair(static_rgb_buffer, pC, pD, R, G, B); break;
-
-                case 3: draw_line_std_pair(static_rgb_buffer, pD, pB, R, G, B); break;
-                case 12: draw_line_std_pair(static_rgb_buffer, pD, pB, R, G, B); break;
-
-                case 6: draw_line_std_pair(static_rgb_buffer, pA, pC, R, G, B); break;
-                case 9: draw_line_std_pair(static_rgb_buffer, pA, pC, R, G, B); break;
-
-                case 5:
-                    draw_line_std_pair(static_rgb_buffer, pA, pB, R, G, B);
-                    draw_line_std_pair(static_rgb_buffer, pC, pD, R, G, B);
-                    break;
-                case 10:
-                    draw_line_std_pair(static_rgb_buffer, pA, pD, R, G, B);
-                    draw_line_std_pair(static_rgb_buffer, pB, pC, R, G, B);
-                    break;
+            if (edges[2] != -1) {
+                draw_line_std_pair(static_rgb_buffer, pts[edges[2]], pts[edges[3]], R, G, B);
             }
-
         }
     }
-
-
 }
 
 void drawGrid()
@@ -588,7 +536,7 @@ void drawGrid()
 }
 
 int main(int argc, char* argv[]) {
-    
+
 
     initGrid();
     initFloaters();
@@ -610,7 +558,7 @@ int main(int argc, char* argv[]) {
         "SDL Static C-Style Array Buffer",
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        BUFFER_WIDTH * SCREEN_SCALE, 
+        BUFFER_WIDTH * SCREEN_SCALE,
         BUFFER_HEIGHT * SCREEN_SCALE,
         SDL_WINDOW_SHOWN
     );
@@ -671,13 +619,13 @@ int main(int argc, char* argv[]) {
 
 
         end = clock();
-        
+
         double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
-        
-        
+
+
         std::cout << "Time taken by program is : " << std::fixed
         << time_taken << std::setprecision(8) << std::endl;
-        
+
 
 
         offsetsCreation();
@@ -688,7 +636,7 @@ int main(int argc, char* argv[]) {
 
     // 8. Clean up resources
     // We only free the SDL_Surface wrapper; the C-style array memory is managed by the program.
-    SDL_FreeSurface(bufferSurface); 
+    SDL_FreeSurface(bufferSurface);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
