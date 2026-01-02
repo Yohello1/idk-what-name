@@ -29,10 +29,23 @@ constexpr int POINTS_WIDTH = SIZE_MULTIPLIER+1;
 constexpr int POINTS_HEIGHT = SIZE_MULTIPLIER+1;
 constexpr int POINTS_AMT = (POINTS_HEIGHT)*(POINTS_WIDTH);
 
-const int FLOATER_AMT = 10000;
+const int FLOATER_AMT = 1000;
 const int FLOATER_SPEED = 3;
 
 const uint16_t THRESHOLD = 180;
+
+// Fluid simulation global constants
+float PARTICLE_SIZE = 1.0f;
+float PARTICLE_TIME_STEP = 1.0f;
+float PARTICLE_REFERENCE_DENSITY = 1.0f;
+float PARTICLE_BULK_MODULUS = 1.0f;
+float PARTICLE_VISCOSITY = 1.0f;
+float PARTICLE_GRAVITY = 1.0f;
+
+int PARTICLE_N_FRAMES = 0; // Number of frames
+int PARTICLE_NP_FRAMES = 0; // Steps per frame 
+
+float PARTICLE_TOTAL_MASS = 1.0f;
 
 // spatial compute stuff
 constexpr int CELL_SIZE = DISTANCE_BETWEEN_POINTS*DISTANCE_BETWEEN_POINTS;
@@ -59,18 +72,27 @@ struct point
 };
 
 struct floater {
+    float density;
+
     float x;
     float y;
 
-    float v_x;
-    float v_y;
+    float v_x; // full
+    float v_y; // full
 
+    float v_x_h; // half
+    float v_y_h; // half
+
+    float a_x;
+    float a_y;
+    
     uint8_t r;
     uint8_t b;
 };
 
 struct point*   points = new struct point[POINTS_AMT];
-struct floater* floaters = new struct floater[FLOATER_AMT];
+struct floater* floatersA = new struct floater[FLOATER_AMT];
+struct floater* floatersB = new struct floater[FLOATER_AMT];
 
 int signBit(int a) { return a/abs(a); };
 float fsignBit(float a) { return a/abs(a); };
@@ -78,6 +100,23 @@ float fsignBit(float a) { return a/abs(a); };
 std::pair<int, int> get_mid_point(const point& p0, const point& p1)
 {
     return {(p0.i_x + p1.i_x) / 2, (p0.i_y + p1.i_y) / 2};
+}
+
+template<typename T>
+T distEuclid(const std::vector<T>& p1, const std::vector<T>& p2) 
+{
+    if (p1.size() != p2.size()) {
+        throw std::invalid_argument("Points must have the same dimensionality.");
+    }
+
+    T sum = 0.0;
+
+    for (size_t i = 0; i < p1.size(); ++i) {
+        T diff = p1[i] - p2[i];
+        sum += diff * diff; // Much faster than pow(diff, 2)
+    }
+
+    return std::sqrt(sum);
 }
 
 // --- Drawing function that fills the static array ONCE ---
@@ -114,8 +153,8 @@ void offsetsCreation()
     /*
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        int x = (floaters[i].x-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
-        int y = (floaters[i].y-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
+        int x = (floatersA[i].x-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
+        int y = (floatersA[i].y-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
 
         int idx = x + y*POINTS_WIDTH;
 
@@ -131,8 +170,8 @@ void offsetsCreation()
 
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        int gx = (floaters[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-        int gy = (floaters[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gx = (floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gy = (floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
 
         int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
 
@@ -233,8 +272,8 @@ void computeIndicies()
     for(int i = 0; i < FLOATER_AMT; i++)
     {
 
-        int x = (floaters[i].x-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
-        int y = (floaters[i].y-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
+        int x = (floatersA[i].x-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
+        int y = (floatersA[i].y-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
 
         int idx = x + y*POINTS_WIDTH;
 
@@ -255,8 +294,8 @@ void computeIndicies()
 
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        int gx = (floaters[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-        int gy = (floaters[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gx = (floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gy = (floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
 
         int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
 
@@ -316,19 +355,24 @@ void draw_line_std_pair(uint8_t* buffer,
     }
 }
 
-void initFloaters()
+void initfloatersA()
 {
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        floaters[i].x = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
-        floaters[i].y = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
+        floatersA[i].x = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
+        floatersA[i].y = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING; 
 
-        floaters[i].v_x = ((rand() % 50) - 25)/10;
-        floaters[i].v_y = ((rand() % 50) - 25)/10;
+        floatersA[i].v_x = ((rand() % 50) - 25)/10;
+        floatersA[i].v_y = ((rand() % 50) - 25)/10;
 
-        floaters[i].r = (rand() % 127)+128;
-        floaters[i].b = (rand() % 127)+128;
+        floatersA[i].r = (rand() % 127)+128;
+        floatersA[i].b = (rand() % 127)+128;
+
+        floatersA[i].density = PARTICLE_REFERENCE_DENSITY;
+    
+        std::cout << floatersA[i].density << ' ';
     }
+    std::cout << '\n';
 }
 
 void initGrid()
@@ -374,63 +418,62 @@ void initGrid()
 }
 
 
-void drawFloaters()
+void drawfloatersA()
 {
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        int idx = floaters[i].x*BYTES_PER_PIXEL + floaters[i].y*BUFFER_WIDTH*BYTES_PER_PIXEL;
-        static_rgb_buffer[idx]   = floaters[i].r;
-        static_rgb_buffer[idx+1] = floaters[i].b;
+        int idx = floatersA[i].x*BYTES_PER_PIXEL + floatersA[i].y*BUFFER_WIDTH*BYTES_PER_PIXEL;
+        static_rgb_buffer[idx]   = floatersA[i].r;
+        static_rgb_buffer[idx+1] = floatersA[i].b;
     }
 }
 
-void simulateFloaters()
+void simulatefloatersA()
 {
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        floaters[i].x += floaters[i].v_x;
-        floaters[i].y += floaters[i].v_y;
+        floatersA[i].x += floatersA[i].v_x;
+        floatersA[i].y += floatersA[i].v_y;
 
 
-        if (floaters[i].x < (float) BUFFER_PADDING)
+        if (floatersA[i].x < (float) BUFFER_PADDING)
         {
-            floaters[i].v_x *= -1.0f;
-            floaters[i].x = BUFFER_PADDING;
+            floatersA[i].v_x *= -1.0f;
+            floatersA[i].x = BUFFER_PADDING;
         }
 
 
-        else if (floaters[i].x > (float) (BUFFER_WORKING + BUFFER_PADDING-1))
+        else if (floatersA[i].x > (float) (BUFFER_WORKING + BUFFER_PADDING-1))
         {
-            floaters[i].v_x *= -1.0f;
-            floaters[i].x = (BUFFER_WORKING + BUFFER_PADDING - 1);
+            floatersA[i].v_x *= -1.0f;
+            floatersA[i].x = (BUFFER_WORKING + BUFFER_PADDING - 1);
         }
 
 
-        if (floaters[i].y < (float) BUFFER_PADDING)
+        if (floatersA[i].y < (float) BUFFER_PADDING)
         {
-            floaters[i].v_y *= -1.0f;
-            floaters[i].y = BUFFER_PADDING;
+            floatersA[i].v_y *= -1.0f;
+            floatersA[i].y = BUFFER_PADDING;
         }
 
-        else if (floaters[i].y > (float) (BUFFER_WORKING + BUFFER_PADDING-1))
+        else if (floatersA[i].y > (float) (BUFFER_WORKING + BUFFER_PADDING-1))
         {
-            floaters[i].v_y *= -1.0f;
-            floaters[i].y = (BUFFER_WORKING + BUFFER_PADDING - 1);
+            floatersA[i].v_y *= -1.0f;
+            floatersA[i].y = (BUFFER_WORKING + BUFFER_PADDING - 1);
         }
     }
 }
 
-void drawConnections()
+void computeStrengths()
 {
+
     int offset = DISTANCE_BETWEEN_POINTS / 2;
     const int SQR_PER_ROW = POINTS_WIDTH - 1;
     const int SQR_PER_COL = POINTS_HEIGHT - 1;
 
-    floater* __restrict p_floaters = floaters;
+    floater* __restrict p_floatersA = floatersA;
     int* __restrict p_indices = particles_loc;
 
-    // --- PART 1: STRENGTH CALCULATION ---
-    // (Kept your logic, but optimized the inner math)
     for(int i = 0; i < POINTS_AMT; i++)
     {
         float strength = 0.0f;
@@ -449,16 +492,17 @@ void drawConnections()
             {
                 int floater_idx = p_indices[idx_o + k];
 
-                float dx = p_floaters[floater_idx].x - x;
-                float dy = p_floaters[floater_idx].y - y;
+                float dx = p_floatersA[floater_idx].x - x;
+                float dy = p_floatersA[floater_idx].y - y;
                 float dist_sq = dx*dx + dy*dy;
 
                 // if(dist_sq < 0.001f) dist_sq = 0.001f;
                 dist_sq = (dist_sq < 0.001f) ? 0.001 : dist_sq; 
 
-                float val = (p_floaters[floater_idx].r + p_floaters[floater_idx].b)* (1.0f / dist_sq);
+                float val = (p_floatersA[floater_idx].density)* (1.0f / dist_sq);
 
-                //float val = (floaters[particles_loc[idx_o+k]].r+floaters[particles_loc[idx_o+k]].b)/((floaters[particles_loc[idx_o+k]].x-x)*(floaters[particles_loc[idx_o+k]].x-x)+(floaters[particles_loc[idx_o+k]].y-y)*(floaters[particles_loc[idx_o+k]].y-y));
+                // std::cout << p_floatersA[floater_idx].density << ' ';
+                //float val = (floatersA[particles_loc[idx_o+k]].r+floatersA[particles_loc[idx_o+k]].b)/((floatersA[particles_loc[idx_o+k]].x-x)*(floatersA[particles_loc[idx_o+k]].x-x)+(floatersA[particles_loc[idx_o+k]].y-y)*(floatersA[particles_loc[idx_o+k]].y-y));
 
                 strength += val;
             }
@@ -467,14 +511,18 @@ void drawConnections()
 
         points[i].strength = (uint16_t)strength;
     }
+}
+
+void drawConnections()
+{
+    int offset = DISTANCE_BETWEEN_POINTS / 2;
+    const int SQR_PER_ROW = POINTS_WIDTH - 1;
+    const int SQR_PER_COL = POINTS_HEIGHT - 1;
+
+    floater* __restrict p_floatersA = floatersA;
+    int* __restrict p_indices = particles_loc;
 
 
-
-
-    // --- PART 2: MARCHING SQUARES OPTIMIZATION ---
-
-    // LUT defines which points to connect for each of the 16 cases
-    // 0=pA, 1=pB, 2=pC, 3=pD. -1 means no point.
     static const int8_t LUT[16][4] = {
         {-1,-1,-1,-1}, {0,3,-1,-1}, {0,1,-1,-1}, {3,1,-1,-1},
         {1,2,-1,-1},   {0,1,2,3},   {0,2,-1,-1}, {3,2,-1,-1},
@@ -486,7 +534,6 @@ void drawConnections()
 
     for(int i = 0; i < SQR_PER_ROW; i++)
     {
-        // Pre-calculate row offsets
         int row_top = i * POINTS_WIDTH;
         int row_bot = (i + 1) * POINTS_WIDTH;
 
@@ -532,14 +579,63 @@ void drawGrid()
         static_rgb_buffer[idx+2] = 255;
 
     }
+}
 
+// kernel value: density
+// first derivitive: force
+// second derivative: viscosity
+//
+// Density is just a value
+// Force is accel part 1
+// viscoscity is used to smooth similar to other stuff
+
+void computeDensity()
+{
+    // 2D Constant btw
+    float density_multiplier = 4.0;
+    density_multiplier /= 3.141592654*std::pow(PARTICLE_SIZE, 8.0f); 
+
+    std::memcpy(floatersB, floatersA, sizeof(floater)*FLOATER_AMT);
+
+
+    // I have 0 clue how to implement this
+    // Ok so it returns 
+
+    // Density computation 
+
+    for(int i = 0; i < FLOATER_AMT; i++)
+    {
+        float density = 0.0;
+        for(int k = 0; k < FLOATER_AMT; k++)
+        {
+            if(k == i) continue;     
+            
+            float r = distEuclid<float>({floatersA[i].x, floatersA[i].y}, {floatersA[k].x, floatersA[k].y});
+            
+            if(r < PARTICLE_SIZE) continue;
+
+            float cubed = (float) std::pow((std::pow(r,2.0f), std::pow(PARTICLE_SIZE, 2.0f)), 3.0f);
+
+            density += cubed;
+        }
+        density *= density_multiplier;
+   
+        std::cout << density << ' ' ;
+
+        floatersB[i].density = density;
+    }
+
+    void* temp = (void*) floatersA;
+    floatersA = floatersB;
+    floatersB = (floater*) temp;
+
+    // for(int i = 0; i < 
 }
 
 int main(int argc, char* argv[]) {
 
-
     initGrid();
-    initFloaters();
+    initfloatersA();
 
     srand(100);
 
@@ -605,8 +701,10 @@ int main(int argc, char* argv[]) {
         }
 
         memset(static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
-        simulateFloaters();
-        drawFloaters();
+        simulatefloatersA();
+        drawfloatersA();
+        computeDensity();
+        computeStrengths();
         drawConnections();
         // drawGrid();
 
@@ -642,3 +740,4 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+
