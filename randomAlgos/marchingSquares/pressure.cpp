@@ -74,6 +74,8 @@ struct point
 struct floater {
     float density;
 
+    std::pair<float, float> pressure;
+
     float x;
     float y;
 
@@ -370,9 +372,9 @@ void initfloatersA()
 
         floatersA[i].density = PARTICLE_REFERENCE_DENSITY;
     
-        std::cout << floatersA[i].density << ' ';
+        // std::cout << floatersA[i].density << ' ';
     }
-    std::cout << '\n';
+    // std::cout << '\n';
 }
 
 void initGrid()
@@ -581,6 +583,40 @@ void drawGrid()
     }
 }
 
+void computePressure()
+{
+    float constant_multiplier = 315.0f/(64.0f*3.141592654*std::pow(PARTICLE_SIZE, 9.0f));
+
+    for(int i = 0; i < FLOATER_AMT; i++)
+    {
+        std::pair<float, float> summed;
+        summed.first = 0.0f;
+        summed.second = 0.0f;
+        for(int j = 0; j < FLOATER_AMT; j++)
+        {
+            if(j == i) continue;
+
+            float distance = std::sqrt(std::pow(floatersA[i].x - floatersA[j].x, 2.0f) + std::pow(floatersA[i].y - floatersA[j].y, 2.0f));
+            
+            if(distance < PARTICLE_SIZE) continue;    
+
+            float temp = 6.0f * std::pow(std::pow(PARTICLE_SIZE, 2.0f) -  std::pow(distance, 2.0f), 2.0f);
+
+            float dx = floatersA[i].x - floatersA[j].x;
+            float dy = floatersA[i].y - floatersA[j].y;
+     
+            dx *= temp;
+            dy *= temp;
+
+            summed.first += dx;
+            summed.second += dy;
+        }
+        
+        floatersB[i].pressure.first = summed.first;
+        floatersB[i].pressure.second = summed.second;
+    }
+}
+
 // kernel value: density
 // first derivitive: force
 // second derivative: viscosity
@@ -620,17 +656,20 @@ void computeDensity()
         }
         density *= density_multiplier;
    
-        std::cout << density << ' ' ;
+        // std::cout << density << ' ' ;
 
         floatersB[i].density = density;
     }
+    // for(int i = 0; i < 
+}
 
+void swapFloaters()
+{
     void* temp = (void*) floatersA;
     floatersA = floatersB;
     floatersB = (floater*) temp;
-
-    // for(int i = 0; i < 
 }
+
 
 int main(int argc, char* argv[]) {
 
@@ -704,6 +743,8 @@ int main(int argc, char* argv[]) {
         simulatefloatersA();
         drawfloatersA();
         computeDensity();
+        computePressure();
+        swapFloaters();
         computeStrengths();
         drawConnections();
         // drawGrid();
