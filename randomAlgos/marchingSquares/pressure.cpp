@@ -74,7 +74,8 @@ struct point
 struct floater {
     float density;
 
-    std::pair<float, float> pressure;
+    float p_x;
+    float p_y;
 
     float x;
     float y;
@@ -468,11 +469,6 @@ void simulatefloatersA()
 
 void computeStrengths()
 {
-
-    int offset = DISTANCE_BETWEEN_POINTS / 2;
-    const int SQR_PER_ROW = POINTS_WIDTH - 1;
-    const int SQR_PER_COL = POINTS_HEIGHT - 1;
-
     floater* __restrict p_floatersA = floatersA;
     int* __restrict p_indices = particles_loc;
 
@@ -517,13 +513,8 @@ void computeStrengths()
 
 void drawConnections()
 {
-    int offset = DISTANCE_BETWEEN_POINTS / 2;
     const int SQR_PER_ROW = POINTS_WIDTH - 1;
     const int SQR_PER_COL = POINTS_HEIGHT - 1;
-
-    floater* __restrict p_floatersA = floatersA;
-    int* __restrict p_indices = particles_loc;
-
 
     static const int8_t LUT[16][4] = {
         {-1,-1,-1,-1}, {0,3,-1,-1}, {0,1,-1,-1}, {3,1,-1,-1},
@@ -585,8 +576,6 @@ void drawGrid()
 
 void computePressure()
 {
-    float constant_multiplier = 315.0f/(64.0f*3.141592654*std::pow(PARTICLE_SIZE, 9.0f));
-
     for(int i = 0; i < FLOATER_AMT; i++)
     {
         std::pair<float, float> summed;
@@ -612,9 +601,15 @@ void computePressure()
             summed.second += dy;
         }
         
-        floatersB[i].pressure.first = summed.first;
-        floatersB[i].pressure.second = summed.second;
+        floatersB[i].p_x = summed.first;
+        floatersB[i].p_y = summed.second;
     }
+}
+
+
+void copyFloaters()
+{
+    std::memcpy(floatersB, floatersA, sizeof(floater)*FLOATER_AMT);
 }
 
 // kernel value: density
@@ -631,7 +626,8 @@ void computeDensity()
     float density_multiplier = 4.0;
     density_multiplier /= 3.141592654*std::pow(PARTICLE_SIZE, 8.0f); 
 
-    std::memcpy(floatersB, floatersA, sizeof(floater)*FLOATER_AMT);
+    // std::memcpy(floatersB, floatersA, sizeof(floater)*FLOATER_AMT);
+    // copyFloater();
 
 
     // I have 0 clue how to implement this
@@ -742,6 +738,7 @@ int main(int argc, char* argv[]) {
         memset(static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
         simulatefloatersA();
         drawfloatersA();
+        copyFloaters();
         computeDensity();
         computePressure();
         swapFloaters();
