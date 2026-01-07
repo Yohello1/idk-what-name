@@ -8,10 +8,11 @@
 #include <omp.h>
 
 
-#include "settings.cpp"
-#include "struct.cpp"
-#include "math.cpp"
+#include "settings.hpp"
+#include "struct.hpp"
+#include "math.hpp"
 #include "graphics.hpp"
+#include "spatial.hpp"
 
 // --- Drawing function that fills the static array ONCE ---
 void InitializeStaticBuffer() {
@@ -40,128 +41,7 @@ void InitializeStaticBuffer() {
     }
 }
 
-void offsetsCreation()
-{
-    memset(cells_ctr, 0, sizeof(int)*(BUFFER_LINE*BUFFER_LINE));
 
-    /*
-    for(int i = 0; i < FLOATER_AMT; i++)
-    {
-        int x = (floatersA[i].x-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
-        int y = (floatersA[i].y-BUFFER_PADDING)/DISTANCE_BETWEEN_POINTS;
-
-        int idx = x + y*POINTS_WIDTH;
-
-        cells_ctr[idx] += 1;
-    }
-
-    for(int i = 0, j = 0; i < POINTS_AMT; i++)
-    {
-        offsets[i] = j;
-        j += cells_ctr[i];
-    }
-    */
-
-    for(int i = 0; i < FLOATER_AMT; i++)
-    {
-        int gx = (floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-        int gy = (floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-
-        int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
-
-        if (idx >= 0 && idx < (BUFFER_LINE * BUFFER_LINE)) {
-            cells_ctr[idx] += 1;
-        }
-    }
-
-    for(int i = 0, j = 0; i < (BUFFER_LINE * BUFFER_LINE); i++)
-    {
-        offsets[i] = j;
-        j += cells_ctr[i];
-    }
-}
-
-std::vector<std::pair<int, int>> calculateRegionsOffsets()
-{
-    std::vector<std::pair<int, int>> combined_list;
-
-    for (int y = -INFLUENCE_RADIUS; y <= INFLUENCE_RADIUS; ++y) {
-        for (int x = -INFLUENCE_RADIUS; x <= INFLUENCE_RADIUS; ++x) {
-            if (std::abs(x) + std::abs(y) <= INFLUENCE_RADIUS) {
-                combined_list.push_back({x, y});
-            }
-        }
-    }
-
-    return combined_list;
-}
-
-void computeIndicies()
-{
-    uint32_t* curr_pos = (uint32_t*)calloc(sizeof(uint32_t), BUFFER_LINE * BUFFER_LINE);
-
-    for(int i = 0; i < FLOATER_AMT; i++)
-    {
-        int gx = (floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-        int gy = (floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-
-        int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
-
-        if (idx >= 0 && idx < (BUFFER_LINE * BUFFER_LINE)) {
-            int offset = offsets[idx];
-            particles_loc[offset + curr_pos[idx]] = i;
-            curr_pos[idx] += 1;
-        }
-    }
-    free(curr_pos);
-}
-
-void draw_line_std_pair(uint8_t* buffer,
-                        std::pair<int, int> p0,
-                        std::pair<int, int> p1,
-                        uint8_t r, uint8_t g, uint8_t b) {
-
-    int x0 = p0.first;
-    int y0 = p0.second;
-    int x1 = p1.first;
-    int y1 = p1.second;
-
-    int dx = abs(x1 - x0);
-    int dy = abs(y1 - y0);
-
-    int sx = x0 < x1 ? 1 : -1;
-    int sy = y0 < y1 ? 1 : -1;
-
-    int err = (dx > dy ? dx : -dy) / 2;
-    int e2;
-
-    int x = x0;
-    int y = y0;
-
-    while (true) {
-        if (x >= 0 && x < BUFFER_WIDTH && y >= 0 && y < BUFFER_HEIGHT) {
-            int index = (y * BUFFER_WIDTH + x) * BYTES_PER_PIXEL;
-
-            static_rgb_buffer[index + 0] = 255;
-            static_rgb_buffer[index + 1] = 255;
-            static_rgb_buffer[index + 2] = 255;
-        }
-
-        if (x == x1 && y == y1) break;
-
-        e2 = err;
-
-        if (e2 > -dx) {
-            err -= dy;
-            x += sx;
-        }
-
-        if (e2 < dy) {
-            err += dx;
-            y += sy;
-        }
-    }
-}
 
 void initfloatersA()
 {
