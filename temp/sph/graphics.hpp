@@ -19,4 +19,11 @@ void draw_line_std_pair(uint8_t* buffer,
                         std::pair<int, int> p0,
                         std::pair<int, int> p1,
                         uint8_t r, uint8_t g, uint8_t b);
+void InitializeStaticBuffer(); 
+
+
+void drawGrid();
+void drawConnections();
+void computeStrengths();
+void initGrid();
 #endif

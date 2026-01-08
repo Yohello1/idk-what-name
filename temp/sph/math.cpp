@@ -22,7 +22,7 @@ float fdistEuclid(std::vector<float> a, std::vector<float> b)
     return std::sqrt(qq);
 }
 
-std::pair<int, int> get_mid_point(const point& p0, const point& p1)
+std::pair<int, int> getMidPoint(const point& p0, const point& p1)
 {
     return {(p0.i_x + p1.i_x) / 2, (p0.i_y + p1.i_y) / 2};
 }

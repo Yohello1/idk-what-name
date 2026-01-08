@@ -8,6 +8,6 @@
 int signBit(int a);
 float fsignBit(float a);
 float fdistEuclid(std::vector<float> a, std::vector<float> b);
-std::pair<int, int> get_mid_point(const point& p0, const point& p1);
+std::pair<int, int> getMidPoint(const point& p0, const point& p1);
 
 #endif

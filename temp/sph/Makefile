@@ -1,5 +1,5 @@
 # List of object files (matching your tree structure)
-OBJS = main.o graphics.o math.o settings.o struct.o spatial.o
+OBJS = main.o graphics.o math.o settings.o struct.o spatial.o floaters.o
 
 # Compiler and Executable name
 CC = g++
