@@ -1,35 +1,42 @@
-# List of object files (matching your tree structure)
-OBJS = main.o graphics.o math.o settings.o struct.o spatial.o floaters.o
-
-# Compiler and Executable name
 CC = g++
 OBJ_NAME = draw2
 
-# Optimization and Compiler Flags
-# -flto: Link Time Optimization (cross-file optimization)
-# -funroll-loops: Specific optimization for math-heavy loops
-CFLAGS = -O3 -march=native -flto -funroll-loops \
-         -fassociative-math -fsimd-cost-model=unlimited \
-         -mavx2 -mfma -mrecip -ffast-math -fopenmp -Wall
+# 1. Directories
+SRC_DIR = src
+INC_DIR = include
+OBJ_DIR = obj
 
-# Linker Flags
-# Note: -flto must be present in the linker stage as well
-LDFLAGS = -lSDL2 -lSDL2_image `sdl2-config --cflags --libs` -lpthread -fopenmp -flto
+# 2. Find all .cpp files in src/
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 
-# Final Linker Step
-# This joins the object files into the final executable
+# 3. Map src/*.cpp to obj/*.o
+OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+
+# 4. Flags
+# -I$(INC_DIR) tells the compiler to look in the include folder for .hpp files
+CFLAGS = -std=c++20 -O3 -march=native -flto -fopenmp -Wall -I$(INC_DIR)
+LDFLAGS = `sdl2-config --cflags --libs` -lSDL2_image -lpthread -fopenmp -flto
+
+# Default Target
+all: $(OBJ_DIR) $(OBJ_NAME)
+
+# Create the obj directory if it doesn't exist
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+# Final Linker Step + Auto-Launch
 $(OBJ_NAME) : $(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS) -o $(OBJ_NAME)
-
-# Individual Compilation Step (Pattern Rule)
-# Compiles each .cpp file into a .o file independently
-%.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Convenience command: build and run
-run: $(OBJ_NAME)
+	@echo "----------------------------"
+	@echo "Build Successful. Launching..."
+	@echo "----------------------------"
 	./$(OBJ_NAME)
 
-# Remove build artifacts
+# Pattern Rule: Compile src/%.cpp into obj/%.o
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -f *.o $(OBJ_NAME)
+	rm -rf $(OBJ_DIR) $(OBJ_NAME)
+
+.PHONY: all clean

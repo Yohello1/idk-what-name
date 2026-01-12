@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
 
     // 3. Create a window
     SDL_Window* window = SDL_CreateWindow(
-        "SDL Static C-Style Array Buffer",
+        "draw2",
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
         BUFFER_WIDTH * SCREEN_SCALE,

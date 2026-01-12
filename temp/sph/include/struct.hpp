@@ -41,4 +41,10 @@ struct floater {
     uint8_t r;
     uint8_t b;
 };
+
+struct force {
+    float x;
+    float y;
+
+};
 #endif
