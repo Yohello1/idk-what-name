@@ -1,0 +1,403 @@
+diff --git a/temp/sph/Makefile b/temp/sph/Makefile
+index dd6df40..b09fb41 100644
+--- a/temp/sph/Makefile
++++ b/temp/sph/Makefile
+@@ -1,35 +1,42 @@
+-# List of object files (matching your tree structure)
+-OBJS = main.o graphics.o math.o settings.o struct.o spatial.o floaters.o
+-
+-# Compiler and Executable name
+ CC = g++
+ OBJ_NAME = draw2
+ 
+-# Optimization and Compiler Flags
+-# -flto: Link Time Optimization (cross-file optimization)
+-# -funroll-loops: Specific optimization for math-heavy loops
+-CFLAGS = -O3 -march=native -flto -funroll-loops \
+-         -fassociative-math -fsimd-cost-model=unlimited \
+-         -mavx2 -mfma -mrecip -ffast-math -fopenmp -Wall
++# 1. Directories
++SRC_DIR = src
++INC_DIR = include
++OBJ_DIR = obj
++
++# 2. Find all .cpp files in src/
++SRCS = $(wildcard $(SRC_DIR)/*.cpp)
++
++# 3. Map src/*.cpp to obj/*.o
++OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
++
++# 4. Flags
++# -I$(INC_DIR) tells the compiler to look in the include folder for .hpp files
++CFLAGS = -std=c++20 -O3 -march=native -flto -fopenmp -Wall -I$(INC_DIR)
++LDFLAGS = `sdl2-config --cflags --libs` -lSDL2_image -lpthread -fopenmp -flto
++
++# Default Target
++all: $(OBJ_DIR) $(OBJ_NAME)
+ 
+-# Linker Flags
+-# Note: -flto must be present in the linker stage as well
+-LDFLAGS = -lSDL2 -lSDL2_image `sdl2-config --cflags --libs` -lpthread -fopenmp -flto
++# Create the obj directory if it doesn't exist
++$(OBJ_DIR):
++	mkdir -p $(OBJ_DIR)
+ 
+-# Final Linker Step
+-# This joins the object files into the final executable
++# Final Linker Step + Auto-Launch
+ $(OBJ_NAME) : $(OBJS)
+ 	$(CC) $(OBJS) $(LDFLAGS) -o $(OBJ_NAME)
++	@echo "----------------------------"
++	@echo "Build Successful. Launching..."
++	@echo "----------------------------"
++	./$(OBJ_NAME)
+ 
+-# Individual Compilation Step (Pattern Rule)
+-# Compiles each .cpp file into a .o file independently
+-%.o: %.cpp
++# Pattern Rule: Compile src/%.cpp into obj/%.o
++$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+ 	$(CC) $(CFLAGS) -c $< -o $@
+ 
+-# Convenience command: build and run
+-run: $(OBJ_NAME)
+-	./$(OBJ_NAME)
+-
+-# Remove build artifacts
+ clean:
+-	rm -f *.o $(OBJ_NAME)
++	rm -rf $(OBJ_DIR) $(OBJ_NAME)
++
++.PHONY: all clean
+diff --git a/temp/sph/floaters.hpp b/temp/sph/include/floaters.hpp
+similarity index 100%
+rename from temp/sph/floaters.hpp
+rename to temp/sph/include/floaters.hpp
+diff --git a/temp/sph/graphics.hpp b/temp/sph/include/graphics.hpp
+similarity index 100%
+rename from temp/sph/graphics.hpp
+rename to temp/sph/include/graphics.hpp
+diff --git a/temp/sph/math.hpp b/temp/sph/include/math.hpp
+similarity index 100%
+rename from temp/sph/math.hpp
+rename to temp/sph/include/math.hpp
+diff --git a/temp/sph/include/poly6.hpp b/temp/sph/include/poly6.hpp
+new file mode 100644
+index 0000000..7b4f5b2
+--- /dev/null
++++ b/temp/sph/include/poly6.hpp
+@@ -0,0 +1,15 @@
++#ifndef _POLY6_HPP
++#define _POLY6_HPP
++
++#include "struct.hpp"
++
++class Poly6_k
++{
++public:
++    float smoothing(float distance_i, float particle_size_i);
++    // we modify the supplied struct for the sake of speed
++    void gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force);
++    float laplacian(float distance_i, float particle_size_i);
++};
++
++#endif
+diff --git a/temp/sph/settings.hpp b/temp/sph/include/settings.hpp
+similarity index 100%
+rename from temp/sph/settings.hpp
+rename to temp/sph/include/settings.hpp
+diff --git a/temp/sph/spatial.hpp b/temp/sph/include/spatial.hpp
+similarity index 100%
+rename from temp/sph/spatial.hpp
+rename to temp/sph/include/spatial.hpp
+diff --git a/temp/sph/include/spiky_k.hpp b/temp/sph/include/spiky_k.hpp
+new file mode 100644
+index 0000000..48a1efd
+--- /dev/null
++++ b/temp/sph/include/spiky_k.hpp
+@@ -0,0 +1,11 @@
++#ifndef _SPIKY_K_HPP
++#define _SPIKY_K_HPP
++
++#include "struct.hpp" 
++
++class Spiky_k {
++public:
++    void gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force);
++};
++
++#endif
+diff --git a/temp/sph/struct.hpp b/temp/sph/include/struct.hpp
+similarity index 91%
+rename from temp/sph/struct.hpp
+rename to temp/sph/include/struct.hpp
+index a63d335..4ba9696 100644
+--- a/temp/sph/struct.hpp
++++ b/temp/sph/include/struct.hpp
+@@ -41,4 +41,10 @@ struct floater {
+     uint8_t r;
+     uint8_t b;
+ };
++
++struct force {
++    float x;
++    float y;
++
++};
+ #endif
+diff --git a/temp/sph/include/viscosity_k.hpp b/temp/sph/include/viscosity_k.hpp
+new file mode 100644
+index 0000000..13281aa
+--- /dev/null
++++ b/temp/sph/include/viscosity_k.hpp
+@@ -0,0 +1,11 @@
++#ifndef _VISCOSITY_K_HPP
++#define _VISCOSITY_K_HPP
++
++#include "struct.hpp"
++
++class Viscosity_k {
++public:
++    float laplacian(float distance_i, float particle_size_i); 
++};
++
++#endif
+diff --git a/temp/sph/kernels.cpp b/temp/sph/kernels.cpp
+deleted file mode 100644
+index 75ac868..0000000
+--- a/temp/sph/kernels.cpp
++++ /dev/null
+@@ -1,30 +0,0 @@
+-#include <concepts>
+-#include <vector>
+-#include "settings.hpp"
+-
+-template <typename Kernel>
+-void simulate()
+-{
+-    // floater[a] = Kernel::derivaitve(x);
+-}
+-
+-
+-class poly6_kernel
+-{
+-    public:
+-   
+-        void density()
+-        {
+-            // density calc 
+-        }
+-
+-        void pressure()
+-        {
+-            // density calc 
+-        }
+-        
+-        void viscosity()
+-        {
+-            // density calc 
+-        }
+-}
+diff --git a/temp/sph/floaters.cpp b/temp/sph/src/floaters.cpp
+similarity index 100%
+rename from temp/sph/floaters.cpp
+rename to temp/sph/src/floaters.cpp
+diff --git a/temp/sph/graphics.cpp b/temp/sph/src/graphics.cpp
+similarity index 100%
+rename from temp/sph/graphics.cpp
+rename to temp/sph/src/graphics.cpp
+diff --git a/temp/sph/src/kernels.cpp b/temp/sph/src/kernels.cpp
+new file mode 100644
+index 0000000..d9b9886
+--- /dev/null
++++ b/temp/sph/src/kernels.cpp
+@@ -0,0 +1,57 @@
++#include <concepts>
++#include <vector>
++#include <iostream>
++#include "settings.hpp"
++
++// concepts are like a list of characteristics
++template<typename T>
++concept IsKernel = requires(T k) {
++    { k.density() } -> std::floating_point;
++    { k.pressure() } -> std::floating_point;
++};
++
++template <typename T>
++concept HasViscosity = requires(T k) {
++    { k.viscosity() } -> std::floating_point;
++};
++
++// you can do 'template <[concept name] T>' to ensure that only types with those
++// characterisitcs can be used there, or check etc
++
++template <IsKernel T>
++void simulate() {
++    // fully boilerplate code
++    T kernel;
++    
++    double d = kernel.get_density();
++    double p = kernel.get_pressure();
++
++    if constexpr (HasViscosity<T>) {
++        double v = kernel.get_viscosity();
++        std::cout << "Using Kernel Viscosity: " << v << std::endl;
++    } else {
++        double v_approx = d * 0.0001; 
++        std::cout << "Using Approximated Viscosity: " << v_approx << std::endl;
++    }
++}
++
++
++class poly6_kernel
++{
++    public:
++   
++        void density()
++        {
++            // density calc 
++        }
++
++        void pressure()
++        {
++            // density calc 
++        }
++        
++        void viscosity()
++        {
++            // density calc 
++        }
++};
+diff --git a/temp/sph/main.cpp b/temp/sph/src/main.cpp
+similarity index 99%
+rename from temp/sph/main.cpp
+rename to temp/sph/src/main.cpp
+index e838efe..c0fff1d 100644
+--- a/temp/sph/main.cpp
++++ b/temp/sph/src/main.cpp
+@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
+ 
+     // 3. Create a window
+     SDL_Window* window = SDL_CreateWindow(
+-        "SDL Static C-Style Array Buffer",
++        "draw2",
+         SDL_WINDOWPOS_UNDEFINED,
+         SDL_WINDOWPOS_UNDEFINED,
+         BUFFER_WIDTH * SCREEN_SCALE,
+diff --git a/temp/sph/math.cpp b/temp/sph/src/math.cpp
+similarity index 100%
+rename from temp/sph/math.cpp
+rename to temp/sph/src/math.cpp
+diff --git a/temp/sph/src/poly6.cpp b/temp/sph/src/poly6.cpp
+new file mode 100644
+index 0000000..6976c7c
+--- /dev/null
++++ b/temp/sph/src/poly6.cpp
+@@ -0,0 +1,47 @@
++#include <numbers>
++
++#include "struct.hpp"
++#include "poly6.hpp"
++
++float Poly6_k::smoothing(float distance_i, float particle_size_i)
++{
++    if (distance_i < 0 || distance_i >= particle_size_i) return 0.0f;
++
++    float h = particle_size_i;
++    float h2 = h * h;
++    float r2 = distance_i * distance_i;
++    float diff = h2 - r2;
++
++    float coeff = 4.0f / (std::numbers::pi_v<float> * std::pow(h, 8));
++    return coeff * (diff * diff * diff);
++}
++
++void Poly6_k::gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force)
++{
++    if (distance_i <= 0 || distance_i >= particle_size_i)
++    {
++        out_force.x = 0.0f; out_force.y = 0.0f;
++        return;
++    }
++
++    float h = particle_size_i;
++    float diff = (h * h) - (distance_i * distance_i);
++    float coeff = 4.0f / (std::numbers::pi_v<float> * std::pow(h, 8));
++
++    float scalar = coeff * -6.0f * (diff * diff);
++
++    // return~ish
++    out_force.x = scalar * dx;
++    out_force.y = scalar * dy;
++}
++
++float Poly6_k::laplacian(float distance_i, float particle_size_i) {
++    if (distance_i < 0 || distance_i >= particle_size_i) return 0.0f;
++
++    float h = particle_size_i;
++    float h2 = h * h;
++    float r2 = distance_i * distance_i;
++    float coeff = 4.0f / (std::numbers::pi_v<float> * std::pow(h, 8));
++
++    return coeff * -6.0f * (3.0f * h2 * h2 - 10.0f * h2 * r2 + 7.0f * r2 * r2);
++}
+diff --git a/temp/sph/settings.cpp b/temp/sph/src/settings.cpp
+similarity index 100%
+rename from temp/sph/settings.cpp
+rename to temp/sph/src/settings.cpp
+diff --git a/temp/sph/spatial.cpp b/temp/sph/src/spatial.cpp
+similarity index 100%
+rename from temp/sph/spatial.cpp
+rename to temp/sph/src/spatial.cpp
+diff --git a/temp/sph/src/spiky_k.cpp b/temp/sph/src/spiky_k.cpp
+new file mode 100644
+index 0000000..ec7d78a
+--- /dev/null
++++ b/temp/sph/src/spiky_k.cpp
+@@ -0,0 +1,21 @@
++#include <numbers>
++
++#include "struct.hpp"
++#include "spiky_k.hpp"
++
++void Spiky_k::gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force)
++{
++    if (distance_i <= 0 || distance_i >= particle_size_i) {
++        out_force.x = 0.0f; out_force.y = 0.0f;
++        return;
++    }
++
++    float h = particle_size_i;
++    float diff = h - distance_i;
++
++    float coeff = -10.0f / (std::numbers::pi_v<float> * std::pow(h, 5));
++
++    float scalar = (coeff * diff * diff) / distance_i;
++    out_force.x = scalar * dx;
++    out_force.y = scalar * dy;
++}
+diff --git a/temp/sph/struct.cpp b/temp/sph/src/struct.cpp
+similarity index 100%
+rename from temp/sph/struct.cpp
+rename to temp/sph/src/struct.cpp
+diff --git a/temp/sph/src/viscosity_k.cpp b/temp/sph/src/viscosity_k.cpp
+new file mode 100644
+index 0000000..b4eed1c
+--- /dev/null
++++ b/temp/sph/src/viscosity_k.cpp
+@@ -0,0 +1,14 @@
++#include <numbers>
++
++#include "struct.hpp"
++#include "viscosity_k.hpp"
++
++float Viscosity_k::laplacian(float distance_i, float particle_size_i)
++{
++    if (distance_i < 0 || distance_i >= particle_size_i) return 0.0f;
++
++    float h = particle_size_i;
++    float coeff = 40.0f / (std::numbers::pi_v<float> * std::pow(h, 5));
++
++    return coeff * (h - distance_i);
++}

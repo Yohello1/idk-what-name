@@ -3,6 +3,7 @@
 #include <iostream>
 #include "settings.hpp"
 
+/*
 // concepts are like a list of characteristics
 template<typename T>
 concept IsKernel = requires(T k) {
@@ -35,23 +36,4 @@ void simulate() {
     }
 }
 
-
-class poly6_kernel
-{
-    public:
-   
-        void density()
-        {
-            // density calc 
-        }
-
-        void pressure()
-        {
-            // density calc 
-        }
-        
-        void viscosity()
-        {
-            // density calc 
-        }
-};
+*/
