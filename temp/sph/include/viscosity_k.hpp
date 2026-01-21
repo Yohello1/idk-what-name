@@ -3,8 +3,7 @@
 
 #include "struct.hpp"
 
-class Viscosity_k {
-public:
+namespace JD::Viscosity_k {
     float laplacian(float distance_i, float particle_size_i); 
 };
 

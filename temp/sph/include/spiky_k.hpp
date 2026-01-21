@@ -3,9 +3,8 @@
 
 #include "struct.hpp" 
 
-class Spiky_k {
-public:
-    void gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force);
+namespace JD::Spiky_k {
+  void gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force);
 };
 
 #endif

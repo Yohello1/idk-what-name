@@ -3,7 +3,7 @@
 #include "struct.hpp"
 #include "poly6.hpp"
 
-float JD:::Poly6_k::smoothing(float distance_i, float particle_size_i)
+float JD::Poly6_k::smoothing(float distance_i, float particle_size_i)
 {
     if (distance_i < 0 || distance_i >= particle_size_i) return 0.0f;
 

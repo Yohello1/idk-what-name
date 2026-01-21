@@ -38,8 +38,7 @@ struct floater {
     float a_x;
     float a_y;
 
-    uint8_t r;
-    uint8_t b;
+    float mass;
 };
 
 struct force {

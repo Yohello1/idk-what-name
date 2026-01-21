@@ -3,7 +3,7 @@
 #include "struct.hpp"
 #include "spiky_k.hpp"
 
-void Spiky_k::gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force)
+void JD::Spiky_k::gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force)
 {
     if (distance_i <= 0 || distance_i >= particle_size_i) {
         out_force.x = 0.0f; out_force.y = 0.0f;
