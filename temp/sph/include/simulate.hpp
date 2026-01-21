@@ -4,7 +4,7 @@
 #include <vector>
 #include <cmath>
 
-#include "structs.hpp"
+#include "struct.hpp"
 #include "settings.hpp"
 #include "floaters.hpp"
 
@@ -19,11 +19,11 @@ namespace JD::simulate
                         float h_in) // Particle size 
     {
         // I will set the correct lookup method after....
-        for (int i = 0 i < FLOATER_AMT; i++) {
+        for (int i = 0; i < FLOATER_AMT; i++) {
             float temp = 0.0f;
             for (int j = 0; j < FLOATER_AMT; j++) {
-                float r = fdistEuclid(particles_in[i], particles_in[j]);
-                if (r < h_in) temp += particles_in[j].mass * KernelFunc(r, h);
+                float r = fdistEuclid({particles_in[i].x, particles_in[i].y}, {particles_in[j].x, particles_in[j].y});
+                if (r < h_in) temp += particles_in[j].mass * KernelFunc(r, h_in);
             }
             particles_in[i].density = temp;
             // put here for future use, makes compute a bit cheaper
@@ -42,44 +42,55 @@ namespace JD::simulate
         for (int i = 0; i < FLOATER_AMT; i++) {
             for (int j = 0; j < FLOATER_AMT; j++) {
                 if (i == j) continue;
-                float dx = particles_in[i].x - pj.x;
-                float dy = particles_in[i].y - pj.y;
+                float dx = particles_in[i].x - particles_in[j].x;
+                float dy = particles_in[i].y - particles_in[j].y;
                 float r = std::sqrt(dx*dx + dy*dy);
 
-                if (r > 0 && r < h) {
-                    force grad_w;
-                    KernelGrad(dx, dy, r, h, grad_f);
-                    float p_term = (pi.pressure + pj.pressure) / (2.0f * pj.density);
-                    pi.ax -= pj.mass * p_term * grad_f.x;
-                    pi.ay -= pj.mass * p_term * grad_f.y;
+                if (r > 0 && r < h_in) {
+                    force grad_f;
+                    KernelGrad(dx, dy, r, h_in, grad_f);
+                    float p_term = (particles_in[i].pressure + particles_in[j].pressure) / (2.0f * particles_in[j].density);
+                    particles_in[i].a_x -= particles_in[j].mass * p_term * grad_f.x;
+                    particles_in[i].a_y -= particles_in[j].mass * p_term * grad_f.y;
                 }
             }
         }
     }
 
     template <auto KernelLap>
-    void compute_viscosity(std::vector<particle>& particles, float h) {
-        for (auto& pi : particles) {
-            for (auto& pj : particles) {
-                if (&pi == &pj) continue;
-                float r = math_dist(pi, pj);
-                if (r > 0 && r < h) {
-                    float lap = KernelLap(r, h);
-                    float v_mod = SETTINGS.visc_mu * (pj.mass / pj.density);
-                    pi.ax += v_mod * (pj.vx - pi.vx) * lap;
-                    pi.ay += v_mod * (pj.vy - pi.vy) * lap;
+    void computeViscosity(int* offsets_in,
+                           int* cells_ctr_in,
+                           int* particles_loc_in,
+                           floater* particles_in,
+                           float h_in) {
+        for (int i = 0; i < FLOATER_AMT; i++) {
+            for (int j = 0; j < FLOATER_AMT; j++) {
+                if (i == j) continue;
+                float r = fdistEuclid({particles_in[i].x, particles_in[j].y}, {particles_in[j].x, particles_in[j].y});
+                if (r > 0 && r < h_in) {
+                    float lap = KernelLap(r, h_in);
+                    float v_mod = PARTICLE_VISCOSITY * (particles_in[j].mass / particles_in[j].density);
+                    particles_in[i].a_x += v_mod * (particles_in[j].v_x - particles_in[i].v_x) * lap;
+                    particles_in[i].a_y += v_mod * (particles_in[j].v_y - particles_in[i].v_y) * lap;
                 }
             }
         }
     }
 
 
-    void integrate(std::vector<particle>& particles, float dt) {
-        for (auto& p : particles) {
-            p.vx += p.ax * dt; p.vy += p.ay * dt;
-            p.x += p.vx * dt; p.y += p.vy * dt;
-            p.ax = 0; p.ay = 0;
+    void integrate(int* offsets_in,
+                   int* cells_ctr_in,
+                   int* particles_loc_in,
+                   floater* particles_in) {
+        for (int i = 0; i < FLOATER_AMT; i++) {
+            particles_in[i].v_x += particles_in[i].a_x * PARTICLE_TIME_STEP; 
+            particles_in[i].v_y += particles_in[i].a_y * PARTICLE_TIME_STEP;
+            particles_in[i].x += particles_in[i].v_x * PARTICLE_TIME_STEP; 
+            particles_in[i].y += particles_in[i].v_y * PARTICLE_TIME_STEP;
+            particles_in[i].a_x = 0; 
+            particles_in[i].a_y = 0;
         }
     }
 }
 
+#endif

@@ -39,6 +39,7 @@ struct floater {
     float a_y;
 
     float mass;
+    float pressure;
 };
 
 struct force {

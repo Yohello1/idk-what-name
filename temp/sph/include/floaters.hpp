@@ -2,7 +2,6 @@
 #define _GRAPHICS_HPP
 
 void initFloaters();
-void simulateFloaters();
 void drawFloaters();
 
 

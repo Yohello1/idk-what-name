@@ -14,116 +14,14 @@
 #include "graphics.hpp"
 #include "spatial.hpp"
 #include "floaters.hpp"
-
-void computePressure_p6()
-{
-    float constant = 315.0/(64.0 * 3.141592654 * std::pow(PARTICLE_SIZE, 9.0f));
-
-    for(int i = 0; i < FLOATER_AMT; i++)
-    {
-        std::pair<float, float> summed;
-        summed.first = 0.0f;
-        summed.second = 0.0f;
-        for(int j = 0; j < FLOATER_AMT; j++)
-        {
-            if(j == i) continue;
-
-            float distance = std::sqrt(std::pow(floatersA[i].x - floatersA[j].x, 2.0f) + std::pow(floatersA[i].y - floatersA[j].y, 2.0f));
-            
-            if(distance > PARTICLE_SIZE) continue;    
-
-            float temp = -6.0f * std::pow(std::pow(PARTICLE_SIZE, 2.0f) -  std::pow(distance, 2.0f), 2.0f);
-
-            float dx = floatersA[i].x - floatersA[j].x;
-            float dy = floatersA[i].y - floatersA[j].y;
-     
-            dx *= temp;
-            dy *= temp;
-
-            summed.first += dx;
-            summed.second += dy;
-        }
-        
-        floatersB[i].p_x = summed.first;
-        floatersB[i].p_y = summed.second;
-    }
-}
-
-void computeViscosity()
-{
-    float constant = 315.0/(64.0 * 3.141592654 * std::pow(PARTICLE_SIZE, 9.0f));
-
-    for(int i = 0; i < FLOATER_AMT; i++)
-    {
-        for(int j = 0; j < FLOATER_AMT; j++)
-        {
-            if(j == i) continue;
-
-            float distance = std::sqrt(std::pow(floatersA[i].x - floatersA[j].x, 2.0f) + std::pow(floatersA[i].y - floatersA[j].y, 2.0f));
-            
-            if(distance > PARTICLE_SIZE) continue;    
-
-            float temp = -6.0f * std::pow(std::pow(PARTICLE_SIZE, 2.0f) -  std::pow(distance, 2.0f), 2.0f);
-
-            float dx = floatersA[i].x - floatersA[j].x;
-            float dy = floatersA[i].y - floatersA[j].y;
-
-            dx *= temp;
-            dy *= temp;
-
-//            summed.first += dx;
-//            summed.second += dy;
-        }
-    }
-}
-
+#include "simulate.hpp"
+#include "poly6.hpp"
+#include "spiky_k.hpp"
+#include "viscosity_k.hpp"
 
 void copyFloaters()
 {
     std::memcpy(floatersB, floatersA, sizeof(floater)*FLOATER_AMT);
-}
-
-// kernel value: density
-// first derivitive: force
-// second derivative: viscosity
-//
-// Density is just a value
-// Force is accel part 1
-// viscoscity is used to smooth similar to other stuff
-
-void computeDensity_p6()
-{
-    // 2D Constant btw
-    float density_multiplier = 4.0;
-    density_multiplier /= 3.141592654*std::pow(PARTICLE_SIZE, 8.0f); 
-    
-    // I have 0 clue how to implement this
-    // Ok so it returns 
-
-    // Density computation 
-
-    for(int i = 0; i < FLOATER_AMT; i++)
-    {
-        float density = 0.0;
-        for(int k = 0; k < FLOATER_AMT; k++)
-        {
-            if(k == i) continue;     
-            
-            float r = fdistEuclid({floatersA[i].x, floatersA[i].y}, {floatersA[k].x, floatersA[k].y});
-            
-            if(r < PARTICLE_SIZE) continue;
-
-            float cubed = (float) std::pow((std::pow(r,2.0f), std::pow(PARTICLE_SIZE, 2.0f)), 3.0f);
-
-            density += cubed;
-        }
-        density *= density_multiplier;
-   
-        // std::cout << density << ' ' ;
-
-        floatersB[i].density = density;
-    }
-    // for(int i = 0; i < 
 }
 
 void swapFloaters()
@@ -133,6 +31,12 @@ void swapFloaters()
     floatersB = (floater*) temp;
 }
 
+void simulateFloaters()
+{
+    JD::simulate::computeDensity<JD::Poly6_k::smoothing>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
+    JD::simulate::computePressureForce<JD::Spiky_k::gradient>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
+    JD::simulate::computeViscosity<JD::Viscosity_k::laplacian>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
+}
 
 int main(int argc, char* argv[]) {
 
@@ -206,10 +110,10 @@ int main(int argc, char* argv[]) {
         simulateFloaters();
         drawFloaters();
         copyFloaters();
-        computeDensity_p6();
-        computePressure_p6();
-        swapFloaters();
-        computeStrengths();
+       
+        simulateFloaters();
+        // code heheh
+        // swapFloaters();
         drawConnections();
         // drawGrid();
 
