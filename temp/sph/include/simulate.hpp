@@ -77,6 +77,17 @@ namespace JD::simulate
         }
     }
 
+    template <auto function>
+    void applyAccelerationValueToAllParticles(floater* particles_in)
+    {
+        float valueToApply = function();
+        for(int i = 0; i < FLOATER_AMT; i++)
+        {
+            particles_in[i].a_x += valueToApply;
+            particles_in[i].a_y += valueToApply;
+        }
+    }
+    
 
     void integrate(int* offsets_in,
                    int* cells_ctr_in,

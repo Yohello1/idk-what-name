@@ -37,11 +37,13 @@ inline const float PARTICLE_REFERENCE_DENSITY = 1.0f;
 inline const float PARTICLE_BULK_MODULUS = 1.0f;
 inline const float PARTICLE_VISCOSITY = 1.0f;
 inline const float PARTICLE_GRAVITY = 1.0f;
+inline const float PARTICLE_MASS = 1.0f;
+
+inline const float GRAVITY_CONSTANT = 10.0f;
 
 inline const int PARTICLE_N_FRAMES = 0; // Number of frames
 inline const int PARTICLE_NP_FRAMES = 0; // Steps per frame
 
-inline const float PARTICLE_TOTAL_MASS = 1.0f;
 
 constexpr int CELL_SIZE = DISTANCE_BETWEEN_POINTS*DISTANCE_BETWEEN_POINTS;
 

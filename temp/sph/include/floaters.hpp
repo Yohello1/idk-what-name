@@ -5,4 +5,4 @@ void initFloaters();
 void drawFloaters();
 
 
-#endif _GRAPHICS_HPP
+#endif

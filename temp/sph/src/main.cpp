@@ -18,6 +18,7 @@
 #include "poly6.hpp"
 #include "spiky_k.hpp"
 #include "viscosity_k.hpp"
+#include "gravity.hpp"
 
 void copyFloaters()
 {
@@ -35,7 +36,10 @@ void simulateFloaters()
 {
     JD::simulate::computeDensity<JD::Poly6_k::smoothing>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
     JD::simulate::computePressureForce<JD::Spiky_k::gradient>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
+    JD::simulate::applyAccelerationValueToAllParticles<JD::gravity::gravityAcceleration>(floatersA);
     JD::simulate::computeViscosity<JD::Viscosity_k::laplacian>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
+
+    JD::simulate::integrate(offsets, cells_ctr, particles_loc, floatersA);
 }
 
 int main(int argc, char* argv[]) {
