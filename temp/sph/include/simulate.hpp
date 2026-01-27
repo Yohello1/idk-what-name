@@ -7,6 +7,7 @@
 #include "struct.hpp"
 #include "settings.hpp"
 #include "floaters.hpp"
+#include "math.hpp"
 
 
 namespace JD::simulate
@@ -22,7 +23,7 @@ namespace JD::simulate
         for (int i = 0; i < FLOATER_AMT; i++) {
             float temp = 0.0f;
             for (int j = 0; j < FLOATER_AMT; j++) {
-                float r = fdistEuclid({particles_in[i].x, particles_in[i].y}, {particles_in[j].x, particles_in[j].y});
+                float r = JD::math::fdistEuclid({particles_in[i].x, particles_in[i].y}, {particles_in[j].x, particles_in[j].y});
                 if (r < h_in) temp += particles_in[j].mass * KernelFunc(r, h_in);
             }
             particles_in[i].density = temp;
@@ -66,7 +67,7 @@ namespace JD::simulate
         for (int i = 0; i < FLOATER_AMT; i++) {
             for (int j = 0; j < FLOATER_AMT; j++) {
                 if (i == j) continue;
-                float r = fdistEuclid({particles_in[i].x, particles_in[j].y}, {particles_in[j].x, particles_in[j].y});
+                float r = JD::math::fdistEuclid({particles_in[i].x, particles_in[j].y}, {particles_in[j].x, particles_in[j].y});
                 if (r > 0 && r < h_in) {
                     float lap = KernelLap(r, h_in);
                     float v_mod = PARTICLE_VISCOSITY * (particles_in[j].mass / particles_in[j].density);

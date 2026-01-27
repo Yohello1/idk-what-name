@@ -9,25 +9,25 @@
 
 void offsetsCreation()
 {
-    memset(cells_ctr, 0, sizeof(int)*(BUFFER_LINE*BUFFER_LINE));
+    memset(JD::graphics::cells_ctr, 0, sizeof(int)*(BUFFER_LINE*BUFFER_LINE));
 
 
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        int gx = (floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-        int gy = (floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gx = (JD::graphics::floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gy = (JD::graphics::floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
 
         int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
 
         if (idx >= 0 && idx < (BUFFER_LINE * BUFFER_LINE)) {
-            cells_ctr[idx] += 1;
+            JD::graphics::cells_ctr[idx] += 1;
         }
     }
 
     for(int i = 0, j = 0; i < (BUFFER_LINE * BUFFER_LINE); i++)
     {
-        offsets[i] = j;
-        j += cells_ctr[i];
+        JD::graphics::offsets[i] = j;
+        j += JD::graphics::cells_ctr[i];
     }
 }
 
@@ -52,14 +52,14 @@ void computeIndicies()
 
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        int gx = (floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-        int gy = (floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gx = (JD::graphics::floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gy = (JD::graphics::floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
 
         int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
 
         if (idx >= 0 && idx < (BUFFER_LINE * BUFFER_LINE)) {
-            int offset = offsets[idx];
-            particles_loc[offset + curr_pos[idx]] = i;
+            int offset = JD::graphics::offsets[idx];
+            JD::graphics::particles_loc[offset + curr_pos[idx]] = i;
             curr_pos[idx] += 1;
         }
     }

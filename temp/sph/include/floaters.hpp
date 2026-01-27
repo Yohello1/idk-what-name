@@ -1,8 +1,11 @@
-#ifndef _GRAPHICS_HPP
-#define _GRAPHICS_HPP
+#ifndef _FLOATERS_HPP
+#define _FLOATERS_HPP
 
-void initFloaters();
-void drawFloaters();
+namespace JD::floaters
+{
+    void initFloaters();
+    void drawFloaters();
+}
 
 
-#endif
+#endif // _FLOATERS_HPP

@@ -22,30 +22,30 @@
 
 void copyFloaters()
 {
-    std::memcpy(floatersB, floatersA, sizeof(floater)*FLOATER_AMT);
+    std::memcpy(JD::graphics::floatersB, JD::graphics::floatersA, sizeof(floater)*FLOATER_AMT);
 }
 
 void swapFloaters()
 {
-    void* temp = (void*) floatersA;
-    floatersA = floatersB;
-    floatersB = (floater*) temp;
+    void* temp = (void*) JD::graphics::floatersA;
+    JD::graphics::floatersA = JD::graphics::floatersB;
+    JD::graphics::floatersB = (floater*) temp;
 }
 
 void simulateFloaters()
 {
-    JD::simulate::computeDensity<JD::Poly6_k::smoothing>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
-    JD::simulate::computePressureForce<JD::Spiky_k::gradient>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
-    JD::simulate::applyAccelerationValueToAllParticles<JD::gravity::gravityAcceleration>(floatersA);
-    JD::simulate::computeViscosity<JD::Viscosity_k::laplacian>(offsets, cells_ctr, particles_loc, floatersA, PARTICLE_SIZE);
+    JD::simulate::computeDensity<JD::Poly6_k::smoothing>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::graphics::floatersA, PARTICLE_SIZE);
+    JD::simulate::computePressureForce<JD::Spiky_k::gradient>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::graphics::floatersA, PARTICLE_SIZE);
+    JD::simulate::applyAccelerationValueToAllParticles<JD::gravity::gravityAcceleration>(JD::graphics::floatersA);
+    JD::simulate::computeViscosity<JD::Viscosity_k::laplacian>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::graphics::floatersA, PARTICLE_SIZE);
 
-    JD::simulate::integrate(offsets, cells_ctr, particles_loc, floatersA);
+    JD::simulate::integrate(JD::graphics::offsets   , JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::graphics::floatersA);
 }
 
 int main(int argc, char* argv[]) {
 
-    initGrid();
-    initFloaters();
+    JD::graphics::initGrid();
+    JD::floaters::initFloaters();
 
     srand(100);
 
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
     }
 
     // 2. Create and fill the static array ONCE
-    InitializeStaticBuffer();
+    JD::graphics::InitializeStaticBuffer();
 
     // 3. Create a window
     SDL_Window* window = SDL_CreateWindow(
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
     // 4. Create an SDL_Surface that points to our C-style array
     // We use the array name 'static_rgb_buffer' which decays to a pointer (uint8_t*)
     SDL_Surface* bufferSurface = SDL_CreateRGBSurfaceFrom(
-        static_rgb_buffer, // C-style array name acts as pointer to data
+        ::JD::graphics::static_rgb_buffer, // C-style array name acts as pointer to data
         BUFFER_WIDTH,
         BUFFER_HEIGHT,
         24, // Bits per pixel (3 bytes)
@@ -110,15 +110,15 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        memset(static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
+        memset(JD::graphics::static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
         simulateFloaters();
-        drawFloaters();
+        JD::floaters::drawFloaters();
         copyFloaters();
        
         simulateFloaters();
         // code heheh
         // swapFloaters();
-        drawConnections();
+        JD::graphics::drawConnections();
         // drawGrid();
 
         // --- COPY (BLIT) STATIC BUFFER TO SCREEN ---

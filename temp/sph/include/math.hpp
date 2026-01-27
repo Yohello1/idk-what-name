@@ -1,13 +1,17 @@
-#ifndef _MATH_CPP
-#define _MATH_CPP
+#ifndef _MATH_HPP
+#define _MATH_HPP
 
 #include <vector>
 #include <utility>
 #include "struct.hpp"
 
-int signBit(int a);
-float fsignBit(float a);
-float fdistEuclid(std::vector<float> a, std::vector<float> b);
-std::pair<int, int> getMidPoint(const point& p0, const point& p1);
+namespace JD::math {
+
+    int signBit(int a);
+    float fsignBit(float a);
+    float fdistEuclid(std::vector<float> a, std::vector<float> b);
+    std::pair<int, int> getMidPoint(const point& p0, const point& p1);
+
+} // namespace JD::math
 
 #endif
