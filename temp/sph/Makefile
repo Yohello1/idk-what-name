@@ -30,7 +30,7 @@ $(OBJ_NAME) : $(OBJS)
 	@echo "----------------------------"
 	@echo "Build Successful. Launching..."
 	@echo "----------------------------"
-	./$(OBJ_NAME)
+	# ./$(OBJ_NAME)
 
 # Pattern Rule: Compile src/%.cpp into obj/%.o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
