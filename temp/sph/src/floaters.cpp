@@ -1,8 +1,13 @@
 #include "floaters.hpp"
 #include "graphics.hpp"
+#include "struct.hpp"
 
 namespace JD::floaters
 {
+
+    extern floater* floatersA;
+    extern floater* floatersB;
+    
     void initFloaters()
     {
         for(int i = 0; i < FLOATER_AMT; i++)

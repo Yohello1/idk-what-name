@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <cmath>
 
+// #include "floaters.hpp"
+
 inline constexpr int DISTANCE_BETWEEN_POINTS = 8;
 
 inline constexpr int SIZE_MULTIPLIER = 90;
@@ -25,10 +27,11 @@ inline constexpr int POINTS_WIDTH = SIZE_MULTIPLIER+1;
 inline constexpr int POINTS_HEIGHT = SIZE_MULTIPLIER+1;
 inline constexpr int POINTS_AMT = (POINTS_HEIGHT)*(POINTS_WIDTH);
 
-inline constexpr int FLOATER_AMT = 1000;
-inline constexpr int FLOATER_SPEED = 3;
-
 inline constexpr uint16_t THRESHOLD = 180;
+
+// Window settings
+const int WINDOW_WIDTH = 880;
+const int WINDOW_HEIGHT = 880;
 
 // Fluid simulation global constexprants
 inline const float PARTICLE_SIZE = 1.0f; // otherwise known as the influence radisu

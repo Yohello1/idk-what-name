@@ -12,9 +12,10 @@ namespace JD::graphics {
     int cells_ctr[BUFFER_LINE * BUFFER_LINE];
     int particles_loc[FLOATER_AMT];
 
+    // TODO make this a calculation based function lol
     point* points = new point[POINTS_AMT];
-    floater* floatersA = new floater[FLOATER_AMT];
-    floater* floatersB = new floater[FLOATER_AMT];
+    floater* floatersA = new floater[ computeFloatersAmt() ];
+    floater* floatersB = new floater[ computeFloatersAmt() ];
 
     void draw_line_std_pair(uint8_t* buffer, std::pair<int, int> p0, std::pair<int, int> p1,
                             uint8_t r, uint8_t g, uint8_t b) {

@@ -40,6 +40,8 @@ struct floater {
 
     float mass;
     float pressure;
+
+    bool enabled; // true: enabled, false: disabled
 };
 
 struct force {

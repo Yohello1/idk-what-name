@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <omp.h>
 
-
+// Assuming these headers define BUFFER_WIDTH, BUFFER_HEIGHT, etc.
 #include "settings.hpp"
 #include "struct.hpp"
 #include "math.hpp"
@@ -20,137 +20,106 @@
 #include "viscosity_k.hpp"
 #include "gravity.hpp"
 
-void copyFloaters()
-{
-    std::memcpy(JD::graphics::floatersB, JD::graphics::floatersA, sizeof(floater)*FLOATER_AMT);
-}
-
-void swapFloaters()
-{
-    void* temp = (void*) JD::graphics::floatersA;
-    JD::graphics::floatersA = JD::graphics::floatersB;
-    JD::graphics::floatersB = (floater*) temp;
-}
-
-void simulateFloaters()
-{
-    JD::simulate::computeDensity<JD::Poly6_k::smoothing>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::graphics::floatersA, PARTICLE_SIZE);
-    JD::simulate::computePressureForce<JD::Spiky_k::gradient>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::graphics::floatersA, PARTICLE_SIZE);
-    JD::simulate::applyYAccelerationToAllParticles<JD::gravity::gravityAcceleration>(JD::graphics::floatersA);
-    JD::simulate::computeViscosity<JD::Viscosity_k::laplacian>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::graphics::floatersA, PARTICLE_SIZE);
-
-    JD::simulate::integrate(JD::graphics::offsets   , JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::graphics::floatersA);
+void copyFloaters() {
+    std::memcpy(JD::graphics::floatersB, JD::graphics::floatersA, sizeof(floater) * FLOATER_AMT);
 }
 
 int main(int argc, char* argv[]) {
-
     JD::graphics::initGrid();
     JD::floaters::initFloaters();
-
     srand(100);
 
-
-    // 1. Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
         return 1;
     }
 
-    // 2. Create and fill the static array ONCE
     JD::graphics::InitializeStaticBuffer();
 
-    // 3. Create a window
+    // 1. Create the window with the FIXED viewport size
     SDL_Window* window = SDL_CreateWindow(
-        "draw2",
+        "Viewport Render",
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        BUFFER_WIDTH * SCREEN_SCALE,
-        BUFFER_HEIGHT * SCREEN_SCALE,
+        WINDOW_WIDTH, 
+        WINDOW_HEIGHT,
         SDL_WINDOW_SHOWN
     );
 
-    // 4. Create an SDL_Surface that points to our C-style array
-    // We use the array name 'static_rgb_buffer' which decays to a pointer (uint8_t*)
+    // 2. This surface represents your "Infinite/Large Canvas"
     SDL_Surface* bufferSurface = SDL_CreateRGBSurfaceFrom(
-        ::JD::graphics::static_rgb_buffer, // C-style array name acts as pointer to data
-        BUFFER_WIDTH,
-        BUFFER_HEIGHT,
-        24, // Bits per pixel (3 bytes)
-        BUFFER_WIDTH * BYTES_PER_PIXEL, // Pitch (bytes per row)
-        0x00FF0000, // R-mask (standard little-endian 24-bit RGB)
-        0x0000FF00, // G-mask
-        0x000000FF, // B-mask
-        0x00000000  // No Alpha
+        ::JD::graphics::static_rgb_buffer, 
+        BUFFER_WIDTH,   // The actual large data width
+        BUFFER_HEIGHT,  // The actual large data height
+        24, 
+        BUFFER_WIDTH * BYTES_PER_PIXEL,
+        0x00FF0000, 0x0000FF00, 0x000000FF, 0x00000000
     );
 
-    if (bufferSurface == nullptr) {
-        std::cerr << "Could not create buffer surface! SDL_Error: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-
-    // 5. Get the destination (window) surface
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
 
-    // Main loop variables
+    // 3. Define the Viewport (The "Camera")
+    SDL_Rect viewRect;
+    viewRect.x = 0;      // Start looking at top-left
+    viewRect.y = 0;
+    viewRect.w = WINDOW_WIDTH;
+    viewRect.h = WINDOW_HEIGHT;
+
     bool quit = false;
     SDL_Event e;
-
     clock_t start, end;
 
-    // 6. Main application loop
     while (!quit) {
-
         start = clock();
 
         while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
-                quit = true;
+            if (e.type == SDL_QUIT) quit = true;
+            
+            // Example: Basic Camera Control with Arrow Keys
+            if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_UP:    viewRect.y -= 10; break;
+                    case SDLK_DOWN:  viewRect.y += 10; break;
+                    case SDLK_LEFT:  viewRect.x -= 10; break;
+                    case SDLK_RIGHT: viewRect.x += 10; break;
+                }
             }
         }
 
-        memset(JD::graphics::static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
-        simulateFloaters();
+        // --- CAMERA BOUNDARY CHECKING ---
+        if (viewRect.x < 0) viewRect.x = 0;
+        if (viewRect.y < 0) viewRect.y = 0;
+        if (viewRect.x + viewRect.w > BUFFER_WIDTH) viewRect.x = BUFFER_WIDTH - viewRect.w;
+        if (viewRect.y + viewRect.h > BUFFER_HEIGHT) viewRect.y = BUFFER_HEIGHT - viewRect.h;
+
+        // Clear the large back-buffer
+        memset(JD::graphics::static_rgb_buffer, 0, (size_t)BUFFER_HEIGHT * BUFFER_WIDTH * BYTES_PER_PIXEL);
+
+        // Simulation and Drawing calls (drawing to the large buffer)
         JD::floaters::drawFloaters();
         copyFloaters();
-       
-        simulateFloaters();
-        // code heheh
-        // swapFloaters();
         JD::graphics::drawConnections();
-        // drawGrid();
 
-        // --- COPY (BLIT) STATIC BUFFER TO SCREEN ---
-        // Copies the fixed gradient image onto the window surface.
-        SDL_BlitSurface(bufferSurface, nullptr, screenSurface, nullptr);
+        // --- THE VIEWPORT BLIT ---
+        // Source: bufferSurface (the whole world), but only the part inside viewRect
+        // Destination: screenSurface (the window), starting at 0,0
+        SDL_BlitSurface(bufferSurface, &viewRect, screenSurface, nullptr);
 
-        // 7. Update the window to display the fixed changes
         SDL_UpdateWindowSurface(window);
 
-
         end = clock();
-
         double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+        std::cout << "Frame Time: " << std::fixed << std::setprecision(4) << time_taken << "s" << std::endl;
 
-
-        std::cout << "Time taken by program is : " << std::fixed
-        << time_taken << std::setprecision(8) << std::endl;
-
-
-
+        // Custom simulation steps
         offsetsCreation();
         computeIndicies();
         SDL_Delay(25);
-
     }
 
-    // 8. Clean up resources
-    // We only free the SDL_Surface wrapper; the C-style array memory is managed by the program.
     SDL_FreeSurface(bufferSurface);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
     return 0;
 }
-

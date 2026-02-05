@@ -14,8 +14,6 @@ namespace JD::graphics {
     extern int particles_loc[FLOATER_AMT];
 
     extern point* points;
-    extern floater* floatersA;
-    extern floater* floatersB;
 
     void draw_line_std_pair(uint8_t* buffer,
                             std::pair<int, int> p0,
