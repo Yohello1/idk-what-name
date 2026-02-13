@@ -5,22 +5,22 @@
 namespace JD::floaters
 {
 
-    extern floater* floatersA;
-    extern floater* floatersB;
+    floater* floatersA = new floater[ FLOATER_AMT ];
+    floater* floatersB = new floater[ FLOATER_AMT ];
     
     void initFloaters()
     {
         for(int i = 0; i < FLOATER_AMT; i++)
         {
-            JD::graphics::floatersA[i].x = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
-            JD::graphics::floatersA[i].y = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
+            floatersA[i].x = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
+            floatersA[i].y = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
 
-            JD::graphics::floatersA[i].v_x = ((rand() % 50) - 25)/10;
-            JD::graphics::floatersA[i].v_y = ((rand() % 50) - 25)/10;
+            floatersA[i].v_x = ((rand() % 50) - 25)/10;
+            floatersA[i].v_y = ((rand() % 50) - 25)/10;
 
-            JD::graphics::floatersA[i].mass = 50;
+            floatersA[i].mass = 50;
 
-            JD::graphics::floatersA[i].density = PARTICLE_REFERENCE_DENSITY;
+            floatersA[i].density = PARTICLE_REFERENCE_DENSITY;
 
             // std::cout << floatersA[i].density << ' ';
         }
@@ -32,7 +32,7 @@ namespace JD::floaters
     {
         for(int i = 0; i < FLOATER_AMT; i++)
         {
-            int idx = JD::graphics::floatersA[i].x*BYTES_PER_PIXEL + JD::graphics::floatersA[i].y*BUFFER_WIDTH*BYTES_PER_PIXEL;
+            int idx = floatersA[i].x*BYTES_PER_PIXEL + floatersA[i].y*BUFFER_WIDTH*BYTES_PER_PIXEL;
             JD::graphics::static_rgb_buffer[idx+1]   = 250;
         }
     }

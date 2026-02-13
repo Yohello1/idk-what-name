@@ -1,33 +1,40 @@
-#include <SDL2/SDL.h>
-#include <iostream>
-#include <cmath>
-#include <algorithm>
-#include <cstring>
-#include <vector>
-#include <iomanip>
-#include <omp.h>
-
-// Assuming these headers define BUFFER_WIDTH, BUFFER_HEIGHT, etc.
 #include "settings.hpp"
 #include "struct.hpp"
-#include "math.hpp"
+#include "floaters.hpp"
 #include "graphics.hpp"
 #include "spatial.hpp"
-#include "floaters.hpp"
 #include "simulate.hpp"
 #include "poly6.hpp"
-#include "spiky_k.hpp"
 #include "viscosity_k.hpp"
 #include "gravity.hpp"
+#include "math.hpp"
+#include "spiky_k.hpp"
+#include <SDL2/SDL.h>
+#include <omp.h>
+
+#include <cstring>
+#include <iostream>
+#include <iomanip>
 
 void copyFloaters() {
-    std::memcpy(JD::graphics::floatersB, JD::graphics::floatersA, sizeof(floater) * FLOATER_AMT);
+    // std::memcpy(JD::floaters::floatersB, JD::floaters::floatersA, sizeof(floater) * FLOATER_AMT);
 }
 
-int main(int argc, char* argv[]) {
+void simulateFloaters()
+{
+    JD::simulate::computeDensity<JD::Poly6_k::smoothing>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
+    JD::simulate::computePressureForce<JD::Spiky_k::gradient>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
+    JD::simulate::applyYAccelerationToAllParticles<JD::gravity::gravityAcceleration>(JD::floaters::floatersA);
+    JD::simulate::computeViscosity<JD::Viscosity_k::laplacian>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
+                              
+    JD::simulate::integrate(JD::graphics::offsets   , JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA);
+}
+
+
+int main() {
     JD::graphics::initGrid();
     JD::floaters::initFloaters();
-    srand(100);
+    // srand(100);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
@@ -45,7 +52,6 @@ int main(int argc, char* argv[]) {
         WINDOW_HEIGHT,
         SDL_WINDOW_SHOWN
     );
-
     // 2. This surface represents your "Infinite/Large Canvas"
     SDL_Surface* bufferSurface = SDL_CreateRGBSurfaceFrom(
         ::JD::graphics::static_rgb_buffer, 
@@ -57,8 +63,6 @@ int main(int argc, char* argv[]) {
     );
 
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
-
-    // 3. Define the Viewport (The "Camera")
     SDL_Rect viewRect;
     viewRect.x = 0;      // Start looking at top-left
     viewRect.y = 0;
@@ -75,8 +79,7 @@ int main(int argc, char* argv[]) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) quit = true;
             
-            // Example: Basic Camera Control with Arrow Keys
-            if (e.type == SDL_KEYDOWN) {
+             if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
                     case SDLK_UP:    viewRect.y -= 10; break;
                     case SDLK_DOWN:  viewRect.y += 10; break;
@@ -92,34 +95,32 @@ int main(int argc, char* argv[]) {
         if (viewRect.x + viewRect.w > BUFFER_WIDTH) viewRect.x = BUFFER_WIDTH - viewRect.w;
         if (viewRect.y + viewRect.h > BUFFER_HEIGHT) viewRect.y = BUFFER_HEIGHT - viewRect.h;
 
-        // Clear the large back-buffer
+         // Clear the large back-buffer
         memset(JD::graphics::static_rgb_buffer, 0, (size_t)BUFFER_HEIGHT * BUFFER_WIDTH * BYTES_PER_PIXEL);
-
-        // Simulation and Drawing calls (drawing to the large buffer)
+        
         JD::floaters::drawFloaters();
-        copyFloaters();
+        // copyFloaters();
         JD::graphics::drawConnections();
 
-        // --- THE VIEWPORT BLIT ---
-        // Source: bufferSurface (the whole world), but only the part inside viewRect
-        // Destination: screenSurface (the window), starting at 0,0
         SDL_BlitSurface(bufferSurface, &viewRect, screenSurface, nullptr);
-
         SDL_UpdateWindowSurface(window);
-
-        end = clock();
-        double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
-        std::cout << "Frame Time: " << std::fixed << std::setprecision(4) << time_taken << "s" << std::endl;
 
         // Custom simulation steps
         offsetsCreation();
         computeIndicies();
-        SDL_Delay(25);
+       
+        simulateFloaters();
+
+        // SDL_Delay(25);
+
+        end = clock();
+        double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+        std::cout << "Frame Time: " << std::fixed << std::setprecision(4) << time_taken << "s" << std::endl;
     }
 
     SDL_FreeSurface(bufferSurface);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    return 0;
+     return 0;
 }

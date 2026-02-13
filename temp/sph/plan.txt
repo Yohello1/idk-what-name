@@ -1,5 +1,0 @@
-Call the "big" namespace; "Jam Dragon"
-
-Have a view port viewing instead so drawing becomes easier lol, viewport of image then tell SDL to draw to it
-Then implement ghost particles at the boundary 
-

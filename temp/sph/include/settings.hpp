@@ -9,7 +9,7 @@
 inline constexpr int DISTANCE_BETWEEN_POINTS = 8;
 
 inline constexpr int SIZE_MULTIPLIER = 90;
-inline constexpr int INFLUENCE_RADIUS = 9; // This is how far we look in terms of blocks lol
+inline constexpr int INFLUENCE_RADIUS = 3; // This is how far we look in terms of blocks lol
 inline constexpr int PADDING = std::max(3, INFLUENCE_RADIUS+1);
 
 inline constexpr int BUFFER_WIDTH = SIZE_MULTIPLIER*DISTANCE_BETWEEN_POINTS+(DISTANCE_BETWEEN_POINTS*PADDING*2);

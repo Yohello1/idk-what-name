@@ -16,19 +16,33 @@ namespace JD::simulate
     void computeDensity(int* offsets_in,
                         int* cells_ctr_in,
                         int* particles_loc_in,
-                        floater* particles_in,
+                        floater* p_floatersA,
                         float h_in) // Particle size 
     {
         // I will set the correct lookup method after....
         for (int i = 0; i < FLOATER_AMT; i++) {
             float temp = 0.0f;
-            for (int j = 0; j < FLOATER_AMT; j++) {
-                float r = JD::math::fdistEuclid({particles_in[i].x, particles_in[i].y}, {particles_in[j].x, particles_in[j].y});
-                if (r < h_in) temp += particles_in[j].mass * KernelFunc(r, h_in);
+
+            float x = p_floatersA[i].x;
+            float y = p_floatersA[i].y;
+
+            for(int j = 0; j < REGIONS_AMT; j++) {
+                int idx_r = JD::graphics::points[i].regions[j];
+                int idx_o = JD::graphics::offsets[idx_r];
+
+                for(int k = 0; k < cells_ctr_in[idx_r]; k++) {
+                    int floater_idx = particles_loc_in[idx_o + k];
+                    float dx = p_floatersA[floater_idx].x - x;
+                    float dy = p_floatersA[floater_idx].y - y;
+                    float dist_sq = dx*dx + dy*dy;
+                
+                    temp += p_floatersA[j].mass * KernelFunc(dist_sq, h_in);
+                }
             }
-            particles_in[i].density = temp;
+
+            p_floatersA[i].density = temp;
             // put here for future use, makes compute a bit cheaper
-            particles_in[i].pressure = PARTICLE_BULK_MODULUS * (particles_in[i].density - PARTICLE_REFERENCE_DENSITY);
+            p_floatersA[i].pressure = PARTICLE_BULK_MODULUS * (p_floatersA[i].density - PARTICLE_REFERENCE_DENSITY);
         }
     }
 
@@ -45,9 +59,9 @@ namespace JD::simulate
                 if (i == j) continue;
                 float dx = particles_in[i].x - particles_in[j].x;
                 float dy = particles_in[i].y - particles_in[j].y;
-                float r = std::sqrt(dx*dx + dy*dy);
+                float r = (dx*dx + dy*dy);
 
-                if (r > 0 && r < h_in) {
+                if (r > 0 && r < h_in*h_in) {
                     force grad_f;
                     KernelGrad(dx, dy, r, h_in, grad_f);
                     float p_term = (particles_in[i].pressure + particles_in[j].pressure) / (2.0f * particles_in[j].density);
@@ -67,8 +81,10 @@ namespace JD::simulate
         for (int i = 0; i < FLOATER_AMT; i++) {
             for (int j = 0; j < FLOATER_AMT; j++) {
                 if (i == j) continue;
-                float r = JD::math::fdistEuclid({particles_in[i].x, particles_in[j].y}, {particles_in[j].x, particles_in[j].y});
-                if (r > 0 && r < h_in) {
+                float dx = particles_in[i].x - particles_in[j].x;
+                float dy = particles_in[i].y - particles_in[j].y;
+                float r = (dx*dx + dy*dy);
+                if (r > 0 && r < h_in*h_in) {
                     float lap = KernelLap(r, h_in);
                     float v_mod = PARTICLE_VISCOSITY * (particles_in[j].mass / particles_in[j].density);
                     particles_in[i].a_x += v_mod * (particles_in[j].v_x - particles_in[i].v_x) * lap;

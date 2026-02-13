@@ -27,4 +27,24 @@ namespace JD::math {
         return {(p0.i_x + p1.i_x) / 2, (p0.i_y + p1.i_y) / 2};
     }
 
+    // Source - https://stackoverflow.com/a/53893163
+    // Posted by user2344271
+    // Retrieved 2026-02-12, License - CC BY-SA 4.0
+    float rsqrt( float number ){
+        union {
+            float f;
+            uint32_t i;
+        } conv;
+
+        float x2;
+        const float threehalfs = 1.5F;
+
+        x2 = number * 0.5F;
+        conv.f  = number;
+        conv.i  = 0x5f3759df - ( conv.i >> 1 );
+        conv.f  = conv.f * ( threehalfs - ( x2 * conv.f * conv.f ) );
+        return conv.f;
+    }
+
+
 } // namespace JD::math

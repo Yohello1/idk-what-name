@@ -1,4 +1,5 @@
 #include "spatial.hpp"
+#include "floaters.hpp"
 
 #include "settings.hpp"
 #include "struct.hpp"
@@ -14,8 +15,8 @@ void offsetsCreation()
 
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        int gx = (JD::graphics::floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-        int gy = (JD::graphics::floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gx = (JD::floaters::floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gy = (JD::floaters::floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
 
         int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
 
@@ -52,8 +53,8 @@ void computeIndicies()
 
     for(int i = 0; i < FLOATER_AMT; i++)
     {
-        int gx = (JD::graphics::floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-        int gy = (JD::graphics::floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gx = (JD::floaters::floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+        int gy = (JD::floaters::floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
 
         int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
 
