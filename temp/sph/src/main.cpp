@@ -24,8 +24,8 @@ void simulateFloaters()
 {
     JD::simulate::computeDensity<JD::Poly6_k::smoothing>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
     JD::simulate::computePressureForce<JD::Spiky_k::gradient>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
-    JD::simulate::applyYAccelerationToAllParticles<JD::gravity::gravityAcceleration>(JD::floaters::floatersA);
     JD::simulate::computeViscosity<JD::Viscosity_k::laplacian>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
+    JD::simulate::applyYAccelerationToAllParticles<JD::gravity::gravityAcceleration>(JD::floaters::floatersA);
                               
     JD::simulate::integrate(JD::graphics::offsets   , JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA);
 }

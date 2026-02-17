@@ -6,8 +6,10 @@ namespace JD::floaters
 {
 
     floater* floatersA = new floater[ FLOATER_AMT ];
-    floater* floatersB = new floater[ FLOATER_AMT ];
-    
+    block*   blocks    = new block  [ BLOCK_AMT   ];
+
+
+
     void initFloaters()
     {
         for(int i = 0; i < FLOATER_AMT; i++)
@@ -36,4 +38,26 @@ namespace JD::floaters
             JD::graphics::static_rgb_buffer[idx+1]   = 250;
         }
     }
+
+    __attribute__ ((noinline))
+    void initBlockRegions()
+    {
+        for(int i = 0; i < BLOCK_AMT; i++)
+        {
+            // if outside of bounds, we set to INT_MAX, and 0 index
+            // I can do the bit masking and the funny math later
+            // teehee
+           
+            blocks[i].id = i;
+
+            blocks[i].regions[0] = (i-1-BUFFER_LINE < 0) ? INT_MAX : i-1-BUFFER_LINE;
+
+            blocks[i].regions[0] = (i-1 < 0) ? INT_MAX : i-1;
+            blocks[i].regions[1] = i; 
+            blocks[i].regions[2] = (i+1 > BLOCK_AMT-1) ? INT_MAX : i+1;
+
+
+        }
+    }
+
 }
