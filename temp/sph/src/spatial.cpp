@@ -49,10 +49,10 @@ namespace JD::spatial
         return combined_list;
     }
 
+    uint32_t* _curr_pos = (uint32_t*)calloc(sizeof(uint32_t), BUFFER_LINE*BUFFER_LINE);
     void computeIndicies()
     {
-        uint32_t* curr_pos = (uint32_t*)calloc(sizeof(uint32_t), BUFFER_LINE * BUFFER_LINE);
-
+        std::memset(_curr_pos, 0, sizeof(uint32_t)*BUFFER_LINE*BUFFER_LINE);
         for(size_t i = 0; i < FLOATER_AMT; i++)
         {
             int gx = (JD::floaters::floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
@@ -62,11 +62,10 @@ namespace JD::spatial
 
             if (idx >= 0 && idx < (BUFFER_LINE * BUFFER_LINE)) {
                 int offset = JD::graphics::offsets[idx];
-                JD::graphics::particles_loc[offset + curr_pos[idx]] = i;
-                curr_pos[idx] += 1;
+                JD::graphics::particles_loc[offset + _curr_pos[idx]] = i;
+                _curr_pos[idx] += 1;
             }
         }
-        free(curr_pos);
     }
 
 }

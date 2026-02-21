@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 #include "struct.hpp"
 #include "settings.hpp"
@@ -16,20 +17,22 @@ namespace JD::simulate
     void computeDensity(int* offsets_in,
                         int* cells_ctr_in,
                         int* particles_loc_in,
-                        int* region_amt,
-                        JD::floaters::block* blocks*;  
-                        int* cells_ctr,
+                        int region_amt,
+                        JD::floaters::block* blocks,  
                         floater* p_floatersA,
                         float h_in) // Particle size 
     {
         // I will set the correct lookup method after....
-        for (int i = 0; i < FLOATER_AMT; i++) {
+        /*
+        for (int i = 0; i < FLOATER_AMT; i++) 
+        {
             float temp = 0.0f;
 
             float x = p_floatersA[i].x;
             float y = p_floatersA[i].y;
 
-            for(int j = 0; j < region_amt; j++) {
+            for(int j = 0; j < region_amt; j++) 
+            {
                 int idx_r = JD::graphics::points[i].regions[j];
                 int idx_o = JD::graphics::offsets[idx_r];
 
@@ -44,6 +47,44 @@ namespace JD::simulate
                 }
             }
 
+            p_floatersA[i].density = temp;
+            // put here for future use, makes compute a bit cheaper
+            p_floatersA[i].pressure = PARTICLE_BULK_MODULUS * (p_floatersA[i].density - PARTICLE_REFERENCE_DENSITY);
+        }
+        */
+        // itterate through all points that are ON
+        // determine block it belongs to
+        // access those blocks from there
+        // and itterate based on that
+        for(size_t i = 0; i < FLOATER_AMT; i++)
+        {
+            int bx = p_floatersA[i].x/DISTANCE_BETWEEN_POINTS;
+            int by = p_floatersA[i].y/DISTANCE_BETWEEN_POINTS;
+            size_t idx = bx + by*BUFFER_LINE;
+            float x = p_floatersA[i].x;
+            float y = p_floatersA[i].y;
+
+
+            float temp = 0.0f;
+            for(int j = 0; j < region_amt; j++)
+            {
+                // now we look at blocks[idx].regions[j]
+                int idx_r = blocks[idx].regions[j];
+                if(idx_r == INT_MAX) { continue;} 
+
+                int idx_o = JD::graphics::offsets[idx_r];
+
+                for(int k = 0; k < cells_ctr_in[idx_r]; k++)
+                {
+                    int floater_idx = particles_loc_in[idx_o + k];
+                    float dx = p_floatersA[floater_idx].x - x;
+                    float dy = p_floatersA[floater_idx].y - y;
+                    float dist_sq = dx*dx + dy*dy;
+                
+                    temp += p_floatersA[j].mass * KernelFunc(dist_sq, h_in);
+                }
+
+            }
             p_floatersA[i].density = temp;
             // put here for future use, makes compute a bit cheaper
             p_floatersA[i].pressure = PARTICLE_BULK_MODULUS * (p_floatersA[i].density - PARTICLE_REFERENCE_DENSITY);

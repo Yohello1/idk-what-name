@@ -17,6 +17,9 @@ namespace JD::floaters
 
     void initFloaters()
     {
+        // Everything gets init random,
+        // then afterwards we select the subset we need for the outside ya
+        // from end
         for(size_t i = 0; i < FLOATER_AMT; i++)
         {
             floatersA[i].x = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
@@ -26,12 +29,59 @@ namespace JD::floaters
             floatersA[i].v_y = ((rand() % 50) - 25)/10;
 
             floatersA[i].mass = 50;
-
             floatersA[i].density = PARTICLE_REFERENCE_DENSITY;
-
-            // std::cout << floatersA[i].density << ' ';
+            floatersA[i].enabled = true;
         }
-        // std::cout << '\n';
+
+
+        size_t current_i = DESIRED_FLOATERS;
+        int shell_idx = 0;
+        while (current_i < FLOATER_AMT) {
+            int x0 = BUFFER_PADDING - shell_idx;
+            int y0 = BUFFER_PADDING - shell_idx;
+            int x1 = BUFFER_PADDING + BUFFER_WORKING + shell_idx;
+            int y1 = BUFFER_PADDING + BUFFER_WORKING + shell_idx;
+
+            // Top edge
+            for (int x = x0; x < x1 && current_i < FLOATER_AMT; x++) {
+                floatersA[current_i].x = (float)x;
+                floatersA[current_i].y = (float)y0;
+                floatersA[current_i].v_x = 0;
+                floatersA[current_i].v_y = 0;
+                floatersA[current_i].enabled = false;
+                current_i++;
+            }
+            // Right edge
+            for (int y = y0; y < y1 && current_i < FLOATER_AMT; y++) {
+                floatersA[current_i].x = (float)x1;
+                floatersA[current_i].y = (float)y;
+                floatersA[current_i].v_x = 0;
+                floatersA[current_i].v_y = 0;
+                floatersA[current_i].enabled = false;
+                current_i++;
+            }
+            // Bottom edge
+            for (int x = x1; x > x0 && current_i < FLOATER_AMT; x--) {
+                floatersA[current_i].x = (float)x;
+                floatersA[current_i].y = (float)y1;
+                floatersA[current_i].v_x = 0;
+                floatersA[current_i].v_y = 0;
+                floatersA[current_i].enabled = false;
+                current_i++;
+            }
+            // Left edge
+            for (int y = y1; y > y0 && current_i < FLOATER_AMT; y--) {
+                floatersA[current_i].x = (float)x0;
+                floatersA[current_i].y = (float)y;
+                floatersA[current_i].v_x = 0;
+                floatersA[current_i].v_y = 0;
+                floatersA[current_i].enabled = false;
+                current_i++;
+            }
+            shell_idx++;
+            if (shell_idx > BUFFER_PADDING) break; 
+        }
+    
     }
 
 
@@ -53,7 +103,6 @@ namespace JD::floaters
         int W = (int) BUFFER_LINE; // Assuming BUFFER_LINE is your grid width
 
         for(size_t i = 0; i < BLOCK_AMT; i++) {
-            blocks[i].id = i;
             int row = i / W;
             int col = i % W;
             int count = 0;

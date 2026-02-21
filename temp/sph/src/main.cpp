@@ -22,11 +22,11 @@ void copyFloaters() {
 
 void simulateFloaters()
 {
-    JD::simulate::computeDensity<JD::Poly6_k::smoothing>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
+    JD::simulate::computeDensity<JD::Poly6_k::smoothing>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, 9, JD::floaters::blocks, JD::floaters::floatersA, PARTICLE_SIZE);
+    // JD::simulate::computeDensity<JD::Poly6_k::smoothing>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
     JD::simulate::computePressureForce<JD::Spiky_k::gradient>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
     JD::simulate::computeViscosity<JD::Viscosity_k::laplacian>(JD::graphics::offsets, JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA, PARTICLE_SIZE);
     JD::simulate::applyYAccelerationToAllParticles<JD::gravity::gravityAcceleration>(JD::floaters::floatersA);
-                              
     JD::simulate::integrate(JD::graphics::offsets   , JD::graphics::cells_ctr, JD::graphics::particles_loc, JD::floaters::floatersA);
 }
 
@@ -34,7 +34,16 @@ void simulateFloaters()
 int main() {
     JD::graphics::initGrid();
     JD::floaters::init();
-    // srand(100);
+    srand(100);
+
+    std::cout << "BUFFER_LINE: " << BUFFER_LINE << std::endl;
+    std::cout << "DISTANCE_BETWEEN_POINTS: " << DISTANCE_BETWEEN_POINTS << std::endl;
+    std::cout << "SIZE_MULTIPLIER: " << SIZE_MULTIPLIER << std::endl;
+    std::cout << "PADDING: " << PADDING << std::endl;
+    std::cout << "BUFFER_WIDTH:  " << BUFFER_WIDTH << std::endl;
+    std::cout << "BUFFER_HEIGHT: " << BUFFER_HEIGHT << std::endl;
+
+    std::cout << std::fixed << std::setprecision(2);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
@@ -81,7 +90,7 @@ int main() {
             
              if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
-                    case SDLK_UP:    viewRect.y -= 10; break;
+                    case SDLK_UP:    viewRect.y -= 10; std::cout << "hi" << std::endl; break;
                     case SDLK_DOWN:  viewRect.y += 10; break;
                     case SDLK_LEFT:  viewRect.x -= 10; break;
                     case SDLK_RIGHT: viewRect.x += 10; break;
@@ -109,7 +118,7 @@ int main() {
         JD::spatial::offsetsCreation();
         JD::spatial::computeIndicies();
        
-        // simulateFloaters();
+        simulateFloaters();
 
         // SDL_Delay(25);
 

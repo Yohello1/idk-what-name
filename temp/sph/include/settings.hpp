@@ -12,8 +12,8 @@ inline constexpr int SIZE_MULTIPLIER = 90;
 inline constexpr int INFLUENCE_RADIUS = 3; // This is how far we look in terms of blocks lol
 inline constexpr int PADDING = std::max(3, INFLUENCE_RADIUS+1);
 
-inline constexpr int BUFFER_WIDTH = SIZE_MULTIPLIER*DISTANCE_BETWEEN_POINTS+(DISTANCE_BETWEEN_POINTS*PADDING*2);
-inline constexpr int BUFFER_HEIGHT = SIZE_MULTIPLIER*DISTANCE_BETWEEN_POINTS+(DISTANCE_BETWEEN_POINTS*PADDING*2);
+inline constexpr int BUFFER_WIDTH  = SIZE_MULTIPLIER *DISTANCE_BETWEEN_POINTS +(DISTANCE_BETWEEN_POINTS*PADDING*2);
+inline constexpr int BUFFER_HEIGHT = SIZE_MULTIPLIER *DISTANCE_BETWEEN_POINTS +(DISTANCE_BETWEEN_POINTS*PADDING*2);
 
 inline constexpr int BUFFER_PADDING = PADDING*DISTANCE_BETWEEN_POINTS;
 inline constexpr int BUFFER_UNPADDED = PADDING*DISTANCE_BETWEEN_POINTS + SIZE_MULTIPLIER*DISTANCE_BETWEEN_POINTS;
@@ -30,8 +30,8 @@ inline constexpr int POINTS_AMT = (POINTS_HEIGHT)*(POINTS_WIDTH);
 inline constexpr uint16_t THRESHOLD = 180;
 
 // Window settings
-const int WINDOW_WIDTH = 880;
-const int WINDOW_HEIGHT = 880;
+const int WINDOW_WIDTH = 784;
+const int WINDOW_HEIGHT = 784;
 
 // Fluid simulation global constexprants
 inline const float PARTICLE_SIZE = 1.0f; // otherwise known as the influence radisu
