@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include "settings.hpp"
 
-typedef struct point
+struct point
 {
     uint16_t x;
     uint16_t y;

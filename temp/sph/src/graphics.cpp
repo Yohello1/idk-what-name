@@ -39,7 +39,7 @@ namespace JD::graphics {
     }
 
     void initGrid() {
-        std::vector<std::pair<int, int>> derivative = calculateRegionsOffsets();
+        std::vector<std::pair<int, int>> derivative = JD::spatial::calculateRegionsOffsets(); 
         std::vector<int> relative_offsets {};
 
         for(int i = 0; i < REGIONS_AMT; i++) {

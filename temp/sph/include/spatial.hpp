@@ -3,9 +3,13 @@
 
 #include <vector>
 
-void offsetsCreation();
-std::vector<std::pair<int, int>> calculateRegionsOffsets();
-void computeIndicies();
+namespace JD::spatial
+{
+    void offsetsCreation();
+    std::vector<std::pair<int, int>> calculateRegionsOffsets();
+    void computeIndicies();
 
+    void computeBlockIndicies();
+}
 
 #endif

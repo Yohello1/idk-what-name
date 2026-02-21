@@ -33,7 +33,7 @@ void simulateFloaters()
 
 int main() {
     JD::graphics::initGrid();
-    JD::floaters::initFloaters();
+    JD::floaters::init();
     // srand(100);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -106,10 +106,10 @@ int main() {
         SDL_UpdateWindowSurface(window);
 
         // Custom simulation steps
-        offsetsCreation();
-        computeIndicies();
+        JD::spatial::offsetsCreation();
+        JD::spatial::computeIndicies();
        
-        simulateFloaters();
+        // simulateFloaters();
 
         // SDL_Delay(25);
 

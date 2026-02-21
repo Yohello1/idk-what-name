@@ -16,15 +16,16 @@ namespace JD::floaters
 {
     static constexpr inline size_t BLOCK_AMT = (SIZE_MULTIPLIER+PADDING)*(SIZE_MULTIPLIER+PADDING);     
    
-    typedef struct block
+    struct block
     {
-        uint32_t id;
         uint32_t regions[9];
     };
 
     extern floater* floatersA;
 
     extern block*   blocks; 
+
+    void init();
 
     void initFloaters();
     void drawFloaters();

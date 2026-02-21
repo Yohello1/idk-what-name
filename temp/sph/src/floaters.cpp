@@ -9,10 +9,15 @@ namespace JD::floaters
     block*   blocks    = new block  [ BLOCK_AMT   ];
 
 
+    void init()
+    {
+        initFloaters();
+        initBlockRegions();
+    }
 
     void initFloaters()
     {
-        for(int i = 0; i < FLOATER_AMT; i++)
+        for(size_t i = 0; i < FLOATER_AMT; i++)
         {
             floatersA[i].x = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
             floatersA[i].y = (rand() % BUFFER_WORKING-1)+BUFFER_PADDING;
@@ -32,32 +37,47 @@ namespace JD::floaters
 
     void drawFloaters()
     {
-        for(int i = 0; i < FLOATER_AMT; i++)
+        for(size_t i = 0; i < FLOATER_AMT; i++)
         {
             int idx = floatersA[i].x*BYTES_PER_PIXEL + floatersA[i].y*BUFFER_WIDTH*BYTES_PER_PIXEL;
             JD::graphics::static_rgb_buffer[idx+1]   = 250;
         }
     }
 
+    // I used an ai to generate this, so if smth breaks
+    // rewrite this first
+    // before going anywhere else
+    // oki
     __attribute__ ((noinline))
-    void initBlockRegions()
-    {
-        for(int i = 0; i < BLOCK_AMT; i++)
-        {
-            // if outside of bounds, we set to INT_MAX, and 0 index
-            // I can do the bit masking and the funny math later
-            // teehee
-           
+    void initBlockRegions() {
+        int W = (int) BUFFER_LINE; // Assuming BUFFER_LINE is your grid width
+
+        for(size_t i = 0; i < BLOCK_AMT; i++) {
             blocks[i].id = i;
+            int row = i / W;
+            int col = i % W;
+            int count = 0;
 
-            blocks[i].regions[0] = (i-1-BUFFER_LINE < 0) ? INT_MAX : i-1-BUFFER_LINE;
+            // Iterate through the 3x3 neighborhood
+            for(int dy = -1; dy <= 1; dy++) {
+                for(int dx = -1; dx <= 1; dx++) {
+                    int targetRow = row + dy;
+                    int targetCol = col + dx;
+                    int targetIndex = i + (dy * W) + dx;
 
-            blocks[i].regions[0] = (i-1 < 0) ? INT_MAX : i-1;
-            blocks[i].regions[1] = i; 
-            blocks[i].regions[2] = (i+1 > BLOCK_AMT-1) ? INT_MAX : i+1;
-
-
+                    // Bounds checking:
+                    // 1. Is the row valid?
+                    // 2. Is the column valid? (Prevents horizontal wrapping)
+                    // 3. Is the resulting index within the array?
+                    if (targetRow >= 0 && targetRow < (BLOCK_AMT / W) &&
+                        targetCol >= 0 && targetCol < W &&
+                        targetIndex >= 0 && targetIndex < BLOCK_AMT) {
+                        blocks[i].regions[count++] = targetIndex;
+                    } else {
+                        blocks[i].regions[count++] = INT_MAX;
+                    }
+                }
+            }
         }
     }
-
 }

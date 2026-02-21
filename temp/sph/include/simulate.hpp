@@ -16,6 +16,9 @@ namespace JD::simulate
     void computeDensity(int* offsets_in,
                         int* cells_ctr_in,
                         int* particles_loc_in,
+                        int* region_amt,
+                        JD::floaters::block* blocks*;  
+                        int* cells_ctr,
                         floater* p_floatersA,
                         float h_in) // Particle size 
     {
@@ -26,11 +29,12 @@ namespace JD::simulate
             float x = p_floatersA[i].x;
             float y = p_floatersA[i].y;
 
-            for(int j = 0; j < REGIONS_AMT; j++) {
+            for(int j = 0; j < region_amt; j++) {
                 int idx_r = JD::graphics::points[i].regions[j];
                 int idx_o = JD::graphics::offsets[idx_r];
 
-                for(int k = 0; k < cells_ctr_in[idx_r]; k++) {
+                for(int k = 0; k < cells_ctr_in[idx_r]; k++) 
+                {
                     int floater_idx = particles_loc_in[idx_o + k];
                     float dx = p_floatersA[floater_idx].x - x;
                     float dy = p_floatersA[floater_idx].y - y;
@@ -54,8 +58,8 @@ namespace JD::simulate
                               floater* particles_in,
                               float h_in) // Particle size 
     {
-        for (int i = 0; i < FLOATER_AMT; i++) {
-            for (int j = 0; j < FLOATER_AMT; j++) {
+        for (size_t i = 0; i < FLOATER_AMT; i++) {
+            for (size_t j = 0; j < FLOATER_AMT; j++) {
                 if (i == j) continue;
                 float dx = particles_in[i].x - particles_in[j].x;
                 float dy = particles_in[i].y - particles_in[j].y;
@@ -78,8 +82,8 @@ namespace JD::simulate
                            int* particles_loc_in,
                            floater* particles_in,
                            float h_in) {
-        for (int i = 0; i < FLOATER_AMT; i++) {
-            for (int j = 0; j < FLOATER_AMT; j++) {
+        for (size_t i = 0; i < FLOATER_AMT; i++) {
+            for (size_t j = 0; j < FLOATER_AMT; j++) {
                 if (i == j) continue;
                 float dx = particles_in[i].x - particles_in[j].x;
                 float dy = particles_in[i].y - particles_in[j].y;
@@ -98,7 +102,7 @@ namespace JD::simulate
     void applyYAccelerationToAllParticles(floater* particles_in)
     {
         float valueToApply = function();
-        for(int i = 0; i < FLOATER_AMT; i++)
+        for(size_t i = 0; i < FLOATER_AMT; i++)
         {
             particles_in[i].a_y += valueToApply;
         }
@@ -108,8 +112,13 @@ namespace JD::simulate
     void integrate(int* offsets_in,
                    int* cells_ctr_in,
                    int* particles_loc_in,
-                   floater* particles_in) {
-        for (int i = 0; i < FLOATER_AMT; i++) {
+                   floater* particles_in) 
+    {
+        for (size_t i = 0; i < FLOATER_AMT; i++) 
+        {
+            // skip disabled particles
+            if(particles_in[i].enabled == false)
+                continue;
             particles_in[i].v_x += particles_in[i].a_x * PARTICLE_TIME_STEP; 
             particles_in[i].v_y += particles_in[i].a_y * PARTICLE_TIME_STEP;
             particles_in[i].x += particles_in[i].v_x * PARTICLE_TIME_STEP; 
