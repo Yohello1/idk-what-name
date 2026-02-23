@@ -15,14 +15,11 @@ namespace JD::spatial
 
         for(size_t i = 0; i < FLOATER_AMT; i++)
         {
-            // removed - BUFFER_PADDING
-            // because it makes no sense to be removing it?
             int gx = (JD::floaters::floatersA[i].x) / DISTANCE_BETWEEN_POINTS;
             int gy = (JD::floaters::floatersA[i].y) / DISTANCE_BETWEEN_POINTS;
 
-            int idx = (gx) + (gy) * BUFFER_LINE;
-
-            if (idx >= 0 && idx < (BUFFER_LINE * BUFFER_LINE)) {
+            if (gx >= 0 && gx < BUFFER_LINE && gy >= 0 && gy < BUFFER_LINE) {
+                int idx = gx + gy * BUFFER_LINE;
                 JD::graphics::cells_ctr[idx] += 1;
             }
         }
@@ -55,15 +52,18 @@ namespace JD::spatial
         std::memset(_curr_pos, 0, sizeof(uint32_t)*BUFFER_LINE*BUFFER_LINE);
         for(size_t i = 0; i < FLOATER_AMT; i++)
         {
-            int gx = (JD::floaters::floatersA[i].x - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
-            int gy = (JD::floaters::floatersA[i].y - BUFFER_PADDING) / DISTANCE_BETWEEN_POINTS;
+            int gx = (JD::floaters::floatersA[i].x) / DISTANCE_BETWEEN_POINTS;
+            int gy = (JD::floaters::floatersA[i].y) / DISTANCE_BETWEEN_POINTS;
 
-            int idx = (gx + PADDING) + (gy + PADDING) * BUFFER_LINE;
-
-            if (idx >= 0 && idx < (BUFFER_LINE * BUFFER_LINE)) {
+            if (gx >= 0 && gx < BUFFER_LINE && gy >= 0 && gy < BUFFER_LINE) {
+                int idx = gx + gy * BUFFER_LINE;
                 int offset = JD::graphics::offsets[idx];
-                JD::graphics::particles_loc[offset + _curr_pos[idx]] = i;
-                _curr_pos[idx] += 1;
+                /// this should never happen................
+                /// (more thingies than expected)
+                if ((size_t)_curr_pos[idx] < (size_t)JD::graphics::cells_ctr[idx]) {
+                    JD::graphics::particles_loc[offset + _curr_pos[idx]] = i;
+                    _curr_pos[idx] += 1;
+                }
             }
         }
     }

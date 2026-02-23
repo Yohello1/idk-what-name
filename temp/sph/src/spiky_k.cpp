@@ -6,13 +6,14 @@
 
 void JD::Spiky_k::gradient(float dx, float dy, float distance_i, float particle_size_i, force& out_force)
 {
-    if (distance_i <= 0 || distance_i >= particle_size_i*particle_size_i) {
+    float h = particle_size_i;
+    float h2 = h * h;
+    if (distance_i <= 0 || distance_i >= h2) {
         out_force.x = 0.0f; out_force.y = 0.0f;
         return;
     }
 
-    float h = particle_size_i;
-    float diff = h - distance_i;
+    float diff = h - std::sqrt(distance_i);
 
     float coeff = -45.0f / (std::numbers::pi_v<float> * std::pow(h, 6));
 
