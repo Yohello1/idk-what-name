@@ -5,6 +5,8 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <fstream>
+#include <string>
 
 namespace JD::graphics {
 
@@ -159,4 +161,14 @@ namespace JD::graphics {
         }
     }
 
+
+    void outputPPM(int height, int width, std::string output)
+    {
+        std::ofstream ofs(output, std::ios::binary);
+        if (!ofs) return;
+
+        ofs << "P6\n" << width << " " << height << "\n255\n";
+        ofs.write(reinterpret_cast<const char*>(static_rgb_buffer), width * height * BYTES_PER_PIXEL);
+        ofs.close();
+    }
 } // namespace JD::graphics

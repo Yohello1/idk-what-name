@@ -131,6 +131,7 @@ namespace JD::simulate
                         floater* p_floatersA,
                         float h_in)
     {
+#pragma omp parallel for num_threads(16)
         for (size_t i = 0; i < FLOATER_AMT; i++)
         {
             int bx = (int)(p_floatersA[i].x / DISTANCE_BETWEEN_POINTS);
@@ -181,8 +182,9 @@ namespace JD::simulate
                               floater* particles_in,
                               float h_in)
     {
+#pragma omp parallel for num_threads(16)
         for (size_t i = 0; i < FLOATER_AMT; i++) {
-            if (!particles_in[i].enabled) break; // Ghosts don't receive forces
+            if (!particles_in[i].enabled) continue; // Ghosts don't receive forces
 
             float x  = particles_in[i].x;
             float y  = particles_in[i].y;
@@ -205,20 +207,48 @@ namespace JD::simulate
                         float dy    = y - particles_in[j].y;
                         float r_sq  = dx*dx + dy*dy;
 
+                        float dist = std::sqrt(r_sq);
+                        float r_norm = dist/h_in;
+
                         if (r_sq > 0 && r_sq < h_in*h_in) {
-                            force grad_f;
-                            KernelGrad(dx, dy, r_sq, h_in, grad_f);
+                            if (!particles_in[i].enabled)
+                            {
+                                if(r_norm < 1.0f)
+                                {
+                                    float k_repulsion = 0.9;
+                                    float force_mag = k_repulsion * (1.0f - r_norm) / (r_sq + 0.01f);
 
-                            // monagham thingy ma bober to fix the pressure going BOOM
-                            // F_ij = -m_j * (P_i + P_j) / (rho_i * rho_j) * grad_W
-                            // Using (P_i+P_j)/(rho_i*rho_j) instead of P/rho^2 keeps
-                            float rho_i = std::max(particles_in[i].density, 1e-6f);
-                            float rho_j = std::max(particles_in[j].density, 1e-6f);
-                            float p_term = (particles_in[i].pressure + particles_in[j].pressure)
-                                         / (rho_i * rho_j);
+                                    particles_in[i].a_x += force_mag * (dx / dist);
+                                    particles_in[i].a_y += force_mag * (dy / dist);
+                                
+                                    float friction_coeff = 0.1f;
+                                    float dvx = particles_in[i].v_x - particles_in[j].v_x; 
+                                    float dvy = particles_in[i].v_y - particles_in[j].v_y;
 
-                            particles_in[i].a_x -= particles_in[j].mass * p_term * grad_f.x;
-                            particles_in[i].a_y -= particles_in[j].mass * p_term * grad_f.y;
+                                    particles_in[i].a_x -= friction_coeff * dvx;
+                                    particles_in[i].a_y -= friction_coeff * dvy;
+                                }
+                            }
+                            else {
+                                force grad_f;
+                                KernelGrad(dx, dy, r_sq, h_in, grad_f);
+
+                                float rho_i = std::max(particles_in[i].density, 1e-6f);
+                                float rho_j = std::max(particles_in[j].density, 1e-6f);
+                                
+                                // monagham thingy ma bober to fix the pressure going BOOM
+                                // F_ij = -m_j * (P_i + P_j) / (rho_i * rho_j) * grad_W
+                                // Using (P_i+P_j)/(rho_i*rho_j) instead of P/rho^2 keeps
+
+                                float p_i = particles_in[i].pressure;
+                                float p_j;
+                                p_j = (!particles_in[j].enabled) ? p_i * 1.0f : particles_in[j].pressure;
+
+                                float p_term = (p_i + p_j) / (rho_i * rho_j);
+
+                                particles_in[i].a_x -= particles_in[j].mass * p_term * grad_f.x;
+                                particles_in[i].a_y -= particles_in[j].mass * p_term * grad_f.y;
+                            }
                         }
                     }
                 }
@@ -232,6 +262,7 @@ namespace JD::simulate
                            int* particles_loc_in,
                            floater* particles_in,
                            float h_in) {
+#pragma omp parallel for num_threads(16)
         for (size_t i = 0; i < FLOATER_AMT; i++) {
             if (!particles_in[i].enabled) continue;
 
@@ -291,6 +322,7 @@ namespace JD::simulate
         const float lo_y = (float)BUFFER_PADDING;
         const float hi_y = (float)(BUFFER_PADDING + BUFFER_WORKING);
 
+#pragma omp parallel for num_threads(16)
         for (size_t i = 0; i < FLOATER_AMT; i++) 
         {
             if (!particles_in[i].enabled) continue; // ghosts stay fixed

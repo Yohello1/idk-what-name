@@ -151,6 +151,13 @@ int main() {
         double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
         std::cout << "Frame " << (frame_num-1)
                   << " Time: " << std::fixed << std::setprecision(4) << time_taken << "s" << std::endl;
+    
+        std::string frame_name = "frames/";
+        frame_name += std::to_string(frame_num);
+        std::cout << "NAME:" <<  frame_name << '\n';
+        frame_name += ".ppm";
+        std::cout << "NAME:" << frame_name << '\n';
+//         JD::graphics::outputPPM(BUFFER_HEIGHT, BUFFER_WIDTH, frame_name);
     }
 
     SDL_FreeSurface(bufferSurface);

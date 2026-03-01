@@ -37,7 +37,7 @@ const int WINDOW_HEIGHT = 784;
 //   keep reference density close to expected resting density to minimise rest pressure
 inline const float PARTICLE_SIZE = INFLUENCE_RADIUS * DISTANCE_BETWEEN_POINTS; // kernel radius px
 inline const float PARTICLE_TIME_STEP = 0.5f;           // smaller step = more stable
-inline const float PARTICLE_REFERENCE_DENSITY = 0.01f;  // target resting density
+inline const float PARTICLE_REFERENCE_DENSITY = 0.015f;  // target resting density
 inline const float PARTICLE_BULK_MODULUS = 80.0f;       // lower = softer / less explosive
 inline const float PARTICLE_VISCOSITY = 0.5f;           // reduced damping for more fluid motion
 inline const float PARTICLE_GRAVITY = 0.5f;

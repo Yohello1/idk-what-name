@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <utility>
+#include <string>
 #include "settings.hpp"
 #include "struct.hpp"
 
@@ -26,6 +27,8 @@ namespace JD::graphics {
     void computeStrengths();
     void initGrid();
 
+    // assuming uint8_t
+    void outputPPM(int height, int width, std::string output);
 } // namespace JD::graphics
 
 #endif
