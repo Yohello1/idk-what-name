@@ -213,9 +213,9 @@ namespace JD::simulate
                         if (r_sq > 0 && r_sq < h_in*h_in) {
                             if (!particles_in[i].enabled)
                             {
-                                if(r_norm < 1.0f)
+                                if(r_norm < PARTICLE_SIZE)
                                 {
-                                    float k_repulsion = 0.9;
+                                    float k_repulsion = 2.5;
                                     float force_mag = k_repulsion * (1.0f - r_norm) / (r_sq + 0.01f);
 
                                     particles_in[i].a_x += force_mag * (dx / dist);

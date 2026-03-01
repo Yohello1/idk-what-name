@@ -7,6 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <iostream>
 
 namespace JD::graphics {
 
@@ -106,6 +107,8 @@ namespace JD::graphics {
                 }
             }
             points[i].strength = (uint16_t)strength;
+            if(strength > THRESHOLD) {std::cout << "hot";}
+            std::cout << strength << ' ';
         }
     }
 
@@ -127,10 +130,10 @@ namespace JD::graphics {
             int row_bot = (i + 1) * POINTS_WIDTH;
 
             for(int j = 0; j < SQR_PER_COL; j++) {
-                int config_index = (points[row_top + j].strength     >= THRESHOLD)      |
-                ((points[row_top + j + 1].strength >= THRESHOLD) << 1) |
-                ((points[row_bot + j + 1].strength >= THRESHOLD) << 2) |
-                ((points[row_bot + j].strength     >= THRESHOLD) << 3);
+                int config_index = (points[row_top + j].strength     >= THRESHOLD)        |
+                                   ((points[row_top + j + 1].strength >= THRESHOLD) << 1) |
+                                   ((points[row_bot + j + 1].strength >= THRESHOLD) << 2) |
+                                   ((points[row_bot + j].strength     >= THRESHOLD) << 3);
 
                 if (config_index == 0 || config_index == 15) continue;
 
