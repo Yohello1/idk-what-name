@@ -14,7 +14,7 @@ struct point
     uint16_t i_y;
 
     uint16_t id;
-    uint16_t strength;
+    float strength;
 
     int regions[REGIONS_AMT];
 

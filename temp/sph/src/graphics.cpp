@@ -106,10 +106,11 @@ namespace JD::graphics {
                     strength += (p_floatersA[floater_idx].density) * (1.0f / dist_sq);
                 }
             }
-            points[i].strength = (uint16_t)strength;
-            if(strength > THRESHOLD) {std::cout << "hot";}
+            points[i].strength = strength;
+            //if(strength > THRESHOLD) {std::cout << "hot";}
             std::cout << strength << ' ';
         }
+        std::cout << '\n';
     }
 
     void drawConnections() {

@@ -3,12 +3,12 @@
 
 #include <stdint.h>
 #include <cmath>
-
+#include <numbers>
 // #include "floaters.hpp"
 
 inline constexpr int DISTANCE_BETWEEN_POINTS = 8;
 
-inline constexpr int SIZE_MULTIPLIER = 20;
+inline constexpr int SIZE_MULTIPLIER = 30;
 inline constexpr int INFLUENCE_RADIUS = 4; // kernel look-ahead in grid cells; increase for more particle sensitivity
 inline constexpr int PADDING = std::max(INFLUENCE_RADIUS+1, INFLUENCE_RADIUS+1);
 
@@ -27,7 +27,7 @@ inline constexpr int POINTS_WIDTH = SIZE_MULTIPLIER+1;
 inline constexpr int POINTS_HEIGHT = SIZE_MULTIPLIER+1;
 inline constexpr int POINTS_AMT = (POINTS_HEIGHT)*(POINTS_WIDTH);
 
-inline constexpr float THRESHOLD = 0.0f;
+inline constexpr float THRESHOLD = 0.05f;
 
 // Window settings
 const int WINDOW_WIDTH = 784;
@@ -38,22 +38,26 @@ const int WINDOW_HEIGHT = 784;
 inline const float PARTICLE_SIZE = INFLUENCE_RADIUS * DISTANCE_BETWEEN_POINTS; // kernel radius px
 inline const float PARTICLE_TIME_STEP = 0.5f;           // smaller step = more stable
 inline const float PARTICLE_REFERENCE_DENSITY = 0.015f;  // target resting density
-inline const float PARTICLE_BULK_MODULUS = 40.0f;       // lower = softer / less explosive
+inline const float PARTICLE_BULK_MODULUS = 20.0f;       // lower = softer / less explosive
 inline const float PARTICLE_VISCOSITY = 0.5f;           // reduced damping for more fluid motion
 inline const float PARTICLE_GRAVITY = 0.5f;
 inline const float PARTICLE_MASS = 1.0f;                // normalised mass; pressure formula handles scaling
 
 // until i learn how to write code :(
 inline const float PARTICLE_MAX_V = 7.5f;
-inline const float PARTICLE_RESTITUTION = 0.5f;
+inline const float PARTICLE_RESTITUTION = 0.9f;
+inline const int PARTICLE_GHOST_DENSITY = 2;
 
-inline const int PARTICLE_GHOST_DENSITY = 8.0;
-
-inline const float GRAVITY_CONSTANT = 0.1f;
-
+// am I even using these?
 inline const int PARTICLE_N_FRAMES = 0; // Number of frames
 inline const int PARTICLE_NP_FRAMES = 0; // Steps per frame
 
+// coeffs
+inline const float PARTICLE_VISCOSITY_K_COEFF = 45.0f/std::numbers::pi_v<float> * 0.1; 
+
+
+
+inline const float GRAVITY_CONSTANT = 0.1f;
 
 constexpr int CELL_SIZE = DISTANCE_BETWEEN_POINTS*DISTANCE_BETWEEN_POINTS;
 
