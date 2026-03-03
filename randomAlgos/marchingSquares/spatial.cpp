@@ -575,9 +575,9 @@ int main(int argc, char* argv[]) {
 
         memset(static_rgb_buffer, 0, sizeof(uint8_t)*BUFFER_HEIGHT*BUFFER_WIDTH*BYTES_PER_PIXEL);
         simulateFloaters();
-        //drawFloaters();
+        drawFloaters();
         drawConnections();
-        drawGrid();
+        // drawGrid();
 
         // --- COPY (BLIT) STATIC BUFFER TO SCREEN ---
         // Copies the fixed gradient image onto the window surface.

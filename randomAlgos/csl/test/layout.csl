@@ -1,0 +1,17 @@
+// layout.csl 
+
+const memcpy = @import_module("<memcpy/get_params>", .{
+    .width = 1,
+    .height = 1,
+});
+
+layout {
+    @set_rectangle(1,1);
+
+    @set_tile_code(0,0, "pe_program.csl", .{ .memcpy_params = memcpy.get_params(0) });
+
+    @export_name("A", [*]f32, true);
+    @export_name("B", [*]f32, true);
+    @export_name("C", [*]f32, true);
+    @export_name("add_arrays", fn()void);
+}

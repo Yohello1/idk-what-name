@@ -1,0 +1,34 @@
+// pe_program.csl
+param memcpy_params: comptime_struct;
+
+const sys_mod = @import_module("<memcpy/memcpy>", memcpy_params);
+
+const SIZE: i16 = 10;
+
+var A: [SIZE]f32;
+var B: [SIZE]f32;
+var C: [SIZE]f32;
+
+var A_ptr: [*]f32 = &A;
+var B_ptr: [*]f32 = &B;
+var C_ptr: [*]f32 = &C;
+
+fn add_arrays() void
+{
+    const a_dsd = @get_dsd(mem1d_dsd, .{ .base_address = &A, .extent = SIZE });
+    const b_dsd = @get_dsd(mem1d_dsd, .{ .base_address = &B, .extent = SIZE});
+    const c_dsd = @get_dsd(mem1d_dsd, .{ .base_address = &C, .extent = SIZE});
+
+    @fadds(c_dsd, a_dsd, b_dsd);
+
+    sys_mod.unblock_cmd_stream();
+}
+
+comptime {
+
+    @export_symbol(A_ptr, "A");
+    @export_symbol(B_ptr, "B");
+    @export_symbol(C_ptr, "C");
+
+    @export_symbol(add_arrays);
+}
